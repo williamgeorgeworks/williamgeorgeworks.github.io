@@ -98,7 +98,7 @@ section.band.inked .card a.btn.alt,section.band.inked .card a.btn.alt:hover{colo
 blockquote.ruling{margin:0}
 .ruling p{font-size:22px;line-height:1.4;font-style:italic;margin:0 0 .7em}
 .ruling cite{font-family:var(--display);font-style:normal;text-transform:uppercase;letter-spacing:.6px;font-size:15px;color:var(--red)}
-.lola{margin:0;display:grid;grid-template-columns:minmax(0,300px) minmax(0,1fr);gap:30px;align-items:center;max-width:46em}
+.lola{margin:0;display:grid;grid-template-columns:minmax(0,380px) minmax(0,1fr);gap:30px;align-items:center;max-width:46em}
 .lola img{border:3px solid var(--ink);box-shadow:7px 7px 0 var(--ink);width:100%;height:auto}
 .lola h2{font-size:clamp(40px,7vw,64px)}
 .lola p{margin:0;font-size:21px}
