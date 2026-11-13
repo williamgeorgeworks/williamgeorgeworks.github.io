@@ -115,3 +115,9 @@ blockquote.ruling{margin:0}
 .petition .tick input{width:22px;height:22px;flex:none;margin-top:3px;accent-color:var(--red)}
 .petition .btn{align-self:flex-start;cursor:pointer;margin-top:8px}
 .petition .trap{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.agony h2{font-size:clamp(24px,3.6vw,32px);margin-bottom:.5em}
+.agony blockquote{margin:0 0 18px;padding:0 0 0 18px;border-left:5px solid var(--ink);font-style:italic}
+.agony blockquote p{margin:0 0 .5em}
+.agony blockquote cite{font-family:var(--hand);font-style:normal;color:var(--red);font-size:20px}
+.agony .reply p:last-child{margin-bottom:0}
+.agony .reply .tag{margin-bottom:10px}
