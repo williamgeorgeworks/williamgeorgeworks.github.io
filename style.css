@@ -101,6 +101,6 @@ blockquote.ruling{margin:0}
 .lola{margin:0;display:grid;grid-template-columns:minmax(0,380px) minmax(0,1fr);gap:30px;align-items:center;max-width:46em}
 .lola img{border:3px solid var(--ink);box-shadow:7px 7px 0 var(--ink);width:100%;height:auto}
 .lola h2{font-size:clamp(40px,7vw,64px)}
-.lola p{margin:0;font-size:21px}
+.lola p{margin:0 0 .7em;font-size:21px}.lola p:last-child{margin-bottom:0}
 .lola .scrawl{margin-bottom:8px;transform:none}
 @media (max-width:560px){.lola{grid-template-columns:1fr;gap:20px}}
