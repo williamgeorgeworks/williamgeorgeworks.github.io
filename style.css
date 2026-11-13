@@ -95,3 +95,6 @@ section.band.inked .card a.btn.alt,section.band.inked .card a.btn.alt:hover{colo
 .post p:last-child{margin-bottom:0}
 .post .when{font-family:var(--hand);color:var(--red);font-size:20px;margin:0 0 8px;display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center}
 .post .when .tag{margin:0;font-size:13px}
+blockquote.ruling{margin:0}
+.ruling p{font-size:22px;line-height:1.4;font-style:italic;margin:0 0 .7em}
+.ruling cite{font-family:var(--display);font-style:normal;text-transform:uppercase;letter-spacing:.6px;font-size:15px;color:var(--red)}
