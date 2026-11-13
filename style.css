@@ -90,3 +90,8 @@ section.band.inked .card a{color:var(--blue)}
 section.band.inked .card a:hover{color:var(--red)}
 section.band.inked .card a.btn,section.band.inked .card a.btn:hover{color:var(--paper)}
 section.band.inked .card a.btn.alt,section.band.inked .card a.btn.alt:hover{color:var(--ink)}
+.log{display:grid;gap:26px;max-width:46em}
+.post h2{font-size:clamp(26px,4vw,36px);margin-bottom:.4em}
+.post p:last-child{margin-bottom:0}
+.post .when{font-family:var(--hand);color:var(--red);font-size:20px;margin:0 0 8px;display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center}
+.post .when .tag{margin:0;font-size:13px}
