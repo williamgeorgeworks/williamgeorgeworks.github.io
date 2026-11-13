@@ -121,3 +121,21 @@ blockquote.ruling{margin:0}
 .agony blockquote cite{font-family:var(--hand);font-style:normal;color:var(--red);font-size:20px}
 .agony .reply p:last-child{margin-bottom:0}
 .agony .reply .tag{margin-bottom:10px}
+.ledger{display:grid;gap:34px;max-width:46em}
+.invoice{overflow:hidden;padding:26px}
+.invoice header{display:flex;flex-wrap:wrap;gap:14px 30px;justify-content:space-between;border-bottom:3px solid var(--ink);padding-bottom:14px;margin-bottom:6px}
+.invoice h2{font-size:clamp(28px,4.4vw,40px);margin:0}
+.invoice .ino{font-family:var(--display);text-transform:uppercase;letter-spacing:1px;font-size:15px;color:var(--red);margin:0 0 2px}
+.invoice .isub{font-style:italic;color:var(--faint);font-size:16px;margin:4px 0 0}
+.invoice dl{display:grid;grid-template-columns:auto 1fr;gap:2px 12px;margin:0;font-size:16px;max-width:19em}
+.invoice dt{font-family:var(--display);text-transform:uppercase;letter-spacing:.5px;font-size:14px;color:var(--faint)}
+.invoice dd{margin:0}
+.invoice table{width:100%;border-collapse:collapse;font-size:17px}
+.invoice th{font-family:var(--display);font-weight:400;text-transform:uppercase;letter-spacing:.6px;font-size:14px;text-align:left;padding:10px 0 6px;color:var(--faint)}
+.invoice td{padding:9px 0;border-top:1px dashed #14141455;vertical-align:top}
+.invoice th:last-child,.invoice td:last-child{text-align:right;padding-left:18px;width:34%}
+.invoice tfoot td{border-top:3px solid var(--ink);font-family:var(--display);text-transform:uppercase;letter-spacing:.4px;font-size:18px;padding-top:12px}
+.invoice .inote{margin:14px 0 0;font-size:16px;font-style:italic;color:var(--faint)}
+.stamp{float:right;margin:16px 4px 6px 22px;font-family:var(--display);text-transform:uppercase;letter-spacing:1.5px;font-size:22px;padding:5px 12px 3px;border:4px solid currentColor;border-radius:6px;transform:rotate(-8deg);opacity:.88;white-space:nowrap}
+.stamp.paid{color:#1d7a3a}.stamp.due{color:var(--red)}.stamp.disp{color:#b06a00}.stamp.ref{color:var(--blue)}
+@media (max-width:560px){.invoice{padding:16px}.invoice table{font-size:16px}.stamp{font-size:17px;margin-left:14px}}
