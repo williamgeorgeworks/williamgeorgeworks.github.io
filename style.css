@@ -86,3 +86,7 @@ footer.site .wrap{display:flex;flex-wrap:wrap;gap:10px 30px;justify-content:spac
 footer.site p{margin:0;max-width:34em}
 @media (max-width:560px){body{font-size:18px}.book{grid-template-columns:96px minmax(0,1fr);gap:14px}.cover{font-size:13px;padding:6px}.card{padding:16px}h3{font-size:21px}.pagehead .splat,.hero .splat{width:150px;height:150px;opacity:.85}.pagehead .splat{right:-50px!important;top:-50px!important}.hero .splat.r{display:none}.logo{font-size:26px}.hero{padding:40px 0}.card{box-shadow:5px 5px 0 var(--ink)}}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.btn{transition:none}}
+section.band.inked .card a{color:var(--blue)}
+section.band.inked .card a:hover{color:var(--red)}
+section.band.inked .card a.btn,section.band.inked .card a.btn:hover{color:var(--paper)}
+section.band.inked .card a.btn.alt,section.band.inked .card a.btn.alt:hover{color:var(--ink)}
