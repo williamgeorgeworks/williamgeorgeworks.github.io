@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Unemployable Arcade</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Rock+Salt&family=Special+Elite&family=Reenie+Beanie&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f7f5ee; --ink:#121212; --blood:#d3221c; --bile:#f3c61a; --damp:#0f4a4a; --moss:#5d7f38; --faint:#6b675c;
+  --display:"Rock Salt","Segoe Print","Bradley Hand","Comic Sans MS",cursive;
+  --hand:"Reenie Beanie","Segoe Print","Bradley Hand",cursive;
+  --body:"Special Elite","Courier New",Courier,monospace;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--paper);color:var(--ink)}
+body{font-family:var(--body);font-size:17px;line-height:1.55}
+#bg{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
+.app{position:relative;z-index:1;max-width:640px;margin:0 auto;padding:12px 14px 40px;display:flex;flex-direction:column;gap:14px}
+header{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.brand{font-family:var(--display);font-size:clamp(15px,3.6vw,22px);line-height:1.5;transform:rotate(-1.2deg)}
+.brand small{display:block;font-family:var(--hand);font-size:clamp(22px,5vw,28px);color:var(--blood);line-height:1}
+button{font:inherit;color:var(--ink);cursor:pointer}
+.sound{background:var(--paper);border:3px solid var(--ink);padding:6px 12px 3px;border-radius:255px 15px 225px 15px/15px 225px 15px 255px;font-family:var(--hand);font-size:23px;line-height:1.1}
+.sound[aria-pressed="true"]{background:var(--bile)}
+.stage{position:relative;align-self:center;width:min(100%,calc(76vh * .8));border:4px solid var(--ink);border-radius:8px 60px 12px 50px/50px 10px 60px 14px;overflow:hidden;background:var(--paper);box-shadow:6px 7px 0 var(--ink)}
+#cv{display:block;width:100%;height:auto;aspect-ratio:4/5;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{border:2px solid var(--ink);background:var(--paper);padding:3px 10px 1px;font-size:14px;border-radius:15px 225px 15px 255px/255px 15px 225px 15px}
+.chip b{font-family:var(--hand);font-size:23px;line-height:1;margin-left:4px;color:var(--blood)}
+#panel{display:flex;flex-direction:column;gap:12px}
+.place{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint)}
+h1,h2{font-family:var(--display);font-weight:400;margin:0;line-height:1.6;text-wrap:balance}
+h1{font-size:clamp(22px,6vw,36px);transform:rotate(-1.5deg)}
+h2{font-size:clamp(18px,4.6vw,26px);transform:rotate(-.8deg)}
+.tag{font-family:var(--hand);font-size:clamp(26px,6vw,32px);color:var(--blood);line-height:1;margin:0}
+p{margin:0;max-width:65ch}
+.quote{position:relative;margin:4px 0;padding:14px 18px 10px 22px;border-left:8px solid var(--blood);background:#fff;border-radius:4px 40px 6px 60px/30px 6px 40px 4px;box-shadow:3px 4px 0 var(--ink)}
+.quote q{display:block;font-family:var(--hand);font-size:clamp(26px,6vw,34px);line-height:1.05;quotes:none}
+.quote cite{display:block;margin-top:8px;font-style:normal;font-size:13px;color:var(--faint)}
+.choices{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.choice,.go{background:var(--paper);border:3px solid var(--ink);padding:11px 14px 8px;text-align:left;border-radius:255px 15px 225px 15px/15px 225px 15px 255px;transition:transform .12s,background .12s}
+.choice:nth-child(even){border-radius:15px 225px 15px 255px/255px 15px 225px 15px}
+.choice b{display:block;font-family:var(--display);font-weight:400;font-size:14px;line-height:1.7}
+.choice span{display:block;font-size:14px;color:var(--faint)}
+.choice em{font-style:normal;color:var(--blood);font-size:18px;letter-spacing:.1em}
+.choice:hover,.go:hover{background:var(--bile);transform:rotate(-1deg) translateY(-2px)}
+.go{background:var(--ink);color:var(--paper);font-family:var(--display);font-size:15px;padding:13px 20px 9px;align-self:flex-start}
+.go:hover{background:var(--blood);color:#fff}
+.go.quiet{background:var(--paper);color:var(--ink)}
+button:focus-visible,a:focus-visible{outline:4px solid var(--blood);outline-offset:3px}
+.hint{font-size:14px;color:var(--faint)}
+.verdict{font-family:var(--display);font-size:clamp(20px,5vw,30px);color:var(--blood);line-height:1.6;transform:rotate(-1.5deg)}
+.ad{display:grid;grid-template-columns:1fr auto;gap:18px;align-items:center;border:4px solid var(--ink);background:var(--damp);color:#f4ecd2;padding:18px 20px;border-radius:12px 60px 10px 50px/50px 12px 60px 10px;box-shadow:6px 7px 0 var(--ink);margin-top:8px}
+.ad h3{font-family:var(--display);font-weight:400;font-size:clamp(15px,3.6vw,20px);line-height:1.7;margin:0 0 4px;text-wrap:balance}
+.ad .sub{font-family:var(--hand);font-size:26px;line-height:1;color:var(--bile);margin:0 0 8px}
+.ad p{font-size:15px}
+.ad .by{margin-top:8px;font-size:13px;opacity:.85}
+.ad a{color:var(--bile);font-family:var(--hand);font-size:28px;line-height:1.1;display:inline-block;margin-top:6px}
+.qr{background:#fff;padding:10px 10px 4px;border:3px solid var(--ink);transform:rotate(2deg);text-align:center;color:var(--ink);border-radius:3px}
+.qr canvas{display:block;width:148px;height:148px;image-rendering:pixelated}
+.qr span{font-family:var(--hand);font-size:22px;line-height:1.2}
+.credit{font-size:12.5px;color:var(--faint)}
+@media (max-width:560px){.ad{grid-template-columns:1fr}.qr{justify-self:start}}
+@media (prefers-reduced-motion:reduce){.choice,.go{transition:none}.choice:hover,.go:hover{transform:none}}
+</style>
+</head>
+<body>
+<a href="arcade.html" style="position:relative;z-index:50;display:block;background:#141414;color:#f6f2e7;font:600 14px/1 system-ui,sans-serif;letter-spacing:.3px;padding:9px 14px;text-decoration:none;text-align:left">&larr; William George Works: back to the arcade</a>
+<canvas id="bg" aria-hidden="true"></canvas>
+<div class="app">
+  <header>
+    <div class="brand">The Last of the Unemployable<small>The Unemployable Arcade</small></div>
+    <button class="sound" id="sound" type="button" aria-pressed="false">Sound: off</button>
+  </header>
+
+  <div class="stage"><canvas id="cv" width="720" height="900" role="img" aria-label="Ink drawing of the current game"></canvas></div>
+
+  <div class="chips" aria-live="polite">
+    <span class="chip">Playing as<b id="cMe">nobody yet</b></span>
+    <span class="chip">Stars<b id="cStars">0 of 12</b></span>
+  </div>
+
+  <main id="panel"></main>
+
+  <aside class="ad" aria-label="About the book">
+    <div>
+      <h3>A museum. Two men spectacularly unqualified to run it.</h3>
+      <p class="sub">An entirely avoidable Lancashire catastrophe</p>
+      <p>A leaking roof, a boot of uncertain importance and an underground cathedral that exists chiefly in an AI-generated description. A Lancashire comedy about failure, friendship and the trouble you can cause while trying to be useful.</p>
+      <p class="by">The Last of the Unemployable, by William George &amp; Terrance Quill (AI collaborator). Paperback and Kindle.</p>
+      <a id="buy" href="#" target="_blank" rel="noopener">Find the book on Amazon</a>
+    </div>
+    <div class="qr"><canvas id="qr" width="370" height="370" role="img" aria-label="QR code that opens the book on Amazon"></canvas><span>Scan for the book</span></div>
+  </aside>
+  <p class="credit">Every quotation is taken from the novel. The games take liberties with it. The tune is an original polka for a band paid in crisps. Arcade by Reginald Quill (AI collaborator).</p>
+</div>
+
+<script>
+"use strict";
+/* ---------- the one line to change if the Amazon listing moves ---------- */
+const BOOK_URL = "https://www.amazon.co.uk/dp/B0HQYKBF3M";
+const QR = ["11111110110010100001101111111", "10000010100011100110101000001", "10111010000101110010101011101", "10111010110100110101001011101", "10111010011101101001101011101", "10000010001111101101101000001", "11111110101010101010101111111", "00000000100100010111000000000", "10110111010011001100001001011", "00011000000111011111111110001", "11100111001101001010000110110", "10010000000010011010011110001", "11011011110100100100000001100", "01000001010010101101001100111", "00110110110101000011010110111", "00000100100000110011100110010", "01111110011000111011110011010", "01100101011100100010000101110", "10011010111001111010010100100", "00110000100001100101010000100", "01111010111001100100111111100", "00000000100110011110100011111", "11111110101100100011101011010", "10000010110001101010100011000", "10111010010100000000111110100", "10111010111011001101010011001", "10111010110011101100110100101", "10000010011001010010111101010", "11111110111111101001101001010"];
+
+/* ---------- ink engine (house style, shared with The Moulding Museum Adventure) ---------- */
+const INK="#0d0d0d", BLOOD="#d3221c", BILE="#f3c61a", DAMP="#0f4a4a", MOSS="#5d7f38", PAPER="#f7f5ee", WET="#3f6f8a";
+const W=720, H=900;
+const DISP='"Rock Salt","Segoe Print","Bradley Hand",cursive', BODY='"Special Elite","Courier New",monospace', HAND='"Reenie Beanie","Segoe Print","Bradley Hand",cursive';
+let seed=1;
+function R(){ seed=(Math.imul(seed,1664525)+1013904223)>>>0; return seed/4294967296; }
+function rr(a,b){ return a+(b-a)*R(); }
+function hash(s){ let h=7; for(const c of s) h=(Math.imul(h,31)+c.charCodeAt(0))>>>0; return h||1; }
+function wob(pts,j){ const out=[]; for(let i=0;i<pts.length-1;i++){ const a=pts[i],b=pts[i+1]; const d=Math.hypot(b[0]-a[0],b[1]-a[1]); const n=Math.max(1,Math.round(d/14));
+  for(let k=0;k<n;k++){ const t=k/n; out.push([a[0]+(b[0]-a[0])*t+rr(-j,j), a[1]+(b[1]-a[1])*t+rr(-j,j)]); } }
+  const l=pts[pts.length-1]; out.push([l[0]+rr(-j,j),l[1]+rr(-j,j)]); return out; }
+function pen(g,pts,w,col,o){ o=o||{}; const q=wob(pts,o.j==null?1.7:o.j), n=q.length; if(n<2) return; const Lp=[],Rp=[], ph=rr(0,6), fr=rr(5,13);
+  for(let i=0;i<n;i++){ const a=q[Math.max(0,i-1)], b=q[Math.min(n-1,i+1)]; let dx=b[0]-a[0], dy=b[1]-a[1]; const d=Math.hypot(dx,dy)||1; dx/=d; dy/=d; const t=i/(n-1);
+    const tap=o.flat?1:Math.pow(Math.sin(Math.PI*(t*.9+.05)),.5), pr=.6+.4*Math.sin(t*fr+ph)+rr(-.2,.2), hw=Math.max(.3,w*.5*tap*Math.max(.22,pr));
+    Lp.push([q[i][0]-dy*hw,q[i][1]+dx*hw]); Rp.push([q[i][0]+dy*hw,q[i][1]-dx*hw]); }
+  g.fillStyle=col||INK; g.beginPath(); Lp.forEach((p,i)=> i?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1])); for(let i=n-1;i>=0;i--) g.lineTo(Rp[i][0],Rp[i][1]); g.closePath(); g.fill();
+  if(!o.clean&&w>1.6){ const q2=wob(pts,3.4); g.strokeStyle=col||INK; g.lineWidth=.7; g.lineCap="round"; g.beginPath(); q2.forEach((p,i)=> i?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1])); g.stroke(); }
+  if(w>2.4&&R()<.5){ const p=q[Math.floor(rr(0,n))]; for(let k=0;k<5;k++){ g.beginPath(); g.arc(p[0]+rr(-14,14),p[1]+rr(-14,14),rr(.5,2.2),0,7); g.fill(); } } }
+function poly(g,pts,col,j){ g.fillStyle=col; g.beginPath(); pts.forEach((p,i)=>{ const x=p[0]+rr(-(j||2),j||2), y=p[1]+rr(-(j||2),j||2); i?g.lineTo(x,y):g.moveTo(x,y); }); g.closePath(); g.fill(); }
+function blob(g,x,y,rx,ry,irr){ const n=13, pts=[]; for(let i=0;i<n;i++){ const a=i/n*Math.PI*2, k=1+rr(-irr,irr); pts.push([x+Math.cos(a)*rx*k, y+Math.sin(a)*ry*k]); }
+  g.beginPath(); for(let i=0;i<n;i++){ const a=pts[i], b=pts[(i+1)%n], mx=(a[0]+b[0])/2, my=(a[1]+b[1])/2; i?g.quadraticCurveTo(a[0],a[1],mx,my):g.moveTo(mx,my); }
+  const a=pts[0], b=pts[1]; g.quadraticCurveTo(a[0],a[1],(a[0]+b[0])/2,(a[1]+b[1])/2); g.closePath(); }
+function wash(g,x,y,rx,ry,col,al){ g.save(); g.globalCompositeOperation="multiply"; g.fillStyle=col; g.strokeStyle=col;
+  g.globalAlpha=(al||.6); blob(g,x+rr(-10,10),y+rr(-8,8),rx,ry,.34); g.fill(); g.globalAlpha=(al||.6)*.5; g.lineWidth=3; g.stroke();
+  g.globalAlpha=(al||.6)*.55; blob(g,x+rr(-rx*.3,rx*.3),y+rr(-ry*.3,ry*.3),rx*.6,ry*.6,.4); g.fill();
+  g.globalAlpha=(al||.6)*.9; for(let i=0;i<7;i++){ const a=rr(0,7), d=rr(1,1.5); g.beginPath(); g.arc(x+Math.cos(a)*rx*d,y+Math.sin(a)*ry*d,rr(1,Math.min(6,Math.max(2,rx*.07))),0,7); g.fill(); }
+  g.restore(); }
+function splat(g,x,y,r,col,dir){ g.save(); col=col||INK; g.fillStyle=col; g.strokeStyle=col; g.lineCap="round";
+  const n=30; g.beginPath(); for(let i=0;i<n;i++){ const a=i/n*Math.PI*2, k=(i%2?rr(.55,.9):rr(.9,1.25))*(R()<.14?rr(1.4,2.1):1), px=x+Math.cos(a)*r*k, py=y+Math.sin(a)*r*k*.92; i?g.lineTo(px,py):g.moveTo(px,py); } g.closePath(); g.fill();
+  const rays=11+Math.floor(rr(0,12));
+  for(let i=0;i<rays;i++){ const a=dir==null?rr(0,Math.PI*2):dir+(R()+R()+R()-1.5)*1.3, len=r*rr(1.8,dir==null?5.5:8.5), bw=r*rr(.05,.17), sx=x+Math.cos(a)*r*.7, sy=y+Math.sin(a)*r*.7, ex=x+Math.cos(a)*len, ey=y+Math.sin(a)*len, nx=-Math.sin(a)*bw, ny=Math.cos(a)*bw;
+    g.beginPath(); g.moveTo(sx+nx,sy+ny); g.lineTo(ex,ey); g.lineTo(sx-nx,sy-ny); g.closePath(); g.fill();
+    if(R()<.7){ const k=rr(1.02,1.35); g.beginPath(); g.ellipse(x+Math.cos(a)*len*k,y+Math.sin(a)*len*k,r*rr(.05,.16),r*rr(.03,.09),a,0,7); g.fill(); } }
+  for(let i=0;i<34;i++){ const a=dir==null?rr(0,7):dir+rr(-1.2,1.2), d=r*(1.3+R()*R()*8); g.beginPath(); g.arc(x+Math.cos(a)*d,y+Math.sin(a)*d,r*rr(.012,.075),0,7); g.fill(); }
+  g.restore(); }
+function spray(g,x,y,sp,n,col){ g.save(); g.fillStyle=col||INK; for(let i=0;i<n;i++){ const a=rr(0,7), d=sp*R()*R(); g.beginPath(); g.arc(x+Math.cos(a)*d,y+Math.sin(a)*d,rr(.4,2.4),0,7); g.fill(); } g.restore(); }
+function hatch(g,x,y,w,h,ang,gap,col){ const c=Math.cos(ang), s=Math.sin(ang), n=Math.floor((w+h)/gap); for(let i=0;i<n;i++){ const t=i*gap-h, x1=x+t+rr(-3,3), l=rr(.55,1.1)*h; if(x1<x-h*.4||x1>x+w+h*.2) continue; pen(g,[[x1,y+rr(-4,4)],[x1+c*l*.9,y+s*l+rr(-3,3)]],rr(.9,2),col||INK,{clean:1,j:.8}); } }
+function scribble(g,x,y,w,rows,col){ for(let r=0;r<rows;r++){ const pts=[]; const n=Math.floor(w/6); for(let i=0;i<=n;i++) pts.push([x+i*6, y+r*9+(i%2?-3:3)*rr(.3,1)]); pen(g,pts,1.7,col||INK,{clean:1,j:.6}); } }
+function scrawl(g,t,x,y,size,rot,col,font){ g.save(); g.translate(x,y); g.rotate(rot||0); g.fillStyle=col||INK; g.font=size+"px "+(font||DISP); g.textAlign="center"; g.fillText(t,0,0); g.restore(); }
+function paper(g){ g.fillStyle=PAPER; g.fillRect(0,0,W,H); spray(g,W/2,H/2,760,200,"rgba(13,13,13,.4)"); }
+function ring(g,x,y,r,w,col){ const pts=[]; const a0=rr(0,6); for(let i=0;i<=16;i++){ const a=a0+i/16*Math.PI*2.08; pts.push([x+Math.cos(a)*r*rr(.94,1.06),y+Math.sin(a)*r*rr(.94,1.06)]); } pen(g,pts,w,col||INK,{clean:1,j:.6,flat:1}); }
+function eyeball(g,x,y,r){ g.fillStyle="#fff"; g.beginPath(); g.arc(x,y,r,0,7); g.fill(); ring(g,x,y,r,2.6); for(let i=0;i<4;i++){ const a=rr(0,7); pen(g,[[x+Math.cos(a)*r*.95,y+Math.sin(a)*r*.95],[x+Math.cos(a+rr(-.4,.4))*r*.35,y+Math.sin(a)*r*.35]],.9,BLOOD,{clean:1,j:.4}); } g.fillStyle=INK; g.beginPath(); g.arc(x+rr(-r*.3,r*.4),y+rr(-r*.2,r*.3),Math.max(1.4,r*.26),0,7); g.fill(); }
+function hand(g,x,y,a,s){ for(let i=0;i<5;i++){ const b=a-.9+i*.45+rr(-.1,.1), l=rr(20,34)*s, k=b+rr(-.5,.5); pen(g,[[x,y],[x+Math.cos(b)*l*.55,y+Math.sin(b)*l*.55],[x+Math.cos(b)*l*.55+Math.cos(k)*l*.5,y+Math.sin(b)*l*.55+Math.sin(k)*l*.5]],3*s,INK,{clean:1,j:.6}); } }
+
+/* ---------- the cast ---------- */
+function seb(g,x,y,s,o){ o=o||{}; const coat=o.coat||INK, P=(dx,dy)=>[x+dx*s,y+dy*s];
+  pen(g,[P(-10,-70),P(-26,-36),P(-12,-4)],5*s); pen(g,[P(12,-70),P(30,-40),P(20,-4)],5*s);
+  poly(g,[P(-14,-6),P(-58,2),P(-12,4)],INK); poly(g,[P(18,-6),P(70,-2),P(20,4)],INK);
+  poly(g,[P(-16,-204),P(-36,-150),P(-70,-78),P(-112,-40),P(-62,-58),P(-50,-30),P(-24,-64),P(-2,-40),P(14,-68),P(48,-44),P(34,-128),P(22,-204)],coat,3);
+  for(let i=0;i<9;i++) pen(g,[P(rr(-40,24),rr(-180,-70)),P(rr(-60,34),rr(-120,-50))],1.1*s,PAPER,{clean:1,j:.6});
+  pen(g,[P(-16,-204),P(-36,-150),P(-70,-78),P(-112,-40)],3*s); pen(g,[P(22,-204),P(34,-128),P(48,-44)],3*s);
+  pen(g,[P(-4,-206),P(-8,-226)],3.4*s); pen(g,[P(10,-206),P(12,-222)],2.6*s);
+  pen(g,[P(8,-204),P(-40,-222),P(-104,-196),P(-150,-226)],12*s,BLOOD,{clean:1}); pen(g,[P(4,-198),P(-50,-186),P(-96,-150)],9*s,BLOOD,{clean:1});
+  poly(g,[P(-14,-230),P(-22,-264),P(-6,-288),P(18,-284),P(27,-264),P(64,-244),P(27,-240),P(31,-228),P(17,-221),P(22,-206),P(-2,-204)],PAPER,1.5);
+  pen(g,[P(-14,-230),P(-22,-264),P(-6,-288),P(18,-284),P(27,-264),P(64,-244),P(27,-240)],3.6*s); pen(g,[P(22,-206),P(-2,-204),P(-14,-230)],3.2*s);
+  poly(g,[P(15,-234),P(36,-231),P(19,-213)],INK,1); for(let i=0;i<3;i++) pen(g,[P(19+i*5,-233),P(20+i*4,-227)],1.6*s,"#fff",{clean:1,j:.2});
+  eyeball(g,x+9*s,y-262*s,10*s); eyeball(g,x+27*s,y-270*s,6.5*s); pen(g,[P(-6,-280),P(14,-276),P(36,-284)],4*s);
+  for(let i=0;i<19;i++){ const a=Math.PI*(1.02+i*.045)+rr(-.08,.08), l=rr(28,78)*s; pen(g,[P(Math.cos(a)*14-2,-262+Math.sin(a)*22),P(Math.cos(a)*14-2+Math.cos(a-.5)*l,-262+Math.sin(a)*22+Math.sin(a-.5)*l)],2.6*s,INK,{clean:1,j:1}); }
+  let e,h,ha; if(o.arm==="out"){ e=P(62,-176); h=P(124,-206); ha=-.35; } else { e=P(66,-206); h=P(94,-286); ha=-1.2; }
+  pen(g,[P(18,-194),e,h],5.5*s); hand(g,h[0],h[1],ha,s);
+  const e2=P(-56,-150), h2=P(-34,-106); pen(g,[P(-12,-194),e2,h2],5.5*s); }
+function oli(g,x,y,s){ const P=(dx,dy)=>[x+dx*s,y+dy*s];
+  pen(g,[P(-12,-52),P(-16,-4)],5*s); pen(g,[P(12,-52),P(16,-4)],5*s); poly(g,[P(-18,-8),P(-52,2),P(-10,4)],INK); poly(g,[P(12,-8),P(48,2),P(18,4)],INK);
+  wash(g,x,y-98*s,40*s,52*s,MOSS,.95);
+  pen(g,[P(-30,-150),P(-48,-96),P(-40,-46),P(0,-40),P(42,-48),P(46,-100),P(28,-152)],3.4*s); hatch(g,x-36*s,y-140*s,34*s,84*s,1.2,7*s);
+  poly(g,[P(-26,-150),P(-30,-182),P(-16,-204),P(14,-206),P(30,-184),P(26,-150),P(0,-142)],PAPER,1.5);
+  pen(g,[P(-26,-150),P(-30,-182),P(-16,-204),P(14,-206),P(30,-184),P(26,-150),P(0,-142),P(-26,-150)],3.2*s);
+  [[-12,-178],[13,-178]].forEach(e=>{ g.fillStyle="#fff"; g.beginPath(); g.arc(x+e[0]*s,y+e[1]*s,12*s,0,7); g.fill(); ring(g,x+e[0]*s,y+e[1]*s,12*s,3.4*s); g.fillStyle=INK; g.beginPath(); g.arc(x+e[0]*s+rr(-3,3),y+e[1]*s+3*s,2*s,0,7); g.fill(); });
+  pen(g,[P(-1,-180),P(2,-180)],2.4*s,INK,{clean:1}); pen(g,[P(-9,-158),P(-4,-155),P(1,-159),P(6,-155),P(10,-158)],2*s,INK,{clean:1,j:.3});
+  for(let i=0;i<8;i++) pen(g,[P(-20+i*6,-204),P(-24+i*6+rr(-3,3),-204+rr(8,24))],2.2*s,INK,{clean:1,j:.5});
+  [[38,-196],[44,-180],[-40,-190]].forEach(d=>{ pen(g,[P(d[0],d[1]),P(d[0]+2,d[1]+8)],2.2*s,WET,{clean:1}); });
+  pen(g,[P(28,-140),P(52,-100),P(48,-68)],5*s); pen(g,[P(-28,-140),P(-54,-108),P(-44,-78)],5*s); }
+function diane(g,x,y,s,front){ const P=(dx,dy)=>[x+dx*s,y+dy*s];
+  pen(g,[P(-14,-30),P(-15,-4)],5*s); pen(g,[P(14,-30),P(15,-4)],5*s);
+  poly(g,[P(-34,-6),P(-4,-8),P(-4,6),P(-36,6)],BILE,1); poly(g,[P(4,-8),P(34,-6),P(36,6),P(4,6)],BILE,1);
+  pen(g,[P(-36,6),P(-34,-6),P(-4,-8),P(-4,6),P(-36,6)],2.4*s,INK,{clean:1}); pen(g,[P(4,6),P(4,-8),P(34,-6),P(36,6),P(4,6)],2.4*s,INK,{clean:1});
+  poly(g,[P(-28,-166),P(-50,-28),P(50,-28),P(28,-166)],"#5a2a6a",2); pen(g,[P(-28,-166),P(-50,-28),P(50,-28),P(28,-166)],3.4*s); hatch(g,x-40*s,y-150*s,40*s,110*s,1.25,8*s);
+  pen(g,[P(-28,-150),P(-58,-96),P(-46,-70)],5*s); pen(g,[P(28,-150),P(56,-100),P(50,-72)],5*s);
+  poly(g,[P(46,-74),P(84,-76),P(82,-40),P(48,-38)],"#8a5a2b",1.5); pen(g,[P(46,-74),P(84,-76),P(82,-40),P(48,-38),P(46,-74)],2.6*s); pen(g,[P(54,-75),P(60,-96),P(72,-96),P(76,-76)],2.2*s);
+  g.fillStyle=PAPER; blob(g,x,y-192*s,27*s,29*s,.05); g.fill(); ring(g,x,y-192*s,27*s,3.2*s);
+  if(front){ poly(g,[P(-28,-196),P(-22,-224),P(0,-230),P(22,-224),P(28,-196),P(12,-212),P(-12,-212)],INK,1.5);
+    ring(g,x-10*s,y-192*s,8*s,2.4*s); ring(g,x+10*s,y-192*s,8*s,2.4*s); g.fillStyle=INK; g.beginPath(); g.arc(x-10*s,y-191*s,2.4*s,0,7); g.arc(x+10*s,y-191*s,2.4*s,0,7); g.fill();
+    pen(g,[P(-22,-206),P(-4,-202)],3*s,INK,{clean:1}); pen(g,[P(22,-206),P(4,-202)],3*s,INK,{clean:1}); pen(g,[P(-9,-174),P(9,-175)],2.6*s,INK,{clean:1}); }
+  else { g.fillStyle=INK; blob(g,x,y-194*s,27*s,28*s,.08); g.fill(); g.fillStyle=INK; blob(g,x,y-226*s,13*s,11*s,.1); g.fill(); for(let i=0;i<5;i++) pen(g,[P(rr(-16,16),rr(-210,-180)),P(rr(-18,18),rr(-200,-172))],1*s,PAPER,{clean:1}); } }
+
+/* ---------- canvas plumbing ---------- */
+const cv=document.getElementById("cv"), ctx=cv.getContext("2d");
+function mk(w,h,fn){ const c=document.createElement("canvas"); c.width=w; c.height=h; fn(c.getContext("2d")); return c; }
+const SPR={};
+function buildSprites(){
+  seed=11; SPR.seb={c:mk(340,360,g=>seb(g,180,346,1,{arm:"up"})),ox:180,oy:346};
+  seed=12; SPR.oli={c:mk(220,240,g=>oli(g,110,228,1)),ox:110,oy:228};
+  seed=13; SPR.dBack={c:mk(240,270,g=>diane(g,110,258,1,false)),ox:110,oy:258};
+  seed=14; SPR.dFront={c:mk(240,270,g=>diane(g,110,258,1,true)),ox:110,oy:258}; }
+function spr(g,name,x,y,sc){ const s=SPR[name]; g.drawImage(s.c,x-s.ox*sc,y-s.oy*sc,s.c.width*sc,s.c.height*sc); }
+function meSpr(g,x,y,sc){ spr(g,S.me,x,y,S.me==="seb"?sc:sc*1.25); }
+function T(g,str,x,y,size,font,col,align){ g.font=size+"px "+font; g.fillStyle=col||INK; g.textAlign=align||"center"; g.fillText(str,x,y); }
+function wrap(g,str,x,y,maxW,lh,size,font,col){ g.font=size+"px "+font; g.fillStyle=col||INK; g.textAlign="center"; const words=str.split(" "); let line="", lines=[];
+  words.forEach(w=>{ const t=line?line+" "+w:w; if(g.measureText(t).width>maxW&&line){ lines.push(line); line=w; } else line=t; }); if(line) lines.push(line);
+  const y0=y-(lines.length-1)*lh/2; lines.forEach((l,i)=>g.fillText(l,x,y0+i*lh)); }
+function box(g,x,y,w,h,r,fill,stroke,lw){ g.beginPath(); g.moveTo(x+r,y); g.lineTo(x+w-r,y); g.quadraticCurveTo(x+w,y,x+w,y+r); g.lineTo(x+w,y+h-r); g.quadraticCurveTo(x+w,y+h,x+w-r,y+h); g.lineTo(x+r,y+h); g.quadraticCurveTo(x,y+h,x,y+h-r); g.lineTo(x,y+r); g.quadraticCurveTo(x,y,x+r,y); g.closePath();
+  if(fill){ g.fillStyle=fill; g.fill(); } if(stroke){ g.strokeStyle=stroke; g.lineWidth=lw||4; g.lineJoin="round"; g.stroke(); } }
+function star(g,x,y,r,on){ g.beginPath(); for(let i=0;i<10;i++){ const a=-Math.PI/2+i*Math.PI/5, d=i%2?r*.45:r; i?g.lineTo(x+Math.cos(a)*d,y+Math.sin(a)*d):g.moveTo(x+Math.cos(a)*d,y+Math.sin(a)*d); } g.closePath(); g.fillStyle=on?BILE:PAPER; g.fill(); g.strokeStyle=INK; g.lineWidth=4; g.lineJoin="round"; g.stroke(); }
+function banner(g,stars,word){ g.save(); g.translate(W/2,430); g.rotate(-.04); box(g,-250,-100,500,200,18,PAPER,INK,6); T(g,word,0,-40,26,DISP,BLOOD); for(let i=0;i<3;i++) star(g,-110+i*110,40,40,i<stars); g.restore(); }
+
+let cur=null, raf=0, lastT=0;
+function setScene(sc){ cancelAnimationFrame(raf); cur=sc; cv.style.touchAction=sc.live?"none":""; if(sc.live){ lastT=performance.now(); raf=requestAnimationFrame(tick); } else sc.draw(ctx); }
+function tick(now){ if(!cur||!cur.live) return; const dt=Math.min(.05,Math.max(0,(now-lastT)/1000)); lastT=now; cur.update(dt); if(!cur||!cur.live) return; cur.draw(ctx); raf=requestAnimationFrame(tick); }
+function pos(e){ const r=cv.getBoundingClientRect(); return [(e.clientX-r.left)/r.width*W,(e.clientY-r.top)/r.height*H]; }
+cv.addEventListener("pointerdown",e=>{ if(cur&&cur.live){ e.preventDefault(); const p=pos(e); if(cur.down) cur.down(p[0],p[1]); } });
+addEventListener("pointerup",()=>{ if(cur&&cur.live&&cur.up) cur.up(); });
+addEventListener("pointercancel",()=>{ if(cur&&cur.live&&cur.up) cur.up(); });
+cv.addEventListener("contextmenu",e=>e.preventDefault());
+addEventListener("keydown",e=>{ if(cur&&cur.live&&cur.key&&(e.key==="ArrowLeft"||e.key==="ArrowRight"||e.key===" ")){ e.preventDefault(); if(!e.repeat) cur.key(e.key,true); } });
+addEventListener("keyup",e=>{ if(cur&&cur.live&&cur.key) cur.key(e.key,false); });
+
+/* ---------- sound: an original polka ---------- */
+let AC=null, mus=null, sfxBus=null, soundOn=false, timer=null, nextT=0, step=0, tempo=112, tr=0;
+const CH={G:[43,[59,62,67]],D7:[38,[60,62,66]],C:[36,[60,64,67]]};
+const BARS=["G","G","D7","D7","G","G","D7","G","C","C","G","G","D7","D7","G","G"];
+const TUNE=[[67,1],[71,1],[74,1],[71,1],[79,2],[74,2],[74,1],[72,1],[69,1],[72,1],[78,2],[74,2],[67,1],[71,1],[74,1],[79,1],[83,2],[79,2],[81,1],[78,1],[74,1],[72,1],[71,1],[74,1],[67,2],
+            [76,1],[72,1],[76,1],[79,1],[84,2],[79,1],[76,1],[74,1],[71,1],[74,1],[79,1],[83,2],[79,2],[81,1],[81,1],[78,1],[74,1],[72,1],[74,1],[78,1],[81,1],[79,1],[74,1],[71,1],[74,1],[67,3],[0,1]];
+const MEL=(function(){ const m={}; let b=0; TUNE.forEach(n=>{ if(n[0]) m[b]=n; b+=n[1]; }); return m; })();
+function hz(m){ return 440*Math.pow(2,(m-69)/12); }
+function tone(bus,type,m,t,dur,vol,cut,det){ const o=AC.createOscillator(), f=AC.createBiquadFilter(), g=AC.createGain(); o.type=type; o.frequency.value=hz(m); o.detune.value=det||0; f.type="lowpass"; f.frequency.value=cut;
+  g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(vol,t+.02); g.gain.setValueAtTime(vol,t+dur*.6); g.gain.exponentialRampToValueAtTime(.0008,t+dur); o.connect(f); f.connect(g); g.connect(bus); o.start(t); o.stop(t+dur+.05); }
+function sched(){ if(!AC) return; const sd=30/tempo; while(nextT<AC.currentTime+.3){ const pass=Math.floor(step/64)%2, b=step%64, bar=Math.floor(b/4), p=b%4, ch=CH[BARS[bar]], t=nextT+Math.random()*.01;
+    if(p===0) tone(mus,"sawtooth",ch[0]+tr,t,sd*1.6,.32,260,0); else if(p===2) tone(mus,"sawtooth",ch[0]+7+tr,t,sd*1.6,.26,260,0);
+    else ch[1].forEach(m=>tone(mus,"triangle",m+tr,t,sd*.7,.08,1500,(Math.random()-.5)*14));
+    const n=MEL[b]; if(n){ if(pass===0){ tone(mus,"sawtooth",n[0]+tr,t,sd*n[1]*.92,.11,1800,(Math.random()-.5)*20); tone(mus,"square",n[0]-12+tr,t,sd*n[1]*.9,.03,900,6); } else tone(mus,"triangle",n[0]-12+tr,t,sd*n[1]*.92,.2,1200,(Math.random()-.5)*16); }
+    nextT+=sd; step++; } }
+function startSound(){ try{ if(!AC){ AC=new (window.AudioContext||window.webkitAudioContext)(); mus=AC.createGain(); mus.gain.value=.5; mus.connect(AC.destination); sfxBus=AC.createGain(); sfxBus.gain.value=.7; sfxBus.connect(AC.destination); }
+    AC.resume(); nextT=AC.currentTime+.08; if(!timer) timer=setInterval(sched,80); soundOn=true; }catch(e){ soundOn=false; } paintSound(); }
+function stopSound(){ soundOn=false; if(timer){ clearInterval(timer); timer=null; } if(AC) AC.suspend(); paintSound(); }
+function paintSound(){ const b=document.getElementById("sound"); b.textContent="Sound: "+(soundOn?"on":"off"); b.setAttribute("aria-pressed",String(soundOn)); }
+function sfx(kind){ if(!soundOn||!AC) return; const t=AC.currentTime;
+  if(kind==="bad"){ tone(sfxBus,"sawtooth",40,t,.25,.3,300,0); }
+  else if(kind==="till"){ tone(sfxBus,"triangle",88,t,.12,.25,5000,0); tone(sfxBus,"triangle",93,t+.09,.3,.25,5000,0); }
+  else if(kind==="pomp"){ [62,66,69,74].forEach((m,i)=>tone(sfxBus,"sawtooth",m,t+i*.09,.22,.14,1800,0)); }
+  else if(kind==="tick"){ tone(sfxBus,"square",84,t,.04,.08,4000,0); }
+  else { tone(sfxBus,"triangle",76,t,.1,.2,3000,0); tone(sfxBus,"triangle",81,t+.08,.18,.2,3000,0); } }
+document.getElementById("sound").addEventListener("click",()=> soundOn?stopSound():startSound());
+
+/* ---------- state ---------- */
+const S={me:null,stars:{}};
+const NAME={seb:"Sebastian",oli:"Oliver"};
+function total(){ return Object.values(S.stars).reduce((a,b)=>a+b,0); }
+function chips(){ document.getElementById("cMe").textContent=S.me?NAME[S.me]:"nobody yet"; document.getElementById("cStars").textContent=total()+" of 12"; }
+
+/* ---------- game one: the road from Garstang ---------- */
+function roadGame(){
+  const lanes=[200,360,520], CY=730; let lane=1, cx=360, batt=100, dist=0, acc=0, objs=[], stall=0, msg="Tap left or right to change lane", msgT=2.5, scroll=0, flash=0;
+  const LEN=38;
+  seed=hash("road"); const bg=mk(W,H,g=>{ paper(g); wash(g,360,450,230,460,"#8d9296",.5); wash(g,52,300,50,280,MOSS,.7); wash(g,52,720,50,200,MOSS,.6); wash(g,668,260,50,240,MOSS,.6); wash(g,668,680,50,260,MOSS,.7);
+    pen(g,[[112,-10],[106,910]],7); pen(g,[[608,-10],[614,910]],7); hatch(g,10,40,80,820,1.2,22); hatch(g,625,40,80,820,1.9,22);
+    for(let i=0;i<26;i++){ const x=rr(0,W), y=rr(0,H), l=rr(26,70); pen(g,[[x,y],[x-l*.3,y+l]],rr(.8,1.8),INK,{clean:1,j:.5}); } });
+  function spawn(){ const free=Math.floor(Math.random()*3); for(let l=0;l<3;l++){ if(l===free||Math.random()>.6) continue; const r=Math.random(); objs.push({l:l,y:-80,k:r<.3?"sheep":r<.5?"puddle":r<.72?"app":"tap"}); }
+    if(Math.random()<.22) objs.push({l:free,y:-80,k:"tap"}); }
+  function say(m){ msg=m; msgT=1.6; }
+  function hit(o){ o.hit=1;
+    if(o.k==="sheep"){ batt-=12; stall=.5; flash=.3; say("Sheep. It was there first."); sfx("bad"); }
+    else if(o.k==="puddle"){ batt-=6; say("Puddle. Deeper than it looked."); sfx("bad"); }
+    else if(o.k==="app"){ batt-=9; stall=.9; flash=.3; say("PLEASE DOWNLOAD THE APP"); sfx("bad"); }
+    else { batt=Math.min(100,batt+16); say("Contactless. It works at once."); sfx("till"); } }
+  return { live:true,
+    down(x){ lane=Math.max(0,Math.min(2,lane+(x<W/2?-1:1))); sfx("tick"); },
+    key(k,d){ if(!d) return; if(k==="ArrowLeft") lane=Math.max(0,lane-1); if(k==="ArrowRight") lane=Math.min(2,lane+1); },
+    update(dt){ const f=stall>0?.3:1; if(stall>0) stall-=dt; if(flash>0) flash-=dt; if(msgT>0) msgT-=dt;
+      dist+=dt*f; batt-=3.5*dt; scroll=(scroll+430*f*dt)%120; acc+=dt*f; if(acc>.74){ acc=0; spawn(); }
+      objs.forEach(o=>{ o.y+=430*f*dt; if(!o.hit&&o.l===lane&&Math.abs(o.y-CY)<64) hit(o); }); objs=objs.filter(o=>o.y<H+90&&!(o.hit&&o.k==="tap"));
+      cx+=(lanes[lane]-cx)*Math.min(1,dt*14);
+      if(dist>=LEN){ const st=batt>=50?3:batt>=22?2:1; finish("road",st,"Arrived",["You roll into Moulding-in-the-Mire with "+Math.round(batt)+"% in the battery. It is raining. The car says nothing, which is the most it has said all day."],"That’s how they get you.","Sebastian Vale"); }
+      else if(batt<=0){ batt=0; finish("road",0,"Flat",["The battery dies "+Math.max(1,Math.round((1-dist/LEN)*24))+" miles short of Moulding-in-the-Mire. The car is electric and silent, and now it is also stationary."],"Perhaps it doesn’t respect you.","Sebastian Vale"); } },
+    draw(g){ g.drawImage(bg,0,0);
+      g.fillStyle=PAPER; for(let y=-120+scroll;y<H;y+=120){ g.fillRect(277,y,8,60); g.fillRect(437,y,8,60); }
+      objs.forEach(o=>{ const x=lanes[o.l], y=o.y;
+        if(o.k==="puddle"){ g.globalAlpha=.75; g.fillStyle=WET; g.beginPath(); g.ellipse(x,y,56,30,0,0,7); g.fill(); g.globalAlpha=1; g.strokeStyle=INK; g.lineWidth=2.5; g.beginPath(); g.ellipse(x-6,y-2,30,12,0,0,7); g.stroke(); }
+        else if(o.k==="sheep"){ g.fillStyle="#fff"; g.strokeStyle=INK; g.lineWidth=4; g.beginPath(); for(let i=0;i<8;i++){ const a=i/8*Math.PI*2; g.moveTo(x+Math.cos(a)*30+16,y+Math.sin(a)*18); g.arc(x+Math.cos(a)*30,y+Math.sin(a)*18,16,0,7); } g.fill(); g.stroke(); g.beginPath(); g.ellipse(x,y,34,22,0,0,7); g.fill();
+          g.fillStyle=INK; g.beginPath(); g.ellipse(x+34,y-10,14,11,-.3,0,7); g.fill(); g.fillRect(x-20,y+22,6,16); g.fillRect(x+12,y+22,6,16); g.fillStyle="#fff"; g.beginPath(); g.arc(x+38,y-13,3,0,7); g.fill(); }
+        else { const good=o.k==="tap"; box(g,x-34,y-56,68,112,8,"#fff",INK,5); box(g,x-24,y-44,48,44,4,good?DAMP:BILE,INK,3); T(g,good?"TAP":"APP",x,y-14,15,DISP,good?"#fff":INK); g.fillStyle=INK; g.fillRect(x-4,y+12,8,30); g.beginPath(); g.arc(x,y+16,9,0,7); g.fill(); } });
+      const jx=stall>0?Math.sin(performance.now()/24)*6:0; g.save(); g.translate(cx+jx,CY);
+      g.fillStyle=INK; [[-50,-48],[38,-48],[-50,26],[38,26]].forEach(w=>g.fillRect(w[0],w[1],12,30));
+      box(g,-42,-74,84,148,18,"#e9e6da",INK,5); box(g,-30,-40,60,34,8,DAMP,INK,3); box(g,-28,30,56,22,6,DAMP,INK,3);
+      g.fillStyle=BILE; g.fillRect(-36,-72,14,8); g.fillRect(22,-72,14,8);
+      g.strokeStyle=S.me==="seb"?BLOOD:MOSS; g.lineWidth=9; g.lineCap="round"; g.beginPath(); g.moveTo(-42,-10); g.quadraticCurveTo(-70,10+Math.sin(performance.now()/90)*8,-64,60+Math.sin(performance.now()/70)*10); g.stroke(); g.restore();
+      if(flash>0){ g.globalAlpha=flash; g.fillStyle=BLOOD; g.fillRect(0,0,W,H); g.globalAlpha=1; }
+      box(g,24,22,300,54,10,PAPER,INK,4); g.fillStyle=batt>30?MOSS:BLOOD; g.fillRect(32,30,Math.max(0,284*batt/100),38); T(g,"battery "+Math.max(0,Math.round(batt))+"%",174,57,18,BODY,INK);
+      box(g,350,22,346,54,10,PAPER,INK,4); T(g,"Moulding-in-the-Mire "+Math.max(0,Math.ceil((1-dist/LEN)*24))+" mi",523,57,18,BODY,INK);
+      if(msgT>0){ g.save(); g.translate(W/2,150); g.rotate(-.03); box(g,-300,-34,600,60,10,PAPER,INK,4); T(g,msg,0,8,20,BODY,BLOOD); g.restore(); } } };
+}
+
+/* ---------- game two: The Injured Badger ---------- */
+function pubGame(){
+  const SAFE=["A tea, please.","Evening, all.","Is the pie on tonight?","Same again. I have the money here.","Grand fire you’ve got going.","Whose dog is that?","I’ll have what he’s having."];
+  const CREDIT=["Put it on my tab, Neville.","I’ll settle up Thursday.","Do you take IOUs?","Add it to the museum account."];
+  const POL=["The trouble with this council…","What this country needs…","I blame Westminster.","Now, about the bypass…","Call that a government?"];
+  const Y88=["So what did happen in the summer of 1988?","Funny thing about 1988…","Eighty-eight was a hot one, I hear."];
+  function pick(a){ return a.splice(Math.floor(Math.random()*a.length),1)[0]; }
+  function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); const t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
+  function half(extra){ const h=[{k:"pol",t:pick(POL)},{k:"pol",t:pick(POL)},{k:"credit",t:pick(CREDIT)},{k:extra,t:pick(extra==="y88"?Y88:CREDIT)},{k:"safe",t:pick(SAFE)},{k:"safe",t:pick(SAFE)},{k:"safe",t:pick(SAFE)}]; return shuffle(h); }
+  const first=half("y88"); first.push({k:"y88",t:pick(Y88)}); shuffle(first); const deck=first.slice(0,7).concat(half("y88")); const N=deck.length;
+  let i=0, score=0, strikes=0, phase="ask", t=0, limit=4.4, out="", good=true;
+  seed=hash("pub"); const bg=mk(W,H,g=>{ paper(g); wash(g,360,120,380,130,"#8a5a2b",.55); wash(g,360,640,380,90,"#8a5a2b",.4);
+    pen(g,[[30,40],[28,250],[400,246],[404,36],[30,40]],5); pen(g,[[-10,596],[730,590]],8); pen(g,[[-10,612],[730,608]],3);
+    [[560,596],[640,596]].forEach(p=>{ pen(g,[[p[0],p[1]],[p[0]+2,p[1]-70]],9); poly(g,[[p[0]-12,p[1]-70],[p[0]+16,p[1]-72],[p[0]+12,p[1]-98],[p[0]-8,p[1]-96]],BLOOD,2); });
+    splat(g,680,40,16,"#8a5a2b",2.4); splat(g,30,560,12,INK,-.4); });
+  function mins(){ return 300+Math.min(i,N)*(120/N)+(phase==="ask"?Math.min(1,t/limit)*(120/N)*.9:(120/N)*.9); }
+  function afterSix(){ return 300+i*(120/N)>=359.9; }
+  function answer(said,auto){ if(phase!=="ask") return; const c=deck[i], ok=c.k==="safe"||(c.k==="pol"&&afterSix());
+    if(said){ if(ok){ score++; good=true; out=auto?"It slips out. Harmlessly, as it happens.":c.k==="pol"?"Gone six. Politics is permitted. The pub joins in.":"Said. The pub carries on."; sfx("ok"); }
+      else { strikes++; good=false; out=(auto?"It slips out. ":"")+(c.k==="credit"?"Rule one. Nobody receives credit.":c.k==="pol"?"Rule two. Not before six.":"Rule three. The pub goes very quiet."); sfx("bad"); } }
+    else { if(!ok){ score++; good=true; out="Swallowed. Neville nods, very slightly."; sfx("ok"); } else { good=true; out=c.k==="pol"?"It has gone six. You were allowed that one.":"You say nothing. Nobody minds."; sfx("tick"); } }
+    phase="react"; t=0; }
+  return { live:true,
+    down(x,y){ if(y>640) answer(x>W/2,false); },
+    key(k,d){ if(!d) return; if(k==="ArrowLeft") answer(false,false); if(k==="ArrowRight") answer(true,false); },
+    update(dt){ t+=dt;
+      if(phase==="ask"&&t>=limit) answer(true,true);
+      else if(phase==="react"&&t>1.5){ if(strikes>=3){ finish("pub",0,"Barred",["Three offences. Neville lifts the hatch and holds the door, which is the politest you have ever been thrown out of anywhere."],"I expected hospitality, not financial persecution.","Sebastian Vale"); return; }
+        i++; if(i>=N){ const st=score>=12?3:score>=9?2:1; finish("pub",st,"Seven o’clock",["You made it to seven with "+score+" out of "+N+" and "+(strikes?strikes+" offence"+(strikes>1?"s":""):"a clean sheet")+". Neville pours you a tea without being asked. Three pounds."],"Comes with a cup.","Neville Puddifoot"); return; }
+        phase="ask"; t=0; limit=Math.max(2.8,4.4-i*.12); } },
+    draw(g){ g.drawImage(bg,0,0);
+      T(g,"HOUSE RULES",215,82,17,DISP,BLOOD); T(g,"1. Nobody receives credit.",50,122,17,BODY,INK,"left"); T(g,"2. No politics before six.",50,156,17,BODY,INK,"left"); T(g,"3. Nobody mentions the",50,190,17,BODY,INK,"left"); T(g,"   summer of 1988.",50,216,17,BODY,INK,"left");
+      const m=mins(), cxk=565, cyk=140; g.fillStyle="#fff"; g.beginPath(); g.arc(cxk,cyk,84,0,7); g.fill(); g.strokeStyle=INK; g.lineWidth=7; g.stroke();
+      for(let k=0;k<12;k++){ const a=k/12*Math.PI*2; g.lineWidth=k%3?2:5; g.beginPath(); g.moveTo(cxk+Math.sin(a)*70,cyk-Math.cos(a)*70); g.lineTo(cxk+Math.sin(a)*80,cyk-Math.cos(a)*80); g.stroke(); }
+      const ha=(m/720)*Math.PI*2, ma=((m%60)/60)*Math.PI*2; g.lineCap="round"; g.lineWidth=8; g.beginPath(); g.moveTo(cxk,cyk); g.lineTo(cxk+Math.sin(ha)*42,cyk-Math.cos(ha)*42); g.stroke(); g.lineWidth=4; g.strokeStyle=BLOOD; g.beginPath(); g.moveTo(cxk,cyk); g.lineTo(cxk+Math.sin(ma)*64,cyk-Math.cos(ma)*64); g.stroke();
+      const six=m>=360; T(g,six?"gone six":"not yet six",cxk,262,18,DISP,six?MOSS:BLOOD);
+      for(let k=0;k<3;k++){ const x=450+k*44; g.strokeStyle=k<strikes?BLOOD:"#c9c4b4"; g.lineWidth=7; g.beginPath(); g.moveTo(x-12,286); g.lineTo(x+12,312); g.moveTo(x+12,286); g.lineTo(x-12,312); g.stroke(); }
+      T(g,(Math.min(i+1,N))+" of "+N+"  ·  score "+score,40,304,17,BODY,INK,"left");
+      meSpr(g,120,596,.62);
+      if(phase==="ask"){ box(g,230,340,460,200,26,"#fff",INK,5); g.fillStyle="#fff"; g.beginPath(); g.moveTo(236,470); g.lineTo(196,500); g.lineTo(240,500); g.closePath(); g.fill(); g.strokeStyle=INK; g.lineWidth=5; g.beginPath(); g.moveTo(232,468); g.lineTo(196,500); g.lineTo(234,502); g.stroke();
+        T(g,"it occurs to you to say",460,372,14,BODY,"#6b675c"); wrap(g,"“"+deck[i].t+"”",460,455,410,40,36,HAND,INK);
+        const f=Math.max(0,1-t/limit); g.fillStyle="#ddd8c8"; g.fillRect(230,552,460,12); g.fillStyle=f>.35?DAMP:BLOOD; g.fillRect(230,552,460*f,12); }
+      else { box(g,230,360,460,170,14,good?"#eef3e2":"#fbe3e1",INK,5); wrap(g,out,460,452,410,32,22,BODY,good?INK:BLOOD); }
+      box(g,24,660,326,210,24,PAPER,INK,6); T(g,"SWALLOW",187,756,24,DISP,INK); T(g,"IT",187,806,24,DISP,INK);
+      box(g,370,660,326,210,24,BILE,INK,6); T(g,"SAY",533,756,24,DISP,INK); T(g,"IT",533,806,24,DISP,INK); } };
+}
+
+/* ---------- game three: the fruit machine ---------- */
+function fruitGame(){
+  const SYM=["BOOT","PICKLE","BADGER","DAMP","1988"], COL={BOOT:"#8a5a2b",PICKLE:MOSS,BADGER:INK,DAMP:WET,"1988":BLOOD};
+  let spins=10, won=0, reels=[0,2,4], fin=[0,0,0], spinning=false, t=0, msg="Tap anywhere to spin. £1 a go.", endT=-1, clicked=[1,1,1];
+  const STOP=[.7,1.15,1.6];
+  seed=hash("fruit"); const bg=mk(W,H,g=>{ paper(g); wash(g,360,420,260,330,BLOOD,.55); wash(g,360,180,220,70,BILE,.6);
+    pen(g,[[90,110],[76,720],[648,726],[632,104],[90,110]],7); pen(g,[[130,270],[126,470],[596,474],[592,266],[130,270]],5); hatch(g,540,500,90,200,1.25,12); hatch(g,90,500,60,200,1.9,12);
+    pen(g,[[650,330],[690,300],[694,220]],8); g.fillStyle=BLOOD; g.beginPath(); g.arc(694,206,22,0,7); g.fill(); ring(g,694,206,22,4);
+    splat(g,60,60,16,INK,.6); splat(g,670,780,14,BILE,2.4); });
+  function spin(){ if(spinning||spins<=0||endT>=0) return; spins--; spinning=true; t=0; clicked=[0,0,0]; fin=[0,1,2].map(()=>Math.floor(Math.random()*5)); msg="…"; sfx("tick"); }
+  function settle(){ spinning=false; const a=SYM[fin[0]], b=SYM[fin[1]], c=SYM[fin[2]];
+    if(a===b&&b===c){ if(a==="1988"){ msg="Three 1988s. The machine goes quiet and pays nothing."; sfx("bad"); } else { const p=a==="BADGER"?8:5; won+=p; msg="Three "+a.toLowerCase()+"s. £"+p+". Somebody look at that."; sfx("pomp"); } }
+    else if(a===b||b===c||a===c){ won+=1; msg="A pair. Your pound back."; sfx("till"); }
+    else { msg="Nothing. The machine thanks you for your custom."; }
+    if(spins<=0) endT=1.6; }
+  return { live:true,
+    down(){ spin(); }, key(k,d){ if(d&&k===" ") spin(); },
+    update(dt){ if(spinning){ t+=dt; for(let r=0;r<3;r++){ if(t<STOP[r]) reels[r]=Math.floor(t*16+r*2)%5; else { reels[r]=fin[r]; if(!clicked[r]){ clicked[r]=1; sfx("tick"); } } } if(t>=STOP[2]+.15) settle(); }
+      else if(endT>=0){ endT-=dt; if(endT<=0){ const net=won-10, st=won>=10?3:won>=6?2:won>=3?1:0;
+        finish("fruit",st,net>=0?"Up £"+net:"Down £"+(-net),[net>0?"A tenner went in and £"+won+" came out. This has never happened before and you should tell nobody.":net===0?"A tenner went in and a tenner came out. Ten spins of entertainment for nothing, which is the best the machine has ever done by anyone.":"A tenner went in and £"+won+" came out. "+(S.me==="seb"?"You describe this as an investment. Oliver points out that you lost.":"Sebastian describes this as an investment. You point out that he lost.")],"Markets fluctuate, Oliver.","Sebastian Vale"); } } },
+    draw(g){ g.drawImage(bg,0,0); T(g,"THE INJURED BADGER",360,170,22,DISP,INK); T(g,"amusement only, allegedly",360,214,30,HAND,BLOOD);
+      for(let r=0;r<3;r++){ const x=146+r*146; box(g,x,290,136,160,8,"#fff",INK,5); const s=SYM[reels[r]], blur=spinning&&t<STOP[r]; g.globalAlpha=blur?.5:1; T(g,s,x+68,382,s.length>5?17:21,DISP,COL[s]); g.globalAlpha=1; }
+      box(g,120,500,480,140,10,PAPER,INK,4); T(g,"spins left "+spins,240,542,21,BODY,INK); T(g,"winnings £"+won,480,542,21,BODY,BLOOD);
+      T(g,"3 alike £5 · 3 badgers £8 · a pair £1",360,588,15,BODY,INK); T(g,"3 × 1988: nobody will discuss it",360,618,15,BODY,INK);
+      meSpr(g,110,890,.5);
+      box(g,200,756,430,110,24,spinning||spins<=0?"#ddd8c8":BILE,INK,6); T(g,spins>0||spinning?"SPIN":"THAT'S YOUR LOT",415,826,spins>0||spinning?30:18,DISP,INK);
+      g.save(); g.translate(W/2,688); box(g,-330,-30,660,54,10,PAPER,INK,4); T(g,msg,0,6,17,BODY,BLOOD); g.restore(); } };
+}
+
+/* ---------- game four: Diane and the cathedral ---------- */
+function dianeGame(){
+  const GOAL=330, START=800; let y=START, held=false, st="back", stT=2.2, faceT=0, catches=0, time=32, msg="Hold to creep. Let go when she turns.", msgT=3, bob=0;
+  const LINES=["She asks where the cathedral is. You have no cathedral.","She asks about the knight. There is no knight.","She mentions the dinosaur. She has seen the listing."];
+  seed=hash("diane"); const bg=mk(W,H,g=>{ paper(g); wash(g,360,150,380,150,"#d9d2bd",.6); wash(g,360,620,380,280,"#cbb893",.35);
+    pen(g,[[-10,330],[730,324]],6); for(let i=0;i<8;i++) pen(g,[[i*110+rr(-10,10),332],[i*150-170,910]],2.2,INK,{clean:1});
+    poly(g,[[150,326],[148,110],[256,104],[258,324]],BLOOD,2); pen(g,[[150,326],[148,110],[256,104],[258,324]],5); g.fillStyle=BILE; g.beginPath(); g.arc(240,224,7,0,7); g.fill();
+    pen(g,[[420,300],[424,110],[640,104],[642,298],[420,300]],7,"#2a1c10"); hatch(g,440,124,180,160,1.25,16);
+    wash(g,600,620,60,70,"#b9c9c6",.7); pen(g,[[540,700],[536,560],[664,556],[662,700],[540,700]],5); scribble(g,560,670,84,2);
+    splat(g,60,60,16,INK,.6); splat(g,680,860,12,WET,-1.2); });
+  function caught(){ catches++; held=false; y=Math.min(START,y+130); msg=LINES[(catches-1)%3]; msgT=2.2; sfx("bad");
+    if(catches>=3) finish("diane",0,"Cornered",["Caught three times. You are now giving forty-seven people a talk on why a museum of unexplained phenomena cannot be expected to explain itself."],"There’s always a problem. Problems are the administrative expression of cowardice.","Sebastian Vale"); }
+  return { live:true,
+    down(){ held=true; }, up(){ held=false; }, key(k,d){ if(k===" ") held=d; },
+    update(dt){ time-=dt; stT-=dt; if(msgT>0) msgT-=dt;
+      if(stT<=0){ if(st==="back"){ st="warn"; stT=.5; sfx("tick"); } else if(st==="warn"){ st="face"; stT=1+Math.random()*.9; faceT=0; } else { st="back"; stT=1.1+Math.random()*1.5; } }
+      if(st==="face"){ faceT+=dt; if(held&&faceT>.18){ caught(); if(!cur||cur!==this) return; } }
+      else if(held){ y-=92*dt; bob+=dt*12; }
+      if(y<=GOAL){ const s=catches===0?3:catches===1?2:1; finish("diane",s,"Through the door",["You are through the door marked PRIVATE with "+Math.ceil(time)+" seconds to spare and "+(catches?"only "+catches+" awkward conversation"+(catches>1?"s":""):"no conversations at all")+". Diane has been to three underground cathedrals. This is not going to be the fourth."],"Dry ones. For afterwards.","Diane, a visitor, on the shoes one takes to an underground cathedral"); return; }
+      if(time<=0) finish("diane",0,"Too slow",["The rest of the coach party has caught up. Forty-seven people would like to see an underground cathedral, and they are all looking at you."],"There’s always a problem. Problems are the administrative expression of cowardice.","Sebastian Vale"); },
+    draw(g){ g.drawImage(bg,0,0); T(g,"PRIVATE",203,160,13,DISP,"#fff"); T(g,"cathedral",530,190,17,DISP,BLOOD); T(g,"(artist's impression)",530,226,26,HAND,INK);
+      spr(g,st==="face"?"dFront":"dBack",520,470,.86);
+      if(st==="warn"){ T(g,"!",610,330,70,DISP,BLOOD); } if(st==="face"){ g.strokeStyle=BLOOD; g.lineWidth=3; g.setLineDash([10,10]); g.beginPath(); g.moveTo(512,312); g.lineTo(230,y-90); g.stroke(); g.setLineDash([]); }
+      T(g,"the right shoes",620,500,26,HAND,INK);
+      const by=held&&st!=="face"?Math.sin(bob)*5:0; meSpr(g,204,y+by,.5);
+      box(g,24,22,250,54,10,PAPER,INK,4); T(g,"time "+Math.max(0,Math.ceil(time)),149,57,20,BODY,time<8?BLOOD:INK);
+      box(g,446,22,250,54,10,PAPER,INK,4); for(let k=0;k<3;k++){ const x=520+k*52; g.strokeStyle=k<catches?BLOOD:"#c9c4b4"; g.lineWidth=7; g.beginPath(); g.moveTo(x-12,36); g.lineTo(x+12,62); g.moveTo(x+12,36); g.lineTo(x-12,62); g.stroke(); }
+      if(msgT>0){ g.save(); g.translate(W/2,862); box(g,-340,-30,680,56,10,PAPER,INK,4); T(g,msg,0,6,16,BODY,BLOOD); g.restore(); } } };
+}
+
+/* ---------- the arcade ---------- */
+const GAMES=[
+ {id:"road", name:"Please Try Again", blurb:"Drive to the museum before the battery dies", place:"Chapter Two · the road from Garstang", make:roadGame, tempo:132, tr:2, go:"Release the handbrake",
+  intro:m=>["The hire car is electric and silent. It has no ignition, which makes it hard to tell whether it is taking you seriously.", (m==="seb"?"You are driving, in the sense that you are holding the wheel and addressing the countryside.":"You are driving. Sebastian is navigating, which is to say talking.")+" Reach Moulding-in-the-Mire before the battery runs out.", "Chargers marked TAP take contactless and work at once. Chargers marked APP would like you to download something. Mind the sheep."],
+  hint:"Tap the left or right side of the picture to change lane. Arrow keys also work."},
+ {id:"pub", name:"Reasonable Behaviour Expected", blurb:"Survive two hours in The Injured Badger", place:"The Injured Badger · five o’clock", make:pubGame, tempo:100, tr:-3, go:"Go in",
+  intro:()=>["The sign outside says REAL ALE. HOT FOOD. REASONABLE BEHAVIOUR EXPECTED. Neville Puddifoot has three rules: nobody receives credit, nobody discusses politics before six, and nobody mentions the summer of 1988.","It is five o’clock and things keep occurring to you. Say the harmless ones and swallow the rest. Watch the clock: politics becomes legal the moment it has gone six.","Dither and it slips out on its own. Three offences and you are barred."],
+  hint:"Tap SWALLOW IT or SAY IT. Left and right arrow keys also work."},
+ {id:"fruit", name:"Markets Fluctuate", blurb:"A tenner, a fruit machine, an investment", place:"The Injured Badger · by the fruit machine", make:fruitGame, tempo:120, tr:0, go:"Put the tenner in",
+  intro:m=>[m==="seb"?"You have put a tenner in the fruit machine. You are calling it an investment.":"Sebastian has put a tenner in the fruit machine and handed you the button, so that the result will be yours.","Ten spins at a pound a go. Three alike pays £5, three badgers pays £8, and any pair gets your pound back.","Three 1988s pays nothing, and nobody will discuss why."],
+  hint:"Tap anywhere on the picture to spin, or press the space bar. It is a fruit machine. Skill does not come into it."},
+ {id:"diane", name:"Dry Ones, For Afterwards", blurb:"Creep past Diane before she asks about the cathedral", place:"Chapter Three · the main gallery, just after eleven", make:dianeGame, tempo:92, tr:-5, go:"Start creeping",
+  intro:()=>["Forty-seven visitors were promised an underground cathedral, a medieval knight and a dinosaur. Diane has been to three underground cathedrals and has brought the right shoes. She would like a word with the management.","You are the management. Creep to the door marked PRIVATE while her back is turned.","An exclamation mark means she is about to turn round. Freeze before she does. Caught three times and you are giving the speech."],
+  hint:"Hold a finger on the picture to creep and lift it to freeze. The space bar does the same."}
+];
+const panel=document.getElementById("panel");
+function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;"); }
+function quoteHTML(q,by){ return '<blockquote class="quote"><q>“'+esc(q)+'”</q><cite>'+esc(by)+', in The Last of the Unemployable</cite></blockquote>'; }
+function focusFirst(){ const b=panel.querySelector("button"); if(b) b.focus({preventScroll:true}); }
+function toStage(){ try{ document.querySelector(".stage").scrollIntoView({block:"start",behavior:"smooth"}); }catch(e){} }
+function starStr(n){ return "★★★".slice(0,n)+"☆☆☆".slice(0,3-n); }
+
+const titleScene={ live:false, draw(g){ seed=hash("title"); paper(g); wash(g,360,120,380,120,DAMP,.55); wash(g,360,700,330,120,BILE,.35);
+  for(let i=0;i<34;i++){ const x=rr(0,W), y=rr(0,420), l=rr(26,70); pen(g,[[x,y],[x-l*.3,y+l]],rr(.8,1.8),INK,{clean:1,j:.5}); }
+  for(let i=0;i<7;i++){ const x=rr(-40,300), l=rr(200,520); pen(g,[[x,800+rr(-6,24)],[x+l,800+rr(-6,24)]],rr(1,4.5),INK,{clean:1,j:1.2}); }
+  seb(g,250,800,1.5,{arm:"up"}); oli(g,560,806,1.45);
+  splat(g,640,90,30,BLOOD,2.4); splat(g,60,70,18,INK,.6);
+  scrawl(g,"THE UNEMPLOYABLE",360,92,34,-.03); scrawl(g,"ARCADE",360,160,46,-.03,BLOOD);
+  scrawl(g,"four games of no skill whatsoever",360,214,34,-.02,INK,HAND);
+  scrawl(g,"professionally unavailable",180,868,15,-.04,BLOOD); scrawl(g,"damp",566,868,18,.05,WET); } };
+function menuScene(){ return { live:false, draw(g){ seed=hash("menu"+S.me); paper(g); g.fillStyle="#16233f"; g.fillRect(58,148,606,614); spray(g,360,450,420,160,"rgba(244,236,210,.35)");
+  pen(g,[[60,150],[52,760],[668,766],[660,144],[60,150]],8,"#2a1c10"); splat(g,650,60,18,BLOOD,2.4); splat(g,50,840,14,INK,-.6);
+  scrawl(g,"THE BOARD",360,104,30,-.02);
+  GAMES.forEach((gm,i)=>{ const y=250+i*128, s=S.stars[gm.id]; T(g,gm.name,360,y,gm.name.length>22?18:21,DISP,"#f4ecd2"); if(s==null) T(g,"not yet attempted",360,y+44,30,HAND,BILE); else for(let k=0;k<3;k++) star(g,300+k*60,y+38,22,k<s); });
+  if(S.me==="seb") seb(g,640,892,.42,{arm:"out"}); else oli(g,650,892,.55);
+  scrawl(g,NAME[S.me]+": "+total()+" of 12",330,838,22,-.02,BLOOD); } }; }
+
+function showTitle(){ S.me=null; S.stars={}; chips(); tempo=112; tr=0; setScene(titleScene);
+  panel.innerHTML='<p class="place">A playable advertisement · four mini-games</p><h1>The Unemployable Arcade</h1><p class="tag">An entirely avoidable Lancashire catastrophe, now in four sizes</p>'+
+   '<p>Two men have inherited a museum of unexplained local phenomena. Pick one of them, then drive, drink, gamble and hide your way round Moulding-in-the-Mire.</p>'+
+   quoteHTML("He considered himself an artist. His bank considered him a liability.","The narrator")+
+   '<div class="choices"><button class="choice" type="button" data-me="seb"><b>Play as Sebastian Vale</b><span>Forty-three. Actor. Professionally unavailable.</span></button>'+
+   '<button class="choice" type="button" data-me="oli"><b>Play as Oliver Finch</b><span>Thirty-eight. Aspiring novelist. Braced.</span></button></div>'+
+   '<p class="hint">Choosing starts the band. The Sound button, top right, sends it home.</p>';
+  panel.querySelectorAll(".choice").forEach(b=>b.addEventListener("click",()=>{ S.me=b.dataset.me; if(!soundOn) startSound(); sfx("pomp"); showMenu(); })); }
+function showMenu(){ chips(); tempo=112; tr=0; setScene(menuScene()); const done=GAMES.every(gm=>S.stars[gm.id]!=null);
+  let h='<p class="place">The arcade · playing as '+esc(NAME[S.me])+'</p><h2>Choose your catastrophe</h2><div class="choices">'+
+   GAMES.map((gm,i)=>'<button class="choice" type="button" data-i="'+i+'"><b>'+esc(gm.name)+'</b><span>'+esc(gm.blurb)+'</span>'+(S.stars[gm.id]!=null?'<em>'+starStr(S.stars[gm.id])+'</em>':'')+'</button>').join("")+'</div>';
+  h+=done?'<button class="go" id="verdict" type="button">Hear the verdict</button>':'<p class="hint">Play all four to hear the verdict of Moulding-in-the-Mire.</p>';
+  h+='<button class="go quiet" id="swap" type="button">Start again as the other one</button>';
+  panel.innerHTML=h; panel.querySelectorAll(".choice").forEach(b=>b.addEventListener("click",()=>showIntro(+b.dataset.i)));
+  if(done) document.getElementById("verdict").addEventListener("click",showVerdict);
+  document.getElementById("swap").addEventListener("click",showTitle); }
+function showIntro(i){ const gm=GAMES[i]; sfx("ok");
+  panel.innerHTML='<p class="place">'+esc(gm.place)+'</p><h2>'+esc(gm.name)+'</h2>'+gm.intro(S.me).map(t=>'<p>'+esc(t)+'</p>').join("")+
+   '<button class="go" id="start" type="button">'+esc(gm.go)+'</button><p class="hint">'+esc(gm.hint)+'</p><button class="go quiet" id="back" type="button">Back to the board</button>';
+  document.getElementById("start").addEventListener("click",()=>{ tempo=gm.tempo; tr=gm.tr; panel.innerHTML='<p class="place">'+esc(gm.place)+'</p><h2>'+esc(gm.name)+'</h2><p class="hint">'+esc(gm.hint)+'</p><button class="go quiet" id="quit" type="button">Give up and go back</button>';
+    document.getElementById("quit").addEventListener("click",showMenu); setScene(gm.make()); toStage(); });
+  document.getElementById("back").addEventListener("click",showMenu); focusFirst(); }
+function finish(id,stars,word,lines,q,by){ const gm=GAMES.find(x=>x.id===id); if(cur&&cur.draw) cur.draw(ctx); cancelAnimationFrame(raf); cur={live:false,draw(){}}; cv.style.touchAction="";
+  banner(ctx,stars,word); S.stars[id]=Math.max(S.stars[id]||0,stars); chips(); sfx(stars?"pomp":"bad"); tempo=112; tr=0;
+  panel.innerHTML='<p class="place">'+esc(gm.place)+'</p><h2>'+esc(word)+' · '+starStr(stars)+'</h2>'+lines.map(t=>'<p>'+esc(t)+'</p>').join("")+quoteHTML(q,by)+
+   '<button class="go" id="board" type="button">Back to the board</button><button class="go quiet" id="again" type="button">Have another go</button>';
+  document.getElementById("board").addEventListener("click",showMenu); document.getElementById("again").addEventListener("click",()=>showIntro(GAMES.indexOf(gm))); }
+function showVerdict(){ const n=total(); let v,t;
+  if(n>=10){ v="Professionally available. Almost."; t="The village has noticed. There is talk of putting you on a rota."; }
+  else if(n>=6){ v="Custodian of culture, provisional."; t="The museum is still open. So is the question of why."; }
+  else { v="Professionally unavailable."; t="Four attempts at being useful, and the roof still did more than you."; }
+  setScene(menuScene());
+  panel.innerHTML='<p class="place">The verdict of Moulding-in-the-Mire</p><p class="verdict">'+esc(v)+'</p><p>'+esc(NAME[S.me])+' finished with '+n+' stars out of 12. '+esc(t)+'</p>'+
+   quoteHTML("Oliver, if we understood everything, there’d be no need for museums.","Sebastian Vale")+
+   '<p>That was four games. The book has twenty-one chapters, a property developer, a bishop, and the answer to what happened in the summer of 1988. Scan the code below or follow the link.</p>'+
+   '<button class="go" id="board" type="button">Back to the board</button><button class="go quiet" id="swap" type="button">Start again as the other one</button>';
+  document.getElementById("board").addEventListener("click",showMenu); document.getElementById("swap").addEventListener("click",showTitle); focusFirst(); }
+
+/* ---------- page spatter, QR and boot ---------- */
+function pageSpatter(){ const b=document.getElementById("bg"), w=b.width=innerWidth, h=b.height=innerHeight, g=b.getContext("2d"); seed=4242; g.clearRect(0,0,w,h);
+  g.globalAlpha=.9; splat(g,w*.04,h*.2,16,INK); splat(g,w*.97,h*.62,20,BLOOD); splat(g,w*.93,h*.08,11,BILE); splat(g,w*.05,h*.9,13,DAMP); }
+(function(){ const c=document.getElementById("qr"), g=c.getContext("2d"), n=QR.length, q=4, m=Math.floor(c.width/(n+q*2)), o=Math.floor((c.width-m*n)/2);
+  g.fillStyle="#fff"; g.fillRect(0,0,c.width,c.height); g.fillStyle="#000"; for(let y=0;y<n;y++) for(let x=0;x<n;x++) if(QR[y][x]==="1") g.fillRect(o+x*m,o+y*m,m,m);
+  document.getElementById("buy").href=BOOK_URL; })();
+pageSpatter(); let rz; addEventListener("resize",()=>{ clearTimeout(rz); rz=setTimeout(pageSpatter,150); });
+buildSprites(); showTitle();
+if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>{ if(cur&&!cur.live&&cur===titleScene) cur.draw(ctx); });
+</script>
+</body>
+</html>

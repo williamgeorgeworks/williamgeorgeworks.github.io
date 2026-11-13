@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Arthur's Tribunal</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Permanent+Marker&display=swap">
+<style>
+/* Layout: a navy promo card, as in the book's video. The white "page" holds the game;
+   the book sits beside it on a wide screen and stacks under it on a phone. One look, by choice. */
+:root{
+  --navy:#16244a; --navy-deep:#0e1836; --paper:#ffffff; --ink:#141414;
+  --red:#d1202f; --blue:#2b4fc2; --mist:#c5cfea;
+  --display:'Anton','Arial Narrow','Haettenschweiler',Impact,sans-serif;
+  --marker:'Permanent Marker','Comic Sans MS','Chalkboard SE',cursive;
+  --body:Georgia,'Times New Roman',serif;
+  color-scheme:dark;
+}
+body{background:var(--navy);color:var(--paper);font-family:var(--body);font-size:16px;line-height:1.5}
+.wrap{max-width:960px;margin:0 auto;padding-block:26px 40px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  display:grid;gap:22px}
+.mast{display:grid;gap:6px}
+.eyebrow{font-family:var(--display);letter-spacing:.09em;font-size:.82rem;color:var(--mist);text-transform:uppercase;
+  padding-bottom:8px;border-bottom:3px solid var(--red);justify-self:start}
+h1{font-family:var(--display);font-weight:400;font-size:clamp(2.4rem,9vw,4rem);line-height:1;margin:6px 0 0;text-transform:uppercase;letter-spacing:.01em;text-wrap:balance}
+.tag{margin:0;font-style:italic;color:var(--mist);font-size:1.05rem}
+.cols{display:grid;gap:24px;grid-template-columns:minmax(0,1fr)}
+@media (min-width:820px){.cols{grid-template-columns:minmax(0,480px) minmax(0,1fr);align-items:start}}
+.stage{position:relative;max-width:480px;width:100%;justify-self:center;background:var(--paper);border-radius:4px;overflow:hidden;
+  box-shadow:0 14px 0 var(--navy-deep)}
+canvas{display:block;width:100%;aspect-ratio:3/4;max-width:100%;touch-action:none;cursor:ew-resize;background:var(--paper)}
+canvas:focus-visible{outline:4px solid var(--red);outline-offset:-4px}
+.panel{position:absolute;inset:0;display:grid;place-content:center;justify-items:center;gap:12px;text-align:center;
+  padding:22px;background:color-mix(in srgb,var(--paper) 88%,transparent);color:var(--ink)}
+.panel h2{font-family:var(--marker);font-weight:400;font-size:clamp(1.7rem,7vw,2.3rem);line-height:1.05;margin:0;text-wrap:balance}
+.panel p{margin:0;max-width:30ch}
+.rules{display:grid;gap:4px;font-size:.98rem}
+.rules b{font-family:var(--display);font-weight:400;letter-spacing:.06em;text-transform:uppercase}
+.rules .good b{color:var(--blue)} .rules .bad b{color:var(--red)}
+.score{font-family:var(--marker);font-size:3rem;line-height:1;color:var(--red)}
+.verdict{font-family:var(--display);text-transform:uppercase;letter-spacing:.05em;font-size:1.15rem}
+button{font:inherit;cursor:pointer}
+.btn{font-family:var(--display);text-transform:uppercase;letter-spacing:.07em;font-size:1.15rem;
+  background:var(--red);color:var(--paper);border:3px solid var(--ink);border-radius:3px;padding:10px 20px;
+  box-shadow:4px 4px 0 var(--ink)}
+.btn:hover{background:var(--blue)} .btn:active{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--ink)}
+.btn.quiet{background:var(--paper);color:var(--ink);font-size:.95rem;padding:7px 14px}
+.btn:focus-visible,.mute:focus-visible{outline:3px solid var(--blue);outline-offset:3px}
+.row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.share{font-size:.9rem;font-style:italic;user-select:all}
+.mute{position:absolute;right:8px;bottom:8px;font-family:var(--display);letter-spacing:.06em;text-transform:uppercase;font-size:.78rem;
+  background:var(--paper);color:var(--ink);border:2px solid var(--ink);border-radius:3px;padding:4px 9px}
+.book{display:grid;gap:16px;grid-template-columns:minmax(0,150px) minmax(0,1fr);align-items:start}
+.book img{width:100%;max-width:100%;height:auto;border:3px solid var(--paper);box-shadow:8px 8px 0 var(--navy-deep);transform:rotate(-2deg)}
+@media (min-width:820px){.book{grid-template-columns:minmax(0,1fr)}.book img{max-width:230px}}
+.book h2{font-family:var(--display);font-weight:400;text-transform:uppercase;font-size:1.7rem;line-height:1.05;margin:0 0 8px;text-wrap:balance}
+.book p{margin:0 0 10px;max-width:46ch}
+.book .credit{color:var(--mist);font-size:.95rem}
+.soon{display:inline-block;font-family:var(--display);text-transform:uppercase;letter-spacing:.08em;font-size:.9rem;
+  border:2px solid var(--red);padding:4px 10px;color:var(--paper)}
+.foot{color:var(--mist);font-size:.85rem;border-top:1px solid color-mix(in srgb,var(--mist) 35%,transparent);padding-top:14px;max-width:70ch}
+@media (prefers-reduced-motion:reduce){.btn:active{transform:none}}
+</style>
+</head>
+<body>
+<a href="arcade.html" style="position:relative;z-index:50;display:block;background:#141414;color:#f6f2e7;font:600 14px/1 system-ui,sans-serif;letter-spacing:.3px;padding:9px 14px;text-decoration:none;text-align:left">&larr; William George Works: back to the arcade</a>
+
+<div class="wrap">
+  <header class="mast">
+    <span class="eyebrow">The Great British Disagreement</span>
+    <h1>Arthur's Tribunal</h1>
+    <p class="tag">The nation is rowing again. Catch the cream, dodge the teabags, keep your dignity.</p>
+  </header>
+
+  <div class="cols">
+    <div class="stage">
+      <canvas id="game" width="600" height="800" tabindex="0" role="img"
+        aria-label="Arthur the cat sits on a table while two arguing crowds throw food. Move him left and right to catch good things and dodge bad ones."></canvas>
+
+      <div class="panel" id="startPanel">
+        <h2>All rise for Arthur</h2>
+        <div class="rules">
+          <p class="good"><b>Catch</b> cream, ham, tuna, biscuits, sunbeams</p>
+          <p class="bad"><b>Dodge</b> teabags, semi-skimmed, bread rolls, forks</p>
+        </div>
+        <p>Slide a finger or the mouse, or use the arrow keys. Three hits and the court rises.</p>
+        <button class="btn" id="startBtn" type="button">Start the hearing</button>
+        <p style="font-size:.85rem;font-style:italic">The music starts with the game.</p>
+      </div>
+
+      <div class="panel" id="overPanel" hidden>
+        <h2>The tribunal rises</h2>
+        <div class="score" id="finalScore">0</div>
+        <div class="verdict" id="verdict">Kitten of the Lower Court</div>
+        <p id="bestLine"></p>
+        <div class="row">
+          <button class="btn" id="againBtn" type="button">Appeal</button>
+          <button class="btn quiet" id="copyBtn" type="button">Copy my score</button>
+        </div>
+        <p class="share" id="shareText"></p>
+      </div>
+
+      <button class="mute" id="muteBtn" type="button" aria-pressed="false">Sound on</button>
+    </div>
+
+    <section class="book">
+      <img src="cover-great-british-disagreement.jpg" width="560" height="800" alt="Book cover: The Great British Disagreement. A wild-haired man in a tartan dressing gown holds a dripping teabag aloft and shouts.">
+      <div>
+        <h2>Seventeen rows. Nobody wins.</h2>
+        <p>Milk first or last? Barm, bap or cob? Jam on the cream or cream on the jam? <em>The Great British Disagreement</em> is an illustrated field guide to the rows that hold the country together, from the kettle to the Crown.</p>
+        <p>Every side gets a fair hearing. Then every side gets laughed at. Arthur presides, and would prefer you all to put the kettle on.</p>
+        <p class="credit">William George &amp; Terrance Quill (AI collaborator), with Reginald Quill (AI collaborator).</p>
+        <span class="soon">Paperback coming soon</span>
+      </div>
+    </section>
+  </div>
+
+  <p class="foot">Tune: &ldquo;Pop Goes the Weasel&rdquo;, a traditional London song, with a new middle section. The game is drawn in code in the style of the book; the cover and the book&rsquo;s illustrations are by Terrance Quill. Arthur is a real cat. He was not consulted.</p>
+</div>
+
+<script>
+(function(){
+'use strict';
+var W=600,H=800,FLOOR=716;
+var C={ink:'#141414',red:'#d1202f',blue:'#2b4fc2',cream:'#f3e9d8',white:'#ffffff',grey:'#8a8c99',greyd:'#5d6070',pink:'#e79aa5',eye:'#3f7fd6',skin:'#f3cdb6'};
+var HAIR=['#6b4a2e','#8d8d8d','#b5651d','#3a3a3a','#c9c2b5','#a23b1e'];
+var cv=document.getElementById('game'),ctx=cv.getContext('2d');
+var reduce=!!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches);
+var scale=1;
+function fit(){var b=cv.getBoundingClientRect();var d=Math.min(window.devicePixelRatio||1,2);var w=Math.max(300,Math.round(b.width*d));if(cv.width!==w){cv.width=w;cv.height=Math.round(w*H/W);}scale=cv.width/W;}
+window.addEventListener('resize',fit);
+
+function rng(seed){var a=seed>>>0;return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+
+/* ---------- drawing helpers: wobbly "boiling" ink ---------- */
+function blob(cx,cy,rx,ry,n,j,r){var p=[];for(var i=0;i<n;i++){var a=i/n*Math.PI*2;var k=1+(r()-.5)*j;p.push([cx+Math.cos(a)*rx*k,cy+Math.sin(a)*ry*k]);}return p;}
+function smooth(p){var n=p.length;ctx.beginPath();ctx.moveTo((p[n-1][0]+p[0][0])/2,(p[n-1][1]+p[0][1])/2);for(var i=0;i<n;i++){var a=p[i],b=p[(i+1)%n];ctx.quadraticCurveTo(a[0],a[1],(a[0]+b[0])/2,(a[1]+b[1])/2);}ctx.closePath();}
+function fur(cx,cy,rx,ry,n,depth,r){ctx.beginPath();for(var i=0;i<n;i++){var a=i/n*Math.PI*2-Math.PI/2;var k=(i%2?1:1-depth)+(r()-.5)*.07;var x=cx+Math.cos(a)*rx*k,y=cy+Math.sin(a)*ry*k;if(i)ctx.lineTo(x,y);else ctx.moveTo(x,y);}ctx.closePath();}
+function ink(fill,lw){ctx.lineJoin='round';ctx.lineCap='round';if(fill){ctx.fillStyle=fill;ctx.fill();}ctx.strokeStyle=C.ink;ctx.lineWidth=lw||2.5;ctx.stroke();}
+function ell(x,y,rx,ry,rot){ctx.beginPath();ctx.ellipse(x,y,rx,ry,rot||0,0,Math.PI*2);}
+function line(pts,lw,col){ctx.beginPath();ctx.moveTo(pts[0],pts[1]);for(var i=2;i<pts.length;i+=2)ctx.lineTo(pts[i],pts[i+1]);ctx.strokeStyle=col||C.ink;ctx.lineWidth=lw||2;ctx.lineCap='round';ctx.lineJoin='round';ctx.stroke();}
+function splatShape(x,y,size,col,alpha,seed){var r=rng(seed);ctx.save();ctx.globalAlpha=alpha;ctx.fillStyle=col;smooth(blob(x,y,size,size*.8,9,.7,r));ctx.fill();var n=6+(r()*7|0);for(var i=0;i<n;i++){var a=r()*6.283,d=size*(1.1+r()*1.9),s=size*(.06+r()*.2);ell(x+Math.cos(a)*d,y+Math.sin(a)*d,s,s*(.6+r()*.6),a);ctx.fill();if(r()<.4){ctx.beginPath();ctx.moveTo(x+Math.cos(a)*size*.7,y+Math.sin(a)*size*.7);ctx.lineTo(x+Math.cos(a)*d,y+Math.sin(a)*d);ctx.strokeStyle=col;ctx.lineWidth=s*.7;ctx.stroke();}}ctx.restore();}
+
+/* ---------- things that get thrown ---------- */
+var ITEMS={
+ biscuit:{pts:5,say:['If the biscuit falls in, it is mine. That is the law.'],draw:function(r){smooth(blob(0,0,21,21,11,.08,r));ink('#d9a45c');ctx.fillStyle='#8a5a22';for(var i=0;i<7;i++){ell(Math.cos(i*.9)*11,Math.sin(i*.9)*11,1.8,1.8);ctx.fill();}ell(0,0,1.8,1.8);ctx.fill();}},
+ cream:{pts:10,say:['The cream is not in dispute.','I move that the cream be placed on the floor.'],draw:function(r){smooth(blob(0,8,23,12,9,.1,r));ink(C.white);smooth(blob(0,-3,16,10,8,.1,r));ink(C.white);smooth(blob(1,-13,9,8,7,.12,r));ink(C.white);line([2,-21,6,-27,3,-29],2.2);line([-12,9,-4,12,8,10],1.6,C.blue);}},
+ ham:{pts:15,say:['I was given ham. I shall be saying nothing.'],draw:function(r){smooth(blob(0,0,25,19,10,.08,r));ink('#f6e3d6');smooth(blob(1,0,19,14,9,.08,r));ink(C.pink,1.8);ell(5,1,4.5,4.5);ink(C.white,1.8);}},
+ tuna:{pts:20,say:['The court will accept it as an apology.','The tuna at number nine is of a high standard.'],draw:function(r){ctx.beginPath();ctx.rect(-22,-9,44,22);ink('#c8ccd6');ctx.beginPath();ctx.rect(-22,-3,44,11);ink(C.blue,1.6);ell(0,-9,22,7);ink('#e9ecf2');ell(-2,-9,10,3.2);ink('#9aa3b5',1.4);line([8,-9,13,-12,13,-6,8,-9],1.4);}},
+ sun:{pts:0,sun:true,say:['The court is adjourned.'],draw:function(r){ctx.strokeStyle='#e9a400';ctx.lineWidth=3;ctx.lineCap='round';for(var i=0;i<10;i++){var a=i/10*6.283+r()*.2;ctx.beginPath();ctx.moveTo(Math.cos(a)*19,Math.sin(a)*19);ctx.lineTo(Math.cos(a)*(27+r()*5),Math.sin(a)*(27+r()*5));ctx.stroke();}smooth(blob(0,0,16,16,9,.06,r));ink('#ffd23c');}},
+ teabag:{bad:true,col:'#7a4a1c',say:['No bloody comment.'],draw:function(r){line([0,-12,4,-27],1.6);ctx.beginPath();ctx.rect(-1,-33,10,7);ink(C.white,1.6);ctx.beginPath();ctx.moveTo(-15,-12);ctx.lineTo(15,-12);ctx.lineTo(17+r()*2,16);ctx.lineTo(-17-r()*2,16);ctx.closePath();ink('#b9844a');smooth(blob(0,5,9,7,7,.3,r));ctx.fillStyle='#6b3d14';ctx.fill();ctx.fillStyle='#7a4a1c';ell(-6,24+r()*3,2.2,3.6);ctx.fill();ell(7,27+r()*4,1.8,3);ctx.fill();}},
+ milk:{bad:true,col:'#dfe9df',say:['It was semi-skimmed. I have not forgotten.'],draw:function(r){ctx.beginPath();ctx.moveTo(-14,-12);ctx.lineTo(0,-26);ctx.lineTo(14,-12);ctx.lineTo(14,22);ctx.lineTo(-14,22);ctx.closePath();ink(C.white);ctx.beginPath();ctx.rect(-14,-2,28,11);ink('#3d9a52',1.6);line([-14,-12,14,-12],1.8);ctx.fillStyle=C.white;ctx.font='bold 9px Arial,sans-serif';ctx.textAlign='center';ctx.fillText('SEMI',0,7);}},
+ roll:{bad:true,col:'#d7b98c',say:['Call it what you like.','I do not eat bread.'],draw:function(r){ctx.beginPath();ctx.moveTo(-24,10);ctx.quadraticCurveTo(-26,-20+r()*2,0,-20);ctx.quadraticCurveTo(26,-20+r()*2,24,10);ctx.quadraticCurveTo(0,17,-24,10);ctx.closePath();ink('#e0b672');ctx.fillStyle=C.white;for(var i=0;i<6;i++){ell(-14+i*5.5,-8+((i*7)%5),1.5,1.5);ctx.fill();}line([-10,-4,-2,-9],1.6,'#a87631');line([4,-3,12,-8],1.6,'#a87631');}},
+ jam:{bad:true,col:'#b3122a',say:['I ignored the jam. I shall go on ignoring it.'],draw:function(r){smooth(blob(0,0,18,16,9,.45,r));ink('#c2142f');ell(-5,-5,4,2.5,-.5);ctx.fillStyle='#f29aa8';ctx.fill();ctx.fillStyle='#c2142f';ell(14,20+r()*3,3,4.5);ctx.fill();ell(-16,18+r()*3,2.4,3.6);ctx.fill();}},
+ fork:{bad:true,col:'#8b93a8',say:['Load it your way when it is your turn.'],draw:function(r){ctx.lineCap='round';line([0,-2,0,26],7,C.ink);line([0,-2,0,26],4,'#c8ccd6');[-9,-3,3,9].forEach(function(x){line([x,-26,x,-8],5,C.ink);line([x,-26,x,-8],2.4,'#c8ccd6');});line([-9,-8,9,-8],7,C.ink);line([-9,-8,9,-8],4,'#c8ccd6');}},
+ suds:{bad:true,col:'#bcd3f5',say:['I will rinse the plates for nothing. Leave them on the floor.'],draw:function(r){[[0,0,13],[-14,7,9],[13,9,10],[-6,-14,8],[9,-12,7]].forEach(function(b){ell(b[0]+r(),b[1]+r(),b[2],b[2]);ink('#e6f0ff',1.8);ell(b[0]-b[2]*.3,b[1]-b[2]*.3,b[2]*.22,b[2]*.22);ctx.fillStyle=C.white;ctx.fill();});}},
+ ball:{bad:true,col:'#b9cf2e',say:['Honestly pleased to see you. Have some dignity.'],draw:function(r){smooth(blob(0,0,19,19,10,.05,r));ink('#cfe23a');ctx.beginPath();ctx.arc(-15,0,17,-.9,.9);ctx.strokeStyle=C.white;ctx.lineWidth=2.6;ctx.stroke();ctx.fillStyle='#9fc3ee';ell(12,22+r()*3,2.6,4.4);ctx.fill();ell(-9,25+r()*3,2,3.4);ctx.fill();}},
+ sprout:{bad:true,col:'#4f8f3a',say:['Change the subject to the cat. It has never failed.'],draw:function(r){smooth(blob(0,0,17,17,9,.08,r));ink('#6aa84f');ctx.strokeStyle='#2f6b22';ctx.lineWidth=1.8;ctx.beginPath();ctx.arc(-5,2,11,-1.2,1);ctx.stroke();ctx.beginPath();ctx.arc(6,-1,10,2,4.2);ctx.stroke();}}
+};
+var CASES=[
+ {name:'The Tea Tribunal',good:['biscuit','biscuit','cream'],bad:['teabag','milk']},
+ {name:'Bread Roll Wars',good:['ham','biscuit'],bad:['roll','roll','teabag']},
+ {name:'The Scone Summit',good:['cream','cream','biscuit'],bad:['jam','roll']},
+ {name:'The Dishwasher Doctrine',good:['tuna','ham'],bad:['fork','suds']},
+ {name:'Dogs Versus Cats',good:['tuna','ham','cream'],bad:['ball','ball','milk']},
+ {name:'Politics at the Dinner Table',good:['ham','tuna'],bad:['sprout','fork','teabag']}
+];
+var CASE_LEN=18;
+
+/* ---------- state ---------- */
+var G={mode:'title',t:0,score:0,dignity:3,best:0,caseIx:0,caseT:0,lap:0,banner:0,spawnT:1,sunT:9,items:[],splats:[],floats:[],
+       ax:W/2,tx:W/2,face:'idle',faceT:0,nap:0,inv:0,shake:0,say:'',sayT:0,keys:{},said:{}};
+try{G.best=parseInt(localStorage.getItem('arthur-best')||'0',10)||0;}catch(e){}
+var BG=(function(){var r=rng(20261111),a=[];for(var i=0;i<16;i++)a.push({x:r()*W,y:60+r()*(H-140),s:14+r()*34,c:i%2?C.red:C.blue,seed:(r()*1e9)|0});return a;})();
+
+function say(text,secs){G.say=text;G.sayT=secs||2.4;}
+function sayFor(type){var s=ITEMS[type].say;if(!s)return;if(!G.said[type]||Math.random()<.3){G.said[type]=1;say(s[(Math.random()*s.length)|0]);}}
+function floatText(x,y,text,col){G.floats.push({x:x,y:y,text:text,col:col,age:0});}
+
+function startGame(){
+  G.mode='play';G.score=0;G.dignity=3;G.caseIx=0;G.caseT=0;G.lap=0;G.banner=2.2;G.spawnT=1.4;G.sunT=9;
+  G.items=[];G.splats=[];G.floats=[];G.nap=0;G.inv=0;G.face='idle';G.said={};G.ax=G.tx=W/2;
+  say('All rise.',1.8);
+  document.getElementById('startPanel').hidden=true;document.getElementById('overPanel').hidden=true;
+  audioStart();try{cv.focus({preventScroll:true});}catch(e){}
+}
+function verdictFor(s){return s<60?'Kitten of the Lower Court':s<150?'Clerk to the Tribunal':s<300?'Deputy Chair':s<500?'Chief Justice':'His Supreme Fluffiness';}
+function endGame(){
+  if(G.mode!=='play')return;G.mode='over';G.face='hit';G.faceT=99;say('The tribunal rises.',4);
+  var isBest=G.score>G.best;if(isBest){G.best=G.score;try{localStorage.setItem('arthur-best',String(G.best));}catch(e){}}
+  document.getElementById('finalScore').textContent=G.score;
+  document.getElementById('verdict').textContent=verdictFor(G.score);
+  document.getElementById('bestLine').textContent=isBest&&G.score>0?'A new best. The court is mildly impressed.':'Your best: '+G.best;
+  document.getElementById('shareText').textContent='I scored '+G.score+' as Arthur in The Great British Disagreement. Verdict: '+verdictFor(G.score)+'. Put the kettle on.';
+  document.getElementById('copyBtn').textContent='Copy my score';
+  setTimeout(function(){document.getElementById('overPanel').hidden=false;try{document.getElementById('againBtn').focus({preventScroll:true});}catch(e){}},900);
+  sfx('over');
+}
+
+function spawn(){
+  var cs=CASES[G.caseIx],lvl=G.lap*CASES.length+G.caseIx;
+  var bad=Math.random()<Math.min(.6,.36+lvl*.022);
+  var list=bad?cs.bad:cs.good,type=list[(Math.random()*list.length)|0];
+  launch(type,lvl);
+}
+function launch(type,lvl){
+  var sx=Math.random()<.5?50+Math.random()*190:360+Math.random()*190;
+  var tx=45+Math.random()*(W-90);
+  var speed=Math.min(430,175+lvl*17+Math.random()*50);
+  G.items.push({type:type,x:sx,y:150,vx:(tx-sx)/((FLOOR-150)/speed),vy:speed,rot:(Math.random()-.5)*.6,vr:(Math.random()-.5)*(ITEMS[type].bad?5:1.5),seed:(Math.random()*1e9)|0});
+}
+
+function update(dt){
+  G.t+=dt;
+  if(G.sayT>0)G.sayT-=dt;
+  if(G.faceT>0){G.faceT-=dt;if(G.faceT<=0&&G.mode==='play')G.face='idle';}
+  if(G.shake>0)G.shake-=dt;
+  var i,f;
+  for(i=G.floats.length-1;i>=0;i--){f=G.floats[i];f.age+=dt;f.y-=40*dt;if(f.age>1)G.floats.splice(i,1);}
+  for(i=G.splats.length-1;i>=0;i--){G.splats[i].age+=dt;if(G.splats[i].age>1.6)G.splats.splice(i,1);}
+  if(G.mode==='title'){G.tx=W/2+Math.sin(G.t*.8)*150;}
+  if(G.mode==='play'){
+    var mv=(G.keys.right?1:0)-(G.keys.left?1:0);if(mv)G.tx+=mv*470*dt;
+  }
+  G.tx=Math.max(72,Math.min(W-72,G.tx));
+  G.ax+=(G.tx-G.ax)*Math.min(1,dt*13);
+  if(G.mode!=='play'){for(i=G.items.length-1;i>=0;i--){var o=G.items[i];o.y+=o.vy*dt;o.x+=o.vx*dt;o.rot+=o.vr*dt;if(o.y>H+50)G.items.splice(i,1);}return;}
+
+  if(G.inv>0)G.inv-=dt;
+  if(G.nap>0){G.nap-=dt;if(G.nap<=0){G.face='idle';say('Where were we?',1.4);}}
+  if(G.banner>0)G.banner-=dt;
+  G.caseT+=dt;
+  if(G.caseT>CASE_LEN){
+    G.caseT=0;G.caseIx++;if(G.caseIx>=CASES.length){G.caseIx=0;G.lap++;}
+    G.banner=2.2;G.spawnT=1.3;G.score+=25;floatText(W/2,300,'Case closed +25',C.blue);sfx('case');
+  }
+  var lvl=G.lap*CASES.length+G.caseIx;
+  G.spawnT-=dt;if(G.spawnT<=0){spawn();G.spawnT=Math.max(.34,.95-lvl*.045)*(.75+Math.random()*.5);}
+  G.sunT-=dt;if(G.sunT<=0){launch('sun',Math.max(0,lvl-2));G.sunT=13+Math.random()*6;}
+
+  for(i=G.items.length-1;i>=0;i--){
+    var it=G.items[i],def=ITEMS[it.type];
+    it.vy+=70*dt;it.y+=it.vy*dt;it.x+=it.vx*dt;it.rot+=it.vr*dt;
+    if(it.x<24){it.x=24;it.vx=Math.abs(it.vx);}if(it.x>W-24){it.x=W-24;it.vx=-Math.abs(it.vx);}
+    if(it.y>FLOOR-160&&it.y<FLOOR-6&&Math.abs(it.x-G.ax)<70){
+      G.items.splice(i,1);
+      if(def.sun){G.nap=4.5;G.face='nap';G.faceT=0;say(def.say[0],2.2);floatText(G.ax,FLOOR-205,'Nap time',"#c98a00");sfx('nap');}
+      else if(def.bad){
+        if(G.nap>0||G.inv>0){G.score+=2;floatText(it.x,it.y-20,'Overruled +2',C.blue);G.splats.push({x:it.x,y:it.y,s:14,c:def.col,age:0,seed:it.seed});sfx('tick');}
+        else{G.dignity--;G.inv=1.3;G.face='hit';G.faceT=1;G.shake=.3;G.splats.push({x:it.x,y:it.y-20,s:38,c:def.col,age:0,seed:it.seed});floatText(G.ax,FLOOR-205,'Dignity wounded',C.red);sayFor(it.type);sfx('hit');if(G.dignity<=0){endGame();return;}}
+      }else{G.score+=def.pts;if(G.nap<=0){G.face='yum';G.faceT=.45;}floatText(it.x,it.y-24,'+'+def.pts,C.blue);sayFor(it.type);sfx('yum');}
+      continue;
+    }
+    if(it.y>FLOOR+6){G.items.splice(i,1);if(def.bad)G.splats.push({x:it.x,y:FLOOR,s:16,c:def.col,age:0,seed:it.seed});}
+  }
+}
+
+/* ---------- scene ---------- */
+function person(x,y,col,dir,i,r){
+  var t=G.t,bob=Math.sin(t*6+i*1.7)*3,arm=Math.sin(t*9+i*1.3)*10;
+  ctx.save();ctx.translate(x,y+bob);
+  smooth(blob(0,50,36,32,9,.12,r));ink(col);
+  ctx.beginPath();ctx.moveTo(dir*18,36);ctx.quadraticCurveTo(dir*48,14+arm,dir*42,-14+arm);ctx.lineCap='round';ctx.strokeStyle=C.ink;ctx.lineWidth=11;ctx.stroke();ctx.strokeStyle=col;ctx.lineWidth=6.5;ctx.stroke();
+  ell(dir*42,-17+arm,7,7);ink(C.skin,2);
+  smooth(blob(0,0,23,25,10,.09,r));ink(C.skin);
+  ctx.beginPath();for(var k=0;k<8;k++){var a=Math.PI*(1.02+k*.137);ctx.moveTo(Math.cos(a)*21,Math.sin(a)*23);ctx.lineTo(Math.cos(a)*(28+r()*9),Math.sin(a)*(30+r()*9));}ctx.strokeStyle=HAIR[i%HAIR.length];ctx.lineWidth=3;ctx.stroke();
+  line([-13,-9,-3,-4],2.6);line([13,-9,3,-4],2.6);
+  ctx.fillStyle=C.ink;ell(-7,-1,2.2,2.2);ctx.fill();ell(7,-1,2.2,2.2);ctx.fill();
+  ctx.fillStyle='rgba(209,32,47,.35)';ell(-13,7,5,3.5);ctx.fill();ell(13,7,5,3.5);ctx.fill();
+  ell(dir*2,13,7,3+Math.abs(Math.sin(t*10+i*2))*6);ink('#7a1220',2);
+  ctx.restore();
+}
+function crowd(r){
+  var xs=[58,140,222],i;
+  for(i=0;i<3;i++)person(xs[i],104+(i%2)*10,C.red,1,i,r);
+  for(i=0;i<3;i++)person(W-xs[i],104+(i%2)*10,C.blue,-1,i+3,r);
+  ctx.beginPath();ctx.moveTo(0,170);for(var x=0;x<=W;x+=24)ctx.lineTo(x,168+(r()-.5)*4);ctx.lineTo(W,186);ctx.lineTo(0,186);ctx.closePath();ink(C.white,3);
+  ctx.strokeStyle=C.ink;ctx.lineWidth=1.2;ctx.beginPath();for(x=6;x<W;x+=11){ctx.moveTo(x,174);ctx.lineTo(x-4,184);}ctx.stroke();
+}
+function table(r){
+  var y=FLOOR-4,cols=[C.red,C.white,C.blue,C.white];
+  ctx.save();ctx.beginPath();ctx.rect(0,y,W,H-y);ctx.clip();ctx.fillStyle=C.white;ctx.fillRect(0,y,W,H-y);
+  for(var i=-4;i<22;i++){ctx.beginPath();ctx.moveTo(i*38,y);ctx.lineTo(i*38+38,y);ctx.lineTo(i*38+118,H);ctx.lineTo(i*38+80,H);ctx.closePath();ctx.fillStyle=cols[((i%4)+4)%4];ctx.globalAlpha=.88;ctx.fill();}
+  ctx.restore();
+  ctx.beginPath();ctx.moveTo(0,y);for(var x=0;x<=W;x+=30)ctx.lineTo(x,y+(r()-.5)*3.5);ctx.strokeStyle=C.ink;ctx.lineWidth=3.2;ctx.stroke();
+}
+function arthur(x,y,r){
+  var t=G.t,st=G.face,nap=st==='nap',hit=st==='hit',yum=st==='yum';
+  if(G.inv>0&&G.mode==='play'&&Math.floor(t*14)%2===0)ctx.globalAlpha=.45;
+  ctx.save();ctx.translate(x,y);ctx.scale(1.36,1.36);
+  var lean=(G.tx-G.ax)*.0012;ctx.rotate(Math.max(-.12,Math.min(.12,lean)));
+  if(nap)ctx.scale(1.08,.9);
+  /* tail */
+  ctx.save();ctx.translate(46,-26);ctx.rotate(.55+Math.sin(t*(hit?16:3))*(hit?.25:.12));fur(0,-40,19,46,18,.3,r);ink(C.grey);ctx.restore();
+  /* body and ruff */
+  fur(0,-50,58,52,36,.11,r);ink(C.cream);
+  fur(0,-64,38,27,26,.15,r);ink(C.white,1.8);
+  /* front legs with white toes */
+  [-19,19].forEach(function(sx){ell(sx,-17,11,19);ink(C.grey);ell(sx,-5,12.5,7.5);ink(C.white);line([sx-4,-3,sx-4,1],1.4);line([sx+4,-3,sx+4,1],1.4);});
+  /* head */
+  var hy=nap?-98:-112;
+  ctx.save();ctx.translate(0,hy);if(!nap)ctx.rotate(Math.sin(t*2)*.03);
+  var ea=hit?.9:0;
+  [-1,1].forEach(function(s){ctx.save();ctx.translate(s*22,-22);ctx.rotate(s*ea);ctx.beginPath();ctx.moveTo(-10,8);ctx.lineTo(s*4,-20-r()*2);ctx.lineTo(11,6);ctx.closePath();ink(C.greyd);ctx.restore();});
+  fur(0,0,36,32,22,.12,r);ink(C.cream);
+  smooth(blob(0,4,23,21,9,.08,r));ctx.fillStyle=C.grey;ctx.fill();
+  ell(0,14,11,8);ctx.fillStyle='#b9bac4';ctx.fill();
+  /* eyes */
+  [-11,11].forEach(function(ex){
+    if(nap){ctx.beginPath();ctx.arc(ex,2,5.5,.15*Math.PI,.85*Math.PI);ctx.strokeStyle=C.ink;ctx.lineWidth=2.4;ctx.stroke();}
+    else if(hit){line([ex-5,-3,ex+5,5],2.6);line([ex+5,-3,ex-5,5],2.6);}
+    else{ell(ex,1,6,yum?6.5:5);ctx.fillStyle=C.white;ctx.fill();ell(ex,1.5,4.2,yum?5:3.8);ctx.fillStyle=C.eye;ctx.fill();ell(ex,1.5,1.7,3);ctx.fillStyle=C.ink;ctx.fill();
+      if(!yum){ctx.beginPath();ctx.moveTo(ex-7.5,-1.5);ctx.lineTo(ex+7.5,-2.5);ctx.lineTo(ex+7,-7);ctx.lineTo(ex-7,-6);ctx.closePath();ctx.fillStyle=C.grey;ctx.fill();}
+      line([ex-7.5,-1.5,ex+7.5,-2.5],2.4);}
+  });
+  /* nose, mouth, whiskers */
+  ctx.beginPath();ctx.moveTo(-4,10);ctx.lineTo(4,10);ctx.lineTo(0,14.5);ctx.closePath();ink(C.pink,1.6);
+  if(yum){ell(0,20,5.5,5);ink('#b3122a',1.8);}else{line([0,14.5,0,18],1.8);ctx.beginPath();ctx.arc(-4,18,4,0,Math.PI);ctx.moveTo(8,18);ctx.arc(4,18,4,0,Math.PI);ctx.strokeStyle=C.ink;ctx.lineWidth=1.8;ctx.stroke();}
+  line([-13,15,-40,10+r()*2],1.3);line([-13,18,-40,21+r()*2],1.3);line([13,15,40,10+r()*2],1.3);line([13,18,40,21+r()*2],1.3);
+  ctx.restore();
+  if(nap){ctx.fillStyle=C.blue;ctx.font='26px '+FONT_M;ctx.textAlign='left';var zz=(t*1.2)%1;ctx.globalAlpha=1-zz;ctx.fillText('z',34,hy-30-zz*26);ctx.globalAlpha=1-((zz+.5)%1);ctx.font='20px '+FONT_M;ctx.fillText('z',52,hy-46-((zz+.5)%1)*26);ctx.globalAlpha=1;}
+  ctx.restore();ctx.globalAlpha=1;
+  if(G.nap>0){ctx.save();ctx.globalAlpha=.25+Math.sin(t*5)*.06;ctx.fillStyle='#ffd23c';ell(x,y-82,114,106);ctx.fill();ctx.restore();}
+}
+var FONT_M="'Permanent Marker','Comic Sans MS','Chalkboard SE',cursive";
+var FONT_D="'Anton','Arial Narrow',Impact,sans-serif";
+function wrap(text,maxW){var words=text.split(' '),lines=[],cur='';for(var i=0;i<words.length;i++){var t=cur?cur+' '+words[i]:words[i];if(ctx.measureText(t).width>maxW&&cur){lines.push(cur);cur=words[i];}else cur=t;}if(cur)lines.push(cur);return lines;}
+function bubble(r){
+  if(G.sayT<=0||!G.say)return;
+  ctx.font='italic 17px Georgia,serif';var lines=wrap('“'+G.say+'”',230),lh=21,w=0,i;
+  for(i=0;i<lines.length;i++)w=Math.max(w,ctx.measureText(lines[i]).width);
+  var bw=w+26,bh=lines.length*lh+18,bx=Math.max(8,Math.min(W-bw-8,G.ax-bw/2)),by=FLOOR-238-bh;
+  ctx.save();ctx.globalAlpha=Math.min(1,G.sayT*3);
+  ctx.beginPath();ctx.moveTo(bx,by);ctx.lineTo(bx+bw+r()*2,by+r()*2);ctx.lineTo(bx+bw,by+bh);ctx.lineTo(Math.min(bx+bw-20,Math.max(bx+34,G.ax+14)),by+bh);ctx.lineTo(G.ax,by+bh+16);ctx.lineTo(Math.min(bx+bw-34,Math.max(bx+20,G.ax-10)),by+bh);ctx.lineTo(bx,by+bh);ctx.closePath();ink(C.white,2.4);
+  ctx.fillStyle=C.ink;ctx.textAlign='left';ctx.textBaseline='top';for(i=0;i<lines.length;i++)ctx.fillText(lines[i],bx+13,by+10+i*lh);
+  ctx.restore();ctx.textBaseline='alphabetic';
+}
+function paw(x,y,on){ctx.save();ctx.translate(x,y);ell(0,3,7.5,6.5);if(on){ctx.fillStyle=C.red;ctx.fill();}ctx.strokeStyle=C.ink;ctx.lineWidth=1.8;ctx.stroke();[[-8,-6],[0,-9.5],[8,-6]].forEach(function(p){ell(p[0],p[1],3.2,3.6);if(on){ctx.fillStyle=C.red;ctx.fill();}ctx.stroke();});ctx.restore();}
+function hud(){
+  ctx.fillStyle=C.ink;ctx.textAlign='left';ctx.font='30px '+FONT_M;ctx.fillText(String(G.score),16,38);
+  ctx.font='13px '+FONT_D;ctx.fillText('SCORE',17,54);
+  ctx.textAlign='right';ctx.fillText('DIGNITY',W-16,54);
+  for(var i=0;i<3;i++)paw(W-28-i*27,26,i<G.dignity);
+  if(G.mode==='play'||G.mode==='over'){ctx.textAlign='center';ctx.font='14px '+FONT_D;ctx.fillStyle=C.red;ctx.fillText((G.lap?'APPEAL '+G.lap+' · ':'')+'CASE '+(G.caseIx+1)+' OF '+CASES.length,W/2,24);ctx.fillStyle=C.ink;ctx.font='19px '+FONT_M;ctx.fillText(CASES[G.caseIx].name,W/2,46);
+    var p=Math.min(1,G.caseT/CASE_LEN);ctx.fillStyle='rgba(20,20,20,.14)';ctx.fillRect(W/2-90,54,180,4);ctx.fillStyle=C.blue;ctx.fillRect(W/2-90,54,180*p,4);}
+  if(G.banner>0&&G.mode==='play'){var a=Math.min(1,G.banner*2,(2.2-G.banner)*4);ctx.save();ctx.globalAlpha=Math.max(0,a);ctx.textAlign='center';ctx.fillStyle=C.red;ctx.font='20px '+FONT_D;ctx.fillText('NOW HEARING',W/2,330);ctx.fillStyle=C.ink;ctx.font='40px '+FONT_M;var ls=wrap(CASES[G.caseIx].name,520);for(var k=0;k<ls.length;k++)ctx.fillText(ls[k],W/2,374+k*44);ctx.restore();}
+}
+function draw(){
+  var boil=reduce?1:Math.floor(G.t*7),r=rng(boil*7919+13),i;
+  ctx.setTransform(scale,0,0,scale,0,0);
+  ctx.fillStyle=C.white;ctx.fillRect(0,0,W,H);
+  if(G.shake>0&&!reduce)ctx.translate((Math.random()-.5)*10,(Math.random()-.5)*10);
+  for(i=0;i<BG.length;i++)splatShape(BG[i].x,BG[i].y,BG[i].s,BG[i].c,.16,BG[i].seed);
+  crowd(r);table(r);
+  for(i=0;i<G.items.length;i++){var it=G.items[i],def=ITEMS[it.type],ir=rng(it.seed+boil*31);
+    ctx.save();ctx.translate(it.x,it.y);
+    if(def.bad&&!reduce){ctx.strokeStyle=def.col;ctx.lineWidth=3;ctx.lineCap='round';ctx.globalAlpha=.55;ctx.beginPath();ctx.moveTo(-6,-26);ctx.lineTo(-6-it.vx*.05,-52-ir()*14);ctx.moveTo(8,-24);ctx.lineTo(8-it.vx*.05,-44-ir()*12);ctx.stroke();ctx.globalAlpha=1;}
+    ctx.rotate(it.rot);ctx.scale(1.3,1.3);def.draw(ir);ctx.restore();}
+  arthur(G.ax,FLOOR,r);
+  for(i=0;i<G.splats.length;i++){var s=G.splats[i];splatShape(s.x,s.y,s.s*(1+s.age*.25),s.c,Math.max(0,.85*(1-s.age/1.6)),s.seed);}
+  for(i=0;i<G.floats.length;i++){var f=G.floats[i];ctx.globalAlpha=Math.max(0,1-f.age);ctx.fillStyle=f.col;ctx.textAlign='center';ctx.font='24px '+FONT_M;ctx.fillText(f.text,Math.max(90,Math.min(W-90,f.x)),f.y);ctx.globalAlpha=1;}
+  bubble(r);hud();
+}
+
+/* ---------- music and sound ---------- */
+var A={ac:null,master:null,muted:false,next:0,pos:0,timer:null};
+var NOTE={G2:98,C3:130.81,D3:146.83,F3:174.61,G3:196,D4:293.66,E4:329.63,F4:349.23,G4:392,A4:440,C5:523.25,D5:587.33,E5:659.25,F5:698.46,G5:783.99,A5:880};
+var SONG=(function(){
+  /* "Pop Goes the Weasel", traditional, in 6/8. Each pair is [note, length in quavers]. */
+  var tune=[['C5',2],['C5',1],['D5',2],['D5',1],['E5',1],['G5',1],['E5',1],['C5',3],
+            ['C5',2],['C5',1],['D5',2],['D5',1],['E5',3],['C5',3],
+            ['C5',2],['C5',1],['D5',2],['D5',1],['E5',1],['G5',1],['E5',1],['C5',3],
+            ['A5',3],['D5',2],['F5',1],['E5',3],['C5',3]];
+  /* A new middle section in the same rhythm. */
+  var mid=[['G5',2],['E5',1],['G5',2],['E5',1],['F5',1],['A5',1],['F5',1],['D5',3],
+           ['F5',2],['D5',1],['F5',2],['D5',1],['E5',1],['G5',1],['E5',1],['C5',3],
+           ['G5',2],['E5',1],['G5',2],['E5',1],['F5',1],['A5',1],['F5',1],['D5',3],
+           ['A5',3],['D5',2],['F5',1],['E5',3],['C5',3]];
+  var bassT=['C3','G2','C3','G2','C3','G2','C3','G2','C3','G2','C3','G2','F3','G2','C3','G2'];
+  var bassM=['C3','G2','D3','G2','G2','D3','C3','G2','C3','G2','D3','G2','F3','G2','C3','C3'];
+  var chT=['C','C','C','C','C','C','F','C'],chM=['C','D','G','C','C','D','F','C'];
+  var CH={C:['E4','G4'],F:['F4','A4'],D:['D4','F4'],G:['D4','G4']};
+  var by=[],off=0;
+  function add(t,n,d,k){(by[t]=by[t]||[]).push({f:NOTE[n],d:d,k:k});}
+  function section(mel,bass,ch){var t=off,i;for(i=0;i<mel.length;i++){add(t,mel[i][0],mel[i][1],'m');t+=mel[i][1];}
+    for(i=0;i<8;i++){add(off+i*6,bass[i*2],2,'b');add(off+i*6+3,bass[i*2+1],2,'b');[2,5].forEach(function(e){CH[ch[i]].forEach(function(n){add(off+i*6+e,n,1,'c');});});}
+    off+=48;}
+  section(tune,bassT,chT);section(tune,bassT,chT);section(mid,bassM,chM);section(tune,bassT,chT);
+  return {by:by,len:off};
+})();
+function tone(f,t,d,k){
+  var o=A.ac.createOscillator(),g=A.ac.createGain();
+  o.type=k==='m'?'square':'triangle';o.frequency.value=f;
+  var vol=k==='m'?.055:k==='b'?.17:.045,len=k==='c'?.09:Math.max(.08,d*.9);
+  g.gain.setValueAtTime(0.0001,t);g.gain.linearRampToValueAtTime(vol,t+.008);g.gain.exponentialRampToValueAtTime(Math.max(.0002,vol*.45),t+len*.7);g.gain.linearRampToValueAtTime(0.0001,t+len);
+  o.connect(g);g.connect(A.master);o.start(t);o.stop(t+len+.03);
+}
+function tick(){
+  if(!A.ac||A.ac.state!=='running')return;
+  var q=60/(120*3);
+  if(A.next<A.ac.currentTime)A.next=A.ac.currentTime+.05;
+  while(A.next<A.ac.currentTime+.3){var ev=SONG.by[A.pos%SONG.len];if(ev)for(var i=0;i<ev.length;i++)tone(ev[i].f,A.next,ev[i].d*q,ev[i].k);A.next+=q;A.pos++;}
+}
+function audioStart(){
+  try{
+    if(!A.ac){var AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;A.ac=new AC();A.master=A.ac.createGain();A.master.gain.value=A.muted?0:1;A.master.connect(A.ac.destination);A.next=A.ac.currentTime+.1;A.pos=0;A.timer=setInterval(tick,90);}
+    if(A.ac.state==='suspended')A.ac.resume();
+  }catch(e){}
+}
+function sfx(kind){
+  if(!A.ac||A.ac.state!=='running')return;
+  try{
+    var t=A.ac.currentTime,o=A.ac.createOscillator(),g=A.ac.createGain();o.connect(g);g.connect(A.master);
+    if(kind==='yum'){o.type='sine';o.frequency.setValueAtTime(880,t);o.frequency.setValueAtTime(1320,t+.07);g.gain.setValueAtTime(.12,t);g.gain.exponentialRampToValueAtTime(.001,t+.2);o.start(t);o.stop(t+.22);}
+    else if(kind==='tick'){o.type='triangle';o.frequency.setValueAtTime(600,t);g.gain.setValueAtTime(.08,t);g.gain.exponentialRampToValueAtTime(.001,t+.08);o.start(t);o.stop(t+.1);}
+    else if(kind==='hit'){o.type='sawtooth';o.frequency.setValueAtTime(320,t);o.frequency.exponentialRampToValueAtTime(60,t+.35);g.gain.setValueAtTime(.2,t);g.gain.exponentialRampToValueAtTime(.001,t+.4);o.start(t);o.stop(t+.42);}
+    else if(kind==='nap'){o.type='sine';o.frequency.setValueAtTime(700,t);o.frequency.exponentialRampToValueAtTime(260,t+.6);g.gain.setValueAtTime(.12,t);g.gain.exponentialRampToValueAtTime(.001,t+.65);o.start(t);o.stop(t+.7);}
+    else if(kind==='case'){o.type='triangle';[523,659,784,1047].forEach(function(f,i){o.frequency.setValueAtTime(f,t+i*.08);});g.gain.setValueAtTime(.12,t);g.gain.exponentialRampToValueAtTime(.001,t+.45);o.start(t);o.stop(t+.5);}
+    else{o.type='triangle';[392,330,262,196].forEach(function(f,i){o.frequency.setValueAtTime(f,t+i*.16);});g.gain.setValueAtTime(.14,t);g.gain.exponentialRampToValueAtTime(.001,t+.8);o.start(t);o.stop(t+.85);}
+  }catch(e){}
+}
+
+/* ---------- input ---------- */
+function pointTo(e){var b=cv.getBoundingClientRect();if(G.mode==='play')G.tx=(e.clientX-b.left)/b.width*W;}
+cv.addEventListener('pointerdown',function(e){pointTo(e);try{cv.setPointerCapture(e.pointerId);}catch(x){}});
+cv.addEventListener('pointermove',pointTo);
+window.addEventListener('keydown',function(e){
+  var k=e.key;if(k==='ArrowLeft'||k==='a'||k==='A'){G.keys.left=true;if(G.mode==='play')e.preventDefault();}
+  if(k==='ArrowRight'||k==='d'||k==='D'){G.keys.right=true;if(G.mode==='play')e.preventDefault();}
+});
+window.addEventListener('keyup',function(e){var k=e.key;if(k==='ArrowLeft'||k==='a'||k==='A')G.keys.left=false;if(k==='ArrowRight'||k==='d'||k==='D')G.keys.right=false;});
+document.getElementById('startBtn').addEventListener('click',startGame);
+document.getElementById('againBtn').addEventListener('click',startGame);
+document.getElementById('muteBtn').addEventListener('click',function(){
+  A.muted=!A.muted;if(A.master)A.master.gain.value=A.muted?0:1;
+  this.textContent=A.muted?'Sound off':'Sound on';this.setAttribute('aria-pressed',A.muted?'true':'false');
+});
+document.getElementById('copyBtn').addEventListener('click',function(){
+  var btn=this,el=document.getElementById('shareText'),text=el.textContent;
+  function fallback(){try{var rg=document.createRange();rg.selectNodeContents(el);var s=window.getSelection();s.removeAllRanges();s.addRange(rg);}catch(e){}btn.textContent='Selected. Copy it';}
+  try{navigator.clipboard.writeText(text).then(function(){btn.textContent='Copied';},fallback);}catch(e){fallback();}
+});
+document.addEventListener('visibilitychange',function(){if(!A.ac)return;try{if(document.hidden)A.ac.suspend();else A.ac.resume();}catch(e){}});
+
+/* ---------- loop ---------- */
+var last=0;
+function frame(ts){
+  var dt=Math.min(.05,(ts-last)/1000||0);last=ts;
+  if(!document.hidden){update(dt);draw();}
+  requestAnimationFrame(frame);
+}
+function boot(){fit();if(document.fonts&&document.fonts.load){try{document.fonts.load("20px 'Permanent Marker'");document.fonts.load("14px 'Anton'");}catch(e){}}requestAnimationFrame(frame);}
+window.__arthur={end:function(){endGame();},state:G};
+var hot=window.claude&&window.claude.hot;
+if(hot&&hot.ready)hot.ready(boot);else boot();
+})();
+</script>
+
+
+</body>
+</html>

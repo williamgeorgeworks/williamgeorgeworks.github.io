@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Lion and Albert Adventure</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Ultra&family=Josefin+Sans:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Layout idea: a music-hall playbill. Picture on top, the bill (words and choices) beneath, one column. */
+  --ink:#1b2440;      /* navy outline and page ground */
+  --paper:#efe2c4;    /* playbill buff */
+  --red:#d43a2f;      /* pillar-box red: stamps, timer, accents */
+  --sea:#2f8f8a;      /* promenade teal */
+  --mustard:#dfa32a;  /* Wallace */
+  --shade:#131a30;    /* deeper navy for the surround */
+  --display:"Ultra","Rockwell Extra Bold","Rockwell","Georgia",serif;
+  --body:"Josefin Sans","Gill Sans","Trebuchet MS",sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--shade);color:var(--paper);font-family:var(--body);font-size:17px;line-height:1.35;display:flex;justify-content:center}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible{outline:3px solid var(--mustard);outline-offset:2px}
+#app{width:100%;max-width:720px;height:100%;display:flex;flex-direction:column;background:var(--ink);position:relative;overflow:hidden}
+
+/* top strip */
+#bar{display:flex;align-items:center;gap:10px;padding:8px 16px;border-bottom:3px solid var(--paper);flex:none}
+#bar .bill{font-family:var(--display);font-size:13px;letter-spacing:.06em;text-transform:uppercase;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#role{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:var(--paper);color:var(--ink);padding:4px 8px 2px;border-radius:2px;white-space:nowrap}
+#role:empty{display:none}
+#mute{background:none;border:2px solid var(--paper);border-radius:2px;padding:4px 8px 2px;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;min-height:30px}
+
+/* picture */
+#stage{position:relative;flex:none;width:100%;aspect-ratio:4/3;max-height:52%;background:var(--paper);border-bottom:3px solid var(--paper);overflow:hidden}
+#stage svg{display:block;width:100%;height:100%}
+#stage .pic{position:absolute;inset:0;transition:opacity .35s}
+#stage .pic.out{opacity:0}
+
+/* toast: "Mother will remember that." */
+#toast{position:absolute;left:12px;top:10px;max-width:80%;background:var(--paper);color:var(--red);border:3px solid var(--red);font-family:var(--display);font-size:13px;letter-spacing:.03em;padding:6px 10px 5px;transform:translateX(-120%) rotate(-2deg);opacity:0;transition:transform .35s,opacity .2s;pointer-events:none;z-index:3}
+#toast.on{transform:translateX(0) rotate(-2deg);opacity:1}
+
+/* the bill */
+#panel{flex:1;min-height:0;display:flex;flex-direction:column;gap:10px;padding:14px 16px 16px;overflow-y:auto}
+#who{font-family:var(--display);font-size:14px;letter-spacing:.06em;text-transform:uppercase;color:var(--mustard);min-height:18px}
+#who.you{color:#ff8a7d}
+#line{font-size:19px;line-height:1.38;min-height:4.2em;max-width:34em;text-wrap:pretty}
+#line.narr{font-style:italic;color:#e7dcc2}
+#prompt{font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mustard)}
+#timer{height:6px;background:rgba(239,226,196,.2);border-radius:3px;overflow:hidden}
+#timer i{display:block;height:100%;width:100%;background:var(--red);transform-origin:left center}
+#choices{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+#choices button{background:var(--paper);color:var(--ink);border:0;border-radius:3px;padding:11px 12px 9px;min-height:48px;text-align:left;font-weight:600;font-size:16px;line-height:1.25;box-shadow:4px 4px 0 var(--red)}
+#choices button:active{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--red)}
+#choices button .k{font-family:var(--display);font-size:11px;color:var(--red);margin-right:6px}
+#next{align-self:flex-end;margin-top:auto;background:none;border:2px solid var(--paper);border-radius:3px;padding:9px 16px 7px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:13px;min-height:44px}
+@media (max-width:460px){#choices{grid-template-columns:1fr}#line{font-size:18px}}
+[hidden]{display:none!important}
+
+/* full-bleed cards: title, chapter, eaten, end */
+.card{position:absolute;inset:0;z-index:5;background:var(--ink);display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:14px;padding:28px 24px;overflow-y:auto}
+.card h1,.card h2{font-family:var(--display);font-weight:400;margin:0;text-wrap:balance;line-height:1.05}
+.card h1{font-size:clamp(40px,12vw,76px);color:var(--paper)}
+.card h1 em{font-style:normal;color:var(--mustard)}
+.card h2{font-size:clamp(28px,8vw,48px);color:var(--paper)}
+.card .eyebrow{font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--mustard)}
+.card p{margin:0;max-width:32em}
+.card .small{font-size:14px;color:#cfc3a6}
+.rule{width:100%;height:0;border-top:3px double var(--paper);margin:2px 0}
+.row{display:flex;flex-wrap:wrap;gap:10px}
+.btn{background:var(--red);color:#fff;border:0;border-radius:3px;padding:13px 18px 11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:14px;min-height:46px;box-shadow:4px 4px 0 var(--paper)}
+.btn.ghost{background:none;border:2px solid var(--paper);box-shadow:none;color:var(--paper)}
+#title .art{width:100%;max-width:420px;border:3px solid var(--paper);background:var(--paper);align-self:center}
+#title .art svg{display:block;width:100%;height:auto}
+.card.red{background:var(--red)}
+.card.red h2{color:#fff;font-size:clamp(34px,10vw,60px)}
+.card.red .eyebrow{color:var(--ink)}
+.card.red .btn{background:var(--ink);box-shadow:4px 4px 0 var(--paper)}
+#ledger{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;width:100%}
+#ledger li{background:var(--paper);color:var(--ink);padding:10px 12px 8px;border-left:6px solid var(--red);font-size:15px}
+#ledger b{display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--red)}
+
+/* lion-house states */
+.stick-poke,.eye-open,.brow,.belly,.smile,.cap{opacity:0}
+.cap{transform:translateY(-46px)}
+.albert{transform-origin:150px 235px;transition:transform .55s ease-in,opacity .55s ease-in}
+.cap,.belly{transition:opacity .3s .45s,transform .45s .45s cubic-bezier(.3,1.6,.6,1)}
+[data-state="poke"] .stick-held{opacity:0}
+[data-state="poke"] .stick-poke,[data-state="poke"] .eye-open,[data-state="poke"] .brow{opacity:1}
+[data-state="poke"] .eye-shut{opacity:0}
+[data-state="gulp"] .stick-held,[data-state="eaten"] .stick-held{opacity:0}
+[data-state="gulp"] .albert,[data-state="eaten"] .albert{transform:translate(78px,-18px) scale(.05);opacity:0}
+[data-state="gulp"] .belly,[data-state="eaten"] .belly,[data-state="gulp"] .smile,[data-state="eaten"] .smile{opacity:1}
+[data-state="gulp"] .cap,[data-state="eaten"] .cap{opacity:1;transform:none}
+[data-state="gulp"] .mouth,[data-state="eaten"] .mouth{opacity:0}
+[data-state="gulp"] .wallace{animation:heave .7s ease-in-out}
+.wallace{transform-origin:300px 262px}
+@keyframes heave{0%{transform:none}30%{transform:translateX(-10px) rotate(-3deg)}60%{transform:translateX(4px) rotate(2deg)}100%{transform:none}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+body{flex-direction:column;align-items:center;justify-content:flex-start}#app{flex:1 1 auto;height:auto;min-height:0}
+</style>
+</head>
+<body>
+<a href="arcade.html" style="position:relative;z-index:50;display:block;width:100%;max-width:720px;flex:none;background:#141414;color:#f6f2e7;font:600 14px/1 system-ui,sans-serif;letter-spacing:.3px;padding:9px 14px;text-decoration:none;text-align:left">&larr; William George Works: back to the arcade</a>
+<div id="app">
+  <div id="bar">
+    <div class="bill" id="bill">The Lion &amp; Albert</div>
+    <div id="role"></div>
+    <button id="mute" type="button" aria-pressed="false">Sound on</button>
+  </div>
+  <div id="stage" data-state="idle"><div id="toast" role="status"></div><div class="pic" id="pic"></div></div>
+  <div id="panel">
+    <div id="who"></div>
+    <div id="line" aria-live="polite"></div>
+    <div id="prompt" hidden></div>
+    <div id="timer" hidden><i></i></div>
+    <div id="choices" hidden></div>
+    <button id="next" type="button">Continue</button>
+  </div>
+
+  <section class="card" id="title">
+    <div class="eyebrow">A Blackpool adventure in five short chapters</div>
+    <h1>The Lion <em>&amp;</em> Albert</h1>
+    <div class="rule"></div>
+    <div class="art" id="titleart"></div>
+    <p>A day out. A stick with a horse's head handle. One very large lion who would rather be left alone. Your choices will be remembered. Whether they matter is another question.</p>
+    <div class="row">
+      <button class="btn" id="begin" type="button">Begin with music</button>
+      <button class="btn ghost" id="beginq" type="button">Begin quietly</button>
+    </div>
+    <p class="small">After the comic monologue by Marriott Edgar (1880 to 1951), written for Stanley Holloway. Every line of dialogue here is new; none of Edgar's verse is reproduced. Pictures and music are original.</p>
+  </section>
+
+  <section class="card" id="chap" hidden>
+    <div class="eyebrow" id="chapno"></div>
+    <h2 id="chaptitle"></h2>
+    <div class="rule"></div>
+    <p id="chaprole"></p>
+    <button class="btn" id="chapgo" type="button">Continue</button>
+  </section>
+
+  <section class="card red" id="eaten" hidden>
+    <div class="eyebrow" id="eatenbrow"></div>
+    <h2 id="eatenhead"></h2>
+    <p id="eatensub"></p>
+    <button class="btn" id="eatengo" type="button">Continue</button>
+  </section>
+
+  <section class="card" id="end" hidden>
+    <div class="eyebrow">The end. Case closed, cap returned.</div>
+    <h2>The Ramsbottom ledger</h2>
+    <ul id="ledger"></ul>
+    <p class="small">Wallace was not available for comment. Edgar later wrote a sequel, The Return of Albert, in which the matter is reopened.</p>
+    <div class="row"><button class="btn" id="again" type="button">Go again</button></div>
+  </section>
+</div>
+
+<script>
+"use strict";
+/* ---------- pictures: flat colour, heavy navy line, drawn in code ---------- */
+const INK="#1b2440",SKIN="#f1c79e",RED="#d43a2f",SEA="#2f8f8a",MUS="#dfa32a",BUFF="#efe2c4",BROWN="#7a4b2a",DARK="#23232e";
+const NS=' stroke="none"';
+function svg(inner){return `<svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" stroke="${INK}" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" fill="none" role="img">${inner}<rect width="400" height="300" fill="url(#grain)"${NS} opacity=".5"/><defs><pattern id="grain" width="6" height="6" patternUnits="userSpaceOnUse"><circle cx="1.5" cy="1.5" r=".7" fill="${INK}" opacity=".10"${NS}/><circle cx="4.5" cy="4.5" r=".6" fill="#fff" opacity=".12"${NS}/></pattern></defs></svg>`}
+function eyes(y){return `<circle cx="-5" cy="${y}" r="1.7" fill="${INK}"${NS}/><circle cx="5" cy="${y}" r="1.7" fill="${INK}"${NS}/>`}
+function man(x,y,o){
+  const hats={
+    bowler:`<path d="M-15,-121 Q-15,-139 0,-139 Q15,-139 15,-121 Z" fill="${DARK}"/><rect x="-20" y="-123" width="40" height="4" rx="2" fill="${DARK}"/>`,
+    peak:`<path d="M-15,-121 L-17,-134 L17,-134 L15,-121 Z" fill="${o.coat}"/><path d="M-16,-121 L17,-121 L23,-116 L-16,-117 Z" fill="${DARK}"/><circle cx="0" cy="-128" r="2.5" fill="${MUS}"${NS}/>`,
+    top:`<rect x="-12" y="-152" width="24" height="31" fill="${DARK}"/><rect x="-12" y="-131" width="24" height="5" fill="${RED}"${NS}/><rect x="-19" y="-123" width="38" height="4" rx="2" fill="${DARK}"/>`,
+    none:`<path d="M-14,-116 Q-18,-124 -11,-122 M14,-116 Q18,-124 11,-122" stroke-width="4" stroke="#ddd"/>`};
+  return `<g transform="translate(${x} ${y}) scale(${o.s||1})">
+  <rect x="-13" y="-42" width="11" height="40" fill="${o.tr}"/><rect x="2" y="-42" width="11" height="40" fill="${o.tr}"/>
+  <ellipse cx="-9" cy="-2" rx="9" ry="4" fill="${DARK}"/><ellipse cx="9" cy="-2" rx="9" ry="4" fill="${DARK}"/>
+  <path d="M-21,-40 L-19,-94 Q0,-103 19,-94 L21,-40 Z" fill="${o.coat}"/>
+  <path d="M-19,-92 L-29,-56 L-22,-53 L-15,-78 Z" fill="${o.coat}"/><path d="M19,-92 L29,-56 L22,-53 L15,-78 Z" fill="${o.coat}"/>
+  <circle cx="-26" cy="-53" r="4.5" fill="${SKIN}"/><circle cx="26" cy="-53" r="4.5" fill="${SKIN}"/>
+  ${o.front||""}
+  <circle cx="0" cy="-111" r="14" fill="${SKIN}"/>${eyes(-114)}${o.face||""}${hats[o.hat]}</g>`}
+const pa=(x,y)=>man(x,y,{coat:BROWN,tr:"#3b3b4d",hat:"bowler",
+  front:`<path d="M-7,-96 L0,-62 L7,-96 Z" fill="${BUFF}"/><path d="M-4,-74 Q0,-68 5,-74" stroke-width="2" stroke="${MUS}"/>`,
+  face:`<path d="M-10,-105 Q0,-112 10,-105 Q0,-100 -10,-105 Z" fill="#5a3a22"/>`});
+const keeper=(x,y)=>man(x,y,{coat:"#2f6b4a",tr:"#2f6b4a",hat:"peak",
+  front:`<circle cx="0" cy="-86" r="2.2" fill="${MUS}"${NS}/><circle cx="0" cy="-72" r="2.2" fill="${MUS}"${NS}/><circle cx="0" cy="-58" r="2.2" fill="${MUS}"${NS}/>`,
+  face:`<path d="M-9,-119 L-3,-117 M9,-119 L3,-117" stroke-width="2"/><path d="M-4,-103 Q0,-106 4,-103" stroke-width="2"/>`});
+const manager=(x,y)=>man(x,y,{coat:DARK,tr:"#8d8d99",hat:"top",
+  front:`<path d="M-6,-96 L0,-80 L6,-96 Z" fill="#fff"/><path d="M20,-56 q8,-6 14,0 q4,10 -7,12 q-11,-2 -7,-12 Z" fill="${BROWN}"/><circle cx="27" cy="-56" r="2" fill="${MUS}"${NS}/>`,
+  face:`<path d="M-9,-105 L0,-107 L9,-105" stroke-width="2.5"/>`});
+function mother(x,y,cross){return `<g transform="translate(${x} ${y})">
+  <ellipse cx="-8" cy="-3" rx="8" ry="4" fill="${DARK}"/><ellipse cx="8" cy="-3" rx="8" ry="4" fill="${DARK}"/>
+  <path d="M-25,-8 L-18,-92 Q0,-100 18,-92 L25,-8 Z" fill="#7b2d4e"/>
+  <path d="M-18,-90 L-28,-56 L-21,-53 L-14,-76 Z" fill="#7b2d4e"/><path d="M18,-90 L27,-60 L20,-57 L14,-76 Z" fill="#7b2d4e"/>
+  <rect x="17" y="-56" width="17" height="14" rx="2" fill="${BROWN}"/><path d="M20,-56 q6,-9 11,0"/>
+  <ellipse cx="0" cy="-92" rx="16" ry="6" fill="#caa46a"/>
+  <circle cx="0" cy="-70" r="2.2" fill="${BUFF}"${NS}/><circle cx="0" cy="-52" r="2.2" fill="${BUFF}"${NS}/><circle cx="0" cy="-34" r="2.2" fill="${BUFF}"${NS}/>
+  <circle cx="0" cy="-109" r="13" fill="${SKIN}"/>${eyes(-111)}
+  ${cross?`<path d="M-9,-117 L-2,-114 M9,-117 L2,-114" stroke-width="2.5"/><path d="M-5,-101 Q0,-105 5,-101" stroke-width="2.5"/>`:`<path d="M-5,-102 L5,-102" stroke-width="2.5"/>`}
+  <path d="M-15,-110 Q-17,-130 0,-130 Q17,-130 15,-110 Q0,-117 -15,-110 Z" fill="${SEA}"/><circle cx="10" cy="-121" r="4.5" fill="${RED}"/></g>`}
+function albert(x,y,stick){return `<g transform="translate(${x} ${y})">
+  <rect x="-9" y="-24" width="7" height="20" fill="${SKIN}"/><rect x="2" y="-24" width="7" height="20" fill="${SKIN}"/>
+  <rect x="-9" y="-12" width="7" height="9" fill="#9aa1ad"/><rect x="2" y="-12" width="7" height="9" fill="#9aa1ad"/>
+  <ellipse cx="-6" cy="-2" rx="7" ry="3.5" fill="${DARK}"/><ellipse cx="6" cy="-2" rx="7" ry="3.5" fill="${DARK}"/>
+  <rect x="-12" y="-36" width="24" height="13" fill="#3d4a5c"/>
+  <path d="M-13,-34 L-11,-59 Q0,-64 11,-59 L13,-34 Z" fill="#3c5a8c"/>
+  <path d="M-5,-61 L0,-52 L5,-61 Z" fill="#fff"/>
+  <path d="M11,-57 L18,-40 L13,-38 L9,-48 Z" fill="#3c5a8c"/><circle cx="16" cy="-38" r="3.5" fill="${SKIN}"/>
+  <circle cx="0" cy="-72" r="11" fill="${SKIN}"/><circle cx="-3" cy="-73" r="1.5" fill="${INK}"${NS}/><circle cx="5" cy="-73" r="1.5" fill="${INK}"${NS}/>
+  <path d="M-2,-66 Q2,-63 6,-66" stroke-width="2"/>
+  <path d="M-11,-75 Q-11,-87 0,-87 Q11,-87 11,-75 Z" fill="${RED}"/><path d="M3,-76 L17,-74 L11,-71 Z" fill="${RED}"/>
+  ${stick?`<g class="stick-held">${stickShape(16,-38,24,-2)}</g>`:""}</g>`}
+/* the stick: plain cane, with the horse's head handle at the (x1,y1) end */
+function stickShape(x1,y1,x2,y2){return `<path d="M${x1},${y1} L${x2},${y2}" stroke="${BROWN}" stroke-width="4"/><path d="M${x1},${y1}" /><g transform="translate(${x1} ${y1})"><path d="M-3,2 L-2,-10 L3,-15 L5,-10 L12,-7 L11,-2 L4,-1 Z" fill="#caa46a" stroke-width="2"/><circle cx="4" cy="-8" r="1" fill="${INK}"${NS}/></g>`}
+function cap(x,y){return `<g transform="translate(${x} ${y})"><path d="M-11,0 Q-11,-12 0,-12 Q11,-12 11,0 Z" fill="${RED}"/><path d="M3,-1 L18,1 L11,4 Z" fill="${RED}"/></g>`}
+function wallace(x,y){return `<g class="wallace"><g transform="translate(${x} ${y})">
+  <path d="M88,-26 Q118,-30 120,-52" stroke-width="6" stroke="${MUS}"/><path d="M88,-26 Q118,-30 120,-52" stroke-width="10" stroke="${INK}" opacity="0"/><circle cx="120" cy="-54" r="6" fill="#a3561f"/>
+  <ellipse cx="64" cy="-24" rx="30" ry="24" fill="${MUS}"/>
+  <ellipse cx="18" cy="-28" rx="70" ry="27" fill="${MUS}"/>
+  <ellipse class="belly" cx="26" cy="-30" rx="46" ry="36" fill="${MUS}"/>
+  <ellipse cx="-34" cy="-6" rx="24" ry="7" fill="${MUS}"/><ellipse cx="6" cy="-5" rx="22" ry="7" fill="${MUS}"/>
+  <path d="M-52,-82 l8,8 l10,-6 l4,10 l11,0 l-2,11 l10,5 l-7,9 l7,9 l-10,5 l1,11 l-11,0 l-5,9 l-9,-6 l-9,6 l-5,-9 l-11,0 l1,-11 l-10,-5 l7,-9 l-7,-9 l10,-5 l-2,-11 l11,0 l4,-10 l10,6 Z" fill="#a3561f"/>
+  <circle cx="-48" cy="-60" r="7" fill="${MUS}"/><circle cx="-76" cy="-58" r="6" fill="${MUS}"/>
+  <ellipse cx="-62" cy="-36" rx="23" ry="21" fill="${MUS}"/>
+  <ellipse cx="-77" cy="-27" rx="14" ry="11" fill="#f0d28a"/>
+  <path d="M-91,-32 l8,0 l-4,6 Z" fill="#5a3a22"/>
+  <path d="M-86,-41 l8,5 M-80,-45 l7,6 M-92,-24 l7,3" stroke-width="2"/>
+  <path class="eye-shut" d="M-72,-44 q5,4 10,0 M-56,-46 q5,4 9,0" stroke-width="2.5"/>
+  <g class="eye-open"><circle cx="-67" cy="-44" r="4" fill="#fff" stroke-width="2"/><circle cx="-68" cy="-44" r="1.6" fill="${INK}"${NS}/><circle cx="-52" cy="-46" r="4" fill="#fff" stroke-width="2"/><circle cx="-53" cy="-46" r="1.6" fill="${INK}"${NS}/></g>
+  <path class="brow" d="M-73,-52 l10,4 M-46,-54 l-9,4" stroke-width="3"/>
+  <path class="mouth" d="M-87,-22 q6,3 12,-1" stroke-width="2"/>
+  <path class="smile" d="M-89,-23 q10,10 22,1" stroke-width="2.5"/>
+</g></g>`}
+const SCENES={
+  prom(cast){return svg(`
+    <rect width="400" height="300" fill="#bfe3da"${NS}/><circle cx="62" cy="52" r="26" fill="${MUS}"/>
+    <path d="M300,196 L318,60 L326,60 L344,196 Z" fill="#b8472f"/><path d="M308,150 L336,150 M312,115 L332,115 M315,88 L329,88 M309,196 L322,150 L335,196" stroke-width="2"/><rect x="313" y="46" width="18" height="14" fill="#b8472f"/><path d="M322,46 L322,26"/><path d="M322,27 l12,4 l-12,4" fill="${RED}" stroke-width="2"/>
+    <rect y="150" width="400" height="48" fill="${SEA}"${NS}/><path d="M0,150 L400,150"/>
+    <path d="M40,168 q5,-4 10,0 M120,180 q5,-4 10,0 M200,164 q5,-4 10,0 M250,184 q5,-4 10,0 M150,160 q4,-3 8,0" stroke="${BUFF}" stroke-width="2"/>
+    <rect y="196" width="400" height="18" fill="#e9cf8f"${NS}/>
+    <rect y="212" width="400" height="88" fill="#d6c4a0"${NS}/><path d="M0,212 L400,212"/>
+    <path d="M0,186 L400,186 M0,200 L400,200" stroke-width="2.5"/><path d="M20,184 L20,214 M100,184 L100,214 M180,184 L180,214 M260,184 L260,214 M340,184 L340,214"/>
+    <path d="M110,70 q6,-6 12,0 q6,-6 12,0 M170,96 q5,-5 10,0 q5,-5 10,0" stroke-width="2"/>
+    ${cast.includes("albert")?albert(150,286,true):""}${cast.includes("pa")?pa(232,288):""}${cast.includes("ma")?mother(300,288):""}`)},
+  zoo(cast){return svg(`
+    <rect width="400" height="300" fill="#bfe3da"${NS}/>
+    <rect y="60" width="400" height="180" fill="#b8472f"${NS}/><path d="M0,60 L400,60"/>
+    <path d="M0,100 L400,100 M0,140 L400,140 M0,180 L400,180" stroke-width="1.5" opacity=".5"/>
+    <path d="M150,240 L150,120 Q200,70 250,120 L250,240 Z" fill="#8f9c8a"/>
+    <rect x="160" y="78" width="80" height="30" fill="${BUFF}"/><text x="200" y="101" text-anchor="middle" font-family="Ultra,Georgia,serif" font-size="22" fill="${INK}"${NS}>ZOO</text>
+    <path d="M176,240 L176,200 L224,200 L224,240 M176,214 L224,214" /><rect x="186" y="186" width="28" height="14" fill="${BUFF}"/><text x="200" y="197" text-anchor="middle" font-family="Josefin Sans,sans-serif" font-weight="700" font-size="8" fill="${INK}"${NS}>PAY HERE</text>
+    <g transform="translate(64 232)"><path d="M-34,0 L-34,-34 Q-30,-50 -18,-44 Q-12,-66 0,-46 Q10,-66 18,-44 L30,-44 L36,-74 Q40,-86 50,-80 L48,-70 L42,-70 L38,-30 L30,-26 L30,0 L22,0 L22,-22 L-22,-22 L-22,0 Z" fill="#c9a064"/><circle cx="43" cy="-78" r="1.5" fill="${INK}"${NS}/></g>
+    <path d="M10,240 L130,240 M10,214 L130,214 M20,206 L20,240 M50,206 L50,240 M80,206 L80,240 M110,206 L110,240" stroke-width="2.5"/>
+    <rect x="270" y="150" width="120" height="90" fill="${BUFF}"/>
+    <path d="M262,150 L398,150 L390,124 L270,124 Z" fill="${RED}"/><path d="M290,124 L286,150 M310,124 L308,150 M330,124 L330,150 M350,124 L352,150 M370,124 L374,150" stroke="${BUFF}" stroke-width="6"/><path d="M262,150 L398,150 L390,124 L270,124 Z"/>
+    <rect x="276" y="84" width="108" height="38" fill="${BUFF}"/><text x="330" y="102" text-anchor="middle" font-family="Ultra,Georgia,serif" font-size="13" fill="${INK}"${NS}>OLD ALE</text><text x="330" y="115" text-anchor="middle" font-family="Josefin Sans,sans-serif" font-weight="700" font-size="9" fill="${RED}"${NS}>AND SANDWICHES</text>
+    <rect x="270" y="198" width="120" height="8" fill="${BROWN}"/><rect x="352" y="182" width="12" height="16" fill="#8a5a1e"/><rect x="351" y="179" width="14" height="5" fill="#fff" stroke-width="2"/>
+    <rect y="240" width="400" height="60" fill="#d6c4a0"${NS}/><path d="M0,240 L400,240"/>
+    ${cast.includes("albert")?albert(146,288,true):""}${cast.includes("ma")?mother(266,290):""}${cast.includes("pa")?pa(344,290):""}`)},
+  lion(cast){const after=!cast.includes("albert");return svg(`
+    <rect width="400" height="300" fill="#cdbd94"${NS}/>
+    <rect x="186" y="40" width="214" height="226" fill="#8f9c8a"${NS}/>
+    <rect x="240" y="8" width="110" height="26" fill="${BUFF}"/><text x="295" y="27" text-anchor="middle" font-family="Ultra,Georgia,serif" font-size="15" fill="${INK}"${NS}>WALLACE</text>
+    <path d="M200,262 l14,-8 M330,258 l16,-6 M360,262 l12,-8 M250,264 l10,-5" stroke="#e9cf8f" stroke-width="2.5"/>
+    ${wallace(300,262)}
+    <path d="M196,40 L196,266 M218,40 L218,266 M240,40 L240,266 M262,40 L262,266 M284,40 L284,266 M306,40 L306,266 M328,40 L328,266 M350,40 L350,266 M372,40 L372,266 M394,40 L394,266" stroke-width="3.5"/>
+    <rect x="186" y="34" width="216" height="9" fill="${DARK}"/><rect x="186" y="264" width="216" height="12" fill="${DARK}"/>
+    <rect y="274" width="400" height="26" fill="#b9a67c"${NS}/><path d="M0,274 L400,274"/>
+    <g class="stick-poke">${stickShape(246,204,170,238)}</g>
+    <g class="cap">${cap(212,293)}</g>
+    ${after?"":`<g class="albert">${albert(150,290,true)}</g>`}
+    ${cast.includes("pa")?pa(after?44:44,292):""}${cast.includes("ma")?mother(after?104:96,292,after):""}
+    ${cast.includes("keeper")?keeper(154,290):""}${cast.includes("manager")?manager(154,290):""}`)},
+  court(cast){return svg(`
+    <rect width="400" height="300" fill="#a9825a"${NS}/>
+    <path d="M0,70 L400,70 M50,70 L50,300 M130,70 L130,300" stroke-width="2" opacity=".45"/>
+    <rect x="36" y="14" width="56" height="44" fill="#bfe3da"/><path d="M64,14 L64,58 M36,36 L92,36" stroke-width="2"/>
+    <circle cx="150" cy="38" r="16" fill="${BUFF}"/><path d="M150,38 L150,28 M150,38 L157,41" stroke-width="2"/>
+    ${man(286,214,{coat:DARK,tr:DARK,hat:"none",front:`<path d="M-7,-96 L0,-84 L7,-96 Z" fill="#fff"/>`,face:`<circle cx="-5" cy="-114" r="5" stroke-width="2"/><circle cx="5" cy="-114" r="5" stroke-width="2"/><path d="M-5,-103 L5,-103" stroke-width="2"/>`})}
+    <rect x="186" y="150" width="204" height="150" fill="${BROWN}"/><rect x="178" y="142" width="220" height="12" fill="#5a3a22"/>
+    <rect x="204" y="172" width="70" height="110" fill="none" stroke-width="2"/><rect x="300" y="172" width="70" height="110" fill="none" stroke-width="2"/>
+    <rect x="330" y="128" width="12" height="14" fill="${DARK}"/><path d="M336,128 L346,106" stroke-width="2"/>
+    <rect x="212" y="131" width="34" height="11" fill="#fff" stroke-width="2"/>
+    <rect y="284" width="186" height="16" fill="#8a6a45"${NS}/><path d="M0,284 L186,284"/>
+    <rect x="136" y="236" width="50" height="6" fill="#5a3a22"/><path d="M142,242 L142,284 M180,242 L180,284"/>
+    ${cap(160,236)}<rect x="146" y="246" width="30" height="12" fill="${BUFF}" stroke-width="1.5"/><text x="161" y="255" text-anchor="middle" font-family="Josefin Sans,sans-serif" font-weight="700" font-size="6.5" fill="${INK}"${NS}>EXHIBIT A</text>
+    ${cast.includes("pa")?pa(40,292):""}${cast.includes("ma")?mother(96,292,true):""}`)}
+};
+
+/* ---------- the script. All dialogue is new; the events follow Edgar's monologue beat for beat. ---------- */
+const NAMES={N:"",AL:"Albert",PA:"Mr Ramsbottom",MA:"Mrs Ramsbottom",KE:"The Keeper",MG:"The Manager",JP:"The Magistrate"};
+const FAM=["albert","pa","ma"];
+const S=[
+ {chap:1,title:"The Seaside, Such As It Is",role:"AL",sc:["prom",FAM,"idle"],cue:"prom"},
+ {w:"N",t:"Blackpool. The Ramsbottoms have come for the day: Mr Ramsbottom, Mrs Ramsbottom, and young Albert, who is dressed in his best."},
+ {w:"N",t:"Albert has a new stick. The handle is a horse's head. It came from Woolworths, and Albert regards it as the finest object in Lancashire."},
+ {w:"PA",t:"Well. There's the sea."},
+ {w:"MA",t:"Is that it?"},
+ {w:"N",t:"The tide is flat. The waves are small. Nobody appears to be in any difficulty whatsoever."},
+ {q:"What do you make of the sea?",o:[
+   {l:"It's not very big.",set:{sea:"You said it was not very big."},note:"Pa agrees with you.",r:[["PA","It's as big as it needs to be, lad. It's just not trying."]]},
+   {l:"Nobody's drowning.",set:{sea:"You pointed out that nobody was drowning."},note:"Mother will remember that.",r:[["MA","No. You'd think somebody would make the effort, at these prices."]]},
+   {l:"Can I poke it with my stick?",set:{pokey:1,sea:"You asked to poke it with your stick."},note:"The stick will remember that.",r:[["PA","You cannot poke the sea, Albert."],["N","Albert files this under things to test later."]]},
+   {l:"...",set:{sea:"You said nothing. The sea did not notice."},r:[["MA","He's gone quiet. He's thinking. I don't like it when he thinks."]]}]},
+ {w:"PA",t:"There's nowt here to laugh at. Shall we find summat with a bit more go in it?"},
+ {w:"MA",t:"There's a zoo."},
+ {q:"A zoo?",o:[
+   {l:"Have they got lions?",note:"Mother noticed your interest in lions.",r:[["MA","I expect so. They charge enough."]]},
+   {l:"Have they got sandwiches?",r:[["PA","Now the lad's talking sense."]]},
+   {l:"I'd rather watch the sea do nothing.",r:[["PA","We are not stopping here to look at water, Albert."],["N","The motion is defeated, two votes to one."]]}]},
+
+ {chap:2,title:"Paid at the Gate",role:"AL",sc:["zoo",FAM,"idle"],cue:"prom"},
+ {w:"N",t:"They pay at the gate and go in. Mrs Ramsbottom will have cause to mention this payment later."},
+ {w:"N",t:"The zoo has lions. It has tigers. It has camels. It also has old ale and sandwiches, which Mr Ramsbottom considers the pick of the exhibits."},
+ {w:"PA",t:"Look at that, Mother. Old ale."},
+ {w:"MA",t:"We came to see animals."},
+ {w:"PA",t:"I can see them from the counter."},
+ {q:"What do you want to look at?",o:[
+   {l:"The camels.",set:{camels:1},r:[["N","The camel looks at Albert. Albert looks at the camel. Neither is improved by it."]]},
+   {l:"The tigers.",r:[["N","The tiger is pacing up and down like a man waiting for a train. Albert approves. That is how a wild beast ought to carry on."]]},
+   {l:"Pa's sandwich.",note:"Pa will remember that.",r:[["PA","Get your own."],["MA","And he's not having ale."]]},
+   {l:"The lions.",r:[["N","Straight to business. Albert has always known his own mind."]]}]},
+ {w:"N",t:"And so, sooner or later, to the lion house."},
+
+ {chap:3,title:"A Matter of Principle",role:"AL",sc:["lion",FAM,"idle"],cue:"wallace"},
+ {w:"N",t:"In it lies one very large lion. His name is Wallace. His nose is a map of old scars."},
+ {w:"N",t:"Wallace is resting with the side of his face against the bars, like a gentleman who has dined and does not wish to be consulted."},
+ {w:"AL",t:"That's not right."},
+ {w:"N",t:"Albert has heard about lions. Lions are meant to be fierce. Lions are meant to be wild. This one is having a lie-down."},
+ {q:"Say something to the lion",o:[
+   {l:"Oi. Do something.",r:[["N","Wallace does nothing, and does it thoroughly."]]},
+   {l:"Are you poorly?",note:"Wallace noticed that.",r:[["N","Wallace opens one eye, establishes that Albert is not a meal, and shuts it again. He will shortly revise this opinion."]]},
+   {l:"Roar, then.",r:[["N","Wallace declines."]]},
+   {l:"...",r:[["N","A stand-off. Boy and lion, neither giving an inch. The lion is asleep, which helps him."]]}]},
+ {w:"N",t:"Albert is not afraid. Not a scrap. He looks at the lion. He looks at his stick. He looks at the lion's ear."},
+ {w:"N",t:"He was told he could not poke the sea. Nobody has said one word about lions.",if:f=>f.pokey},
+ {q:"The stick. The ear.",timed:7,silent:3,o:[
+   {l:"Poke the lion.",set:{poke:"You chose to poke the lion. Albert poked the lion."},r:[["N","Good lad. Straight in."]]},
+   {l:"Poke the lion, politely.",set:{polite:1,poke:"You chose to poke the lion politely. Albert said excuse me, then poked the lion."},r:[["AL","Excuse me."],["N","Manners cost nothing. They also make no difference to where the stick ends up."]]},
+   {l:"Do not poke the lion.",set:{poke:"You chose not to poke the lion. Albert poked the lion."},note:"Albert ignored that.",r:[["N","Albert weighs this advice with care. Then he pokes the lion."]]},
+   {l:"...",set:{poke:"You said nothing. The stick spoke for you. Albert poked the lion."},r:[["N","You say nothing. The stick says it for you."]]}]},
+ {w:"N",t:"The horse's head handle goes into Wallace's ear.",sc:["lion",FAM,"poke"],sfx:"thud",cue:"none"},
+ {w:"N",t:"You can tell at once that Wallace does not care for it."},
+ {w:"N",t:"He gives a sort of heave, hauls Albert in through the bars, and swallows him. Whole. In one go.",sc:["lion",FAM,"gulp"],sfx:"gulp"},
+ {eaten:"You have been eaten.",brow:"Chapter three ends here",sub:"Wallace will remember that. You are now playing as Mr Ramsbottom."},
+
+ {chap:4,title:"Somebody in Charge",role:"PA",sc:["lion",["pa","ma"],"eaten"],cue:"vexed"},
+ {w:"N",t:"Mr Ramsbottom saw the whole thing. He stands a moment, not sure what a man is meant to do next."},
+ {q:"Tell Mother",o:[
+   {l:"Mother. The lion's had Albert.",r:[["MA","Had him? Eaten him?"],["PA","Whole."]]},
+   {l:"Mother, don't turn round.",r:[["N","Mrs Ramsbottom turns round."],["MA","Where's Albert?"],["PA","That's the bit you weren't to turn round for."]]},
+   {l:"Now, I don't want you upset.",r:[["MA","I'm not upset. Why would I be upset? Where's Albert?"],["PA","Ah."]]},
+   {l:"...",r:[["MA","You've gone a funny colour. Where's the lad?"],["N","Mr Ramsbottom points at the lion. The lion looks comfortable."]]}]},
+ {w:"MA",t:"Eaten! On a day out! Oh, I am annoyed."},
+ {w:"N",t:"The Ramsbottoms do the proper thing, which is to complain. They find the keeper.",sc:["lion",["pa","ma","keeper"],"eaten"]},
+ {w:"KE",t:"Oh dear. Oh, that is unfortunate. And you're quite certain it's your boy he's had?"},
+ {q:"Prove it",o:[
+   {l:"Show him the cap.",r:[["PA","Certain? That's his cap, is that."]]},
+   {l:"Ask the lion.",r:[["KE","He doesn't generally comment, sir."],["PA","Then look at the floor. That's the lad's cap."]]},
+   {l:"Count the family.",r:[["PA","We came in three. We're stood here two. Do your sums."],["KE","Might he have wandered off?"],["PA","He's wandered into that. There's his cap."]]}]},
+ {w:"N",t:"The cap lies where it fell. It is all the evidence there is, and it will be carried about for the rest of the day."},
+ {w:"KE",t:"I think this wants the manager."},
+ {w:"N",t:"The manager is sent for.",sc:["lion",["pa","ma","manager"],"eaten"]},
+ {w:"MG",t:"Now then. What's the trouble?"},
+ {q:"Tell the manager",o:[
+   {l:"Your lion's eaten our Albert.",r:[["PA","Your lion's eaten our Albert. And him in his Sunday best."]]},
+   {l:"We want a word about your lion.",r:[["MG","Which lion?"],["PA","The full one."]]},
+   {l:"...",r:[["N","Mr Ramsbottom opens his mouth. Mrs Ramsbottom gets there first."]]}]},
+ {w:"MA",t:"Fair's fair, young man. We paid at that gate. Paid. And then your lion goes and eats the boy. That is not what the money was for."},
+ {w:"N",t:"The manager wants no fuss. He has his purse out before she has finished."},
+ {w:"MG",t:"Shall we name a sum and call the matter settled?"},
+ {q:"Name your price",o:[
+   {l:"What do folk generally get?",set:{ask:"Pa asked what the going rate was for a son."},note:"The manager will remember that.",r:[["MG","It doesn't come up as often as you might think."]]},
+   {l:"A refund on the tickets.",set:{ask:"Pa asked for the gate money back."},r:[["MG","All three?"],["PA",f=>f.camels?"Two and a half. He did get a good look at the camels.":"All three. He never saw the camels properly."]]},
+   {l:"The price of a new stick.",set:{ask:"Pa asked for the price of a new stick."},r:[["MG","The stick, sir, is what started it."],["PA","It were a good stick."]]},
+   {l:"...",set:{ask:"Pa looked at the purse and said nothing."},r:[["N","Mr Ramsbottom looks at the purse. The purse looks back."]]}]},
+ {w:"N",t:"But Mother has turned awkward. She has seen where Albert went, and no purse is going to cover it."},
+ {w:"MA",t:"No. Put that away. Somebody is going to answer for this."},
+ {w:"PA",t:"Answer for it?"},
+ {w:"MA",t:"Summonsed. In front of a magistrate. Fetch the cap.",note:"Mother will not forget that."},
+
+ {chap:5,title:"The Opinion of the Bench",role:"MA",sc:["court",["pa","ma"],"idle"],cue:"court"},
+ {w:"N",t:"So off they all go to the police station, and stand before a magistrate."},
+ {w:"N",t:"They tell him what happened to Albert. They prove it by showing him the cap."},
+ {q:"Present the evidence",o:[
+   {l:"Hold up the cap.",r:[["JP","A cap."],["MA","His cap."],["JP","And the boy?"],["MA","Inside the lion."],["JP","And the lion?"],["PA","Inside the zoo."]]},
+   {l:"Describe the stick.",r:[["MA","It had a horse's head handle. From Woolworths."],["JP","Is Woolworths a party to this?"],["MA","Not yet."]]},
+   {l:"Blame Father.",note:"Pa will remember that.",r:[["MA","He were looking at the ale."],["PA","I were looking at the lad. I'd already finished the ale."]]}]},
+ {w:"N",t:"The magistrate thinks it over. Then he gives his opinion."},
+ {w:"JP",t:"It seems to me that nobody is really at fault here. Not the zoo. Not the keeper. Not, strictly speaking, the lion."},
+ {w:"JP",t:"I note the boy said excuse me. That is to his credit. It does not alter the outcome.",if:f=>f.polite},
+ {w:"JP",t:"I can only say I hope Mr and Mrs Ramsbottom will be blessed with further sons in due course."},
+ {w:"N",t:"At this, Mother goes up like a firework.",cue:"none",sfx:"thud"},
+ {q:"Answer the magistrate",timed:8,silent:3,o:[
+   {l:"Further sons?",set:{last:"Mother's reply: Further sons?"}},
+   {l:"For the lions?",set:{last:"Mother's reply: For the lions?"}},
+   {l:"After all that trouble?",set:{last:"Mother's reply: After all that trouble?"}},
+   {l:"...",set:{last:"Mother said nothing for one full second. Then she said plenty."},r:[["N","Mother says nothing for one full second. It is the most dangerous second in the history of the Blackpool bench."]]}]},
+ {w:"MA",t:"Further sons! Bring them up, feed them, clothe them, buy them sticks from Woolworths, and all so they can go down a lion? I'll thank you to keep your hopes to yourself.",cue:"prom"},
+ {w:"N",t:"And that was that."},
+ {end:1}
+];
+
+/* ---------- music: original tunes, played live with the Web Audio API ---------- */
+const A={ctx:null,master:null,bus:null,cue:"none",tm:null,loopAt:0,on:false};
+const mtof=m=>440*Math.pow(2,(m-69)/12);
+const PROM=[[67,.5],[64,.5],[67,.5],[72,.5],[76,1],[74,.5],[72,.5],[69,.5],[65,.5],[69,.5],[72,.5],[71,1],[67,1],[67,.5],[64,.5],[67,.5],[72,.5],[76,.5],[77,.5],[76,.5],[74,.5],[72,.5],[69,.5],[71,.5],[74,.5],[72,1.5],[0,.5]];
+const toMinor=m=>{const p=m%12;return (p===4||p===9||p===11)?m-1:m};
+const CUES={
+  /* seaside oom-pah for the promenade and the zoo */
+  prom:{bpm:116,bar:2,lead:"square",mel:PROM,ch:[[48,"M"],[48,"M"],[53,"M"],[55,"M"],[48,"M"],[48,"M"],[53,"M"],[48,"M"]],bass:[0,1],pah:[.5,1.5]},
+  /* the same tune gone sour, for after the gulp */
+  vexed:{bpm:74,bar:2,lead:"triangle",mel:PROM.map(([m,d])=>[m?toMinor(m)-12:0,d]),ch:[[48,"m"],[48,"m"],[53,"m"],[55,"M"],[48,"m"],[48,"m"],[53,"m"],[48,"m"]],bass:[0,1],pah:[.5,1.5]},
+  /* a slow, heavy waltz for a lion who has dined */
+  wallace:{bpm:84,bar:3,lead:"triangle",mel:[[57,1],[60,1],[64,1],[62,2],[60,1],[59,1],[62,1],[65,1],[64,3],[57,1],[60,1],[64,1],[67,2],[65,1],[64,1],[62,1],[59,1],[57,3]],ch:[[45,"m"],[50,"m"],[43,"M"],[40,"M"],[45,"m"],[50,"m"],[40,"M"],[45,"m"]],bass:[0],pah:[1,2]},
+  /* a pompous little march for the bench */
+  court:{bpm:88,bar:4,lead:"sawtooth",mel:[[65,1.5],[65,.5],[69,1],[72,1],[70,1.5],[69,.5],[67,2],[67,1.5],[67,.5],[70,1],[74,1],[72,3],[0,1],[65,1.5],[65,.5],[69,1],[72,1],[74,1.5],[72,.5],[70,2],[69,1],[67,1],[64,1],[67,1],[65,3],[0,1]],ch:[[41,"M"],[46,"M"],[43,"m"],[48,"M"],[41,"M"],[46,"M"],[48,"M"],[41,"M"]],bass:[0,2],pah:[1,3]}
+};
+function audioInit(){
+  if(A.ctx)return;
+  try{
+    const C=window.AudioContext||window.webkitAudioContext;A.ctx=new C();
+    A.master=A.ctx.createGain();A.master.gain.value=A.on?.2:0;
+    const lp=A.ctx.createBiquadFilter();lp.type="lowpass";lp.frequency.value=2200;
+    A.master.connect(lp);lp.connect(A.ctx.destination);
+  }catch(e){A.ctx=null}
+}
+function tone(dest,m,t,d,type,vol){
+  const o=A.ctx.createOscillator(),g=A.ctx.createGain();
+  o.type=type;o.frequency.value=mtof(m);
+  g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(vol,t+.015);
+  g.gain.setValueAtTime(vol,t+Math.max(.02,d-.05));g.gain.linearRampToValueAtTime(0,t+d);
+  o.connect(g);g.connect(dest);o.start(t);o.stop(t+d+.02);
+}
+function scheduleLoop(name,start){
+  const c=CUES[name],spb=60/c.bpm;let b=0;
+  for(const [m,d] of c.mel){if(m)tone(A.bus,m,start+b*spb,d*spb*.92,c.lead,c.lead==="triangle"?.5:.22);b+=d}
+  c.ch.forEach(([root,q],i)=>{
+    const t0=start+i*c.bar*spb,third=q==="M"?4:3;
+    c.bass.forEach((off,k)=>tone(A.bus,root+(k%2?7:0)-12,t0+off*spb,spb*.8,"triangle",.6));
+    c.pah.forEach(off=>{[0,third,7].forEach(n=>tone(A.bus,root+12+n,t0+off*spb,spb*.3,"triangle",.16))});
+  });
+  return c.ch.length*c.bar*spb;
+}
+function setCue(name){
+  if(name===A.cue)return;A.cue=name;
+  if(!A.ctx)return;
+  clearInterval(A.tm);
+  if(A.bus){const old=A.bus;old.gain.cancelScheduledValues(A.ctx.currentTime);old.gain.setValueAtTime(old.gain.value,A.ctx.currentTime);old.gain.linearRampToValueAtTime(0,A.ctx.currentTime+.25);setTimeout(()=>{try{old.disconnect()}catch(e){}},400);A.bus=null}
+  if(name==="none"||!CUES[name])return;
+  A.bus=A.ctx.createGain();A.bus.gain.value=1;A.bus.connect(A.master);
+  A.loopAt=A.ctx.currentTime+.3;
+  const pump=()=>{if(A.cue!==name)return;while(A.loopAt<A.ctx.currentTime+1){A.loopAt+=scheduleLoop(name,A.loopAt)}};
+  pump();A.tm=setInterval(pump,400);
+}
+function sfx(kind){
+  if(!A.ctx||!A.on)return;const t=A.ctx.currentTime;
+  const sweep=(f1,f2,d,type,vol,at)=>{const o=A.ctx.createOscillator(),g=A.ctx.createGain();o.type=type;o.frequency.setValueAtTime(f1,t+at);o.frequency.exponentialRampToValueAtTime(f2,t+at+d);g.gain.setValueAtTime(vol,t+at);g.gain.linearRampToValueAtTime(0,t+at+d);o.connect(g);g.connect(A.master);o.start(t+at);o.stop(t+at+d+.02)};
+  if(kind==="ding"){sweep(1318,1318,.25,"sine",.5,0);sweep(1760,1760,.35,"sine",.4,.09)}
+  if(kind==="thud"){sweep(120,40,.3,"sine",1,0)}
+  if(kind==="gulp"){sweep(520,90,.32,"sine",.9,.25);sweep(160,260,.12,"sine",.8,.62)}
+  if(kind==="tick"){sweep(900,900,.03,"square",.15,0)}
+}
+function setSound(on){
+  A.on=on;if(on)audioInit();
+  if(A.ctx){try{A.ctx.resume()}catch(e){};A.master.gain.value=on?.2:0}
+  const b=document.getElementById("mute");b.textContent=on?"Sound on":"Sound off";b.setAttribute("aria-pressed",String(on));
+  if(on&&A.ctx){const want=cur.cue;A.cue="";setCue(want)}
+}
+
+/* ---------- engine ---------- */
+const $=id=>document.getElementById(id);
+let st={i:-1,f:{}};
+let queue=[],cur={sc:null,cue:"none",role:""},typing=null,full="",timerT=null,tickT=null,toastT=null;
+const reduce=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+function contextAt(i){const c={sc:null,cue:"none",role:""};for(let k=0;k<=i&&k<S.length;k++){const s=S[k];if(s.sc)c.sc=s.sc;if(s.cue)c.cue=s.cue;if(s.role)c.role=s.role}return c}
+let picKey="";
+function paint(sc){
+  if(!sc)return;const key=sc[0]+"|"+sc[1].join(",");
+  if(key!==picKey){picKey=key;$("pic").innerHTML=SCENES[sc[0]](sc[1])}
+  $("stage").dataset.state=sc[2];
+}
+function toast(msg){const t=$("toast");t.textContent=msg;t.classList.add("on");sfx("ding");clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove("on"),2600)}
+function say(who,text){
+  const t=typeof text==="function"?text(st.f):text;
+  $("who").textContent=NAMES[who];$("who").classList.toggle("you",who===cur.role);
+  const el=$("line");el.classList.toggle("narr",who==="N");
+  clearInterval(typing);typing=null;full=t;
+  if(reduce){el.textContent=t;return}
+  let n=0;el.textContent="";
+  typing=setInterval(()=>{n+=2;el.textContent=t.slice(0,n);if(n>=t.length){clearInterval(typing);typing=null}},22);
+}
+function hideCards(){["title","chap","eaten","end"].forEach(id=>$(id).hidden=true)}
+function clearChoice(){$("choices").hidden=true;$("prompt").hidden=true;$("timer").hidden=true;clearTimeout(timerT);clearInterval(tickT);$("next").hidden=false}
+function show(){
+  const s=S[st.i];if(!s)return;
+  if(s.if&&!s.if(st.f)){st.i++;return show()}
+  cur=contextAt(st.i);
+  $("role").textContent=cur.role?"You are "+NAMES[cur.role]:"";
+  hideCards();clearChoice();
+  if(s.chap){
+    paint(s.sc);setCue(s.cue);
+    $("chapno").textContent="Chapter "+["one","two","three","four","five"][s.chap-1]+" of five";
+    $("chaptitle").textContent=s.title;$("chaprole").textContent="You are playing as "+NAMES[s.role]+".";
+    $("bill").textContent="The Lion & Albert · "+s.title;
+    $("who").textContent="";$("line").textContent="";
+    $("chap").hidden=false;$("chapgo").focus();return;
+  }
+  paint(cur.sc);setCue(cur.cue);
+  if(s.sfx)sfx(s.sfx);
+  if(s.eaten){$("eatenbrow").textContent=s.brow;$("eatenhead").textContent=s.eaten;$("eatensub").textContent=s.sub;$("eaten").hidden=false;$("eatengo").focus();return}
+  if(s.end){ledger();setCue("prom");$("end").hidden=false;$("again").focus();return}
+  if(s.q){ask(s);return}
+  say(s.w,s.t);if(s.note)toast(s.note);
+}
+function ask(s){
+  $("prompt").textContent=s.q;$("prompt").hidden=false;$("next").hidden=true;
+  const box=$("choices");box.innerHTML="";box.hidden=false;
+  s.o.forEach((o,k)=>{const b=document.createElement("button");b.type="button";b.innerHTML=`<span class="k">${k+1}</span>`;b.append(o.l==="..."?"Say nothing":o.l);b.addEventListener("click",()=>pick(s,k));box.append(b)});
+  if(s.timed){
+    const bar=$("timer").firstElementChild;$("timer").hidden=false;
+    bar.style.transition="none";bar.style.transform="scaleX(1)";void bar.offsetWidth;
+    bar.style.transition=`transform ${s.timed}s linear`;bar.style.transform="scaleX(0)";
+    tickT=setInterval(()=>sfx("tick"),1000);
+    timerT=setTimeout(()=>pick(s,s.silent),s.timed*1000);
+  }
+}
+function pick(s,k){
+  const o=s.o[k];clearChoice();
+  Object.assign(st.f,o.set||{});
+  if(o.note)toast(o.note);
+  queue=(o.r||[]).slice();
+  advance();
+}
+function advance(){
+  if(typing){clearInterval(typing);typing=null;$("line").textContent=full;return}
+  if(queue.length){const [w,t]=queue.shift();say(w,t);return}
+  st.i++;show();
+}
+function ledger(){
+  const f=st.f,rows=[
+    ["The sea",f.sea||"No opinion was recorded."],
+    ["The stick and the ear",f.poke||"Albert poked the lion."],
+    ["The purse",f.ask||"No sum was named."],
+    ["The bench",f.last||"Mother spoke her mind."],
+    ["Outcome","Albert eaten. Nobody to blame. This could not have gone any other way: it is how Edgar wrote it."]];
+  $("ledger").innerHTML="";
+  rows.forEach(([a,b])=>{const li=document.createElement("li");const h=document.createElement("b");h.textContent=a;li.append(h,b);$("ledger").append(li)});
+}
+function begin(sound){setSound(sound);st={i:0,f:{}};queue=[];show()}
+$("begin").addEventListener("click",()=>begin(true));
+$("beginq").addEventListener("click",()=>begin(false));
+$("again").addEventListener("click",()=>{setCue("none");st={i:-1,f:{}};hideCards();$("title").hidden=false;$("bill").textContent="The Lion & Albert";$("role").textContent=""});
+$("next").addEventListener("click",advance);
+$("chapgo").addEventListener("click",()=>{st.i++;show()});
+$("eatengo").addEventListener("click",()=>{st.i++;show()});
+$("mute").addEventListener("click",()=>setSound(!A.on));
+$("stage").addEventListener("click",()=>{if($("choices").hidden&&st.i>=0)advance()});
+document.addEventListener("keydown",e=>{
+  if(e.target.tagName==="BUTTON"&&(e.key===" "||e.key==="Enter"))return;
+  if(!$("choices").hidden&&/^[1-4]$/.test(e.key)){const b=$("choices").children[+e.key-1];if(b)b.click();return}
+  if((e.key===" "||e.key==="Enter")&&st.i>=0&&$("choices").hidden&&$("chap").hidden&&$("eaten").hidden&&$("end").hidden){e.preventDefault();advance()}
+});
+function start(data){
+  $("titleart").innerHTML=SCENES.lion(FAM);
+  paint(["lion",FAM,"idle"]);
+  if(data&&typeof data.i==="number"&&data.i>=0&&data.i<S.length){st={i:data.i,f:data.f||{}};A.on=false;show()}
+}
+try{window.claude&&window.claude.hot&&window.claude.hot.snapshot&&window.claude.hot.snapshot(()=>({i:st.i,f:st.f}))}catch(e){}
+if(window.claude&&window.claude.hot&&window.claude.hot.ready){window.claude.hot.ready(start)}else{start((window.claude&&window.claude.hot&&window.claude.hot.data)||{})}
+</script>
+</body>
+</html>
