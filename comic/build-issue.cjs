@@ -12,4 +12,3 @@ if(context.OUTPUT.length!==16)throw Error('Expected 16 pages');
 const html='<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><base href="../../../"><title>'+issue.date+' - The Magnificent Nonsense</title><link rel="stylesheet" href="comic/reader.css"><body><main style="max-width:820px;margin:auto"><p><a href="comic.html#issue='+id+'">Open page-turning reader</a></p>'+context.OUTPUT.map(p=>p.html.replace(/loading="lazy"/g,'loading="eager"')).join('')+'</main></body></html>';
 fs.writeFileSync(path.join(__dirname,'issues',id,'transcript.html'),html);
 console.log('Validated '+id+': 16 pages; eight four-panel stories; complete standalone edition generated.');
-

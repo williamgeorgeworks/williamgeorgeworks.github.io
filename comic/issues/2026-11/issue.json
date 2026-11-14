@@ -8,23 +8,23 @@
     {
       "cast": "ferret",
       "title": "The one-small-idea machine",
-      "kicker": "FERRET  PROFESSIONAL SCHEMER",
-      "basis": "Inspired by Ferret's many projects, DJing, fishing and the Accord's right to rest.",
+      "kicker": "FERRET • PROFESSIONAL SCHEMER",
+      "basis": "Inspired by Ferret’s many projects, DJing, fishing and the Accord’s right to rest.",
       "panels": [
         [
-          "One quiet morning.",
+          "One quiet morning…",
           "Ferret",
           "One small idea. Nothing that needs its own shed."
         ],
         [
-          "By the second cup of tea.",
+          "By the second cup of tea…",
           "Ferret",
           "A book! A game! A farm! A waterproof disco for carp!"
         ],
         [
           "The planning department expands.",
           "Ferret",
-          "Good news: I've cleared the desk. Bad news: I can't find the house."
+          "Good news: I’ve cleared the desk. Bad news: I can’t find the house."
         ],
         [
           "Article IX to the rescue.",
@@ -36,23 +36,23 @@
     {
       "cast": "jo",
       "title": "The Chairperson takes the bait",
-      "kicker": "JO  CALM IN A SEA OF NONSENSE",
-      "basis": "Inspired by Jo's real fishing trips and her Chairperson role. The dialogue and splash are invented.",
+      "kicker": "JO • CALM IN A SEA OF NONSENSE",
+      "basis": "Inspired by Jo’s real fishing trips and her Chairperson role. The dialogue and splash are invented.",
       "panels": [
         [
           "Jo opens the meeting.",
           "Jo",
-          "Today's agenda: sit down, cast out, enjoy ourselves."
+          "Today’s agenda: sit down, cast out, enjoy ourselves."
         ],
         [
           "A motion is raised.",
           "Jo",
-          "That's a very strong objection from the floor of the pond!"
+          "That’s a very strong objection from the floor of the pond!"
         ],
         [
           "The witness is briefly examined.",
           "Jo",
-          "Lovely fish. No speech, please-we'll get you straight back."
+          "Lovely fish. No speech, please—we’ll get you straight back."
         ],
         [
           "The motion carries. Quite a lot of water.",
@@ -64,8 +64,8 @@
     {
       "cast": "arthur",
       "title": "The case of the warmer cushion",
-      "kicker": "ARTHUR  HIS SUPREME FLUFFINESS",
-      "basis": "Inspired by Arthur's Chief Justice persona and fondness for the warmest spot.",
+      "kicker": "ARTHUR • HIS SUPREME FLUFFINESS",
+      "basis": "Inspired by Arthur’s Chief Justice persona and fondness for the warmest spot.",
       "panels": [
         [
           "Two cushions. One constitutional crisis.",
@@ -92,8 +92,8 @@
     {
       "cast": "spyro",
       "title": "Long live the box!",
-      "kicker": "SPYRO  THE TRUE KING",
-      "basis": "Inspired by Spyro's "true king" character. This royal box dispute is fictional.",
+      "kicker": "SPYRO • THE TRUE KING",
+      "basis": "Inspired by Spyro’s “true king” character. This royal box dispute is fictional.",
       "panels": [
         [
           "A new throne arrives.",
@@ -120,13 +120,13 @@
     {
       "cast": "tilly",
       "title": "A very quiet warning",
-      "kicker": "TILLY  DO NOT DISTURB",
-      "basis": "Inspired by Tilly's quiet, shy character and formidable boundaries.",
+      "kicker": "TILLY • DO NOT DISTURB",
+      "basis": "Inspired by Tilly’s quiet, shy character and formidable boundaries.",
       "panels": [
         [
           "Tilly enjoys a peaceful chapter.",
           "Tilly",
-          "At last. A plot that doesn't involve anybody shouting."
+          "At last. A plot that doesn’t involve anybody shouting."
         ],
         [
           "A demonstration arrives uninvited.",
@@ -141,15 +141,15 @@
         [
           "A much better arrangement.",
           "Tilly",
-          "You're a natural at silent service. More tea?"
+          "You’re a natural at silent service. More tea?"
         ]
       ]
     },
     {
       "cast": "trixie",
       "title": "The sofa inspection",
-      "kicker": "TRIXIE  COMMANDER OF CUSHIONS",
-      "basis": "Inspired by Trixie's stern parade-ground persona. No real military figure is depicted.",
+      "kicker": "TRIXIE • COMMANDER OF CUSHIONS",
+      "basis": "Inspired by Trixie’s stern parade-ground persona. No real military figure is depicted.",
       "panels": [
         [
           "Inspection time!",
@@ -175,9 +175,9 @@
     },
     {
       "cast": "dexter",
-      "title": "The wolf who wouldn't boo",
-      "kicker": "DEXTER  BIG FUR, SOFT HEART",
-      "basis": "Inspired by Dexter's wolf-like appearance and gentle temperament.",
+      "title": "The wolf who wouldn’t boo",
+      "kicker": "DEXTER • BIG FUR, SOFT HEART",
+      "basis": "Inspired by Dexter’s wolf-like appearance and gentle temperament.",
       "panels": [
         [
           "Dexter rehearses being fearsome.",
@@ -204,13 +204,13 @@
     {
       "cast": "daisy",
       "title": "The perfectly innocent biscuit",
-      "kicker": "DAISY  NOTHING TO SEE HERE",
-      "basis": "Inspired by Daisy's "butter would not melt" persona. No real biscuit theft is alleged.",
+      "kicker": "DAISY • NOTHING TO SEE HERE",
+      "basis": "Inspired by Daisy’s “butter would not melt” persona. No real biscuit theft is alleged.",
       "panels": [
         [
           "The biscuit tin is under guard.",
           "Daisy",
-          "Me? I'm simply admiring the lid."
+          "Me? I’m simply admiring the lid."
         ],
         [
           "A tiny paw conducts research.",
@@ -220,15 +220,14 @@
         [
           "The evidence makes an escape.",
           "Daisy",
-          "That's not theft. That's an unauthorised crumb migration."
+          "That’s not theft. That’s an unauthorised crumb migration."
         ],
         [
           "The suspect remains helpful.",
           "Daisy",
-          "I'll watch the empty tin. You go and fetch another one."
+          "I’ll watch the empty tin. You go and fetch another one."
         ]
       ]
     }
   ]
 }
-

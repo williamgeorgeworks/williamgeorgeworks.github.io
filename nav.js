@@ -22,4 +22,3 @@
   document.addEventListener('keydown',function(e){if(e.key==='Escape'&&more.classList.contains('open')){set(false);mb.focus();}});
 })();
 
-
