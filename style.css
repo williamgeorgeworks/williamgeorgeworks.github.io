@@ -197,3 +197,12 @@ section.band.trailer{padding-top:10px}
 .stage #promo-play,.trailer-bar #promo-play{position:static;transform:none;font-size:19px;white-space:nowrap}
 .trailer-bar #promo-play:hover{transform:translate(2px,2px)}
 .trailer-bar #promo-sound{font-size:19px;padding:11px 20px 10px;box-shadow:5px 5px 0 var(--ink)}
+
+/* cat photo galleries: one lead photo, then thumbnails; add <div class="catpics"> under any cat's heading */
+.who .catpics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:0 0 16px}
+.who .catpics a{display:block;border:3px solid var(--ink);overflow:hidden;background:var(--ink)}
+.who .catpics img{display:block;width:100%;height:100%;aspect-ratio:1/1;object-fit:cover;object-position:50% 25%;transition:transform .2s}
+.who .catpics a:hover img,.who .catpics a:focus-visible img{transform:scale(1.05)}
+.who .catpics .lead{grid-column:1/-1}
+.who .catpics .lead img{aspect-ratio:4/5;object-position:50% 30%}
+@media (prefers-reduced-motion:reduce){.who .catpics img{transition:none}}
