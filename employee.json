@@ -1,6 +1,16 @@
 {
   "month": "2026-11",
   "winner": "reggie",
-  "names": { "reggie": "Reggie", "terry": "Terry" },
-  "note": "Change month and winner at the start of each month. The badge only shows while 'month' matches the current UK month, so it switches itself off if this is left alone."
+  "names": {
+    "reggie": "Reggie",
+    "terry": "Terry"
+  },
+  "note": "Each month: change 'month' and 'winner', and add the new winner at the front of 'history'. The badge shows only while 'month' is the current UK month, so it switches itself off if left alone.",
+  "history": [
+    {
+      "month": "2026-11",
+      "winner": "reggie",
+      "line": "Built the lot, invoiced for the lot."
+    }
+  ]
 }

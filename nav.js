@@ -3,6 +3,7 @@
 (function(){
   var h=document.querySelector('header.site'),n=h&&h.querySelector('nav.main');if(!n)return;
   if(!n.querySelector('a[href="comic.html"]')){var comic=document.createElement('a');comic.href='comic.html';comic.textContent='Monthly comic';n.appendChild(comic);}
+  if(!n.querySelector('a[href="employee-of-the-month.html"]')){var eo=document.createElement('a');eo.href='employee-of-the-month.html';eo.textContent='Employee of the Month';n.appendChild(eo);}
   var MAIN=['index.html','books.html','arcade.html','comic.html','story.html','cats.html'];
   var b=document.createElement('button');b.type='button';b.className='navbtn';b.textContent='Menu';
   n.id=n.id||'mainnav';b.setAttribute('aria-controls',n.id);b.setAttribute('aria-expanded','false');
