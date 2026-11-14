@@ -17,7 +17,7 @@ Before each story ask: could a reader of any political view, or none, laugh at t
 - No international politics or wars.
 
 ## Hard rules
-1. Every story starts from a real report from the last 48 hours. Check the publication date. If you cannot confirm it is recent, do not use it.
+1. Every story starts from a real report from the last 4 days (Ferret widened this from 48 hours on 14 November 2026). Prefer the newest, but check the publication date of every story. If you cannot confirm it is recent, do not use it.
 2. Every story has a plain "real" sentence stating what actually happened, using only facts found in the source, and a source link (https).
    Do not state any number, name or date that is not in the source.
 3. Never invent quotes or statements for any real, named person or organisation. Never put words in a real person's mouth.
