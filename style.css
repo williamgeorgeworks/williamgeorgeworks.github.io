@@ -210,3 +210,8 @@ section.band.trailer{padding-top:10px}
 .who .catpics.two{grid-template-columns:repeat(2,minmax(0,1fr))}
 .who .catpics.two .lead{grid-column:auto}
 .who .catpics.two img,.who .catpics.two .lead img{aspect-ratio:3/4}
+/* five-photo gallery: lead photo, then a 2x2 grid of thumbnails */
+.who .catpics.four{grid-template-columns:repeat(2,minmax(0,1fr))}
+.who .catpics.four .lead{grid-column:1/-1}
+.who .catpics.four img{aspect-ratio:1/1;object-position:50% 30%}
+.who .catpics.four .lead img{aspect-ratio:4/5}
