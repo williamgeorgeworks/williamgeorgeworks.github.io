@@ -153,3 +153,4 @@ nav.main a.tip:hover{background:var(--red);color:#fff;border-bottom-color:var(--
 section.band.closing{border-top:4px solid var(--ink);padding:38px 0 46px}
 section.band.closing .btns{margin-top:10px}
 section.band.memorial{padding-bottom:84px}
+section.band.closing .btns+.btns{margin-top:16px}
