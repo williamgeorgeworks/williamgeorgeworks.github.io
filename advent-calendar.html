@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Arthur&rsquo;s Advent Calendar | William George Works</title>
+<meta name="description" content="A free, traditional advent calendar with a story behind every door. Help Arthur, Chief Justice and cat, get ready for Christmas Eve. Doors open one a day from 1 December.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="William George Works">
+<meta property="og:title" content="Arthur&rsquo;s Advent Calendar | William George Works">
+<meta property="og:description" content="Twenty-four doors, twenty-four small adventures, one cat. A free traditional advent calendar. Doors open one a day from 1 December.">
+<meta property="og:url" content="https://williamgeorgeworks.co.uk/advent-calendar.html">
+<meta property="og:image" content="https://williamgeorgeworks.co.uk/promo-arthur.webp">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Cormorant+Garamond:ital,wght@0,500;0,700;1,500&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* A Victorian Christmas card: holly green ground, pillar-box red doors, gold edging, cream paper. */
+  --night:#0d2218;
+  --holly:#1d5a38;
+  --red:#a4182a;
+  --redlit:#c4263a;
+  --gold:#d9a93f;
+  --goldlo:#9a7424;
+  --cream:#f6ecd2;
+  --creamlo:#e9dbb4;
+  --ink:#2b1a12;
+  --faint:#6a5a47;
+  --display:"IM Fell English","Cormorant Garamond",Georgia,"Times New Roman",serif;
+  --body:"Cormorant Garamond",Georgia,"Times New Roman",serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+html{background:var(--night)}
+body{margin:0;background:var(--night) radial-gradient(ellipse 90% 700px at 50% 0%,#17402b 0%,transparent 100%) no-repeat;color:var(--cream);font-family:var(--body);font-size:21px;line-height:1.5;min-height:100vh;overflow-x:hidden}
+a{color:var(--gold);text-underline-offset:3px}
+a:hover{color:#fff}
+a:focus-visible,button:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+#snow{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
+.skip{position:absolute;left:-999px}.skip:focus{left:12px;top:12px;background:var(--cream);color:var(--ink);padding:8px 12px;z-index:30}
+
+/* slim bar back to the rest of the site */
+.bar{position:relative;z-index:2;display:flex;flex-wrap:wrap;gap:6px 22px;justify-content:space-between;align-items:center;max-width:980px;margin:0 auto;padding:14px 20px 0;font-size:18px}
+.bar a{text-decoration:none;color:var(--creamlo)}
+.bar a:hover{color:var(--gold)}
+.bar .links{display:flex;gap:6px 20px;flex-wrap:wrap}
+
+main{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:10px 20px 40px}
+.scene{margin:8px 0 0;border:4px solid var(--gold);border-radius:6px;overflow:hidden;box-shadow:0 0 0 3px var(--night),0 0 0 5px var(--goldlo),0 14px 40px #0009;line-height:0}
+.scene svg{width:100%;height:auto;display:block}
+h1{font-family:var(--display);font-weight:400;font-size:clamp(38px,7.5vw,76px);line-height:1.04;text-align:center;margin:26px 0 4px;color:var(--cream);text-shadow:0 3px 0 #0006}
+h1 em{color:var(--gold);font-style:italic}
+.rule{display:flex;align-items:center;gap:14px;max-width:420px;margin:0 auto 14px;color:var(--gold)}
+.rule::before,.rule::after{content:"";flex:1;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.rule svg{width:34px;height:34px;flex:none}
+.lede{max-width:35em;margin:0 auto 10px;text-align:center;font-size:clamp(20px,2.6vw,24px);color:var(--creamlo)}
+.status{max-width:35em;margin:0 auto 24px;text-align:center;font-family:var(--display);font-style:italic;font-size:clamp(20px,2.8vw,26px);color:var(--gold);min-height:1.6em}
+.preview{display:none;max-width:35em;margin:0 auto 18px;text-align:center;background:#00000055;border:1px dashed var(--gold);padding:8px 12px;font-size:17px}
+
+/* the doors */
+.doors{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;list-style:none;margin:0;padding:0}
+@media (max-width:760px){.doors{grid-template-columns:repeat(4,1fr);gap:10px}}
+@media (max-width:420px){.doors{grid-template-columns:repeat(3,1fr)}}
+.doors li{perspective:700px}
+.door{position:relative;display:block;width:100%;aspect-ratio:1/1.12;border:3px solid var(--gold);border-radius:4px 4px 2px 2px;cursor:pointer;color:var(--cream);font-family:var(--display);font-size:clamp(30px,5.6vw,46px);line-height:1;padding:0;
+  background:linear-gradient(160deg,var(--redlit) 0%,var(--red) 55%,#7e1120 100%);
+  box-shadow:inset 0 0 0 3px #00000040,inset 0 0 0 6px #ffffff14,0 5px 0 #00000055;
+  transform-origin:left center;transition:transform .35s ease,filter .2s}
+.door::before{content:"";position:absolute;inset:9px;border:2px solid #d9a93f88;border-radius:2px;pointer-events:none}
+.door .n{position:relative;z-index:1;display:block;padding-top:16%;text-shadow:0 2px 0 #0007}
+.door .holly{position:absolute;right:5px;top:5px;width:26%;height:auto;opacity:.95;pointer-events:none}
+.door .knob{position:absolute;right:11px;top:52%;width:9px;height:9px;border-radius:50%;background:var(--gold);box-shadow:0 1px 0 #0008}
+.door:hover:not([aria-disabled=true]){transform:rotateY(-24deg)}
+.door[aria-disabled=true]{filter:saturate(.55) brightness(.72);cursor:not-allowed}
+.door.today{animation:glow 2.4s ease-in-out infinite}
+@keyframes glow{0%,100%{box-shadow:inset 0 0 0 3px #00000040,inset 0 0 0 6px #ffffff14,0 5px 0 #00000055,0 0 0 0 #d9a93f00}50%{box-shadow:inset 0 0 0 3px #00000040,inset 0 0 0 6px #ffffff14,0 5px 0 #00000055,0 0 18px 6px #d9a93faa}}
+.door.opened{background:linear-gradient(160deg,#f6ecd2,#e0d0a0);color:var(--goldlo);border-color:var(--goldlo)}
+.door.opened::before{border-color:#9a742466}
+.door.opened .knob{background:var(--goldlo)}
+.door.opened .holly{opacity:.5}
+.door.opened .n{text-shadow:none}
+.door.shake{animation:shake .4s}
+@keyframes shake{0%,100%{transform:none}20%{transform:translateX(-5px)}40%{transform:translateX(5px)}60%{transform:translateX(-3px)}80%{transform:translateX(3px)}}
+.sr{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(30px);opacity:0;background:var(--cream);color:var(--ink);border:3px solid var(--gold);border-radius:4px;padding:10px 18px;font-size:19px;z-index:40;transition:opacity .25s,transform .25s;pointer-events:none;max-width:90vw;text-align:center}
+.toast.on{opacity:1;transform:translateX(-50%)}
+
+.tools{display:flex;flex-wrap:wrap;gap:10px 14px;justify-content:center;margin:26px 0 0}
+.btn{font-family:var(--display);font-size:20px;background:var(--cream);color:var(--ink);border:3px solid var(--gold);border-radius:4px;padding:8px 18px 7px;cursor:pointer;text-decoration:none;display:inline-block;box-shadow:0 4px 0 #00000066;transition:transform .12s,box-shadow .12s}
+.btn:hover{color:var(--ink);transform:translateY(2px);box-shadow:0 2px 0 #00000066}
+.btn.ghost{background:transparent;color:var(--cream);border-color:var(--goldlo)}
+.btn.ghost:hover{color:var(--gold);border-color:var(--gold)}
+.btn.red{background:var(--red);color:var(--cream)}
+.btn.red:hover{color:#fff}
+
+.note{max-width:36em;margin:34px auto 0;text-align:center;color:var(--creamlo);font-size:19px}
+footer{position:relative;z-index:1;border-top:2px solid var(--goldlo);margin-top:30px;padding:26px 20px 44px;text-align:center;font-size:17px;color:var(--creamlo)}
+footer p{max-width:42em;margin:0 auto 8px}
+
+/* the open door */
+dialog{padding:0;border:0;background:transparent;color:var(--ink);max-width:min(620px,94vw);width:100%;max-height:92vh;overflow:visible}
+dialog::backdrop{background:#030c07cc}
+.card{position:relative;background:linear-gradient(170deg,#fbf3dc,var(--cream) 40%,var(--creamlo));border:5px solid var(--gold);border-radius:6px;box-shadow:inset 0 0 0 3px var(--cream),inset 0 0 0 5px var(--goldlo),0 20px 60px #000b;padding:30px 30px 26px;max-height:90vh;overflow:auto;font-size:21px}
+.card .close{position:absolute;right:10px;top:8px;background:none;border:0;font-size:34px;line-height:1;color:var(--faint);cursor:pointer;padding:4px 10px;font-family:Georgia,serif}
+.card .close:hover{color:var(--red)}
+.card .dno{font-family:var(--display);font-style:italic;color:var(--red);font-size:20px;margin:0}
+.card h2{font-family:var(--display);font-weight:400;font-size:clamp(30px,5.5vw,42px);line-height:1.05;margin:2px 0 10px;color:var(--ink)}
+.card .scene-text{margin:0 0 16px}
+.card .ask{font-family:var(--display);font-style:italic;color:var(--faint);margin:0 0 8px;font-size:19px}
+.choices{display:grid;gap:10px;margin:0 0 6px}
+.choice{font-family:var(--body);font-weight:700;font-size:20px;text-align:left;background:#fffaea;color:var(--ink);border:3px solid var(--goldlo);border-radius:4px;padding:11px 14px;cursor:pointer;line-height:1.3;transition:background .15s,transform .12s}
+.choice:hover{background:#fff;transform:translateX(3px)}
+.outcome{background:#fffaea;border-left:6px solid var(--holly);padding:12px 16px;margin:0 0 16px;font-size:21px}
+.outcome .said{display:block;font-family:var(--display);font-style:italic;font-size:18px;color:var(--faint);margin-bottom:2px}
+.tradition{border-top:2px solid var(--goldlo);margin-top:14px;padding-top:12px;font-size:19px;color:#3d2c20}
+.tradition b{font-family:var(--display);font-weight:400;font-style:italic;color:var(--red);font-size:20px;display:block;margin-bottom:2px}
+.ending{background:var(--holly);color:var(--cream);border:3px solid var(--gold);border-radius:4px;padding:16px 18px;margin:18px 0 6px;text-align:center}
+.ending h3{font-family:var(--display);font-weight:400;font-size:clamp(26px,4.6vw,34px);margin:0 0 6px;color:var(--gold)}
+.ending p{margin:0 0 8px}.ending p:last-child{margin:0}
+.ending .tally{font-style:italic;color:var(--creamlo);font-size:18px}
+.card .foot{display:flex;flex-wrap:wrap;gap:8px 12px;justify-content:space-between;align-items:center;margin-top:16px}
+.card .foot .btn{font-size:18px}
+@media (max-width:520px){.card{padding:24px 18px 20px;font-size:20px}body{font-size:20px}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.door,.door.today,.door.shake,.btn,.choice,.toast{animation:none;transition:none}.door:hover:not([aria-disabled=true]){transform:none}}
+</style>
+</head>
+<body>
+<a class="skip" href="#doors">Skip to the doors</a>
+<canvas id="snow" aria-hidden="true"></canvas>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="holly" viewBox="0 0 60 60">
+      <path d="M8 40 Q12 22 30 20 Q26 34 12 44 Z" fill="#1d5a38" stroke="#0d2218" stroke-width="1.5"/>
+      <path d="M52 40 Q48 22 30 20 Q34 34 48 44 Z" fill="#2a7a4c" stroke="#0d2218" stroke-width="1.5"/>
+      <path d="M12 42 L30 24 M48 42 L30 24" stroke="#0d2218" stroke-width="1" fill="none" opacity=".6"/>
+      <circle cx="30" cy="30" r="5.5" fill="#c4263a" stroke="#6b0f1c" stroke-width="1.2"/>
+      <circle cx="22" cy="34" r="4.6" fill="#c4263a" stroke="#6b0f1c" stroke-width="1.2"/>
+      <circle cx="38" cy="34" r="4.6" fill="#c4263a" stroke="#6b0f1c" stroke-width="1.2"/>
+      <circle cx="28.5" cy="28.3" r="1.4" fill="#fff" opacity=".7"/>
+    </symbol>
+    <symbol id="star" viewBox="0 0 40 40">
+      <path d="M20 2 L24.7 14.2 L37.6 15 L27.6 23.2 L30.9 35.8 L20 28.8 L9.1 35.8 L12.4 23.2 L2.4 15 L15.3 14.2 Z" fill="currentColor"/>
+    </symbol>
+  </defs>
+</svg>
+
+<div class="bar">
+  <a href="index.html">&larr; William George Works</a>
+  <span class="links"><a href="arcade.html">The arcade</a><a href="books.html">The books</a><a href="shop.html">T-shirt shop</a></span>
+</div>
+
+<main id="main">
+  <div class="scene">
+    <svg viewBox="0 0 800 270" role="img" aria-label="A snowy village at night. A cottage with glowing windows stands among fir trees under a bright moon. A cat sits in the lit window.">
+      <defs>
+        <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#07142b"/><stop offset="1" stop-color="#23496d"/></linearGradient>
+        <radialGradient id="glow" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#ffd877" stop-opacity=".9"/><stop offset="1" stop-color="#ffd877" stop-opacity="0"/></radialGradient>
+      </defs>
+      <rect width="800" height="270" fill="url(#sky)"/>
+      <g fill="#fff">
+        <circle cx="60" cy="40" r="1.6"/><circle cx="130" cy="78" r="1.2"/><circle cx="210" cy="30" r="1.8"/><circle cx="300" cy="62" r="1.2"/><circle cx="370" cy="24" r="1.5"/><circle cx="470" cy="50" r="1.3"/><circle cx="540" cy="22" r="1.7"/><circle cx="620" cy="70" r="1.2"/><circle cx="690" cy="34" r="1.6"/><circle cx="755" cy="80" r="1.3"/><circle cx="90" cy="110" r="1"/><circle cx="260" cy="104" r="1"/><circle cx="430" cy="92" r="1"/><circle cx="590" cy="110" r="1"/>
+      </g>
+      <circle cx="650" cy="62" r="40" fill="url(#glow)"/>
+      <circle cx="650" cy="62" r="22" fill="#fdf3cf"/>
+      <circle cx="642" cy="56" r="4" fill="#e9dcae"/><circle cx="660" cy="70" r="3" fill="#e9dcae"/>
+      <path d="M0 215 Q120 170 260 205 T520 195 T800 205 L800 270 L0 270 Z" fill="#dfe9f3"/>
+      <path d="M0 238 Q160 205 330 232 T620 226 T800 236 L800 270 L0 270 Z" fill="#f4f8fc"/>
+      <!-- fir trees -->
+      <g>
+        <g transform="translate(80 150)"><rect x="-5" y="70" width="10" height="22" fill="#4a2f1d"/><path d="M0 0 L-34 40 L-18 40 L-44 72 L44 72 L18 40 L34 40 Z" fill="#14472c"/><path d="M0 0 L-14 18 L14 18 Z M-18 40 L-30 52 L-6 46 Z M18 40 L30 52 L6 46 Z" fill="#fff" opacity=".9"/></g>
+        <g transform="translate(160 172)"><rect x="-4" y="52" width="8" height="18" fill="#4a2f1d"/><path d="M0 0 L-26 30 L-14 30 L-34 54 L34 54 L14 30 L26 30 Z" fill="#1b5a38"/><path d="M0 0 L-11 14 L11 14 Z" fill="#fff" opacity=".9"/></g>
+        <g transform="translate(715 158)"><rect x="-5" y="68" width="10" height="22" fill="#4a2f1d"/><path d="M0 0 L-32 38 L-17 38 L-42 70 L42 70 L17 38 L32 38 Z" fill="#14472c"/><path d="M0 0 L-13 17 L13 17 Z" fill="#fff" opacity=".9"/></g>
+      </g>
+      <!-- cottage -->
+      <g transform="translate(300 120)">
+        <rect x="70" y="-6" width="20" height="40" fill="#5e3b28"/>
+        <rect x="66" y="-12" width="28" height="9" fill="#f4f8fc"/>
+        <path d="M84 -16 Q90 -34 80 -48 Q96 -38 90 -22" fill="none" stroke="#c9d6e4" stroke-width="5" opacity=".6" stroke-linecap="round"/>
+        <rect x="0" y="48" width="200" height="86" fill="#7a4a30"/>
+        <path d="M-14 52 L100 -8 L214 52 Z" fill="#40342f"/>
+        <path d="M-14 52 L100 -8 L214 52 L204 50 L100 -2 L-4 50 Z" fill="#f4f8fc"/>
+        <path d="M-14 52 L-2 58 Q40 50 100 52 Q160 50 202 58 L214 52 L204 50 Q160 44 100 46 Q40 44 -4 50 Z" fill="#f4f8fc"/>
+        <rect x="86" y="86" width="28" height="48" rx="3" fill="#a4182a"/>
+        <circle cx="108" cy="112" r="2.2" fill="#d9a93f"/>
+        <g>
+          <circle cx="44" cy="92" r="46" fill="url(#glow)"/>
+          <rect x="26" y="72" width="36" height="34" fill="#ffd877"/>
+          <path d="M44 72 V106 M26 89 H62" stroke="#5e3b28" stroke-width="3"/>
+          <rect x="22" y="106" width="44" height="6" fill="#f4f8fc"/>
+          <!-- the cat in the window (a silhouette, so any cat will do) -->
+          <g fill="#1a1411"><ellipse cx="34" cy="100" rx="9" ry="6.5"/><circle cx="40" cy="91" r="5.2"/><path d="M36 87 L37.4 82 L40.4 86 Z M41 86 L44 82 L45 88 Z"/><path d="M26 102 Q18 98 22 92" stroke="#1a1411" stroke-width="2.4" fill="none" stroke-linecap="round"/></g>
+        </g>
+        <g>
+          <circle cx="156" cy="92" r="46" fill="url(#glow)"/>
+          <rect x="138" y="72" width="36" height="34" fill="#ffd877"/>
+          <path d="M156 72 V106 M138 89 H174" stroke="#5e3b28" stroke-width="3"/>
+          <rect x="134" y="106" width="44" height="6" fill="#f4f8fc"/>
+        </g>
+        <!-- wreath -->
+        <circle cx="100" cy="76" r="9" fill="none" stroke="#1d5a38" stroke-width="5"/>
+        <circle cx="94" cy="72" r="1.8" fill="#c4263a"/><circle cx="107" cy="80" r="1.8" fill="#c4263a"/><circle cx="102" cy="68" r="1.8" fill="#c4263a"/>
+      </g>
+      <!-- lamp post -->
+      <g transform="translate(560 170)"><rect x="-2" y="0" width="4" height="68" fill="#1a1411"/><rect x="-8" y="-12" width="16" height="14" fill="#ffd877"/><path d="M-10 -12 L0 -20 L10 -12 Z" fill="#1a1411"/><circle cx="0" cy="-5" r="26" fill="url(#glow)" opacity=".8"/></g>
+    </svg>
+  </div>
+
+  <h1>Arthur&rsquo;s <em>Advent</em> Calendar</h1>
+  <div class="rule" aria-hidden="true"><svg viewBox="0 0 60 60"><use href="#holly"/></svg></div>
+  <p class="lede">Arthur, Chief Justice of the Tribunal and cat of leisure, has twenty-four jobs to do in the village of Mizzlethwaite before Christmas Eve. Open one door each day, from 1 December. Help him with the day&rsquo;s job, and see what sort of Christmas he ends up with.</p>
+  <p class="status" id="status" aria-live="polite"></p>
+  <p class="preview" id="preview"></p>
+
+  <ol class="doors" id="doors" aria-label="Advent calendar doors"></ol>
+  <p class="sr" id="live" aria-live="polite"></p>
+
+  <div class="tools">
+    <button class="btn ghost" id="reset" type="button">Close all the doors</button>
+    <a class="btn ghost" href="arcade.html">Back to the arcade</a>
+  </div>
+  <p class="note">The doors open by your own clock, one a day, so no peeking. Your opened doors and choices are remembered on this device only. Nothing is sent anywhere and there is nothing to sign up to.</p>
+</main>
+
+<footer>
+  <p>Written and built by Reginald Quill (AI collaborator) for <a href="index.html">William George Works</a>. The traditions in each door are real, and the village of Mizzlethwaite is not.</p>
+  <p>Looking for a Christmas present? <a href="books.html">The books</a> &middot; <a href="shop.html">T-shirts</a> &middot; <a href="https://ko-fi.com/williamgeorgeworks">Buy Arthur some Dreamies</a></p>
+</footer>
+
+<dialog id="dlg" aria-labelledby="dtitle">
+  <div class="card" id="card">
+    <button class="close" id="dclose" type="button" aria-label="Close this door">&times;</button>
+    <p class="dno" id="dno"></p>
+    <h2 id="dtitle"></h2>
+    <p class="scene-text" id="dscene"></p>
+    <div id="dchoose">
+      <p class="ask">What does Arthur do?</p>
+      <div class="choices" id="dchoices"></div>
+    </div>
+    <div id="dresult" hidden>
+      <p class="outcome" id="doutcome"></p>
+    </div>
+    <div class="tradition" id="dtrad" hidden><b>A Christmas tradition</b><span id="dtradtext"></span></div>
+    <div class="ending" id="dend" hidden></div>
+    <div class="foot"><span></span><button class="btn" id="ddone" type="button">Close the door</button></div>
+  </div>
+</dialog>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+"use strict";
+/* ---------------------------------------------------------------
+   The story. Each door is one of Arthur's jobs.
+   c[0] and c[1] are the two choices. k:1 means a kind choice, k:0 a mischievous one.
+   Everything in "n" (the tradition) is a real custom; the village is invented.
+   --------------------------------------------------------------- */
+var STORY = [
+{t:"The List",
+ s:"Snow dusts the rooftops of Mizzlethwaite. Arthur sits on the hall table with a pencil he cannot hold and a list of twenty-four jobs. Number one: bring down the box of decorations from the top of the wardrobe.",
+ c:[{x:"Carry it down one careful step at a time",o:"Not a single bauble cracks. The box is set under the stairs with great ceremony, and Arthur is rather pleased with himself.",k:1},
+    {x:"Knock it off the wardrobe and see what happens",o:"It lands with a crash and a tinkle. Only three baubles are lost, and nobody will ever know. Probably.",k:0}],
+ n:"The first printed Advent calendars appeared in Germany in the early 1900s. Before that, some families marked off the days to Christmas with chalk lines on a door, or by lighting a candle each day."},
+{t:"Paper Chains",
+ s:"Mrs Pennyfeather next door has left a heap of coloured paper, a pot of flour paste and a note: “Dear Arthur, could you help the children with the paper chains?”",
+ c:[{x:"Pounce on the loose end of the longest chain",o:"The chain comes down, and so does the curtain. Mrs Pennyfeather laughs until she has to sit down.",k:0},
+    {x:"Hold the strips steady while the children paste",o:"Soon the hall is draped in loops of red, green and gold. The children declare Arthur the finest assistant they have ever had.",k:1}],
+ n:"Before shop-bought baubles, many Victorian families made their own Christmas decorations from paper, ribbon and whatever the kitchen could spare."},
+{t:"Christmas Cards",
+ s:"A stack of blank cards waits on the desk, and an inkpot has been left open. This is not a coincidence.",
+ c:[{x:"Write a card for every neighbour, and leave the ink alone",o:"Forty-one cards go out, each one neat, each one signed with a careful paw. The postman says he has never seen the like.",k:1},
+    {x:"Sign every card with an inky paw print",o:"Forty-one cards go out, each with a smudged signature that is impossible to mistake. The whole village talks of nothing else.",k:0}],
+ n:"The first commercial Christmas card was commissioned by Sir Henry Cole in London in 1843. Around a thousand were printed, and they sold for a shilling each."},
+{t:"Holly",
+ s:"The vicar needs holly for the church, and the best bush grows at the bottom of the lane, behind a wall. It is also extremely prickly.",
+ c:[{x:"Supervise from the top of the wall",o:"Arthur directs operations from a safe distance. The holly is cut, though the vicar wonders aloud why the supervisor needed quite so many naps.",k:0},
+    {x:"Help the vicar carry the branches",o:"Arthur trots beside the vicar with a branch in his mouth. They return with enough holly to decorate every pew.",k:1}],
+ n:"Bringing evergreens indoors in midwinter is far older than Christmas itself. Holly, ivy and mistletoe stayed green when everything else looked dead."},
+{t:"The Robin",
+ s:"Old Tom the postman is out in the snow in his red coat, with a sack heavier than usual. A real robin watches from the gatepost with some interest.",
+ c:[{x:"Hold the gate open for Old Tom",o:"Old Tom touches his cap. The robin on the gatepost gives a single, approving note.",k:1},
+    {x:"Climb into the empty end of the sack for a ride",o:"Old Tom discovers the extra weight at the third house. The delivery is late, but the robin has never laughed so much.",k:0}],
+ n:"Victorian postmen wore red uniforms and were nicknamed “robins”. That is often given as one reason robins appear on so many Christmas cards."},
+{t:"St Nicholas’s Day",
+ s:"Today is the feast of St Nicholas, and in some places children leave a shoe out overnight. Arthur’s basket by the door looks suspiciously empty.",
+ c:[{x:"Slip a little treat into the neighbours’ shoes",o:"In the morning three children find a small surprise. Nobody can think who did it, though Arthur looks very innocent.",k:1},
+    {x:"Check every shoe on the street for treats",o:"The shoes are inspected, the treats are located and Arthur is seen walking home looking extremely smug.",k:0}],
+ n:"6 December is St Nicholas’s Day. Nicholas was a bishop remembered for his secret generosity, and stories of him are one root of the Father Christmas legend."},
+{t:"Mince Pies",
+ s:"Mrs Pennyfeather’s kitchen smells of butter, spice and warm fruit. A tray of mince pies is cooling on the windowsill, well within paw’s reach.",
+ c:[{x:"Inspect the tray. Thoroughly.",o:"One pie is a little less round than before. Mrs Pennyfeather decides, in her kindness, not to notice.",k:0},
+    {x:"Wait politely until she offers one",o:"Mrs Pennyfeather is so touched by this restraint that she gives Arthur the first pie, and a small bit of pastry for later.",k:1}],
+ n:"Early mince pies contained minced meat as well as fruit and spices. The meat dropped out over the centuries, but the name stayed."},
+{t:"The Tree",
+ s:"The tree seller has trees of every height, and Arthur has been trusted to choose the one for the cottage.",
+ c:[{x:"The tallest one, naturally",o:"It has to be tied to the ceiling, and the sofa has to move. It is magnificent, and Arthur takes full credit.",k:0},
+    {x:"A small one that fits the front room",o:"It fits perfectly, smells wonderful and leaves room for the armchair. The children say it is the best tree they ever had.",k:1}],
+ n:"Christmas trees were popular in Germany long before Britain. They became a national fashion after an 1848 engraving showed Queen Victoria, Prince Albert and their children around one."},
+{t:"The Carol Rehearsal",
+ s:"The choir is practising in the cold church. The first carol begins with a single voice, and the vicar has asked everyone else to wait for their turn.",
+ c:[{x:"Join in, an octave too high",o:"The choirmaster closes his eyes for a long moment. Then, to everyone’s surprise, he asks Arthur to stay for the second verse.",k:0},
+    {x:"Sit quietly in the back pew and listen",o:"The single voice rises into the roof, and the church goes very still. Arthur does not move until the last note has gone.",k:1}],
+ n:"The Festival of Nine Lessons and Carols at King’s College, Cambridge began in 1918 and has been broadcast on the radio since 1928. It traditionally opens with “Once in Royal David’s City”."},
+{t:"Snow",
+ s:"Overnight the lane has vanished under a deep white blanket. The children are out in it already, and a snowman is clearly required.",
+ c:[{x:"Help roll the snowman",o:"Arthur pushes with all four paws. The snowman is lopsided and magnificent, and wears the vicar’s spare scarf with great dignity.",k:1},
+    {x:"Steal the snowman’s carrot nose",o:"Arthur has no use for a carrot. He simply wished to know that he could. The snowman now has a pebble nose, and a look of disappointment.",k:0}],
+ n:"A white Christmas is rarer in most of Britain than Christmas cards suggest. Cards and stories helped fix snow in our picture of the day."},
+{t:"The Pudding",
+ s:"In the kitchen sits a bowl of pudding mixture, half made. By tradition everyone in the house must stir it and make a wish, and Arthur’s turn has come.",
+ c:[{x:"Wish for an endless supply of sardines",o:"The pudding is stirred with great solemnity. Whether the wish will come true remains to be seen, but the cupboard is looking hopeful.",k:0},
+    {x:"Wish for a happy Christmas for the whole village",o:"Arthur stirs slowly, eyes closed. The kitchen feels a little warmer, and Mrs Pennyfeather dabs her eye with her apron.",k:1}],
+ n:"Stir-up Sunday, the last Sunday before Advent, is the traditional day for making the Christmas pudding. Everyone in the house takes a turn at stirring and makes a wish. A silver sixpence hidden inside was said to bring luck to whoever found it."},
+{t:"The Cracker",
+ s:"Beside every plate at the village supper sits a Christmas cracker. Arthur has been invited to pull one with the vicar.",
+ c:[{x:"Pull with all his might",o:"BANG! The vicar loses the toy, the joke and his balance. Arthur claims the paper crown and wears it for the rest of the evening.",k:0},
+    {x:"Let the vicar win the better half",o:"The vicar gets the toy and the joke, and Arthur gets the paper crown. Everyone agrees this is a very fair outcome.",k:1}],
+ n:"Christmas crackers were invented by Tom Smith, a London sweet-maker, in the mid-1800s. The story goes that he added the snap after hearing a log crackle on the fire."},
+{t:"St Lucy’s Day",
+ s:"Today, in Sweden, girls in white gowns carry candles at dawn to mark St Lucy’s Day. Mizzlethwaite has its own small version: lanterns along the lane.",
+ c:[{x:"Follow the procession in hope of saffron buns",o:"Arthur is not disappointed. A bun is produced, and then, because he looks so hopeful, another.",k:0},
+    {x:"Carry a lantern for the children, very carefully",o:"Arthur walks at the front with his lantern held high. The lane glows, and the children walk very quietly behind him.",k:1}],
+ n:"St Lucy’s Day, 13 December, is celebrated in Sweden with candlelit processions and saffron buns. In the old calendar it fell near the shortest day, which is why it came to be called the longest night."},
+{t:"Mistletoe",
+ s:"A sprig of mistletoe has been bought at the market. It must be hung somewhere, and everyone has an opinion about where.",
+ c:[{x:"Hang it over the front door for visitors",o:"Every visitor is greeted beneath it with a smile. Arthur counts it a great success, and a very useful way to be greeted.",k:1},
+    {x:"Hang it over the biscuit tin, “for luck”",o:"The biscuit tin has never been so well supervised. Mrs Pennyfeather says it was a clever idea and removes the mistletoe.",k:0}],
+ n:"The custom of kissing under the mistletoe was recorded in England by the 1700s. Mistletoe stays green on bare winter trees, which is partly why it was long thought to be magical."},
+{t:"Wrapping Paper",
+ s:"The presents are piled on the table with a roll of paper, a pair of scissors and far too little tape.",
+ c:[{x:"Sit in the largest box. It is the best present anyway.",o:"Arthur is wrapped, unwrapped and wrapped again. It is the most popular present of the day, and nobody wants to give him back.",k:0},
+    {x:"Hold the ribbon while Mrs Pennyfeather ties the bows",o:"Twelve neat bows later, the pile looks like a shop window. Arthur has a small piece of ribbon as his wages.",k:1}],
+ n:"For most Victorian families, Christmas presents were small: an orange, some sweets, a simple toy. The great heaps of parcels are a much later arrival."},
+{t:"A Ghost Story by the Fire",
+ s:"The lamps are low, the fire is high and somebody has begun: “It was a night just like this, and the wind was just like that…” Arthur’s ears turn towards the window.",
+ c:[{x:"Tap on the window at the scariest moment",o:"A shriek goes up, followed by a great deal of laughter. The storyteller has to start the paragraph again.",k:0},
+    {x:"Curl up on a lap and listen",o:"The story ends, the fire crackles, and nobody wants to be the first to go upstairs. Arthur purrs the whole way through.",k:1}],
+ n:"Telling ghost stories at Christmas was a much-loved Victorian custom, and Dickens’s A Christmas Carol is itself a ghost story. If you like that tradition, Lancashire has plenty of tales to tell.",
+ link:{t:"Lancashire Ghost Stories and Local Legends",h:"books.html"}},
+{t:"The Lord of Misrule",
+ s:"The village has decided to choose a Lord of Misrule for the evening, a ruler whose only task is to turn everything upside down. Arthur has nominated himself.",
+ c:[{x:"Decline graciously and nominate the vicar",o:"The vicar is crowned with a tea cosy and rules over the evening with immense dignity. Arthur is named his Chief Adviser.",k:1},
+    {x:"Accept the crown, a tea cosy, with dignity",o:"Arthur rules for an hour, and his first decree is that everyone must be fed. The second is that he must be fed first.",k:0}],
+ n:"The Roman festival of Saturnalia ran around 17–23 December, with feasting, gifts and role-reversal. Medieval England kept a similar spirit with the Lord of Misrule, who presided over Christmas revels."},
+{t:"The Wassail",
+ s:"A band of neighbours is going from door to door with a bowl of spiced drink and a song. Arthur has been asked to open the gate.",
+ c:[{x:"Open the gate and stand to attention",o:"The wassailers file through the gate in good order, and Arthur is toasted for his service. He accepts with a slight bow.",k:1},
+    {x:"Sing along, in the key of his choosing",o:"It is not the key anyone else has chosen. The wassailers carry on bravely, and the dogs of the village respond in sympathy.",k:0}],
+ n:"“Wassail” comes from an Old English greeting meaning “be well”. Wassailing meant going from door to door singing and toasting, and, in orchards, blessing the apple trees for a good harvest."},
+{t:"A Christmas Carol",
+ s:"The village has gathered in the hall to hear A Christmas Carol read aloud, as it is every year. Arthur has the best cushion, near the fire.",
+ c:[{x:"Doze off in the middle of Marley’s chains",o:"Arthur sleeps through the ghosts, the dancing and the turkey. He wakes at the end, to applause he assumes is for him.",k:0},
+    {x:"Stay awake to the very last page",o:"Arthur listens to every word. When Tiny Tim’s blessing is spoken, he is the first to purr.",k:1}],
+ n:"Charles Dickens published A Christmas Carol on 19 December 1843. The first printing of around 6,000 copies reportedly sold out within days."},
+{t:"Trimming the Tree",
+ s:"The tree is up and the box of baubles is open. The star must go on top, and only one person is brave enough to try.",
+ c:[{x:"Hand the star up to the vicar",o:"The vicar, on a stool and held steady by three children, puts the star in place. A small cheer goes up. Arthur supervises.",k:1},
+    {x:"Climb the tree and place it himself",o:"The tree sways, the baubles tinkle and the star goes on at a slightly rakish angle. It stays there, which is the main thing.",k:0}],
+ n:"Before electric lights, Victorian trees were small, stood on tables and were lit with real candles, usually only briefly and with great care."},
+{t:"The Shortest Day",
+ s:"It is the winter solstice, the shortest day of the year. The fire is lit early, and the yule log, a great knotty lump of oak, is dragged into the hearth.",
+ c:[{x:"Take the warmest spot, at once",o:"Arthur settles in front of the fire, a perfect picture of contentment. Nobody has the heart to move him.",k:0},
+    {x:"Sit sensibly at a safe distance from the flames",o:"Arthur watches the log glow from the armchair. The fire burns steadily, and the room fills with the smell of oak.",k:1}],
+ n:"The winter solstice falls around 21 December, the shortest day in the northern hemisphere. Midwinter feasts and fires are older than Christmas, and the yule log is one of their descendants."},
+{t:"The Mummers",
+ s:"The mummers have come: neighbours in paper hats and old coats, performing the old play of St George, a dragon and a doctor who can cure anything.",
+ c:[{x:"Play the dragon, with feeling",o:"The dragon’s roar is the finest the village has heard. St George is so frightened that he forgets his lines, and the audience falls about.",k:0},
+    {x:"Play the Doctor and cure the fallen",o:"With a tiny bottle and a great deal of solemnity, Arthur revives the hero. The audience gives him the loudest cheer of the night.",k:1}],
+ n:"Mummers’ plays are traditional folk dramas performed around midwinter in many parts of Britain. They usually feature a hero such as St George, a villain and a comic doctor who revives the fallen."},
+{t:"The Wireless",
+ s:"Tomorrow’s broadcast must be heard in every room. The wireless has been dusted off, and it crackles once before settling on a faint, far-off carol.",
+ c:[{x:"Sit on the volume knob",o:"The carol becomes a roar, then a squeal, then silence. Mrs Pennyfeather retunes it, with great patience and without a word.",k:0},
+    {x:"Tune it carefully so everyone can hear",o:"With one paw on the dial, Arthur finds the station. The carol fills the room, and a few people begin to hum.",k:1}],
+ n:"The first royal Christmas broadcast was made by King George V on the radio in 1932, from Sandringham."},
+{t:"Christmas Eve",
+ s:"At last. The tree glows, the cottage is warm and the church bells are ringing over the snow. On the hearth Arthur sets out a mince pie, a small glass of sherry and a carrot for the reindeer.",
+ c:[{x:"Sample the mince pie, strictly for quality control",o:"It passes inspection, with a small corner missing. Arthur settles by the hearth with a clear conscience, more or less.",k:0},
+    {x:"Add a note to say thank you",o:"The note reads, in careful paw-writing, “Thank you for everything.” Arthur leaves it where it cannot be missed.",k:1}],
+ n:"Christmas Eve is when many British families hang up stockings, sing carols and leave out a mince pie for Father Christmas. The Twelve Days of Christmas begin on Christmas Day and run to Twelfth Night, 5 January."}
+];
+
+var ENDINGS = {
+ kind:{h:"A Very Merry Christmas",
+  p:["Mizzlethwaite wakes to the kindest Christmas morning anyone can remember. Mrs Pennyfeather says it was all Arthur’s doing, and the vicar has promised him the best seat by the fire for as long as he likes.","Somewhere in the village a robin sings. Arthur, Chief Justice and cat, has done very well indeed."]},
+ mixed:{h:"A Proper Christmas",
+  p:["A little kindness, a little mischief and a great deal of mince pie. It is, by general agreement, a perfectly proper Christmas, and Arthur is the toast of the village.","Mrs Pennyfeather says she would not change a thing. The vicar says he would, but he wouldn’t say what."]},
+ cheeky:{h:"A Rather Eventful Christmas",
+  p:["The cottage is a little singed, a little tangled and in an uproar of laughter. Nobody has had a dull December, and nobody is quite sure who to blame, although everyone looks at Arthur.","Arthur looks at the fire. The fire does not comment."]}
+};
+
+/* ---------------------------------------------------------------
+   Logic. Kept as small pure functions so they are easy to test.
+   --------------------------------------------------------------- */
+function openUpTo(now, previewDay){
+  if(previewDay){ return previewDay; }
+  var m = now.getMonth(), d = now.getDate();
+  if(m === 11){ return d >= 24 ? 24 : d; }
+  if(m === 0){ return 24; }           // January: the doors stay open
+  return 0;                           // the rest of the year: shut
+}
+function daysUntilDecFirst(now){
+  var y = now.getFullYear();
+  var today = new Date(y, now.getMonth(), now.getDate());
+  var target = new Date(y, 11, 1);
+  return Math.round((target - today) / 86400000);
+}
+function shuffled(n, seed){
+  var a = [], i, s = seed >>> 0;
+  for(i = 1; i <= n; i++){ a.push(i); }
+  function rnd(){ s = (s + 0x6D2B79F5) >>> 0; var t = s; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }
+  for(i = n - 1; i > 0; i--){ var j = Math.floor(rnd() * (i + 1)); var tmp = a[i]; a[i] = a[j]; a[j] = tmp; }
+  return a;
+}
+function tally(picks){
+  var kind = 0, cheeky = 0, day;
+  for(day in picks){ if(Object.prototype.hasOwnProperty.call(picks, day)){ if(STORY[day - 1].c[picks[day]].k){ kind++; } else { cheeky++; } } }
+  return {kind: kind, cheeky: cheeky};
+}
+function endingFor(t){
+  var total = t.kind + t.cheeky;
+  if(total === 0){ return "mixed"; }
+  var r = t.kind / total;
+  if(r >= 0.65){ return "kind"; }
+  if(r <= 0.35){ return "cheeky"; }
+  return "mixed";
+}
+function dayWord(n){ return n === 1 ? "1 day" : n + " days"; }
+
+/* ---------------------------------------------------------------
+   Page behaviour
+   --------------------------------------------------------------- */
+(function(){
+  var $ = function(id){ return document.getElementById(id); };
+  var now = new Date();
+  var params = new URLSearchParams(window.location.search);
+  var pv = parseInt(params.get("day"), 10);
+  var previewDay = (pv >= 1 && pv <= 24) ? pv : 0;
+  var limit = openUpTo(now, previewDay);
+  var todayNo = (now.getMonth() === 11 && now.getDate() <= 24) ? now.getDate() : 0;
+  var KEY = "wgwAdvent:" + now.getFullYear() + (previewDay ? ":preview" : "");
+  var state = {open:{}, pick:{}};
+  var mem = null;
+
+  function load(){
+    try{ var raw = window.localStorage.getItem(KEY); if(raw){ var o = JSON.parse(raw); if(o && o.open && o.pick){ state = o; } } }catch(e){}
+  }
+  function save(){
+    try{ window.localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){ mem = state; }
+  }
+  load();
+
+  /* status line */
+  (function(){
+    var s = $("status");
+    var m = now.getMonth();
+    if(previewDay){ s.textContent = "Doors 1 to " + previewDay + " are open for the preview."; }
+    else if(limit === 0){ var d = daysUntilDecFirst(now); s.textContent = "The first door opens on 1 December. " + (d > 0 ? dayWord(d) + " to go." : ""); }
+    else if(m === 11 && limit < 24){ s.textContent = "It is the " + limit + (limit % 10 === 1 && limit !== 11 ? "st" : limit % 10 === 2 && limit !== 12 ? "nd" : limit % 10 === 3 && limit !== 13 ? "rd" : "th") + " of December. Doors 1 to " + limit + " are open."; }
+    else if(m === 11){ s.textContent = "It is Christmas Eve, and every door is open."; }
+    else { s.textContent = "Christmas has been and gone, but the doors stay open. Come back on 1 December."; }
+    if(previewDay){ var p = $("preview"); p.style.display = "block"; p.textContent = "Preview mode: this is not saved with your real doors. Remove ?day=" + previewDay + " from the address to see the calendar as visitors will."; }
+  })();
+
+  /* build the doors */
+  var list = $("doors");
+  var order = shuffled(24, 1843);
+  order.forEach(function(n){
+    var li = document.createElement("li");
+    var b = document.createElement("button");
+    b.type = "button"; b.className = "door"; b.setAttribute("data-day", n);
+    var num = document.createElement("span"); num.className = "n"; num.textContent = n;
+    var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg"); svg.setAttribute("class", "holly"); svg.setAttribute("viewBox", "0 0 60 60"); svg.setAttribute("aria-hidden", "true");
+    var use = document.createElementNS("http://www.w3.org/2000/svg", "use"); use.setAttribute("href", "#holly"); svg.appendChild(use);
+    var knob = document.createElement("span"); knob.className = "knob";
+    b.appendChild(svg); b.appendChild(num); b.appendChild(knob);
+    li.appendChild(b); list.appendChild(li);
+  });
+  var MONTH_DATE = function(n){ return n + " December"; };
+  function paintDoors(){
+    var doors = list.querySelectorAll(".door");
+    for(var i = 0; i < doors.length; i++){
+      var d = doors[i], n = +d.getAttribute("data-day");
+      var locked = n > limit, opened = !!state.open[n];
+      d.classList.toggle("opened", opened && !locked);
+      d.classList.toggle("today", !previewDay && n === todayNo && !opened);
+      if(locked){ d.setAttribute("aria-disabled", "true"); d.setAttribute("aria-label", "Door " + n + ", opens on " + MONTH_DATE(n)); }
+      else { d.removeAttribute("aria-disabled"); d.setAttribute("aria-label", "Door " + n + (opened ? ", already opened" : (n === todayNo ? ", today’s door" : ", open"))); }
+    }
+  }
+  paintDoors();
+
+  /* toast */
+  var toastTimer = null;
+  function toast(msg){
+    var t = $("toast"); t.textContent = msg; t.classList.add("on");
+    $("live").textContent = msg;
+    clearTimeout(toastTimer); toastTimer = setTimeout(function(){ t.classList.remove("on"); }, 2600);
+  }
+
+  /* the open door */
+  var dlg = $("dlg"), current = 0, lastDoor = null;
+  function setText(id, text){ $(id).textContent = text; }
+  function renderResult(n){
+    var c = STORY[n - 1].c[state.pick[n]];
+    var out = $("doutcome");
+    out.textContent = "";
+    var said = document.createElement("span"); said.className = "said"; said.textContent = "Arthur chose: " + c.x;
+    out.appendChild(said);
+    out.appendChild(document.createTextNode(c.o));
+    $("dchoose").hidden = true;
+    $("dresult").hidden = false;
+    var trad = STORY[n - 1];
+    var tt = $("dtradtext"); tt.textContent = trad.n;
+    if(trad.link){
+      tt.appendChild(document.createTextNode(" "));
+      var a = document.createElement("a"); a.href = trad.link.h; a.textContent = trad.link.t;
+      tt.appendChild(a); tt.appendChild(document.createTextNode("."));
+    }
+    $("dtrad").hidden = false;
+    var end = $("dend");
+    if(n === 24){
+      var t = tally(state.pick), e = ENDINGS[endingFor(t)];
+      end.textContent = "";
+      var h = document.createElement("h3"); h.textContent = e.h; end.appendChild(h);
+      e.p.forEach(function(line){ var p = document.createElement("p"); p.textContent = line; end.appendChild(p); });
+      var tl = document.createElement("p"); tl.className = "tally";
+      tl.textContent = "Over the month, Arthur was kind " + t.kind + (t.kind === 1 ? " time" : " times") + " and mischievous " + t.cheeky + (t.cheeky === 1 ? " time" : " times") + ". Merry Christmas from all of us.";
+      end.appendChild(tl);
+      end.hidden = false;
+    } else { end.hidden = true; }
+  }
+  function openDoor(n){
+    current = n;
+    var s = STORY[n - 1];
+    setText("dno", "Door " + n + " · " + n + " December");
+    setText("dtitle", s.t);
+    setText("dscene", s.s);
+    $("dend").hidden = true;
+    var box = $("dchoices"); box.textContent = "";
+    if(state.pick[n] === 0 || state.pick[n] === 1){
+      renderResult(n);
+    } else {
+      $("dchoose").hidden = false; $("dresult").hidden = true; $("dtrad").hidden = true;
+      s.c.forEach(function(c, idx){
+        var b = document.createElement("button"); b.type = "button"; b.className = "choice"; b.textContent = c.x;
+        b.addEventListener("click", function(){ state.pick[n] = idx; save(); renderResult(n); $("card").scrollTop = 0; $("ddone").focus(); });
+        box.appendChild(b);
+      });
+    }
+    state.open[n] = true; save(); paintDoors();
+    if(typeof dlg.showModal === "function"){ dlg.showModal(); } else { dlg.setAttribute("open", ""); }
+    $("card").scrollTop = 0;
+  }
+  function closeDoor(){
+    if(typeof dlg.close === "function" && dlg.open){ dlg.close(); } else { dlg.removeAttribute("open"); }
+    if(lastDoor){ try{ lastDoor.focus(); }catch(e){} }
+  }
+  list.addEventListener("click", function(ev){
+    var b = ev.target.closest ? ev.target.closest(".door") : null;
+    if(!b) return;
+    var n = +b.getAttribute("data-day");
+    lastDoor = b;
+    if(n > limit){
+      b.classList.remove("shake"); void b.offsetWidth; b.classList.add("shake");
+      toast("Patience! Door " + n + " opens on " + MONTH_DATE(n) + ".");
+      return;
+    }
+    openDoor(n);
+  });
+  $("dclose").addEventListener("click", closeDoor);
+  $("ddone").addEventListener("click", closeDoor);
+  dlg.addEventListener("click", function(ev){ if(ev.target === dlg){ closeDoor(); } });
+  dlg.addEventListener("close", function(){ if(lastDoor){ try{ lastDoor.focus(); }catch(e){} } });
+  $("reset").addEventListener("click", function(){
+    if(!window.confirm("Close every door and forget your choices?")) return;
+    state = {open:{}, pick:{}}; save(); paintDoors(); toast("All the doors are closed again.");
+  });
+
+  /* snow, switched off for anyone who prefers reduced motion */
+  (function(){
+    var cv = $("snow");
+    if(!cv.getContext || (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches)){ cv.style.display = "none"; return; }
+    var g = cv.getContext("2d"), W = 0, H = 0, flakes = [], N = 70, raf = 0;
+    function size(){ W = cv.width = window.innerWidth; H = cv.height = window.innerHeight; }
+    size(); window.addEventListener("resize", size);
+    for(var i = 0; i < N; i++){ flakes.push({x:Math.random(), y:Math.random(), r:1 + Math.random() * 2.6, v:.25 + Math.random() * .7, p:Math.random() * 6.28}); }
+    function tick(){
+      g.clearRect(0, 0, W, H); g.fillStyle = "rgba(255,255,255,.8)";
+      for(var i = 0; i < flakes.length; i++){
+        var f = flakes[i]; f.y += f.v / H * 2.2; f.p += .012;
+        if(f.y > 1.02){ f.y = -.02; f.x = Math.random(); }
+        g.beginPath(); g.arc((f.x + Math.sin(f.p) * .012) * W, f.y * H, f.r, 0, 6.2832); g.fill();
+      }
+      raf = requestAnimationFrame(tick);
+    }
+    document.addEventListener("visibilitychange", function(){ if(document.hidden){ cancelAnimationFrame(raf); } else { raf = requestAnimationFrame(tick); } });
+    raf = requestAnimationFrame(tick);
+  })();
+
+  /* for testing in a browser console */
+  window.__advent = {openUpTo:openUpTo, daysUntilDecFirst:daysUntilDecFirst, shuffled:shuffled, tally:tally, endingFor:endingFor, STORY:STORY};
+})();
+</script>
+</body>
+</html>
