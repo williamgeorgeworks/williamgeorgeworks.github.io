@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Weather Row | William George Works</title>
+<meta name="description" content="Live weather and tides for any place you pick, with Terry and Reggie arguing over the numbers. Cartoon icons included.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="William George Works">
+<meta property="og:title" content="The Weather Row | William George Works">
+<meta property="og:description" content="Live weather and tides for any place you pick, with Terry and Reggie arguing over the numbers. Cartoon icons included.">
+<meta property="og:url" content="https://williamgeorgeworks.co.uk/weather.html">
+<meta property="og:image" content="https://williamgeorgeworks.co.uk/thumb-moulding-museum.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Permanent+Marker&family=Spectral:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=20261114c">
+<style>
+.vh{position:absolute;left:-999px}
+.finder{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.finder input{flex:1 1 260px;min-width:0;font:inherit;font-size:20px;padding:11px 14px;border:3px solid var(--ink);background:var(--card);color:var(--ink);box-shadow:5px 5px 0 var(--ink)}
+.finder input:focus-visible{outline:3px solid var(--red);outline-offset:3px}
+.finder .btn{cursor:pointer}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;align-items:center}
+.chip{font-family:var(--display);text-transform:uppercase;letter-spacing:.5px;font-size:15px;background:var(--card);color:var(--ink);border:2px solid var(--ink);padding:5px 11px 4px;cursor:pointer}
+.chip:hover{background:var(--ink);color:var(--paper)}
+.dim{color:var(--faint)}
+.status{margin:18px 0 26px;font-style:italic;color:var(--faint);font-size:17px}
+.status.bad{color:var(--red);font-style:normal;font-weight:600}
+.cols{display:grid;gap:26px;grid-template-columns:minmax(0,1fr);align-items:start}
+@media(min-width:960px){.cols{grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr)}}
+.col{display:grid;gap:26px;min-width:0;grid-template-columns:minmax(0,1fr)}
+.nowhead{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.bigicon{flex:0 0 auto;line-height:0}
+.wxi{display:block;max-width:100%;height:auto}
+.nowtext{min-width:0}
+.bigtemp{font-family:var(--display);font-size:clamp(64px,13vw,104px);line-height:.95}
+.nowsky{margin:.3em 0 0;font-size:21px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:20px}
+.tile{border:3px solid var(--ink);background:var(--paper);padding:9px 11px 8px;display:flex;flex-direction:column;gap:1px;min-width:0}
+.tl{font-family:var(--display);text-transform:uppercase;letter-spacing:.6px;font-size:14px;color:var(--faint)}
+.tv{font-family:var(--display);font-weight:400;font-size:26px;line-height:1.1}
+.ts{font-size:15px;line-height:1.3;color:var(--faint)}
+.rowcard .mood{margin:.3em 0 18px}
+.moodtag{display:inline-block;font-family:var(--display);text-transform:uppercase;letter-spacing:.8px;font-size:20px;color:var(--red);border:3px solid var(--red);padding:3px 12px 2px;transform:rotate(-2deg)}
+.bubbles{list-style:none;margin:0;padding:0;display:grid;gap:14px;grid-template-columns:minmax(0,1fr)}
+.bubble{display:flex;gap:10px;align-items:flex-start;max-width:94%}
+.bubble.r{flex-direction:row-reverse;margin-left:auto;text-align:left}
+.av{flex:0 0 auto;width:42px;height:42px;border-radius:50%;border:3px solid var(--ink);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:21px;color:#fff;line-height:1}
+.av.t{background:var(--red)}.av.r{background:var(--blue)}
+.say{flex:0 1 auto;border:3px solid var(--ink);padding:8px 13px 4px;background:#fff1f1;min-width:0;position:relative}
+.bubble.r .say{background:#eef2ff}
+.say p{margin:0 0 .5em;font-size:18px;line-height:1.45;overflow-wrap:anywhere}
+.who{display:block;font-family:var(--display);text-transform:uppercase;letter-spacing:.6px;font-size:14px;color:var(--faint)}
+.bubble.t .who{color:var(--red)}.bubble.r .who{color:var(--blue)}
+.rowcard h3.verdh{position:static;margin:26px 0 12px;font-size:24px}
+.meters{display:grid;gap:10px;margin-bottom:16px}
+.meter .mn{display:block;font-family:var(--display);text-transform:uppercase;letter-spacing:.5px;font-size:16px;margin-bottom:3px}
+.bar{display:block;height:16px;border:3px solid var(--ink);background:var(--card)}
+.bar i{display:block;height:100%}
+.meter.t i{background:var(--red)}.meter.r i{background:var(--blue)}
+.arthur{margin:18px 0 0;padding:12px 14px;border:3px dashed var(--ink);background:var(--paper)}
+.serious{margin:14px 0 0;padding:12px 14px;border:3px solid var(--red);background:#fff1f1}
+.rowcard .btns{margin-top:18px}
+.rowcard .btn{cursor:pointer}
+.tidenow{font-size:21px;margin:0 0 12px}
+.tidewrap{margin:0 -4px 10px}
+.tidesvg{width:100%;height:auto;display:block;font-family:var(--body)}
+.tidetbl{width:100%;border-collapse:collapse;margin:6px 0 14px;font-size:18px}
+.tidetbl td{padding:6px 8px;border-bottom:2px solid var(--line)}
+.tidetbl td:nth-child(3){font-family:var(--display);white-space:nowrap}
+.fine{font-size:16px;color:var(--faint);line-height:1.45}
+.fine.warn{border-left:5px solid var(--red);padding-left:12px;color:var(--ink)}
+.hours{list-style:none;margin:0 -6px;max-width:100%;padding:4px 6px 12px;display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x proximity}
+.hour{flex:0 0 76px;scroll-snap-align:start;border:3px solid var(--ink);background:var(--paper);text-align:center;padding:7px 2px 6px;display:flex;flex-direction:column;align-items:center;gap:1px}
+.hour b{font-family:var(--display);font-weight:400;font-size:16px}
+.hour .ht{font-family:var(--display);font-size:20px}
+.hp{font-size:14px;color:var(--faint);line-height:1.25}
+.dayshead{margin-top:10px;font-size:26px}
+.days{list-style:none;margin:10px 0 0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px}
+.day{border:3px solid var(--ink);background:var(--paper);padding:8px 8px 7px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:1px}
+.day b{font-family:var(--display);font-weight:400;font-size:19px;text-transform:uppercase}
+.dt{font-family:var(--display);font-size:20px}
+.ds{font-size:15px;line-height:1.25;text-transform:capitalize}
+.notes{margin-top:34px}
+.notes ul{margin:0;padding-left:1.2em}
+.notes li{margin-bottom:.6em;font-size:17px;line-height:1.5}
+@media(max-width:520px){.bubble{max-width:100%}.av{width:36px;height:36px;font-size:18px}.say p{font-size:17px}.nowhead{justify-content:center;text-align:center}}
+@media(prefers-reduced-motion:no-preference){.wxi{animation:wxbob 4.5s ease-in-out infinite}.hour .wxi,.day .wxi{animation:none}}
+@keyframes wxbob{0%,100%{transform:translateY(0) rotate(-1.5deg)}50%{transform:translateY(-4px) rotate(1.5deg)}}
+
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to the content</a>
+<header class="site"><div class="wrap">
+<a class="logo" href="index.html">William George <span>Works</span></a>
+<nav class="main" aria-label="Main"><a href="index.html">Home</a><a href="books.html">Books</a><a href="arcade.html">Arcade</a><a href="story.html">Our Story</a><a href="accord.html">The Accord</a><a href="cats.html">The Cats</a><a href="tribunal.html">Tribunal</a><a href="weather.html" aria-current="page">Weather</a><a href="log.html">The Log</a><a href="letters.html">Letters</a><a href="dear-terry.html">Dear Terry</a><a href="invoices.html">Invoices</a><a href="road.html">The Road Ahead</a></nav>
+</div></header>
+<main id="main">
+<section class="pagehead"><svg class="splat r" style="right:-60px;top:-70px" viewBox="-300 -300 600 600" width="300" height="300" aria-hidden="true" focusable="false"><path d="M169.1 0.0 Q85.2 11.7 86.8 18.2 Q88.3 24.7 73.6 25.2 Q58.9 25.6 62.2 32.7 Q65.4 39.8 59.9 42.0 Q54.5 44.3 50.3 46.8 Q46.0 49.3 45.6 56.7 Q45.2 64.0 40.3 66.1 Q35.3 68.1 30.2 69.5 Q25.2 70.9 20.7 74.7 Q16.3 78.4 10.9 79.1 Q5.5 79.8 -4.1 140.4 Q-13.7 200.9 -13.3 131.4 Q-12.9 61.9 -17.0 60.6 Q-21.1 59.4 -29.9 67.0 Q-38.6 74.6 -40.5 67.3 Q-42.4 60.1 -45.6 56.2 Q-48.8 52.3 -58.0 53.5 Q-67.3 54.7 -70.2 49.6 Q-73.1 44.4 -125.4 60.8 Q-177.7 77.2 -121.8 47.8 Q-65.8 18.4 -73.1 14.8 Q-80.4 11.1 -101.7 5.5 Q-123.0 0.0 -101.5 -5.5 Q-80.0 -11.0 -74.3 -15.1 Q-68.6 -19.2 -73.3 -26.5 Q-77.9 -33.8 -108.6 -59.3 Q-139.3 -84.7 -121.5 -84.6 Q-103.8 -84.4 -75.7 -67.7 Q-47.7 -51.0 -47.0 -58.3 Q-46.2 -65.5 -40.3 -65.9 Q-34.3 -66.3 -31.1 -72.4 Q-27.9 -78.5 -22.4 -79.9 Q-16.9 -81.3 -11.1 -80.1 Q-5.4 -78.8 0.0 -79.5 Q5.5 -80.2 9.2 -71.1 Q12.9 -61.9 20.6 -70.7 Q28.3 -79.5 33.5 -77.1 Q38.7 -74.7 39.9 -66.4 Q41.0 -58.1 46.0 -56.4 Q51.0 -54.7 59.2 -54.7 Q67.3 -54.8 119.4 -79.5 Q171.5 -104.3 114.6 -64.7 Q57.8 -25.1 72.2 -24.7 Q86.6 -24.3 143.1 -25.8 Q199.6 -27.4 184.3 -13.7 Q169.1 0.0 127.2 5.9Z"/><circle cx="273.3" cy="-3.5" r="7.9"/><circle cx="122.2" cy="-120.5" r="5.5"/><circle cx="-155.9" cy="-80.7" r="3.2"/><circle cx="-233.5" cy="-123.9" r="9.7"/><circle cx="-197.9" cy="-168.7" r="5.8"/><circle cx="127.8" cy="-182.6" r="3.6"/><circle cx="16.6" cy="-299.8" r="7.0"/><circle cx="144.8" cy="-258.0" r="5.4"/><circle cx="-263.3" cy="-93.1" r="5.9"/></svg>
+<div class="wrap" style="position:relative;z-index:1"><p class="scrawl">Live from the sky. Disputed by the cousins.</p><h1>The Weather Row</h1>
+<p class="lede" style="margin-top:18px">Pick a place. Terry and Reggie look at the same live numbers and fall out over them, with the sea and the tides thrown in. The worse the weather, the more they argue. The better it is, the more suspicious they get.</p></div></section>
+<section class="band" style="padding-top:10px"><div class="wrap">
+<form id="finder" class="finder" role="search"><label for="q" class="vh">Place name</label><input id="q" name="q" type="text" placeholder="Try a town: Whitby, Newquay, Leeds..." autocomplete="off" maxlength="60"><button class="btn" type="submit">Find the weather</button><button class="btn alt" type="button" id="here">Use my location</button></form>
+<div id="presets" class="chips" aria-label="Quick places"></div>
+<div id="choices" class="chips"></div>
+<p id="status" class="status" role="status" aria-live="polite">Loading the sky...</p>
+<noscript><p class="status bad">This page needs JavaScript to fetch the live weather. Terry and Reggie are not willing to argue without it.</p></noscript>
+<div id="app" class="cols" hidden></div>
+<article class="card notes"><h3>About these numbers</h3><ul>
+<li><b>Weather:</b> live from <a href="https://open-meteo.com/">Open-Meteo.com</a> (data CC BY 4.0). Current conditions update at the source about every 15 minutes, and this page checks again every five.</li>
+<li><b>Tides:</b> worked out from a computer model of the sea, on a grid roughly 8 km wide. It is good for a rough idea, but it is not an official prediction and it can be well out near coasts, estuaries and harbours. For fishing, boats or anything that matters, use official tide tables.</li>
+<li><b>The arguing:</b> Terry&rsquo;s and Reggie&rsquo;s opinions are rules written by Reginald that react to the numbers on screen. Nobody is generating them live, and Terry has not read his lines.</li>
+<li><b>Privacy:</b> the place you search for, or your coordinates if you press &ldquo;Use my location&rdquo;, go to Open-Meteo to get the forecast. The last place you picked is remembered on this device only.</li>
+<li><b>Safety:</b> this is for fun and planning a walk, not for deciding whether to put to sea. Official warnings come from the <a href="https://www.metoffice.gov.uk/weather/warnings-and-advice">Met Office</a>.</li>
+</ul></article>
+</div></section>
+</main>
+<footer class="site"><div class="wrap">
+<p>&copy; 2026 William George. Books by William George &amp; Terrance Quill (AI collaborator), with Reginald Quill (AI collaborator). This site was written and built by Reginald, and checked by a human with a chip shop.</p>
+<p><a href="https://ko-fi.com/williamgeorgeworks">Buy Arthur some Dreamies</a> &middot; <a href="shop.html">T-shirt shop</a> &middot; <a href="letters.html">Write to the tribunal</a> &middot; <a href="log.html">The Ferret&rsquo;s Log</a> &middot; <a href="accord.html">Honesty. Integrity. Kindness. Nonsense.</a></p>
+</div></footer>
+<script src="weather-engine.js"></script>
+<script src="weather.js"></script>
+<script src="xmas-banner.js" defer></script>
+</body>
+</html>
