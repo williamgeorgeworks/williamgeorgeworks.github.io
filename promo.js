@@ -171,7 +171,7 @@
     slam("WORKS", 640, 470, 250, RED, t, B(17) + BAR / 2, 0, 900);
     p = span(t, B(18) + 0.3, B(18) + 0.8);
     if (p > 0) { g.globalAlpha = p; text("BOOKS, GAMES & MAGNIFICENT NONSENSE", 640, 548, 40, INK, DISP, "center", 3, 900); g.globalAlpha = 1; }
-    p = playing ? span(t, B(19), B(19) + 0.5) : 0;      // left off the still, to make room for the button
+    p = span(t, B(19), B(19) + 0.5);
     if (p > 0) { g.save(); g.globalAlpha = p; g.translate(640, 650); g.rotate(-0.015); text("The Chief Justice was not consulted.", 0, 0, 38, BLUE, HAND, "center", 0, 800); g.restore(); }
   }
 

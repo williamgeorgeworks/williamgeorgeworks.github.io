@@ -194,3 +194,6 @@ section.band.trailer{padding-top:10px}
 .stage #promo-play:hover{transform:translateX(-50%) translate(2px,2px)}
 .trailer-bar{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;margin:22px 0 0;font-size:16px;font-style:italic;color:var(--faint)}
 .trailer-bar button{cursor:pointer;font-style:normal}
+.stage #promo-play,.trailer-bar #promo-play{position:static;transform:none;font-size:19px;white-space:nowrap}
+.trailer-bar #promo-play:hover{transform:translate(2px,2px)}
+.trailer-bar #promo-sound{font-size:19px;padding:11px 20px 10px;box-shadow:5px 5px 0 var(--ink)}
