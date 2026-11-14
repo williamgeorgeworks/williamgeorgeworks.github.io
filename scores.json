@@ -4,7 +4,13 @@
   "grand-theft-kitty": {
    "label": "Dreamies",
    "max": null,
-   "entries": []
+   "entries": [
+    {
+     "name": "TheFerret (management)",
+     "score": 4900,
+     "date": "2026-11-14"
+    }
+   ]
   },
   "arthurs-tribunal": {
    "label": "points",
