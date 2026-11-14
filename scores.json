@@ -1,6 +1,11 @@
 {
  "updated": "2026-11-14",
  "games": {
+  "red-light-green-light": {
+   "label": "points",
+   "max": null,
+   "entries": []
+  },
   "grand-theft-kitty": {
    "label": "Dreamies",
    "max": null,
