@@ -301,3 +301,8 @@ header.site.js-nav nav.main .morelist a[aria-current=page]{border-bottom:3px sol
 .solo img{display:block;width:100%;height:auto;aspect-ratio:1/1;object-fit:cover;border:3px solid var(--ink)}
 @media (max-width:520px){.cast.nine figcaption strong{font-size:17px}.cast.nine figcaption span{font-size:11px}}
 @media (prefers-reduced-motion:reduce){.cast img{transition:none}}
+/* Employee of the Month badge */
+.has-eotm{position:relative}
+.eotm{position:absolute;top:-14px;right:-10px;z-index:2;transform:rotate(6deg);background:var(--red);color:var(--paper);border:3px solid var(--ink);padding:6px 12px 5px;font-family:var(--display);text-transform:uppercase;letter-spacing:.8px;font-size:13px;line-height:1.15;text-align:center;box-shadow:3px 3px 0 var(--ink)}
+.eotm b{display:block;font-weight:400;font-size:16px}
+.eotm i{display:block;font-style:normal;font-family:var(--hand);text-transform:none;font-size:15px;letter-spacing:0}

@@ -1,0 +1,6 @@
+{
+  "month": "2026-11",
+  "winner": "reggie",
+  "names": { "reggie": "Reggie", "terry": "Terry" },
+  "note": "Change month and winner at the start of each month. The badge only shows while 'month' matches the current UK month, so it switches itself off if this is left alone."
+}
