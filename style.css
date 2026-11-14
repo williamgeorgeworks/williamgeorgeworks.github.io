@@ -143,3 +143,5 @@ nav.main a.shop{background:var(--red);color:#fff;padding:4px 10px 3px;border-bot
 nav.main a.shop:hover{background:var(--ink);color:#fff;border-bottom-color:var(--red)}
 .game .shot.shirt{display:block;background:#fff;aspect-ratio:1/1}
 .game .shot.shirt img{object-fit:contain;object-position:center}
+nav.main a.tip{background:var(--ink);color:#fff;padding:4px 10px 3px;border-bottom:3px solid var(--red)}
+nav.main a.tip:hover{background:var(--red);color:#fff;border-bottom-color:var(--ink)}
