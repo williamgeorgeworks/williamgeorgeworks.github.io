@@ -215,3 +215,9 @@ section.band.trailer{padding-top:10px}
 .who .catpics.four .lead{grid-column:1/-1}
 .who .catpics.four img{aspect-ratio:1/1;object-position:50% 30%}
 .who .catpics.four .lead img{aspect-ratio:4/5}
+/* six-photo gallery: lead photo, three thumbnails, then two wider ones */
+.who .catpics.five{grid-template-columns:repeat(6,minmax(0,1fr))}
+.who .catpics.five a{grid-column:span 2}
+.who .catpics.five .lead{grid-column:1/-1}
+.who .catpics.five a:nth-child(n+5){grid-column:span 3}
+.who .catpics.five a:nth-child(n+5) img{aspect-ratio:3/2;object-position:50% 35%}
