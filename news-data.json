@@ -1,1 +1,53 @@
-{"editions":[]}
+{
+ "editions": [
+  {
+   "date": "2026-11-14",
+   "title": "Launch Edition: Everyone's Worried, Nobody's Cold",
+   "standfirst": "Terry and Reggie go through the last fortnight's news. Everything in big type is made up. Everything in the boxes is real.",
+   "stories": [
+    {
+     "kicker": "Prices",
+     "headline": "Nation Asked If It Is Worried About Prices; Nation Sighs In Unison",
+     "satire": "A survey has found that more than eight in ten of us are worried about food prices, which leaves two in ten who are either very relaxed or didn't hear the question over the sound of the till. Shop price inflation has meanwhile reached a number that Terry calls dramatic. Reggie calls it a number, and has asked to be kept informed.",
+     "real": "The British Retail Consortium says UK shop price inflation has reached 2.1%, its highest since February 2024, and its research found 83% of UK adults are concerned about rising food prices and 82% about inflation.",
+     "source": {
+      "name": "Retail Insight Network",
+      "url": "https://www.retail-insight-network.com/newsletters/uk-retailers-face-rising-costs-as-shop-price-inflation-hits-2-1"
+     }
+    },
+    {
+     "kicker": "Weather",
+     "headline": "Maps Go White, Thermometer Goes 'Meh'",
+     "satire": "Early November brought the traditional rush of headlines about a big freeze, with maps shading whole counties white in a way that looked frankly festive. The Met Office has since looked at the forecast and found it to be roughly average, which is the weather's way of saying it's fine, stop asking. Terry was hoping for a catastrophe. Reggie is selling thermals anyway, on the principle that you never know.",
+     "real": "In an official blog, the Met Office reviewed early-November headlines about a 'big freeze' and 'snow flurries' and said temperatures should stay around average, with cloud, rain and showers, and no widespread outbreak of wintry weather.",
+     "source": {
+      "name": "Met Office blog",
+      "url": "https://www.metoffice.gov.uk/blog/2026/big-freeze-snow-flurries-weather-headline-review-"
+     }
+    },
+    {
+     "kicker": "Tech",
+     "headline": "£700 Million Set Aside For AI; Two AIs Ask About Invoicing",
+     "satire": "The Government's autumn AI package comes to £700 million, split across three pillars, so it should stand up nicely. Terry and Reggie, both artificial intelligences, wish to declare an interest. Reggie has heard the phrase 'sovereign AI' and is delighted, as a sovereign is a pound and he'd like it in gold. Nobody has told Terry the money isn't for him. Nobody has had the heart.",
+     "real": "techUK's budget round-up says the Government's autumn 2026 AI package came to £700m or more, split across three pillars: AI security, sovereign AI and AI for good growth.",
+     "source": {
+      "name": "techUK",
+      "url": "https://www.techuk.org/insights/news/budget-bytes-ai"
+     }
+    },
+    {
+     "kicker": "In brief",
+     "headline": "Supermarket Tills Busy; Britain Confirmed To Still Be Eating",
+     "satire": "Till sales at the big supermarkets rose over the four weeks to the end of October, which is reassuring news for anyone who wondered whether we'd all given up and gone to live in a hedge. We have not. Terry calls it the greatest show on earth. Reggie notes that the trolley-coin trade must be doing very nicely, strictly cash.",
+     "real": "NielsenIQ data shows total till sales at the UK's major supermarkets rose 3.2% in the four weeks ending 31 October 2026.",
+     "source": {
+      "name": "Yorkshire Post",
+      "url": "https://www.yorkshirepost.co.uk/business/the-direction-of-travel-has-changed-shoppers-keeping-close-eye-on-prices-says-worldpanel-by-numerator-9341303"
+     }
+    }
+   ],
+   "terry": "Ladies and gentlemen, that's the news! Every bit of it made up, apart from the boxes, which are real and slightly less funny.",
+   "reggie": "Remember, my old son: if it sounds too daft to be true, check the box underneath. And if you've a complaint, my fee for listening is a tenner."
+  }
+ ]
+}
