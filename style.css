@@ -206,3 +206,7 @@ section.band.trailer{padding-top:10px}
 .who .catpics .lead{grid-column:1/-1}
 .who .catpics .lead img{aspect-ratio:4/5;object-position:50% 30%}
 @media (prefers-reduced-motion:reduce){.who .catpics img{transition:none}}
+/* two-photo gallery: side by side instead of lead + thumbnails */
+.who .catpics.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.who .catpics.two .lead{grid-column:auto}
+.who .catpics.two img,.who .catpics.two .lead img{aspect-ratio:3/4}
