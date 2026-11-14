@@ -153,3 +153,25 @@ nav.main a.tip:hover{background:var(--red);color:#fff;border-bottom-color:var(--
 section.band.closing{border-top:4px solid var(--ink);padding:38px 0 46px}
 section.band.closing .btns{margin-top:10px}
 section.band.closing .btns+.btns{margin-top:16px}
+.petition .hint{font-size:15px;font-style:italic;color:var(--faint);margin:12px 0 0}
+.petition button:disabled{opacity:.55;cursor:wait}
+.verdict{min-height:300px;padding:28px 26px 30px;background:#fffdf7;overflow:hidden}
+.verdict.waiting{border-style:dashed;box-shadow:none}
+.verdict .vno{font-family:var(--display);text-transform:uppercase;letter-spacing:1px;font-size:15px;color:var(--red);margin:0 0 12px}
+.verdict .vstage{font-size:22px;font-style:italic;margin:0;color:var(--faint)}
+.verdict .vmatter{margin:0 0 16px;font-size:18px;overflow-wrap:anywhere}
+.verdict .vmatter span{font-family:var(--display);text-transform:uppercase;letter-spacing:.6px;font-size:14px;color:var(--faint);display:block}
+.verdict blockquote{margin:0 0 14px;font-size:clamp(24px,3.2vw,32px);line-height:1.3;font-style:italic}
+.verdict .vsrc,.verdict .vdissent{font-size:16px;color:var(--faint);margin:0 0 10px}
+.verdict .vdissent{color:var(--ink);border-left:4px solid var(--blue);padding-left:12px}
+.verdict .vsig{font-family:var(--hand);font-size:26px;color:var(--ink);margin:18px 0 0;line-height:1.1}
+.verdict .vsig span{font-family:var(--body);font-style:italic;font-size:15px;color:var(--faint)}
+.verdict .stamp{position:absolute;right:16px;bottom:18px;float:none;margin:0}
+.verdict.ruled{animation:thump .35s ease-out}
+@keyframes thump{0%{transform:scale(1.04) rotate(-1deg)}60%{transform:scale(.99)}100%{transform:none}}
+#bench .btns{margin-top:22px}
+#bench button.btn{cursor:pointer}
+@media (prefers-reduced-motion:reduce){.verdict.ruled{animation:none}}
+@media (max-width:560px){.verdict .stamp{position:static;display:inline-block;margin-top:16px}}
+.verdict{padding-bottom:78px}
+@media (max-width:560px){.verdict{padding-bottom:28px}}
