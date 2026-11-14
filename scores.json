@@ -1,0 +1,38 @@
+{
+ "updated": "2026-11-14",
+ "games": {
+  "arthurs-tribunal": {
+   "label": "points",
+   "max": null,
+   "entries": [
+    {
+     "name": "BanditBurns",
+     "score": 832,
+     "date": "2026-11-14"
+    }
+   ]
+  },
+  "moulding-museum": {
+   "label": "drips caught",
+   "max": 30,
+   "entries": [
+    {
+     "name": "BanditBurns",
+     "score": 28,
+     "date": "2026-11-14"
+    }
+   ]
+  },
+  "unemployable-arcade": {
+   "label": "stars",
+   "max": 12,
+   "entries": [
+    {
+     "name": "BanditBurns",
+     "score": 12,
+     "date": "2026-11-14"
+    }
+   ]
+  }
+ }
+}
