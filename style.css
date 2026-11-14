@@ -233,3 +233,14 @@ section.band.trailer{padding-top:10px}
 .hall .when{font-size:14px;color:var(--faint)}
 .hall .none{font-style:italic;color:var(--faint);margin:0}
 .hall .beat{font-size:16px;margin:10px 0 0}
+/* Fold-away menu on phones (nav.js adds the button and the js-nav class) */
+.navbtn{display:none}
+@media (max-width:760px){
+header.site.js-nav .wrap{flex-wrap:wrap;align-items:center}
+header.site.js-nav .navbtn{display:inline-block;font-family:var(--display);text-transform:uppercase;letter-spacing:.8px;font-size:17px;line-height:1.2;background:var(--ink);color:var(--paper);border:0;border-radius:0;padding:8px 16px 6px;cursor:pointer;box-shadow:4px 4px 0 var(--red)}
+header.site.js-nav .navbtn:focus-visible{outline:3px solid var(--blue,#2b4fc2);outline-offset:3px}
+header.site.js-nav nav.main{display:none;flex-basis:100%;width:100%;grid-template-columns:1fr 1fr;gap:0 20px;border-top:3px solid var(--ink);margin-top:8px;padding-top:4px}
+header.site.js-nav.open nav.main{display:grid}
+header.site.js-nav nav.main a{padding:11px 0 9px;border-bottom:1px solid rgba(20,20,20,.18)}
+header.site.js-nav nav.main a[aria-current=page]{color:var(--red);border-bottom:3px solid var(--red)}
+}
