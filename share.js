@@ -9,8 +9,8 @@
     st.textContent='.wgs{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:14px 0 0;padding:0}'+
       '.wgs .wgs-l{font-family:"Permanent Marker","Segoe Print",cursive;color:#d1202f;font-size:16px;margin-right:2px}'+
       '.wgs a,.wgs button{font:700 13px/1 system-ui,-apple-system,"Segoe UI",sans-serif;letter-spacing:.2px;padding:8px 10px;border:2px solid #141414;border-radius:0;'+
-      'background:#fffdf7;color:#141414;text-decoration:none;cursor:pointer;box-shadow:3px 3px 0 #141414;margin:0;text-transform:none;display:inline-block}'+
-      '.wgs a:hover,.wgs button:hover{background:#141414;color:#fffdf7}.wgs a:focus-visible,.wgs button:focus-visible{outline:3px solid #2b4fc2;outline-offset:2px}'+
+      'background:#fffdf7!important;color:#141414!important;text-decoration:none!important;cursor:pointer;box-shadow:3px 3px 0 #141414;margin:0;text-transform:none;display:inline-block}'+
+      '.wgs a:hover,.wgs button:hover{background:#141414!important;color:#fffdf7!important}.wgs a:focus-visible,.wgs button:focus-visible{outline:3px solid #2b4fc2;outline-offset:2px}'+
       '.wgs-strip{background:#f6f2e7;color:#141414;border-top:4px solid #141414;padding:22px 16px 26px;position:relative;z-index:5;width:100%;box-sizing:border-box;clear:both;text-align:left}'+
       '.wgs-strip>div{max-width:1020px;margin:0 auto}.wgs-strip .wgs{margin:0}.wgs-strip .wgs .wgs-l{font-size:20px;flex-basis:100%;margin-bottom:4px}';
     document.head.appendChild(st);
@@ -67,6 +67,14 @@
       play.parentNode.insertBefore(r,play.nextSibling);
     }
   }
-  function go(){books();cards();game();}
+  function hooks(){
+    /* Anything marked data-share-url="page.html" gets a row of its own. */
+    var hs=document.querySelectorAll('[data-share-url]');
+    for(var i=0;i<hs.length;i++){
+      var e=hs[i],d=e.dataset;if(e.querySelector('.wgs'))continue;
+      e.appendChild(row({title:d.shareTitle||document.title,text:d.shareText||d.shareTitle||document.title,url:SITE+d.shareUrl,label:d.shareLabel||'Share'}));
+    }
+  }
+  function go(){books();cards();hooks();game();}
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',go);else go();
 })();
