@@ -257,7 +257,7 @@
     if (master && ac) master.gain.setValueAtTime(muted ? 0 : 0.6, ac.currentTime);
   });
   document.addEventListener("visibilitychange", function () { if (document.hidden && playing) stop(false); });
-  function size() { var r = Math.min(window.devicePixelRatio || 1, 2), w = Math.round(cv.clientWidth * r) || W; cv.width = w; cv.height = Math.round(w * H / W); if (!playing) draw(shown); }
+  function size() { var r = Math.min(window.devicePixelRatio || 1, 2), box = Math.min(stage.clientWidth || W, 1400), w = Math.max(320, Math.min(2560, Math.round(box * r))); if (w === cv.width) { if (!playing) draw(shown); return; } cv.width = w; cv.height = Math.round(w * H / W); if (!playing) draw(shown); }
   window.addEventListener("resize", size);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { if (!playing) draw(shown); });
   window.__promo = { seek: function (t) { draw(t); }, end: END, bar: BAR };
