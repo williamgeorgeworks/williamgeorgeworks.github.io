@@ -1,6 +1,11 @@
 {
  "updated": "2026-11-14",
  "games": {
+  "grand-theft-kitty": {
+   "label": "Dreamies",
+   "max": null,
+   "entries": []
+  },
   "arthurs-tribunal": {
    "label": "points",
    "max": null,
