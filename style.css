@@ -141,3 +141,5 @@ blockquote.ruling{margin:0}
 @media (max-width:560px){.invoice{padding:16px}.invoice table{font-size:16px}.stamp{font-size:17px;margin-left:14px}}
 nav.main a.shop{background:var(--red);color:#fff;padding:4px 10px 3px;border-bottom:3px solid var(--ink)}
 nav.main a.shop:hover{background:var(--ink);color:#fff;border-bottom-color:var(--red)}
+.game .shot.shirt{display:block;background:#fff;aspect-ratio:1/1}
+.game .shot.shirt img{object-fit:contain;object-position:center}
