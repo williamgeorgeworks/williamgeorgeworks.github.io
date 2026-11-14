@@ -1,0 +1,54 @@
+/* Site chrome copied from style.css so the comic page shares the header, footer and fonts. */
+:root{--paper:#f6f2e7;--card:#fffdf7;--ink:#141414;--red:#d1202f;--blue:#22409a;--teal:#0f4a4a;--faint:#5f5a4e;--line:#14141422;
+--display:'Anton','Arial Narrow',Impact,sans-serif;--hand:'Permanent Marker','Segoe Print','Bradley Hand',cursive;--body:'Spectral',Georgia,'Times New Roman',serif;color-scheme:light}
+.skip{position:absolute;left:-999px}.skip:focus{left:12px;top:12px;background:var(--ink);color:var(--paper);padding:8px 12px;z-index:9}
+header.site{border-bottom:4px solid var(--ink);background:var(--paper);position:relative;z-index:2}
+header.site .wrap{display:flex;align-items:center;justify-content:space-between;gap:10px 24px;flex-wrap:wrap;padding-top:14px;padding-bottom:12px}
+.logo{font-family:var(--display);font-size:30px;letter-spacing:.5px;text-transform:uppercase;color:var(--ink);text-decoration:none;line-height:1}
+.logo span{color:var(--red)}
+nav.main{display:flex;flex-wrap:wrap;gap:4px 18px}
+nav.main a{font-family:var(--display);text-transform:uppercase;letter-spacing:.6px;font-size:17px;color:var(--ink);text-decoration:none;padding:4px 0;border-bottom:3px solid transparent}
+nav.main a:hover,nav.main a[aria-current=page]{border-bottom-color:var(--red)}
+.scrawl{font-family:var(--hand);color:var(--red);font-size:22px;line-height:1.2;display:inline-block;transform:rotate(-2deg)}
+.btns{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px}
+.btn{font-family:var(--display);text-transform:uppercase;letter-spacing:.6px;font-size:19px;text-decoration:none;color:var(--paper);background:var(--ink);padding:11px 20px 10px;border:3px solid var(--ink);display:inline-block;box-shadow:5px 5px 0 var(--red);transition:transform .12s,box-shadow .12s}
+.btn:hover{color:var(--paper);transform:translate(2px,2px);box-shadow:3px 3px 0 var(--red)}
+.btn.alt{background:var(--card);color:var(--ink);box-shadow:5px 5px 0 var(--ink)}
+.btn.alt:hover{color:var(--ink);box-shadow:3px 3px 0 var(--ink)}
+.btn.small{font-size:16px;padding:8px 14px 7px;box-shadow:4px 4px 0 var(--red)}
+footer.site{border-top:4px solid var(--ink);padding:30px 0 44px;font-size:16px;color:var(--faint);position:relative;z-index:1;background:var(--paper)}
+footer.site .wrap{display:flex;flex-wrap:wrap;gap:10px 30px;justify-content:space-between}
+footer.site p{margin:0;max-width:34em}
+/* Fold-away menu on phones (nav.js adds the button and the js-nav class) */
+.navbtn{display:none}
+@media (max-width:760px){
+header.site.js-nav .wrap{flex-wrap:wrap;align-items:center}
+header.site.js-nav .navbtn{display:inline-block;font-family:var(--display);text-transform:uppercase;letter-spacing:.8px;font-size:17px;line-height:1.2;background:var(--ink);color:var(--paper);border:0;border-radius:0;padding:8px 16px 6px;cursor:pointer;box-shadow:4px 4px 0 var(--red)}
+header.site.js-nav .navbtn:focus-visible{outline:3px solid var(--blue,#2b4fc2);outline-offset:3px}
+header.site.js-nav nav.main{display:none;flex-basis:100%;width:100%;grid-template-columns:1fr 1fr;gap:0 20px;border-top:3px solid var(--ink);margin-top:8px;padding-top:4px}
+header.site.js-nav.open nav.main{display:grid}
+header.site.js-nav nav.main a{padding:11px 0 9px;border-bottom:1px solid rgba(20,20,20,.18)}
+header.site.js-nav nav.main a[aria-current=page]{color:var(--red);border-bottom:3px solid var(--red)}
+}
+/* "Explore" menu on wider screens (nav.js builds it) */
+nav.main .more{position:relative;display:inline-block}
+nav.main .morebtn{font-family:var(--display);text-transform:uppercase;letter-spacing:.6px;font-size:17px;color:var(--ink);background:none;border:0;border-bottom:3px solid transparent;border-radius:0;padding:4px 0;cursor:pointer;line-height:inherit}
+nav.main .morebtn::after{content:"";display:inline-block;margin-left:7px;border:5px solid transparent;border-top-color:var(--ink);border-bottom-width:0;vertical-align:middle}
+nav.main .morebtn:hover,nav.main .morebtn.here,nav.main .more.open .morebtn{border-bottom-color:var(--red)}
+nav.main .morebtn:focus-visible{outline:3px solid var(--blue,#2b4fc2);outline-offset:3px}
+nav.main .morelist{display:none;position:absolute;right:0;top:calc(100% + 10px);z-index:30;min-width:230px;background:var(--paper);border:3px solid var(--ink);box-shadow:6px 6px 0 var(--ink);padding:8px 16px 10px}
+nav.main .more.open .morelist{display:grid}
+nav.main .morelist a{padding:8px 0 6px;border-bottom:1px solid rgba(20,20,20,.15);white-space:nowrap}
+nav.main .morelist a:last-child{border-bottom-color:transparent}
+nav.main .morelist a:hover,nav.main .morelist a[aria-current=page]{color:var(--red);border-bottom-color:var(--red)}
+@media (max-width:760px){
+header.site.js-nav nav.main .more,header.site.js-nav nav.main .morelist{display:contents}
+header.site.js-nav nav.main .morebtn{display:none}
+header.site.js-nav nav.main .morelist a{white-space:normal;border-bottom:1px solid rgba(20,20,20,.18)}
+header.site.js-nav nav.main .morelist a[aria-current=page]{border-bottom:3px solid var(--red)}
+.btn.red{background:var(--red);border-color:var(--red);color:#fff;box-shadow:5px 5px 0 var(--ink)}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:19px}
+a{color:var(--blue);text-underline-offset:3px}
+a:hover{color:var(--red)}
+.wrap{max-width:1060px;margin:0 auto;padding:0 20px}
+@media (max-width:560px){body{font-size:18px}}
