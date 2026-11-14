@@ -1,6 +1,17 @@
 /* Hall of fame: renders the top three published scores under each game on the arcade page.
    Data lives in scores.json and is edited by hand after a human has checked each submission. */
 (function(){
+  /* Pre-fill the submission form from ?game=slug&score=123, or when a hall link is clicked. */
+  var sel=document.getElementById('sc-game'),scoreBox=document.getElementById('sc-score');
+  function pick(slug){
+    if(!sel)return;
+    for(var i=0;i<sel.options.length;i++){if(sel.options[i].getAttribute('data-slug')===slug){sel.selectedIndex=i;return;}}
+  }
+  try{
+    var q=new URLSearchParams(location.search),g=q.get('game'),sc=q.get('score');
+    if(g)pick(g);
+    if(sc&&scoreBox&&/^[0-9]{1,6}$/.test(sc))scoreBox.value=sc;
+  }catch(e){}
   var holes=document.querySelectorAll('[data-hall]');
   if(!holes.length||!window.fetch)return;
   function el(tag,cls,text){var e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e;}
@@ -28,7 +39,7 @@
       }
       var p=el('p','beat');
       p.appendChild(document.createTextNode(rows.length?'Think you can beat that? ':'Be the first. '));
-      var a=el('a',null,'Send in your score');a.href='#send-score';p.appendChild(a);
+      var a=el('a',null,'Send in your score');a.href='#send-score';var slug=box.getAttribute('data-hall');a.addEventListener('click',function(){pick(slug);});p.appendChild(a);
       box.appendChild(p);
     });
   }).catch(function(){});

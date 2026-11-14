@@ -449,7 +449,7 @@ function showEnd(){ stopGame(); render("end"); tempo=138; tr=5; const d=S.use-S.
   panel.innerHTML='<p class="place">The verdict of Moulding-in-the-Mire</p><p class="verdict">'+esc(v)+'</p><p>'+esc(t)+'</p><p>'+esc(tab)+' Drips caught: '+S.caught+' of 30.</p>'+
     quoteHTML("Sebastian Vale had been unemployed for six years, although he preferred the term professionally unavailable.","The opening line")+
     '<p>That was six scenes. The book has twenty-one chapters, a property developer, a bishop, an influencer of absolutely no influence, and the answer to what happened in the summer of 1988. Scan the code below or follow the link.</p>'+
-    '<button class="go" id="again" type="button">Make different mistakes</button>';
+    '<button class="go" id="again" type="button">Make different mistakes</button> <a class="go" style="display:inline-block;text-decoration:none" href="arcade.html?game=moulding-museum&score='+S.caught+'#send-score" target="_blank" rel="noopener">Send in your score</a>';
   document.getElementById("again").addEventListener("click",()=>{ sfx(); showTitle(); focusFirst(); }); focusFirst(); }
 
 /* ---------- QR and boot ---------- */

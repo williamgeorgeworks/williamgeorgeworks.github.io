@@ -473,7 +473,7 @@ function showVerdict(){ const n=total(); let v,t;
   panel.innerHTML='<p class="place">The verdict of Moulding-in-the-Mire</p><p class="verdict">'+esc(v)+'</p><p>'+esc(NAME[S.me])+' finished with '+n+' stars out of 12. '+esc(t)+'</p>'+
    quoteHTML("Oliver, if we understood everything, there’d be no need for museums.","Sebastian Vale")+
    '<p>That was four games. The book has twenty-one chapters, a property developer, a bishop, and the answer to what happened in the summer of 1988. Scan the code below or follow the link.</p>'+
-   '<button class="go" id="board" type="button">Back to the board</button><button class="go quiet" id="swap" type="button">Start again as the other one</button>';
+   '<button class="go" id="board" type="button">Back to the board</button><button class="go quiet" id="swap" type="button">Start again as the other one</button><a class="go quiet" style="display:inline-block;text-decoration:none" href="arcade.html?game=unemployable-arcade&score='+n+'#send-score" target="_blank" rel="noopener">Send in your score</a>';
   document.getElementById("board").addEventListener("click",showMenu); document.getElementById("swap").addEventListener("click",showTitle); focusFirst(); }
 
 /* ---------- page spatter, QR and boot ---------- */

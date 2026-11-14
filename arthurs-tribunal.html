@@ -98,6 +98,7 @@ button{font:inherit;cursor:pointer}
         <div class="row">
           <button class="btn" id="againBtn" type="button">Appeal</button>
           <button class="btn quiet" id="copyBtn" type="button">Copy my score</button>
+          <a class="btn quiet" id="sendBtn" style="text-decoration:none" href="arcade.html#send-score" target="_blank" rel="noopener">Send in your score</a>
         </div>
         <p class="share" id="shareText"></p>
       </div>
@@ -195,6 +196,7 @@ function endGame(){
   document.getElementById('bestLine').textContent=isBest&&G.score>0?'A new best. The court is mildly impressed.':'Your best: '+G.best;
   document.getElementById('shareText').textContent='I scored '+G.score+' as Arthur in The Great British Disagreement. Verdict: '+verdictFor(G.score)+'. Put the kettle on.';
   document.getElementById('copyBtn').textContent='Copy my score';
+  var sb=document.getElementById('sendBtn');sb.style.display=G.score>0?'':'none';sb.href='arcade.html?game=arthurs-tribunal&score='+G.score+'#send-score';
   setTimeout(function(){document.getElementById('overPanel').hidden=false;try{document.getElementById('againBtn').focus({preventScroll:true});}catch(e){}},900);
   sfx('over');
 }
