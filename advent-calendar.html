@@ -10,8 +10,9 @@
 <meta property="og:title" content="Arthur&rsquo;s Advent Calendar | William George Works">
 <meta property="og:description" content="Twenty-four doors, twenty-four small adventures, one cat. A free traditional advent calendar. Doors open one a day from 1 December.">
 <meta property="og:url" content="https://williamgeorgeworks.co.uk/advent-calendar.html">
-<meta property="og:image" content="https://williamgeorgeworks.co.uk/promo-arthur.webp">
+<meta property="og:image" content="https://williamgeorgeworks.co.uk/thumb-arthurs-tribunal.jpg">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0d2218">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Cormorant+Garamond:ital,wght@0,500;0,700;1,500&display=swap" rel="stylesheet">
@@ -96,6 +97,11 @@ h1 em{color:var(--gold);font-style:italic}
 .btn.red{background:var(--red);color:var(--cream)}
 .btn.red:hover{color:#fff}
 
+.carols{display:flex;flex-wrap:wrap;gap:10px 14px;justify-content:center;align-items:center;margin:0 auto 26px;max-width:42em}
+.carols select{font-family:var(--body);font-size:19px;font-weight:700;background:var(--cream);color:var(--ink);border:3px solid var(--gold);border-radius:4px;padding:8px 10px;max-width:100%}
+.carols .btn{font-size:19px}
+.carols .cnow{flex-basis:100%;margin:0;text-align:center;font-style:italic;font-size:18px;color:var(--creamlo)}
+.ending .btn{margin-top:10px;font-size:18px}
 .note{max-width:36em;margin:34px auto 0;text-align:center;color:var(--creamlo);font-size:19px}
 footer{position:relative;z-index:1;border-top:2px solid var(--goldlo);margin-top:30px;padding:26px 20px 44px;text-align:center;font-size:17px;color:var(--creamlo)}
 footer p{max-width:42em;margin:0 auto 8px}
@@ -129,6 +135,7 @@ dialog::backdrop{background:#030c07cc}
 </head>
 <body>
 <a class="skip" href="#doors">Skip to the doors</a>
+<noscript><p style="position:relative;z-index:2;text-align:center;padding:14px 20px;background:#a4182a;margin:0">The advent calendar needs JavaScript to open its doors. Please switch it on, or <a href="arcade.html" style="color:#fff">go back to the arcade</a>.</p></noscript>
 <canvas id="snow" aria-hidden="true"></canvas>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -211,9 +218,16 @@ dialog::backdrop{background:#030c07cc}
 
   <h1>Arthur&rsquo;s <em>Advent</em> Calendar</h1>
   <div class="rule" aria-hidden="true"><svg viewBox="0 0 60 60"><use href="#holly"/></svg></div>
-  <p class="lede">Arthur, Chief Justice of the Tribunal and cat of leisure, has twenty-four jobs to do in the village of Mizzlethwaite before Christmas Eve. Open one door each day, from 1 December. Help him with the day&rsquo;s job, and see what sort of Christmas he ends up with.</p>
+  <p class="lede">Arthur, Chief Justice of the Tribunal and cat of leisure, has twenty-four jobs to do in the village of Mizzlethwaite before Christmas Eve. The rest of the Bench and a few friends from the books have turned up to help, or at least to watch. Open one door each day, from 1 December, help Arthur with the day&rsquo;s job and see what sort of Christmas he ends up with.</p>
   <p class="status" id="status" aria-live="polite"></p>
   <p class="preview" id="preview"></p>
+
+  <div class="carols" id="carols">
+    <button class="btn" id="cplay" type="button" aria-pressed="false">&#9834; Play a carol</button>
+    <label class="sr" for="csel">Choose a carol</label>
+    <select id="csel"></select>
+    <p class="cnow" id="cnow" aria-live="polite"></p>
+  </div>
 
   <ol class="doors" id="doors" aria-label="Advent calendar doors"></ol>
   <p class="sr" id="live" aria-live="polite"></p>
@@ -226,7 +240,7 @@ dialog::backdrop{background:#030c07cc}
 </main>
 
 <footer>
-  <p>Written and built by Reginald Quill (AI collaborator) for <a href="index.html">William George Works</a>. The traditions in each door are real, and the village of Mizzlethwaite is not.</p>
+  <p>Written and built by Reginald Quill (AI collaborator) for <a href="index.html">William George Works</a>. The traditions in each door are real. Mizzlethwaite is invented, and the friends from the books are every bit as reliable as they are in the books.</p>
   <p>Looking for a Christmas present? <a href="books.html">The books</a> &middot; <a href="shop.html">T-shirts</a> &middot; <a href="https://ko-fi.com/williamgeorgeworks">Buy Arthur some Dreamies</a></p>
 </footer>
 
@@ -259,20 +273,22 @@ dialog::backdrop{background:#030c07cc}
    --------------------------------------------------------------- */
 var STORY = [
 {t:"The List",
- s:"Snow dusts the rooftops of Mizzlethwaite. Arthur sits on the hall table with a pencil he cannot hold and a list of twenty-four jobs. Number one: bring down the box of decorations from the top of the wardrobe.",
+ s:"Snow dusts the rooftops of Mizzlethwaite. Arthur sits on the hall table with a pencil he cannot hold and a list of twenty-four jobs. Spyro, who is the true king, has already declared the list beneath him. Number one: bring down the box of decorations from the top of the wardrobe.",
  c:[{x:"Carry it down one careful step at a time",o:"Not a single bauble cracks. The box is set under the stairs with great ceremony, and Arthur is rather pleased with himself.",k:1},
     {x:"Knock it off the wardrobe and see what happens",o:"It lands with a crash and a tinkle. Only three baubles are lost, and nobody will ever know. Probably.",k:0}],
- n:"The first printed Advent calendars appeared in Germany in the early 1900s. Before that, some families marked off the days to Christmas with chalk lines on a door, or by lighting a candle each day."},
+ n:"The first printed Advent calendars appeared in Germany in the early 1900s. Before that, some families marked off the days to Christmas with chalk lines on a door, or by lighting a candle each day.",
+ ln:{p:"Meet the rest of the Bench on ",t:"the cats page",h:"cats.html"}},
 {t:"Paper Chains",
- s:"Mrs Pennyfeather next door has left a heap of coloured paper, a pot of flour paste and a note: “Dear Arthur, could you help the children with the paper chains?”",
- c:[{x:"Pounce on the loose end of the longest chain",o:"The chain comes down, and so does the curtain. Mrs Pennyfeather laughs until she has to sit down.",k:0},
+ s:"Mrs Pennyfeather next door has left a heap of coloured paper, a pot of flour paste and a note: “Dear Arthur, could you help the children with the paper chains?” Daisy, who looks as if butter would not melt, has already been found in the middle of the paste pot.",
+ c:[{x:"Pounce on the loose end of the longest chain",o:"The chain comes down, and so does the curtain. Mrs Pennyfeather laughs until she has to sit down. Daisy is blamed, and looks astonished.",k:0},
     {x:"Hold the strips steady while the children paste",o:"Soon the hall is draped in loops of red, green and gold. The children declare Arthur the finest assistant they have ever had.",k:1}],
  n:"Before shop-bought baubles, many Victorian families made their own Christmas decorations from paper, ribbon and whatever the kitchen could spare."},
 {t:"Christmas Cards",
- s:"A stack of blank cards waits on the desk, and an inkpot has been left open. This is not a coincidence.",
- c:[{x:"Write a card for every neighbour, and leave the ink alone",o:"Forty-one cards go out, each one neat, each one signed with a careful paw. The postman says he has never seen the like.",k:1},
-    {x:"Sign every card with an inky paw print",o:"Forty-one cards go out, each with a smudged signature that is impossible to mistake. The whole village talks of nothing else.",k:0}],
- n:"The first commercial Christmas card was commissioned by Sir Henry Cole in London in 1843. Around a thousand were printed, and they sold for a shilling each."},
+ s:"A stack of blank cards waits on the desk, and an inkpot has been left open. This is not a coincidence. One card is for Mr Arthur Pritchard, a man with a yellow legal pad and fifty-one years of grievances. His wife Margaret has asked that it say something cheerful.",
+ c:[{x:"Write a card for every neighbour, and leave the ink alone",o:"Forty-one cards go out, each one neat and signed with a careful paw. Mr Pritchard’s says only “Happy Christmas.” He reads it twice and, for once, has nothing to add to the pad.",k:1},
+    {x:"Sign every card with an inky paw print",o:"Forty-one cards go out, each with a smudged signature that is impossible to mistake. Margaret puts Mr Pritchard’s on the mantelpiece. He would like it noted that he has a complaint. It is noted.",k:0}],
+ n:"The first commercial Christmas card was commissioned by Sir Henry Cole in London in 1843. Around a thousand were printed, and they sold for a shilling each.",
+ ln:{p:"Mr Pritchard’s full list of grievances is in ",t:"The Man Who Wanted to Sue God",h:"books.html"}},
 {t:"Holly",
  s:"The vicar needs holly for the church, and the best bush grows at the bottom of the lane, behind a wall. It is also extremely prickly.",
  c:[{x:"Supervise from the top of the wall",o:"Arthur directs operations from a safe distance. The holly is cut, though the vicar wonders aloud why the supervisor needed quite so many naps.",k:0},
@@ -294,8 +310,8 @@ var STORY = [
     {x:"Wait politely until she offers one",o:"Mrs Pennyfeather is so touched by this restraint that she gives Arthur the first pie, and a small bit of pastry for later.",k:1}],
  n:"Early mince pies contained minced meat as well as fruit and spices. The meat dropped out over the centuries, but the name stayed."},
 {t:"The Tree",
- s:"The tree seller has trees of every height, and Arthur has been trusted to choose the one for the cottage.",
- c:[{x:"The tallest one, naturally",o:"It has to be tied to the ceiling, and the sofa has to move. It is magnificent, and Arthur takes full credit.",k:0},
+ s:"The tree seller has trees of every height, and Arthur has been trusted to choose the one for the cottage. Sebastian Vale and Oliver Finch have strolled over from Moulding-in-the-Mire to help. Sebastian is professionally unavailable but has made himself available for carrying. Oliver is working on his novel, which at present involves leaning on a tree.",
+ c:[{x:"The tallest one, naturally",o:"It has to be tied to the ceiling, and the sofa has to move. Sebastian declares it the part he was born to carry. It is magnificent, and Arthur takes full credit.",k:0},
     {x:"A small one that fits the front room",o:"It fits perfectly, smells wonderful and leaves room for the armchair. The children say it is the best tree they ever had.",k:1}],
  n:"Christmas trees were popular in Germany long before Britain. They became a national fashion after an 1848 engraving showed Queen Victoria, Prince Albert and their children around one."},
 {t:"The Carol Rehearsal",
@@ -304,7 +320,7 @@ var STORY = [
     {x:"Sit quietly in the back pew and listen",o:"The single voice rises into the roof, and the church goes very still. Arthur does not move until the last note has gone.",k:1}],
  n:"The Festival of Nine Lessons and Carols at King’s College, Cambridge began in 1918 and has been broadcast on the radio since 1928. It traditionally opens with “Once in Royal David’s City”."},
 {t:"Snow",
- s:"Overnight the lane has vanished under a deep white blanket. The children are out in it already, and a snowman is clearly required.",
+ s:"Overnight the lane has vanished under a deep white blanket. The children are out in it already, and a snowman is clearly required. Trixie, who has shown no interest in annexing anything beyond the sofa, inspects the work from the window.",
  c:[{x:"Help roll the snowman",o:"Arthur pushes with all four paws. The snowman is lopsided and magnificent, and wears the vicar’s spare scarf with great dignity.",k:1},
     {x:"Steal the snowman’s carrot nose",o:"Arthur has no use for a carrot. He simply wished to know that he could. The snowman now has a pebble nose, and a look of disappointment.",k:0}],
  n:"A white Christmas is rarer in most of Britain than Christmas cards suggest. Cards and stories helped fix snow in our picture of the day."},
@@ -314,18 +330,18 @@ var STORY = [
     {x:"Wish for a happy Christmas for the whole village",o:"Arthur stirs slowly, eyes closed. The kitchen feels a little warmer, and Mrs Pennyfeather dabs her eye with her apron.",k:1}],
  n:"Stir-up Sunday, the last Sunday before Advent, is the traditional day for making the Christmas pudding. Everyone in the house takes a turn at stirring and makes a wish. A silver sixpence hidden inside was said to bring luck to whoever found it."},
 {t:"The Cracker",
- s:"Beside every plate at the village supper sits a Christmas cracker. Arthur has been invited to pull one with the vicar.",
- c:[{x:"Pull with all his might",o:"BANG! The vicar loses the toy, the joke and his balance. Arthur claims the paper crown and wears it for the rest of the evening.",k:0},
-    {x:"Let the vicar win the better half",o:"The vicar gets the toy and the joke, and Arthur gets the paper crown. Everyone agrees this is a very fair outcome.",k:1}],
+ s:"Beside every plate at the Christmas supper in The Injured Badger, over in Moulding-in-the-Mire, sits a cracker. Neville Puddifoot, the landlord, has invited Arthur to pull one.",
+ c:[{x:"Pull with all his might",o:"BANG! Neville loses the toy, the joke and his balance. Arthur claims the paper crown and wears it for the rest of the evening.",k:0},
+    {x:"Let Neville win the better half",o:"Neville gets the toy and the joke, and Arthur gets the paper crown. The whole bar agrees this is a very fair outcome.",k:1}],
  n:"Christmas crackers were invented by Tom Smith, a London sweet-maker, in the mid-1800s. The story goes that he added the snap after hearing a log crackle on the fire."},
 {t:"St Lucy’s Day",
  s:"Today, in Sweden, girls in white gowns carry candles at dawn to mark St Lucy’s Day. Mizzlethwaite has its own small version: lanterns along the lane.",
  c:[{x:"Follow the procession in hope of saffron buns",o:"Arthur is not disappointed. A bun is produced, and then, because he looks so hopeful, another.",k:0},
     {x:"Carry a lantern for the children, very carefully",o:"Arthur walks at the front with his lantern held high. The lane glows, and the children walk very quietly behind him.",k:1}],
- n:"St Lucy’s Day, 13 December, is celebrated in Sweden with candlelit processions and saffron buns. In the old calendar it fell near the shortest day, which is why it came to be called the longest night."},
+ n:"St Lucy’s Day, 13 December, is celebrated in Sweden with candlelit processions and saffron buns. In the old Julian calendar her day fell close to the winter solstice, so it became linked with the longest night of the year."},
 {t:"Mistletoe",
- s:"A sprig of mistletoe has been bought at the market. It must be hung somewhere, and everyone has an opinion about where.",
- c:[{x:"Hang it over the front door for visitors",o:"Every visitor is greeted beneath it with a smile. Arthur counts it a great success, and a very useful way to be greeted.",k:1},
+ s:"A sprig of mistletoe has been bought at the market. It must be hung somewhere, and everyone has an opinion about where. Tilly, shy and quiet, has taken up position by the front door. The court advises approaching with respect.",
+ c:[{x:"Hang it over the front door for visitors",o:"Every visitor is greeted beneath it with a smile and, on Tilly’s advice, a respectful distance. Arthur counts it a great success.",k:1},
     {x:"Hang it over the biscuit tin, “for luck”",o:"The biscuit tin has never been so well supervised. Mrs Pennyfeather says it was a clever idea and removes the mistletoe.",k:0}],
  n:"The custom of kissing under the mistletoe was recorded in England by the 1700s. Mistletoe stays green on bare winter trees, which is partly why it was long thought to be magical."},
 {t:"Wrapping Paper",
@@ -334,11 +350,11 @@ var STORY = [
     {x:"Hold the ribbon while Mrs Pennyfeather ties the bows",o:"Twelve neat bows later, the pile looks like a shop window. Arthur has a small piece of ribbon as his wages.",k:1}],
  n:"For most Victorian families, Christmas presents were small: an orange, some sweets, a simple toy. The great heaps of parcels are a much later arrival."},
 {t:"A Ghost Story by the Fire",
- s:"The lamps are low, the fire is high and somebody has begun: “It was a night just like this, and the wind was just like that…” Arthur’s ears turn towards the window.",
+ s:"The lamps are low, the fire is high and somebody has begun the tale of the Hound Without a Head. Arthur’s ears turn towards the window.",
  c:[{x:"Tap on the window at the scariest moment",o:"A shriek goes up, followed by a great deal of laughter. The storyteller has to start the paragraph again.",k:0},
     {x:"Curl up on a lap and listen",o:"The story ends, the fire crackles, and nobody wants to be the first to go upstairs. Arthur purrs the whole way through.",k:1}],
- n:"Telling ghost stories at Christmas was a much-loved Victorian custom, and Dickens’s A Christmas Carol is itself a ghost story. If you like that tradition, Lancashire has plenty of tales to tell.",
- link:{t:"Lancashire Ghost Stories and Local Legends",h:"books.html"}},
+ n:"Telling ghost stories at Christmas was a much-loved Victorian custom, and Dickens’s A Christmas Carol is itself a ghost story.",
+ ln:{p:"The Hound Without a Head is one of the legends in ",t:"Lancashire Ghost Stories and Local Legends",h:"books.html"}},
 {t:"The Lord of Misrule",
  s:"The village has decided to choose a Lord of Misrule for the evening, a ruler whose only task is to turn everything upside down. Arthur has nominated himself.",
  c:[{x:"Decline graciously and nominate the vicar",o:"The vicar is crowned with a tea cosy and rules over the evening with immense dignity. Arthur is named his Chief Adviser.",k:1},
@@ -355,20 +371,21 @@ var STORY = [
     {x:"Stay awake to the very last page",o:"Arthur listens to every word. When Tiny Tim’s blessing is spoken, he is the first to purr.",k:1}],
  n:"Charles Dickens published A Christmas Carol on 19 December 1843. The first printing of around 6,000 copies reportedly sold out within days."},
 {t:"Trimming the Tree",
- s:"The tree is up and the box of baubles is open. The star must go on top, and only one person is brave enough to try.",
- c:[{x:"Hand the star up to the vicar",o:"The vicar, on a stool and held steady by three children, puts the star in place. A small cheer goes up. Arthur supervises.",k:1},
+ s:"The tree is up and the box of baubles is open. The star must go on top, and only one person is brave enough to try. Sebastian Vale, professionally unavailable, has suddenly become available now that there is a ladder and an audience.",
+ c:[{x:"Hand the star up to Sebastian",o:"Sebastian, on the ladder and held steady by three children, puts the star in place with a flourish. A small cheer goes up. Arthur supervises.",k:1},
     {x:"Climb the tree and place it himself",o:"The tree sways, the baubles tinkle and the star goes on at a slightly rakish angle. It stays there, which is the main thing.",k:0}],
  n:"Before electric lights, Victorian trees were small, stood on tables and were lit with real candles, usually only briefly and with great care."},
 {t:"The Shortest Day",
- s:"It is the winter solstice, the shortest day of the year. The fire is lit early, and the yule log, a great knotty lump of oak, is dragged into the hearth.",
- c:[{x:"Take the warmest spot, at once",o:"Arthur settles in front of the fire, a perfect picture of contentment. Nobody has the heart to move him.",k:0},
+ s:"It is the winter solstice, the shortest day of the year. The fire is lit early, and the yule log, a great knotty lump of oak, is dragged into the hearth. Dexter, the grey wolf who would not say boo to a goose, has taken the second-best spot and is not making a fuss.",
+ c:[{x:"Take the warmest spot, at once",o:"Arthur settles in front of the fire, a perfect picture of contentment. Dexter says nothing, as is his way. Nobody has the heart to move either of them.",k:0},
     {x:"Sit sensibly at a safe distance from the flames",o:"Arthur watches the log glow from the armchair. The fire burns steadily, and the room fills with the smell of oak.",k:1}],
  n:"The winter solstice falls around 21 December, the shortest day in the northern hemisphere. Midwinter feasts and fires are older than Christmas, and the yule log is one of their descendants."},
 {t:"The Mummers",
- s:"The mummers have come: neighbours in paper hats and old coats, performing the old play of St George, a dragon and a doctor who can cure anything.",
+ s:"The mummers have come: neighbours in paper hats and old coats, performing the old play of St George, a dragon and a doctor who can cure anything. Sebastian Vale has taken the part of St George, a booking he describes as long overdue. Oliver Finch is writing it all down for the novel.",
  c:[{x:"Play the dragon, with feeling",o:"The dragon’s roar is the finest the village has heard. St George is so frightened that he forgets his lines, and the audience falls about.",k:0},
     {x:"Play the Doctor and cure the fallen",o:"With a tiny bottle and a great deal of solemnity, Arthur revives the hero. The audience gives him the loudest cheer of the night.",k:1}],
- n:"Mummers’ plays are traditional folk dramas performed around midwinter in many parts of Britain. They usually feature a hero such as St George, a villain and a comic doctor who revives the fallen."},
+ n:"Mummers’ plays are traditional folk dramas performed around midwinter in many parts of Britain. They usually feature a hero such as St George, a villain and a comic doctor who revives the fallen.",
+ ln:{p:"Sebastian and Oliver are properly introduced in ",t:"The Last of the Unemployable",h:"books.html"}},
 {t:"The Wireless",
  s:"Tomorrow’s broadcast must be heard in every room. The wireless has been dusted off, and it crackles once before settling on a faint, far-off carol.",
  c:[{x:"Sit on the volume knob",o:"The carol becomes a roar, then a squeal, then silence. Mrs Pennyfeather retunes it, with great patience and without a word.",k:0},
@@ -383,12 +400,40 @@ var STORY = [
 
 var ENDINGS = {
  kind:{h:"A Very Merry Christmas",
-  p:["Mizzlethwaite wakes to the kindest Christmas morning anyone can remember. Mrs Pennyfeather says it was all Arthur’s doing, and the vicar has promised him the best seat by the fire for as long as he likes.","Somewhere in the village a robin sings. Arthur, Chief Justice and cat, has done very well indeed."]},
+  p:["Mizzlethwaite wakes to the kindest Christmas morning anyone can remember. Mrs Pennyfeather says it was all Arthur’s doing, and the vicar has promised him the best seat by the fire for as long as he likes.","Somewhere in the village a robin sings. Spyro, the true king, allows that Arthur has done very well indeed."]},
  mixed:{h:"A Proper Christmas",
   p:["A little kindness, a little mischief and a great deal of mince pie. It is, by general agreement, a perfectly proper Christmas, and Arthur is the toast of the village.","Mrs Pennyfeather says she would not change a thing. The vicar says he would, but he wouldn’t say what."]},
  cheeky:{h:"A Rather Eventful Christmas",
-  p:["The cottage is a little singed, a little tangled and in an uproar of laughter. Nobody has had a dull December, and nobody is quite sure who to blame, although everyone looks at Arthur.","Arthur looks at the fire. The fire does not comment."]}
+  p:["The cottage is a little singed, a little tangled and in an uproar of laughter. Nobody has had a dull December, and nobody is quite sure who to blame, although everyone looks at Arthur.","Arthur looks at the fire. The fire does not comment. Oliver Finch says it will all go in the novel."]}
 };
+
+/* ---------------------------------------------------------------
+   The carols. Three old tunes, all out of copyright, played as a music box.
+   Each note is [MIDI note number, length in beats]; 0 is a rest.
+   Silent Night was checked note for note against a published transcription.
+   --------------------------------------------------------------- */
+var CAROLS = [
+ {name:"Silent Night", by:"Franz Gruber, 1818", bpm:56, notes:[
+   [67,1.5],[69,.5],[67,1],[64,3], [67,1.5],[69,.5],[67,1],[64,3],
+   [74,2],[74,1],[71,3], [72,2],[72,1],[67,3],
+   [69,2],[69,1],[72,1.5],[71,.5],[69,1], [67,1.5],[69,.5],[67,1],[64,3],
+   [69,2],[69,1],[72,1.5],[71,.5],[69,1], [67,1.5],[69,.5],[67,1],[64,3],
+   [74,2],[74,1],[77,1.5],[74,.5],[71,1], [72,3],[76,3],
+   [72,1],[67,1],[64,1], [67,1.5],[65,.5],[62,1], [60,4]]},
+ {name:"Deck the Halls", by:"an old Welsh tune, Nos Galan", bpm:112, notes:
+   (function(){
+     var pass = [[74,.75],[72,.25],[71,.5],[69,.5], [67,.5],[69,.5],[71,.5],[67,.5],
+                 [69,.25],[71,.25],[72,.25],[69,.25],[71,.75],[69,.25], [67,.5],[66,.5],[67,1]];
+     return pass.concat(pass, pass, [[74,.75],[72,.25],[71,.5],[69,.5], [67,.5],[69,.5],[71,.5],[67,.5],
+                 [69,.25],[71,.25],[72,.25],[69,.25],[71,.75],[69,.25], [67,.5],[66,.5],[67,3]]);
+   })()},
+ {name:"We Wish You a Merry Christmas", by:"a traditional English carol", bpm:126, notes:[
+   [62,1],
+   [67,1],[67,.5],[69,.5],[67,.5],[66,.5], [64,1],[64,1],[64,1],
+   [69,1],[69,.5],[71,.5],[69,.5],[67,.5], [66,1],[62,1],[62,1],
+   [71,1],[71,.5],[72,.5],[71,.5],[69,.5], [67,1],[64,1],[62,.5],[62,.5],
+   [64,1],[69,1],[66,1], [67,3]]}
+];
 
 /* ---------------------------------------------------------------
    Logic. Kept as small pure functions so they are easy to test.
@@ -441,13 +486,12 @@ function dayWord(n){ return n === 1 ? "1 day" : n + " days"; }
   var todayNo = (now.getMonth() === 11 && now.getDate() <= 24) ? now.getDate() : 0;
   var KEY = "wgwAdvent:" + now.getFullYear() + (previewDay ? ":preview" : "");
   var state = {open:{}, pick:{}};
-  var mem = null;
 
   function load(){
     try{ var raw = window.localStorage.getItem(KEY); if(raw){ var o = JSON.parse(raw); if(o && o.open && o.pick){ state = o; } } }catch(e){}
   }
   function save(){
-    try{ window.localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){ mem = state; }
+    try{ window.localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){}
   }
   load();
 
@@ -513,9 +557,9 @@ function dayWord(n){ return n === 1 ? "1 day" : n + " days"; }
     $("dresult").hidden = false;
     var trad = STORY[n - 1];
     var tt = $("dtradtext"); tt.textContent = trad.n;
-    if(trad.link){
-      tt.appendChild(document.createTextNode(" "));
-      var a = document.createElement("a"); a.href = trad.link.h; a.textContent = trad.link.t;
+    if(trad.ln){
+      tt.appendChild(document.createTextNode(" " + trad.ln.p));
+      var a = document.createElement("a"); a.href = trad.ln.h; a.textContent = trad.ln.t;
       tt.appendChild(a); tt.appendChild(document.createTextNode("."));
     }
     $("dtrad").hidden = false;
@@ -528,6 +572,9 @@ function dayWord(n){ return n === 1 ? "1 day" : n + " days"; }
       var tl = document.createElement("p"); tl.className = "tally";
       tl.textContent = "Over the month, Arthur was kind " + t.kind + (t.kind === 1 ? " time" : " times") + " and mischievous " + t.cheeky + (t.cheeky === 1 ? " time" : " times") + ". Merry Christmas from all of us.";
       end.appendChild(tl);
+      var cb = document.createElement("button"); cb.type = "button"; cb.className = "btn"; cb.textContent = "\u266a Play \u201cWe Wish You a Merry Christmas\u201d";
+      cb.addEventListener("click", function(){ playCarol(2); });
+      end.appendChild(cb);
       end.hidden = false;
     } else { end.hidden = true; }
   }
@@ -578,6 +625,69 @@ function dayWord(n){ return n === 1 ? "1 day" : n + " days"; }
     state = {open:{}, pick:{}}; save(); paintDoors(); toast("All the doors are closed again.");
   });
 
+  /* the carols: a music box made from oscillators. Nothing plays until a button is pressed. */
+  var audio = {ctx:null, bus:null, master:null, timer:0, playing:false, idx:0};
+  var sel = $("csel"), playBtn = $("cplay"), now_ = $("cnow");
+  CAROLS.forEach(function(c, i){ var o = document.createElement("option"); o.value = i; o.textContent = c.name; sel.appendChild(o); });
+  now_.textContent = "Music-box carols, played only when you press the button.";
+  function hz(m){ return 440 * Math.pow(2, (m - 69) / 12); }
+  function ensureAudio(){
+    if(audio.ctx){ return true; }
+    var AC = window.AudioContext || window.webkitAudioContext;
+    if(!AC){ return false; }
+    var c = new AC();
+    var bus = c.createGain(); bus.gain.value = 0.6;
+    var dly = c.createDelay(1); dly.delayTime.value = 0.27;
+    var fb = c.createGain(); fb.gain.value = 0.3;
+    var lp = c.createBiquadFilter(); lp.type = "lowpass"; lp.frequency.value = 3000;
+    bus.connect(c.destination); bus.connect(dly); dly.connect(fb); fb.connect(dly); dly.connect(lp); lp.connect(c.destination);
+    audio.ctx = c; audio.bus = bus;
+    return true;
+  }
+  function voice(master, m, t, dur){
+    var c = audio.ctx, g = c.createGain(), g2 = c.createGain();
+    var o1 = c.createOscillator(), o2 = c.createOscillator();
+    o1.type = "sine"; o1.frequency.value = hz(m);
+    o2.type = "triangle"; o2.frequency.value = hz(m) * 2; g2.gain.value = 0.2;
+    o1.connect(g); o2.connect(g2); g2.connect(g); g.connect(master);
+    var len = Math.max(dur, 0.4) * 1.1;
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.linearRampToValueAtTime(0.3, t + 0.012);
+    g.gain.exponentialRampToValueAtTime(0.0008, t + len);
+    o1.start(t); o2.start(t); o1.stop(t + len + 0.05); o2.stop(t + len + 0.05);
+  }
+  function setPlayingUI(on, i){
+    audio.playing = on;
+    playBtn.setAttribute("aria-pressed", on ? "true" : "false");
+    playBtn.textContent = on ? "\u25a0 Stop the music" : "\u266a Play a carol";
+    now_.textContent = on ? "Now playing: " + CAROLS[i].name + ", " + CAROLS[i].by + "." : "Music-box carols, played only when you press the button.";
+  }
+  function stopCarol(){
+    clearTimeout(audio.timer);
+    if(audio.master && audio.ctx){
+      var m = audio.master, t = audio.ctx.currentTime;
+      try{ m.gain.cancelScheduledValues(t); m.gain.setTargetAtTime(0, t, 0.05); }catch(e){}
+      setTimeout(function(){ try{ m.disconnect(); }catch(e){} }, 500);
+    }
+    audio.master = null;
+    setPlayingUI(false, audio.idx);
+  }
+  function playCarol(i){
+    if(!ensureAudio()){ toast("Sorry, this browser can\u2019t play sound."); return; }
+    if(audio.playing){ stopCarol(); }
+    if(audio.ctx.state === "suspended"){ try{ audio.ctx.resume(); }catch(e){} }
+    var c = CAROLS[i], spb = 60 / c.bpm;
+    var master = audio.ctx.createGain(); master.gain.value = 1; master.connect(audio.bus);
+    audio.master = master; audio.idx = i; sel.value = i;
+    var t0 = audio.ctx.currentTime + 0.15, t = t0, k;
+    for(k = 0; k < c.notes.length; k++){ if(c.notes[k][0] > 0){ voice(master, c.notes[k][0], t, c.notes[k][1] * spb); } t += c.notes[k][1] * spb; }
+    audio.timer = setTimeout(stopCarol, (t - t0) * 1000 + 1200);
+    setPlayingUI(true, i);
+  }
+  playBtn.addEventListener("click", function(){ if(audio.playing){ stopCarol(); } else { playCarol(+sel.value); } });
+  sel.addEventListener("change", function(){ if(audio.playing){ playCarol(+sel.value); } });
+  document.addEventListener("visibilitychange", function(){ if(document.hidden && audio.playing){ stopCarol(); } });
+
   /* snow, switched off for anyone who prefers reduced motion */
   (function(){
     var cv = $("snow");
@@ -600,7 +710,7 @@ function dayWord(n){ return n === 1 ? "1 day" : n + " days"; }
   })();
 
   /* for testing in a browser console */
-  window.__advent = {openUpTo:openUpTo, daysUntilDecFirst:daysUntilDecFirst, shuffled:shuffled, tally:tally, endingFor:endingFor, STORY:STORY};
+  window.__advent = {openUpTo:openUpTo, daysUntilDecFirst:daysUntilDecFirst, shuffled:shuffled, tally:tally, endingFor:endingFor, STORY:STORY, CAROLS:CAROLS, audio:audio, playCarol:playCarol, stopCarol:stopCarol};
 })();
 </script>
 </body>
