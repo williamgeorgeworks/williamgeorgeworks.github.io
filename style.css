@@ -150,3 +150,6 @@ nav.main a.tip:hover{background:var(--red);color:#fff;border-bottom-color:var(--
 .brand a.shop:hover{background:var(--ink);color:#fff;border-bottom-color:var(--red)}
 .btn.red{background:var(--red);border-color:var(--red);color:#fff;box-shadow:5px 5px 0 var(--ink)}
 .btn.red:hover{color:#fff;box-shadow:3px 3px 0 var(--ink)}
+section.band.closing{border-top:4px solid var(--ink);padding:38px 0 46px}
+section.band.closing .btns{margin-top:10px}
+section.band.memorial{padding-bottom:84px}
