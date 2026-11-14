@@ -1,5 +1,6 @@
 /* Share buttons for the books and the games. Plain links only: no trackers, no third-party scripts.
    Books: every <article class="card book"> gets a row, pointing at its Amazon page if it has one, otherwise at its place on the books page.
+   Game cards on the arcade and home pages get a row too.
    Games: a page that loads this script with data-title and data-text gets a "Share this game" strip above the footer. */
 (function(){
   var me=document.currentScript,SITE='https://williamgeorgeworks.co.uk/';
@@ -54,6 +55,18 @@
     var foot=document.querySelector('.wgw-strip');
     if(foot&&foot.parentNode)foot.parentNode.insertBefore(strip,foot);else document.body.appendChild(strip);
   }
-  function go(){books();game();}
+  function cards(){
+    /* Game cards on the arcade and home pages: share the game's own page. */
+    var cs=document.querySelectorAll('article.card.game');
+    for(var i=0;i<cs.length;i++){
+      var c=cs[i],h=c.querySelector('h3'),play=c.querySelector('a.btn[href$=".html"]');
+      if(!h||!play||c.querySelector('.wgs'))continue;
+      var file=play.getAttribute('href');if(/^https?:|\//.test(file))continue;
+      var title=h.textContent.trim();
+      var r=row({title:title,text:title+', free to play from William George Works:',url:SITE+file,label:'Share'});
+      play.parentNode.insertBefore(r,play.nextSibling);
+    }
+  }
+  function go(){books();cards();game();}
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',go);else go();
 })();
