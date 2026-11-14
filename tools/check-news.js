@@ -8,7 +8,11 @@ if (!Array.isArray(data.editions)) errs.push("editions must be an array");
   const w = "edition " + (e.date || i);
   if (!/^\d{4}-\d{2}-\d{2}$/.test(e.date || "")) errs.push(w + ": bad date");
   ["title", "standfirst", "terry", "reggie"].forEach(k => { if (typeof e[k] !== "string" || !e[k].trim()) errs.push(w + ": missing " + k); });
-  if (!Array.isArray(e.stories) || e.stories.length < 3 || e.stories.length > 5) errs.push(w + ": needs 3 to 5 stories");
+  /* Editions before 15 Nov 2026 were 3 to 5 stories. From then on the aim is 12 (up to 15); a short edition is allowed, with a warning, so safety beats the quota. */
+  const big = (e.date || "") >= "2026-11-15";
+  const n = Array.isArray(e.stories) ? e.stories.length : 0;
+  if (!Array.isArray(e.stories) || n < 3 || n > (big ? 15 : 5)) errs.push(w + ": needs " + (big ? "3 to 15 stories (aim for 12)" : "3 to 5 stories"));
+  else if (big && n < 9) warn.push(w + ": only " + n + " stories; the aim is 9 to 15. Fine if the news was grim, but say why in the pull request");
   (e.stories || []).forEach((s, j) => {
     const sw = w + " story " + (j + 1);
     ["kicker", "headline", "satire", "real"].forEach(k => { if (typeof s[k] !== "string" || !s[k].trim()) errs.push(sw + ": missing " + k); });

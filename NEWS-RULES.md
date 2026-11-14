@@ -28,7 +28,10 @@ Before each story ask: could a reader of any political view, or none, laugh at t
 6. The satire must be obviously absurd, so that nobody could mistake it for real news. Keep it clearly labelled as satire.
 7. Do not copy headlines or sentences from the source. Paraphrase the facts and write your own jokes.
 8. Mild language only. No slurs, no stereotypes.
-9. Between 3 and 5 stories per edition.
+9. Aim for 12 stories per edition, and never more than 15 (Ferret asked for triple the old 3 to 5, from 15 November 2026).
+   Spread them across different areas of everyday life (prices, shops, weather, transport, tech, work, culture, sport, daft stories) so no one topic takes over.
+   The golden rule and rule 5 always beat the quota. If there are not nine safe, recent, light-hearted stories, publish the safe ones (at least 3) rather than reaching,
+   and say in the pull request why the edition is short. Never pad with weak or unchecked stories.
 
 ## Voice
 British English. Terry is a breathless showman (chat-show host). Reggie is Arthur Daley: cheeky sales patter, "my old son", imaginary invoices, "a nice little earner".
