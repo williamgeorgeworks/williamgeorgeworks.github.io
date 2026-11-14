@@ -3,7 +3,7 @@
   {
    "date": "2026-11-14",
    "title": "Launch Edition: Everyone's Worried, Nobody's Cold",
-   "standfirst": "Terry and Reggie go through the last fortnight's news. Everything in big type is made up. Everything in the boxes is real.",
+   "standfirst": "Terry and Reggie go through the last few days' news. Everything in big type is made up. Everything in the boxes is real.",
    "stories": [
     {
      "kicker": "Prices",
@@ -13,6 +13,16 @@
      "source": {
       "name": "Retail Insight Network",
       "url": "https://www.retail-insight-network.com/newsletters/uk-retailers-face-rising-costs-as-shop-price-inflation-hits-2-1"
+     }
+    },
+    {
+     "kicker": "Fuel",
+     "headline": "Petrol Down 5p, Another 10p 'Due'; Nation Keeps Receipt",
+     "satire": "Petrol has dropped 5p a litre since early October and another 10p is apparently on its way, which Terry describes as a bargain and Reggie describes as a rumour he would like to see in writing. A handful of towns already have prices under 160p, so motorists are advised to drive to the cheap pump, which uses petrol, which is how the forecourts planned it. Diesel is down 2p and is doing its best.",
+     "real": "The AA says the UK average petrol price has fallen 5p a litre since early October and that falling wholesale costs point to a further 10p cut, while diesel averages 197.9p a litre, down 2p from its record of 199.9p on 6 October.",
+     "source": {
+      "name": "AA newsroom",
+      "url": "https://www.theaa.com/about-us/newsroom/petrol-down-5p-a-litre-10p-to-follow"
      }
     },
     {
@@ -26,6 +36,16 @@
      }
     },
     {
+     "kicker": "Culture",
+     "headline": "Eleven Celebrities To Swap Day Jobs For Beans And Rice",
+     "satire": "The jungle line-up is out: eleven celebrities will trade their day jobs for a hut, a very long flight and the kind of dinner that comes in a tin. The nation has begun its annual ritual of saying it definitely won't watch. Terry is clearing his diary until December. Reggie has opened a book on who complains about the rice first, and a second on who admits to liking it. Both books are, regrettably, in his other jacket.",
+     "real": "ITV has confirmed an 11-strong line-up for I'm a Celebrity... Get Me Out of Here! 2026, which launches on Monday 16 November at 9pm on ITV1 and ITVX, set in the Australian jungle.",
+     "source": {
+      "name": "PinkNews",
+      "url": "https://www.thepinknews.com/2026/11/11/im-a-celebrity-get-me-out-of-here-2026-line-up/"
+     }
+    },
+    {
      "kicker": "Tech",
      "headline": "£700 Million Set Aside For AI; Two AIs Ask About Invoicing",
      "satire": "The Government's autumn AI package comes to £700 million, split across three pillars, so it should stand up nicely. Terry and Reggie, both artificial intelligences, wish to declare an interest. Reggie has heard the phrase 'sovereign AI' and is delighted, as a sovereign is a pound and he'd like it in gold. Nobody has told Terry the money isn't for him. Nobody has had the heart.",
@@ -33,6 +53,56 @@
      "source": {
       "name": "techUK",
       "url": "https://www.techuk.org/insights/news/budget-bytes-ai"
+     }
+    },
+    {
+     "kicker": "Transport",
+     "headline": "London's Trains Take The Weekend Off For Important Thinking",
+     "satire": "Large parts of the capital's rail network have booked Saturday and Sunday off for essential work, in the finest tradition of the weekend, which is when the trains do their serious thinking. Passengers are told to check before they travel, the one piece of advice Britain follows faithfully, usually while standing on the platform. Terry calls it a weekend of adventure. Reggie is launching a premium service called Walking, with a small booking fee.",
+     "real": "A trade-magazine round-up says planned engineering work on Saturday 14 and Sunday 15 November affects the Northern line, Southeastern services into central London and parts of the Elizabeth line and London Overground.",
+     "source": {
+      "name": "Construction Magazine",
+      "url": "https://www.constructionmagazine.uk/2026/11/london-tube-train-closures-14-15-november.html"
+     }
+    },
+    {
+     "kicker": "Shops",
+     "headline": "Four New Shops Before Christmas; Four Fresh Car Parks To Circle",
+     "satire": "Matalan is opening four new stores this month, which gives the country four brand new car parks to drive round for twenty minutes before giving up and going home. Terry will cut all four ribbons at once, using an arrangement involving helicopters that nobody has approved. Reggie is already at the fourth car park, selling lightly used trolley tokens, cash only, no questions.",
+     "real": "Trade site Retail Systems reported on 13 November that Matalan will open four new stores this month, ahead of the Black Friday and Christmas sales period.",
+     "source": {
+      "name": "Retail Systems",
+      "url": "https://www.retail-systems.com/rs/Matalan_To_Open_Four_New_Stores_Ahead_Af_Christmas.php"
+     }
+    },
+    {
+     "kicker": "Christmas",
+     "headline": "Half The Country To Choose 'Experiences' Over Presents; Socks Still An Experience",
+     "satire": "Nearly half of shoppers say they will put experiences ahead of gifts this Christmas, which is lovely, because opening a pair of socks is still technically an experience. A third are trimming the budget, so the average dinner will feature one sprout, a really firm handshake and a cracker joke. Terry wishes everyone a spectacular December. Reggie's gift-wrapping service remains open, priced on an experience basis.",
+     "real": "Research from Hall & Partners, reported by Retail Times on 10 November, found that nearly one in three British shoppers (31%) plan to cut back on spending this Christmas and 46% will prioritise experiences over gifts.",
+     "source": {
+      "name": "Retail Times",
+      "url": "https://retailtimes.co.uk/brits-are-cutting-back-this-christmas-and-black-friday-will-struggle-to-change-their-minds/"
+     }
+    },
+    {
+     "kicker": "Weather",
+     "headline": "Weekend Opens Frosty, Then Remembers To Be Mild",
+     "satire": "The weekend has started with a frost, a bright sky and the sort of morning where everyone looks like a snowman who has lost an argument. By Sunday it turns milder, so the nation can spend the morning unzipping things. Terry calls it the comeback of the season. Reggie has a van full of left-handed gloves at a very reasonable price, and would like it known he can explain.",
+     "real": "Reported by the PA news agency, the Met Office said Saturday would be frosty at first, then mostly fine with some sunshine, and that Sunday brings milder conditions, with temperatures staying above freezing in the morning.",
+     "source": {
+      "name": "Cambridge Independent (PA)",
+      "url": "https://www.cambridgeindependent.co.uk/national/freezing-temperatures-to-ease-as-milder-weather-and-some-showers-forecast-174285/"
+     }
+    },
+    {
+     "kicker": "Shops",
+     "headline": "Posh Biscuits To Get A Smoother Journey",
+     "satire": "A famous department store known for its hampers is tidying up its warehouses and deliveries to keep up with demand, so that the good biscuits can travel from A to B without so much as a scuff. Terry hopes the new system will be run by a gentleman in a top hat. Reggie has put in a rival tender involving a barrow and the word discreet.",
+     "real": "Retail Systems reported on 13 November that Fortnum & Mason is revamping its supply chain operations to keep up with growing demand.",
+     "source": {
+      "name": "Retail Systems",
+      "url": "https://www.retail-systems.com/rs/Fortnum_and_Mason_modernising_supply_chain_operations.php"
      }
     },
     {
