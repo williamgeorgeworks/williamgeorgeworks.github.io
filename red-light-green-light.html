@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Reggie's Red Light, Green Light: run when the music plays, freeze when Reggie turns round, or take a wet fish. A free browser game from William George Works.">
+<style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="William George Works">
+<meta property="og:title" content="Reggie&rsquo;s Red Light, Green Light">
+<meta property="og:description" content="Run when he is not looking. Freeze when he is. Anyone caught moving gets a wet fish. A free browser game.">
+<meta property="og:url" content="https://williamgeorgeworks.co.uk/red-light-green-light.html">
+<meta property="og:image" content="https://williamgeorgeworks.co.uk/thumb-red-light-green-light.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<title>Reggie&rsquo;s Red Light, Green Light</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Permanent+Marker&display=swap">
+<style>
+/* Same look as Arthur's Tribunal: a navy promo card, a white "page" for the game, ink that wobbles. */
+:root{
+  --navy:#16244a; --navy-deep:#0e1836; --paper:#ffffff; --ink:#141414;
+  --red:#d1202f; --blue:#2b4fc2; --mist:#c5cfea;
+  --display:'Anton','Arial Narrow','Haettenschweiler',Impact,sans-serif;
+  --marker:'Permanent Marker','Comic Sans MS','Chalkboard SE',cursive;
+  --body:Georgia,'Times New Roman',serif;
+  color-scheme:dark;
+}
+body{background:var(--navy);color:var(--paper);font-family:var(--body);font-size:16px;line-height:1.5}
+.wrap{max-width:960px;margin:0 auto;padding-block:26px 40px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  display:grid;gap:22px}
+.mast{display:grid;gap:6px}
+.eyebrow{font-family:var(--display);letter-spacing:.09em;font-size:.82rem;color:var(--mist);text-transform:uppercase;
+  padding-bottom:8px;border-bottom:3px solid var(--red);justify-self:start}
+h1{font-family:var(--display);font-weight:400;font-size:clamp(2.4rem,9vw,4rem);line-height:1;margin:6px 0 0;text-transform:uppercase;letter-spacing:.01em;text-wrap:balance}
+.tag{margin:0;font-style:italic;color:var(--mist);font-size:1.05rem}
+.cols{display:grid;gap:24px;grid-template-columns:minmax(0,1fr)}
+@media (min-width:820px){.cols{grid-template-columns:minmax(0,480px) minmax(0,1fr);align-items:start}}
+.stage{position:relative;max-width:480px;width:100%;justify-self:center;background:var(--paper);border-radius:4px;overflow:hidden;
+  box-shadow:0 14px 0 var(--navy-deep)}
+canvas#game{display:block;width:100%;aspect-ratio:3/4;max-width:100%;touch-action:none;cursor:pointer;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;background:var(--paper)}
+canvas#game:focus-visible{outline:4px solid var(--red);outline-offset:-4px}
+.panel{position:absolute;inset:0;display:grid;align-content:safe center;justify-items:center;gap:8px;text-align:center;overflow-y:auto;
+  padding:12px 12px 40px;background:color-mix(in srgb,var(--paper) 90%,transparent);color:var(--ink)}
+.panel h2{font-family:var(--marker);font-weight:400;font-size:clamp(1.45rem,6.4vw,2.1rem);line-height:1.05;margin:0;text-wrap:balance}
+.panel p{margin:0;max-width:34ch;font-size:.95rem;line-height:1.35}
+.score{font-family:var(--marker);font-size:3rem;line-height:1;color:var(--red)}
+.verdict{font-family:var(--display);text-transform:uppercase;letter-spacing:.05em;font-size:1.15rem}
+button{font:inherit;cursor:pointer}
+.btn{font-family:var(--display);text-transform:uppercase;letter-spacing:.07em;font-size:1.15rem;
+  background:var(--red);color:var(--paper);border:3px solid var(--ink);border-radius:3px;padding:9px 20px;
+  box-shadow:4px 4px 0 var(--ink)}
+.btn:hover{background:var(--blue)} .btn:active{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--ink)}
+.btn.quiet{background:var(--paper);color:var(--ink);font-size:.9rem;padding:6px 12px}
+.btn:focus-visible,.mute:focus-visible,.catbtn:focus-visible{outline:3px solid var(--blue);outline-offset:3px}
+.row{display:flex;flex-wrap:wrap;gap:9px;justify-content:center}
+.share{font-size:.88rem;font-style:italic;user-select:all}
+.mute{position:absolute;right:8px;bottom:8px;font-family:var(--display);letter-spacing:.06em;text-transform:uppercase;font-size:.78rem;
+  background:var(--paper);color:var(--ink);border:2px solid var(--ink);border-radius:3px;padding:4px 9px}
+.gang{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;width:100%;max-width:330px}
+.catbtn{display:grid;justify-items:center;gap:0;padding:3px 2px 4px;background:var(--paper);color:var(--ink);
+  border:2px solid var(--ink);border-radius:3px;font-family:var(--display);letter-spacing:.05em;text-transform:uppercase;font-size:.82rem;line-height:1.15}
+.catbtn canvas{width:50px;height:50px;display:block}
+.catbtn small{font-family:var(--body);text-transform:none;letter-spacing:0;font-size:.68rem;font-style:italic;color:#555}
+.catbtn[aria-pressed="true"]{background:#ffe9a8;box-shadow:3px 3px 0 var(--red)}
+.catbtn.locked canvas{filter:grayscale(1) opacity(.45)}
+.perk{min-height:2.7em}
+@media (max-width:420px){.panel p{font-size:.86rem}.catbtn canvas{width:44px;height:44px}}
+.perk b{font-family:var(--display);font-weight:400;letter-spacing:.05em;text-transform:uppercase}
+.side{display:grid;gap:18px}
+.side h2{font-family:var(--display);font-weight:400;text-transform:uppercase;font-size:1.6rem;line-height:1.05;margin:0 0 8px;text-wrap:balance}
+.side p{margin:0 0 10px;max-width:48ch}
+.side ul{margin:0;padding:0;list-style:none;display:grid;gap:8px;max-width:50ch}
+.side li{padding-left:12px;border-left:3px solid var(--red)}
+.side li b{font-family:var(--display);font-weight:400;letter-spacing:.05em;text-transform:uppercase}
+.side li span{color:var(--mist);font-size:.9rem}
+.side a{color:var(--paper)}
+.sheet{border:2px solid var(--mist);padding:12px 14px;max-width:44ch}
+.sheet dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:4px 14px}
+.sheet dt{font-family:var(--display);letter-spacing:.06em;text-transform:uppercase;font-size:.85rem;color:var(--mist)}
+.sheet dd{margin:0;font-family:var(--marker)}
+.foot{color:var(--mist);font-size:.85rem;border-top:1px solid color-mix(in srgb,var(--mist) 35%,transparent);padding-top:14px;max-width:70ch}
+@media (prefers-reduced-motion:reduce){.btn:active{transform:none}}
+.gang{grid-template-columns:repeat(4,minmax(0,1fr));max-width:360px}
+.catbtn{font-size:.72rem}
+.mute{left:8px;top:8px;right:auto;bottom:auto}
+</style>
+</head>
+<body>
+<div style="position:relative;z-index:50;display:flex;justify-content:space-between;align-items:center;gap:12px;background:#141414;font:600 14px/1 system-ui,sans-serif;letter-spacing:.3px;box-sizing:border-box;"><a href="arcade.html" style="color:#f6f2e7;padding:9px 14px;text-decoration:none">&larr; Back to the arcade</a><a href="shop.html" style="color:#fff;background:#d1202f;padding:9px 14px;text-decoration:none;white-space:nowrap">T-shirt shop</a></div>
+
+<div class="wrap">
+  <header class="mast">
+    <span class="eyebrow">The Employee of the Month presents</span>
+    <h1>Reggie&rsquo;s Red Light, Green Light</h1>
+    <p class="tag" style="font-size:1.35rem;color:#fff">Run when he is not looking. Freeze when he is.</p>
+    <p class="tag">One very tall proofreader. Eight runners. One fish-slapping gun, fully loaded and slightly damp.</p>
+  </header>
+
+  <div class="cols">
+    <div class="stage">
+      <canvas id="game" width="600" height="800" tabindex="0" role="img"
+        aria-label="Reggie the robot stands at the far end of a field with his back turned while two people and six cats creep towards the finishing line. Anyone he catches moving is slapped with a wet fish and falls over."></canvas>
+
+      <div class="panel" id="startPanel">
+        <h2>Pick your runner</h2>
+        <p>Hold the screen, or the space bar, to run. Let go to freeze. If the music stops and you are still moving, it is the fish.</p>
+        <div class="gang" id="gang"></div>
+        <p class="perk" id="perk"></p>
+        <button class="btn" id="startBtn" type="button">Take your marks</button>
+        <p id="bestTitle" style="font-size:.85rem;font-style:italic"></p>
+      </div>
+
+      <div class="panel" id="overPanel" hidden>
+        <h2 id="overTitle">Fished!</h2>
+        <div class="score" id="finalScore">0</div>
+        <div class="verdict" id="verdict"></div>
+        <p id="bestLine"></p>
+        <div class="row">
+          <button class="btn" id="againBtn" type="button">Go again</button>
+          <button class="btn quiet" id="gangBtn" type="button">Change runner</button>
+        </div>
+        <div class="row">
+          <button class="btn quiet" id="copyBtn" type="button">Copy my score</button>
+          <a class="btn quiet" id="sendBtn" style="text-decoration:none" href="arcade.html#send-score" target="_blank" rel="noopener">Send in your score</a>
+        </div>
+        <p class="share" id="shareText"></p>
+      </div>
+
+      <button class="mute" id="muteBtn" type="button" aria-pressed="false">Sound on</button>
+    </div>
+
+    <section class="side">
+      <div>
+        <h2>The rules</h2>
+        <p>Reggie won Employee of the Month and asked for a game of his own. This is it. He stands at the far end with his back to you, and the music plays. <strong>While it plays, run.</strong></p>
+        <p>The moment the music stops, he turns round. <strong>Anybody still moving gets a wet fish</strong> from the fish-slapping gun and falls over. It does not hurt. It is, however, very wet.</p>
+        <p>Cross the line before the clock runs out and you go through to the next round, where the music is quicker and Reggie is nosier. The sooner you cross, and the more of the others you beat, the more points you take.</p>
+      </div>
+      <div>
+        <h2>The runners</h2>
+        <ul id="gangList"></ul>
+        <p style="margin-top:10px"><a href="employee-of-the-month.html">Read Reggie&rsquo;s citation &rarr;</a></p>
+      </div>
+      <div class="sheet">
+        <h2 style="font-size:1.2rem">Your record</h2>
+        <dl><dt>Best score</dt><dd id="rsBest">0</dd><dt>Best round</dt><dd id="rsRound">None yet</dd><dt>Fish taken</dt><dd id="rsFish">0</dd></dl>
+      </div>
+    </section>
+  </div>
+
+  <p class="foot">Red light, green light is an old playground game, also known as statues and grandmother&rsquo;s footsteps. This version, its drawings and its tune are our own, made new for Reggie. No cats, humans or proofreaders were harmed. The fish is imaginary and was returned to the water afterwards.</p>
+</div>
+
+<script>
+(function(){
+"use strict";
+var $=function(i){return document.getElementById(i);};
+var cv=$('game'),c=cv.getContext('2d'),W=600,H=800,INK='#141414',RED='#d1202f',PAPER='#fbf8ef';
+var YS=742,YF=212; /* start line and finishing line */
+var VMAX=.115,ACC=.17,DEC=.62,EPS=.004;
+
+var CH=[
+ {id:'ferret',name:'The Ferret',f:[.30,.33,.17],body:'#b3202c',perk:'The man with the plan. The plan is to run.'},
+ {id:'jo',name:'Jo',f:[.30,.30,.17],body:'#c43a2f',perk:'The Chairperson. Will be raising this at the next meeting.'},
+ {id:'arthur',name:'Arthur',f:[.53,.46,.15],body:'#e9dcc3',perk:'Chief Justice. Considers running beneath him.'},
+ {id:'spyro',name:'Spyro',f:[.55,.37,.16],body:'#f4f0e6',perk:'The true king. Kings do not freeze, they pause.'},
+ {id:'tilly',name:'Tilly',f:[.47,.44,.14],body:'#e4d8c6',perk:'Quietly dangerous. Mostly quiet.'},
+ {id:'trixie',name:'Trixie',f:[.48,.36,.14],body:'#d6c6ae',perk:'Stands to attention better than anyone.'},
+ {id:'dexter',name:'Dexter',f:[.48,.63,.13],body:'#5b5b5b',perk:'The timid wolf. Excellent at not moving.'},
+ {id:'daisy',name:'Daisy',f:[.50,.46,.15],body:'#eadfcb',perk:'Who, me? Moving? Never.'}
+];
+var REG={id:'reggie',f:[.52,.33,.11],body:'#b3202c'};
+var IMG={};
+CH.concat([REG]).forEach(function(ch){var im=new Image();im.src='portraits/'+ch.id+'.jpg';IMG[ch.id]=im;});
+
+var SAVE={best:0,round:0,fish:0,ch:'ferret'};
+try{var raw=JSON.parse(localStorage.getItem('rlgl-v1')||'null');if(raw){SAVE.best=+raw.best||0;SAVE.round=+raw.round||0;SAVE.fish=+raw.fish||0;if(typeof raw.ch==='string')SAVE.ch=raw.ch;}}catch(e){}
+function save(){try{localStorage.setItem('rlgl-v1',JSON.stringify(SAVE));}catch(e){}}
+
+var G={mode:'title',round:1,score:0,time:0,phase:'ready',pt:0,pdur:1,turn:.6,face:-1,say:'',sayT:0,dead:false,deadT:0,banner:'',bannerT:0,done:0,greenT:0,hint:true,why:''};
+var R=[],F=[],FX=[],YOU=null,hold=false;
+function rnd(a,b){return a+Math.random()*(b-a);}
+
+/* ---------- sound: all made here, nothing borrowed ---------- */
+var A={ac:null,master:null,muted:false,step:0,acc:0,beat:0,noise:null};
+function audio(){
+  if(!A.ac){var AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;A.ac=new AC();A.master=A.ac.createGain();A.master.gain.value=A.muted?0:1;A.master.connect(A.ac.destination);
+    var n=A.ac.sampleRate*.4,b=A.ac.createBuffer(1,n,A.ac.sampleRate),d=b.getChannelData(0);for(var i=0;i<n;i++)d[i]=Math.random()*2-1;A.noise=b;}
+  if(A.ac.state==='suspended'){try{A.ac.resume();}catch(e){}}
+}
+function note(f,dur,type,vol,slide){if(!A.ac)return;var t=A.ac.currentTime,o=A.ac.createOscillator(),g=A.ac.createGain();o.type=type||'triangle';o.frequency.setValueAtTime(f,t);
+  if(slide)o.frequency.exponentialRampToValueAtTime(slide,t+dur);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(vol||.12,t+.012);g.gain.exponentialRampToValueAtTime(.0001,t+dur);
+  o.connect(g);g.connect(A.master);o.start(t);o.stop(t+dur+.03);}
+function hiss(dur,freq,vol){if(!A.ac||!A.noise)return;var t=A.ac.currentTime,s=A.ac.createBufferSource(),f=A.ac.createBiquadFilter(),g=A.ac.createGain();s.buffer=A.noise;f.type='bandpass';f.frequency.value=freq;f.Q.value=.8;
+  g.gain.setValueAtTime(vol,t);g.gain.exponentialRampToValueAtTime(.0001,t+dur);s.connect(f);f.connect(g);g.connect(A.master);s.start(t);s.stop(t+dur+.02);}
+/* A creeping tune in A minor that gets quicker the longer the light stays green. */
+var N={A2:110,E2:82.4,F2:87.3,G2:98,A4:440,B4:493.9,C5:523.3,D5:587.3,E5:659.3,F5:698.5,Gs4:415.3,A5:880};
+var MEL=['A4',0,'C5','A4','E5',0,'D5','C5','A4',0,'C5','A4','F5','E5','D5','B4','A4',0,'C5','E5','A5',0,'E5','C5','D5',0,'B4','Gs4','A4',0,0,0];
+var BASS=['A2','A2','F2','E2','A2','A2','G2','E2'];
+function music(dt){
+  if(G.phase==='green'){
+    var bpm=118+(G.round-1)*7+G.greenT*16,iv=60/bpm/2;A.acc+=dt;
+    while(A.acc>=iv){A.acc-=iv;var s=A.step%32,m=MEL[s];
+      if(m)note(N[m],iv*1.5,'square',.05);
+      if(s%4===0)note(N[BASS[(s/4)|0]],iv*2.2,'triangle',.16);
+      hiss(.03,7000,s%2?.03:.06);A.step++;}
+  }else if(G.phase==='red'){
+    A.beat+=dt;if(A.beat>=.85){A.beat=0;note(58,.16,'sine',.2,40);setTimeout(function(){if(G.phase==='red')note(52,.14,'sine',.13,38);},170);}
+  }
+}
+function sting(){note(196,.5,'sawtooth',.11,98);note(207.6,.5,'sawtooth',.09,103);hiss(.2,900,.2);}
+function slap(){hiss(.16,1800,.5);note(300,.22,'sine',.18,90);setTimeout(function(){note(180,.3,'triangle',.12,420);},90);}
+function fanfare(){[523.3,659.3,784,1046.5].forEach(function(f,i){setTimeout(function(){note(f,.22,'square',.07);},i*95);});}
+
+/* ---------- setting up ---------- */
+function say(t,d){G.say=t;G.sayT=d||1.6;}
+function newRound(){
+  var order=CH.slice().sort(function(a,b){return a.id===SAVE.ch?-1:b.id===SAVE.ch?1:Math.random()-.5;});
+  /* the player gets a middle lane; everyone else shuffles round them */
+  var you=order.shift();order.splice(3,0,you);
+  R=order.map(function(ch,i){return {ch:ch,x:58+i*69.2,p:0,v:0,max:VMAX*rnd(.72,.94),step:rnd(0,6),fall:0,fallen:false,hit:false,done:false,place:0,dir:Math.random()<.5?-1:1,go:0,stop:0,you:ch===you};});
+  YOU=R[3];YOU.max=VMAX;
+  F=[];FX=[];G.done=0;G.dead=false;G.deadT=0;G.why='';
+  G.time=Math.max(26,46-(G.round-1)*3);G.turn=Math.max(.4,.62-(G.round-1)*.035);
+  G.phase='ready';G.pt=0;G.pdur=1.6;G.face=-1;
+  say(G.round===1?'On your marks, my old son.':'Round '+G.round+'. Same fish, less patience.',1.6);
+}
+function startGame(){
+  audio();G.mode='play';G.round=1;G.score=0;G.hint=true;A.step=0;hold=false;
+  $('startPanel').hidden=true;$('overPanel').hidden=true;newRound();cv.focus();
+}
+function setPhase(p,d){G.phase=p;G.pt=0;G.pdur=d;}
+function goGreen(){
+  setPhase('green',rnd(1.5,3.7)*Math.max(.62,1-.06*(G.round-1)));G.greenT=0;A.acc=1;
+  R.forEach(function(r){r.go=rnd(.05,.4);});say('Green light. Off you trot.',1.1);
+}
+function goTurn(){
+  setPhase('turning',G.turn);sting();
+  var blunder=.05+.016*G.round;
+  R.forEach(function(r){if(r.you)return;var safe=Math.max(.02,G.turn-r.max/DEC-.07);r.stop=Math.random()<blunder?G.turn+.4:rnd(0,safe);});
+}
+function shoot(r,why){
+  if(r.hit||r.fallen||r.done)return;r.hit=true;
+  F.push({x0:346,y0:128,r:r,t:-F.filter(function(f){return f.t<0;}).length*.12,dur:.42});
+  if(r.you){G.why=why||'moved';hold=false;}
+}
+function yOf(r){return YS-(YS-YF)*r.p;}
+
+/* ---------- the game ---------- */
+function update(dt){
+  if(G.sayT>0)G.sayT-=dt;if(G.bannerT>0)G.bannerT-=dt;
+  FX=FX.filter(function(p){p.t+=dt;p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=600*dt;return p.t<p.life;});
+  if(G.mode!=='play'){G.face+=(-1-G.face)*Math.min(1,dt*4);return;}
+  music(dt);
+  G.pt+=dt;
+  var ph=G.phase;
+  if(ph==='ready'){if(G.pt>=G.pdur)goGreen();}
+  else if(ph==='green'){G.greenT+=dt;G.face=-1;if(G.pt>=G.pdur)goTurn();}
+  else if(ph==='turning'){G.face=-1+2*Math.min(1,G.pt/G.pdur);if(G.pt>=G.pdur){setPhase('red',rnd(1.7,3));G.face=1;A.beat=.5;say('RED LIGHT! Nobody move.',1.4);}}
+  else if(ph==='red'){G.face=1;if(G.pt>=G.pdur&&!F.length)setPhase('back',.34);}
+  else if(ph==='back'){G.face=1-2*Math.min(1,G.pt/G.pdur);if(G.pt>=G.pdur)goGreen();}
+  else if(ph==='clear'){if(G.pt>=G.pdur){G.round++;newRound();}}
+  else if(ph==='end'){if(G.pt>=G.pdur)endGame();}
+
+  var live=(ph==='green'||ph==='turning'||ph==='red'||ph==='back');
+  if(live&&!YOU.done&&!YOU.hit){G.time-=dt;if(G.time<=0){G.time=0;G.face=1;say('Time, my old son. Have a fish.',2);shoot(YOU,'time');setPhase('timeup',99);}}
+
+  R.forEach(function(r){
+    if(r.fallen){r.fall=Math.min(1,r.fall+dt*4.5);r.v=0;return;}
+    var want=false;
+    if(r.done||r.hit)want=false;
+    else if(r.you)want=hold&&live;
+    else if(ph==='green')want=G.pt>r.go;
+    else if(ph==='turning')want=G.pt<r.stop;
+    else if(ph==='red')want=r.stop>G.turn&&G.pt<.2;
+    r.v=want?Math.min(r.max,r.v+ACC*dt):Math.max(0,r.v-DEC*dt);
+    r.p+=r.v*dt;if(r.v>EPS)r.step+=dt*(10+r.v*90);
+    if(ph==='red'&&r.v>EPS)shoot(r);
+    if(!r.done&&r.p>=1){r.done=true;r.place=++G.done;r.p=1.035;r.v=0;if(r.you)cross();}
+  });
+
+  F.forEach(function(f){var was=f.t;f.t+=dt;if(was<0&&f.t>=0)hiss(.12,500,.25);
+    if(f.t>=f.dur&&!f.landed){f.landed=true;var r=f.r;r.fallen=true;slap();
+      for(var i=0;i<12;i++)FX.push({x:r.x,y:yOf(r)-50,vx:rnd(-170,170),vy:rnd(-300,-60),t:0,life:rnd(.35,.7)});
+      if(r.you){SAVE.fish++;save();G.dead=true;say(G.why==='time'?'Too slow. That is one fish, invoiced.':'I saw that. One fish, invoiced.',2.2);setPhase('end',1.7);}
+    }});
+  F=F.filter(function(f){return !f.landed;});
+}
+function cross(){
+  var bonus=[0,150,80,40][YOU.place]||0,pts=100+G.round*50+Math.round(G.time*10)+bonus;
+  G.score+=pts;fanfare();hold=false;
+  G.banner=(YOU.place===1?'First across! ':'Across! ')+'+'+pts;G.bannerT=2.2;
+  say(YOU.place===1?'First. Do not let it go to your head.':'Through. I shall be watching closer.',2.1);
+  setPhase('clear',2.3);G.face=1;
+  if(G.round>SAVE.round){SAVE.round=G.round;save();}
+}
+var RANKS=[[0,'Battered. Lightly.'],[300,'Damp but promising'],[800,'Statue, second class'],[1500,'Nerves of steel'],[2500,'Reggie cannot see you'],[4000,'Employee of the Month material']];
+function rankFor(s){var t=RANKS[0][1];RANKS.forEach(function(r){if(s>=r[0])t=r[1];});return t;}
+function endGame(){
+  G.mode='over';var best=G.score>SAVE.best;if(best)SAVE.best=G.score;save();
+  $('overTitle').textContent=G.why==='time'?'Out of time!':'Fished!';
+  $('finalScore').textContent=G.score;$('verdict').textContent=rankFor(G.score);
+  $('bestLine').textContent=best&&G.score>0?'A new best. Reggie has made a note.':'Reached round '+G.round+'. Best so far: '+SAVE.best+'.';
+  $('shareText').textContent='I scored '+G.score+' as '+YOU.ch.name+' in Reggie’s Red Light, Green Light and was slapped with a wet fish in round '+G.round+'.';
+  var sb=$('sendBtn');sb.style.display=G.score>0?'':'none';sb.href='arcade.html?game=red-light-green-light&score='+G.score+'#send-score';
+  $('copyBtn').textContent='Copy my score';$('overPanel').hidden=false;sheet();
+}
+
+/* ---------- drawing ---------- */
+function head(ch,x,y,r){
+  c.save();c.beginPath();c.arc(x,y,r,0,7);c.clip();var im=IMG[ch.id];
+  if(im&&im.complete&&im.naturalWidth){var w=im.naturalWidth,f=ch.f;c.drawImage(im,(f[0]-f[2])*w,(f[1]-f[2])*w,f[2]*2*w,f[2]*2*w,x-r,y-r,2*r,2*r);}
+  else{c.fillStyle=ch.body;c.fillRect(x-r,y-r,2*r,2*r);}
+  c.restore();c.beginPath();c.arc(x,y,r,0,7);c.lineWidth=3;c.strokeStyle=INK;c.stroke();
+}
+function fish(x,y,a,s){
+  c.save();c.translate(x,y);c.rotate(a);c.scale(s,s);c.lineWidth=2.5;c.strokeStyle=INK;
+  c.fillStyle='#8fb4c9';c.beginPath();c.ellipse(0,0,20,9,0,0,7);c.fill();c.stroke();
+  c.beginPath();c.moveTo(-18,0);c.lineTo(-31,-10);c.lineTo(-27,0);c.lineTo(-31,10);c.closePath();c.fill();c.stroke();
+  c.fillStyle='#fff';c.beginPath();c.arc(11,-2,3.2,0,7);c.fill();c.stroke();c.fillStyle=INK;c.beginPath();c.arc(11.5,-2,1.2,0,7);c.fill();
+  c.beginPath();c.moveTo(2,-6);c.quadraticCurveTo(-3,0,2,6);c.stroke();c.restore();
+}
+function drawRunner(r){
+  var y=yOf(r),run=r.v>EPS,sw=run?Math.sin(r.step)*8:0,bob=r.done?Math.abs(Math.sin(performance.now()/160+r.x))*-5:0;
+  c.save();c.translate(r.x,y+bob);
+  c.fillStyle='rgba(20,20,20,.13)';c.beginPath();c.ellipse(0,2,r.fallen?34:17,5,0,0,7);c.fill();
+  if(r.fall)c.rotate(r.fall*Math.PI/2*r.dir);
+  c.strokeStyle=INK;c.lineWidth=4.5;c.lineCap='round';
+  c.beginPath();c.moveTo(-6,-15);c.lineTo(-6-sw,0);c.moveTo(6,-15);c.lineTo(6+sw,0);c.stroke();
+  c.fillStyle=r.ch.body;c.beginPath();c.ellipse(0,-29,15,18,0,0,7);c.fill();c.lineWidth=2.5;c.stroke();
+  c.lineWidth=4;c.beginPath();c.moveTo(-13,-36);c.lineTo(-21,-23+sw);c.moveTo(13,-36);c.lineTo(21,-23-sw);
+  if(r.done){c.moveTo(-13,-36);c.lineTo(-22,-52);c.moveTo(13,-36);c.lineTo(22,-52);}c.stroke();
+  head(r.ch,0,-61,19);
+  c.restore();
+  if(r.fallen){
+    fish(r.x+r.dir*30,y-26,r.dir*.5,.9);
+    var t=performance.now()/260;c.fillStyle=RED;c.font='18px sans-serif';c.textAlign='center';
+    for(var i=0;i<3;i++)c.fillText('★',r.x+r.dir*58+Math.cos(t+i*2.1)*14,y-40+Math.sin(t+i*2.1)*7);
+  }
+  if(r.you&&!r.fallen&&G.mode==='play'){
+    var ay=y-92+Math.sin(performance.now()/200)*3;c.fillStyle=RED;c.beginPath();c.moveTo(r.x-9,ay);c.lineTo(r.x+9,ay);c.lineTo(r.x,ay+11);c.closePath();c.fill();
+    c.font='15px Anton,Impact,sans-serif';c.textAlign='center';c.fillText('YOU',r.x,ay-5);
+  }
+}
+function drawReggie(){
+  var front=G.face>0,sx=Math.max(.1,Math.abs(G.face));
+  c.save();c.translate(300,0);
+  c.fillStyle='rgba(20,20,20,.15)';c.beginPath();c.ellipse(0,182,46,8,0,0,7);c.fill();
+  c.scale(sx,1);c.strokeStyle=INK;c.lineWidth=3;c.lineJoin='round';
+  c.fillStyle='#9aa3ad';c.fillRect(-19,128,13,50);c.strokeRect(-19,128,13,50);c.fillRect(6,128,13,50);c.strokeRect(6,128,13,50);
+  c.fillStyle=INK;c.fillRect(-24,174,21,8);c.fillRect(3,174,21,8);
+  /* arms */
+  c.lineWidth=9;c.strokeStyle='#9aa3ad';c.lineCap='round';c.beginPath();c.moveTo(-27,88);c.lineTo(-38,126);c.moveTo(27,88);c.lineTo(front?44:38,front?116:126);c.stroke();
+  c.lineWidth=3;c.strokeStyle=INK;
+  /* waistcoat */
+  c.fillStyle=RED;c.beginPath();c.moveTo(-28,80);c.lineTo(28,80);c.lineTo(23,132);c.lineTo(-23,132);c.closePath();c.fill();c.stroke();
+  if(front){c.fillStyle='#fff';c.beginPath();c.moveTo(-8,80);c.lineTo(8,80);c.lineTo(0,112);c.closePath();c.fill();c.stroke();
+    c.fillStyle=INK;c.beginPath();c.moveTo(-9,84);c.lineTo(9,92);c.lineTo(9,84);c.lineTo(-9,92);c.closePath();c.fill();
+    c.fillStyle='#e8c15a';[104,116,126].forEach(function(y){c.beginPath();c.arc(0,y+2,2.2,0,7);c.fill();});
+    /* the fish-slapping gun */
+    c.save();c.translate(44,118);c.rotate(.35);c.fillStyle='#c9973a';c.beginPath();c.moveTo(-7,-14);c.lineTo(7,-14);c.lineTo(15,30);c.lineTo(-15,30);c.closePath();c.fill();c.stroke();
+    c.fillStyle='#6b4a1f';c.fillRect(-9,-26,18,13);c.strokeRect(-9,-26,18,13);c.restore();
+    if(!F.length)fish(49,150,1.9,.62);
+    head(REG,0,48,31);
+  }else{
+    c.beginPath();c.moveTo(0,82);c.lineTo(0,132);c.stroke();
+    c.fillStyle='#b9c1c9';c.beginPath();c.arc(0,48,31,0,7);c.fill();c.stroke();
+    c.fillStyle=INK;[[-17,36],[17,36],[-17,62],[17,62]].forEach(function(b){c.beginPath();c.arc(b[0],b[1],2.6,0,7);c.fill();});
+    c.beginPath();c.moveTo(0,17);c.lineTo(0,4);c.stroke();c.fillStyle=RED;c.beginPath();c.arc(0,2,5,0,7);c.fill();c.stroke();
+    c.beginPath();c.moveTo(-12,48);c.lineTo(12,48);c.moveTo(-9,56);c.lineTo(9,56);c.stroke();
+  }
+  c.restore();
+}
+function drawLamp(){
+  var red=(G.phase==='red'||G.phase==='turning'||G.phase==='timeup'||G.phase==='end'),green=G.phase==='green';
+  c.strokeStyle=INK;c.lineWidth=5;c.beginPath();c.moveTo(500,186);c.lineTo(500,120);c.stroke();
+  c.fillStyle=INK;c.beginPath();c.roundRect(474,22,52,102,8);c.fill();
+  c.fillStyle=red?'#ff2a3b':'#4a1a1e';c.beginPath();c.arc(500,50,17,0,7);c.fill();
+  c.fillStyle=green?'#35d86a':'#173d24';c.beginPath();c.arc(500,96,17,0,7);c.fill();
+  if(red||green){c.fillStyle=red?'rgba(255,42,59,.22)':'rgba(53,216,106,.22)';c.beginPath();c.arc(500,red?50:96,28,0,7);c.fill();}
+}
+function bubble(){
+  if(G.sayT<=0||!G.say)return;
+  c.font='19px "Permanent Marker","Comic Sans MS",cursive';c.textAlign='left';
+  var words=G.say.split(' '),lines=[],cur='';words.forEach(function(w){var t=cur?cur+' '+w:w;if(c.measureText(t).width>190){lines.push(cur);cur=w;}else cur=t;});lines.push(cur);
+  var h=lines.length*23+18;c.fillStyle='#fff';c.strokeStyle=INK;c.lineWidth=3;
+  c.beginPath();c.roundRect(22,64,218,h,12);c.fill();c.stroke();
+  c.beginPath();c.moveTo(238,78);c.lineTo(262,82);c.lineTo(238,96);c.closePath();c.fill();c.stroke();c.fillRect(234,79,6,16);
+  c.fillStyle=INK;lines.forEach(function(l,i){c.fillText(l,34,90+i*23);});
+}
+function draw(){
+  c.fillStyle=PAPER;c.fillRect(0,0,W,H);
+  /* the field */
+  c.fillStyle='#efe8d6';c.fillRect(0,YF,W,H-YF);
+  c.strokeStyle='rgba(20,20,20,.08)';c.lineWidth=2;for(var i=0;i<9;i++){var lx=23.5+i*69.2;c.beginPath();c.moveTo(lx,YF);c.lineTo(lx,YS+12);c.stroke();}
+  for(var k=0;k<20;k++){c.fillStyle=k%2?INK:'#fff';c.fillRect(k*30,YF-9,30,9);c.fillStyle=k%2?'#fff':INK;c.fillRect(k*30,YF,30,9);}
+  c.strokeStyle=INK;c.lineWidth=3;c.strokeRect(0,YF-9,W,18);
+  c.setLineDash([14,10]);c.beginPath();c.moveTo(0,YS+8);c.lineTo(W,YS+8);c.stroke();c.setLineDash([]);
+  c.fillStyle='rgba(20,20,20,.35)';c.font='15px Anton,Impact,sans-serif';c.textAlign='left';c.fillText('START',8,YS+28);
+  drawLamp();drawReggie();
+  R.slice().sort(function(a,b){return yOf(a)-yOf(b);}).forEach(drawRunner);
+  F.forEach(function(f){if(f.t<0)return;var k=Math.min(1,f.t/f.dur),tx=f.r.x,ty=yOf(f.r)-48;
+    fish(f.x0+(tx-f.x0)*k,f.y0+(ty-f.y0)*k-Math.sin(k*Math.PI)*70,k*13,1);});
+  c.fillStyle='#6fb6e0';FX.forEach(function(p){c.globalAlpha=1-p.t/p.life;c.beginPath();c.arc(p.x,p.y,4,0,7);c.fill();});c.globalAlpha=1;
+  bubble();
+  if(G.mode==='play'){
+    if(G.phase==='red'||G.phase==='timeup'||G.phase==='end'){c.strokeStyle='rgba(209,32,47,.75)';c.lineWidth=10;c.strokeRect(5,5,W-10,H-10);}
+    /* clock, round and score */
+    c.fillStyle=INK;c.beginPath();c.roundRect(12,H-44,W-24,32,6);c.fill();
+    var full=Math.max(26,46-(G.round-1)*3),k2=Math.max(0,G.time/full);
+    c.fillStyle=k2<.25?'#ff2a3b':'#e8c15a';c.fillRect(190,H-36,(W-380)*k2,16);c.strokeStyle='#fff';c.lineWidth=2;c.strokeRect(190,H-36,W-380,16);
+    c.fillStyle='#fff';c.font='19px Anton,Impact,sans-serif';c.textAlign='left';c.fillText('ROUND '+G.round+'   '+Math.ceil(G.time)+'s',22,H-21);
+    c.textAlign='right';c.fillText('SCORE '+G.score,W-22,H-21);
+    if(G.hint&&G.round===1&&YOU&&YOU.p<.12&&G.phase!=='ready'){c.textAlign='center';c.fillStyle='rgba(20,20,20,.7)';c.font='22px Anton,Impact,sans-serif';c.fillText('HOLD TO RUN  ·  LET GO TO FREEZE',W/2,H-62);}
+    if(G.bannerT>0){c.textAlign='center';c.font='44px "Permanent Marker",cursive';c.lineWidth=8;c.strokeStyle='#fff';c.strokeText(G.banner,W/2,430);c.fillStyle=RED;c.fillText(G.banner,W/2,430);}
+  }
+}
+
+/* ---------- controls ---------- */
+function press(){if(G.mode==='play'){audio();hold=true;}}
+function lift(){hold=false;}
+cv.addEventListener('pointerdown',function(e){e.preventDefault();press();try{cv.setPointerCapture(e.pointerId);}catch(x){}});
+['pointerup','pointercancel','lostpointercapture'].forEach(function(n){cv.addEventListener(n,lift);});
+window.addEventListener('blur',lift);
+document.addEventListener('keydown',function(e){if((e.code==='Space'||e.code==='ArrowUp')&&G.mode==='play'){e.preventDefault();press();}});
+document.addEventListener('keyup',function(e){if(e.code==='Space'||e.code==='ArrowUp')lift();});
+cv.addEventListener('contextmenu',function(e){e.preventDefault();});
+
+/* ---------- the panels ---------- */
+function face(ch,size){var k=document.createElement('canvas');k.width=k.height=size*2;var x=k.getContext('2d'),im=IMG[ch.id];
+  function paint(){var w=im.naturalWidth,f=ch.f;x.save();x.beginPath();x.arc(size,size,size-3,0,7);x.clip();x.drawImage(im,(f[0]-f[2])*w,(f[1]-f[2])*w,f[2]*2*w,f[2]*2*w,0,0,size*2,size*2);x.restore();x.beginPath();x.arc(size,size,size-3,0,7);x.lineWidth=4;x.strokeStyle=INK;x.stroke();}
+  if(im.complete&&im.naturalWidth)paint();else im.addEventListener('load',paint);return k;}
+function buildGang(){
+  var box=$('gang');box.textContent='';
+  CH.forEach(function(ch){var b=document.createElement('button');b.type='button';b.className='catbtn';b.setAttribute('aria-pressed',ch.id===SAVE.ch?'true':'false');
+    b.appendChild(face(ch,50));b.appendChild(document.createTextNode(ch.name));
+    b.addEventListener('click',function(){SAVE.ch=ch.id;save();buildGang();});box.appendChild(b);
+    if(ch.id===SAVE.ch)$('perk').innerHTML='<b></b> '+ch.perk,$('perk').firstChild.textContent=ch.name+'.';});
+  $('bestTitle').textContent=SAVE.best?'Your best so far: '+SAVE.best+'.':'';
+}
+function sheet(){
+  $('rsBest').textContent=SAVE.best;$('rsRound').textContent=SAVE.round?'Cleared round '+SAVE.round:'None yet';$('rsFish').textContent=SAVE.fish;
+  var ul=$('gangList');ul.textContent='';
+  CH.forEach(function(ch){var li=document.createElement('li'),b=document.createElement('b');b.textContent=ch.name;li.appendChild(b);li.appendChild(document.createTextNode(' '+ch.perk));ul.appendChild(li);});
+}
+$('startBtn').addEventListener('click',startGame);
+$('againBtn').addEventListener('click',startGame);
+$('gangBtn').addEventListener('click',function(){G.mode='title';R=[];F=[];buildGang();$('overPanel').hidden=true;$('startPanel').hidden=false;});
+$('copyBtn').addEventListener('click',function(){var t=$('shareText').textContent+' '+location.href.split('?')[0];
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(function(){$('copyBtn').textContent='Copied';},function(){$('copyBtn').textContent='Select the text below';});}else $('copyBtn').textContent='Select the text below';});
+$('muteBtn').addEventListener('click',function(){A.muted=!A.muted;if(A.master)A.master.gain.value=A.muted?0:1;this.textContent=A.muted?'Sound off':'Sound on';this.setAttribute('aria-pressed',A.muted?'true':'false');});
+document.addEventListener('visibilitychange',function(){if(document.hidden)lift();if(A.ac){try{if(document.hidden)A.ac.suspend();else A.ac.resume();}catch(e){}}});
+
+var last=0;
+function frame(ts){var dt=Math.min(.05,(ts-last)/1000||0);last=ts;update(dt);draw();requestAnimationFrame(frame);}
+buildGang();sheet();requestAnimationFrame(frame);
+window.__rlgl={G:G,R:function(){return R;},you:function(){return YOU;},start:startGame,hold:function(v){hold=v;},update:update,draw:draw};
+})();
+</script>
+<style>.wgw-strip{background:#f6f2e7;color:#141414;border-top:4px solid #141414;padding:28px 16px 40px;position:relative;z-index:5;font-family:Georgia,serif;text-align:left}.wgw-strip>div{max-width:1020px;margin:0 auto}.wgw-strip p{margin:0 0 14px;display:flex;flex-wrap:wrap;gap:12px;max-width:none;width:auto}.wgw-strip{width:100%;box-sizing:border-box;clear:both}.wgw-strip .wgw-h{font-family:"Permanent Marker","Segoe Print",cursive;color:#d1202f;font-size:20px;display:block;margin-bottom:12px}.wgw-strip a{font-family:Anton,"Arial Narrow",Impact,sans-serif;text-transform:uppercase;letter-spacing:.6px;font-size:18px;line-height:1.2;text-decoration:none;padding:10px 18px 9px;border:3px solid #141414;background:#fffdf7;color:#141414;box-shadow:5px 5px 0 #141414;display:inline-block}.wgw-strip a.k{background:#141414;color:#f6f2e7;box-shadow:5px 5px 0 #d1202f}.wgw-strip a.r{background:#d1202f;border-color:#d1202f;color:#fff}</style><div class="wgw-strip"><div><span class="wgw-h">Before you go</span><p><a class="k" href="books.html">See the books</a><a class="r" href="shop.html">T-shirt shop</a><a class="a" href="cats.html#dreamies">Buy the cats some Dreamies</a></p><p><a class="a" href="index.html">Home</a><a class="a" href="arcade.html">Play the games</a><a class="a" href="tribunal.html">Summon the tribunal</a><a class="a" href="cats.html">Meet the cats</a><a class="a" href="dear-terry.html">Dear Terry</a><a class="a" href="invoices.html">Invoices</a><a class="a" href="letters.html">Write to the tribunal</a><a class="a" href="log.html">The Ferret&rsquo;s Log</a><a class="a" href="story.html">Our story</a><a class="a" href="accord.html">The Accord</a><a class="a" href="road.html">The road ahead</a></p><p><a class="a" href="arthurs-tribunal.html">Arthur&rsquo;s Tribunal</a><a class="a" href="moulding-museum.html">The Moulding Museum</a><a class="a" href="unemployable-arcade.html">The Unemployable Arcade</a><a class="a" href="lion-and-albert.html">The Lion and Albert</a></p></div></div>
+<script src="share.js?v=20261114r" defer data-title="Reggie's Red Light, Green Light" data-text="Run when the music plays, freeze when Reggie turns round, or take a wet fish. A free game:"></script>
+</body>
+</html>
