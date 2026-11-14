@@ -2,7 +2,8 @@
    pages sit under "Explore". Without this script the full menu simply shows, as before. */
 (function(){
   var h=document.querySelector('header.site'),n=h&&h.querySelector('nav.main');if(!n)return;
-  var MAIN=['index.html','books.html','arcade.html','story.html','cats.html'];
+  if(!n.querySelector('a[href="comic.html"]')){var comic=document.createElement('a');comic.href='comic.html';comic.textContent='Monthly comic';n.appendChild(comic);}
+  var MAIN=['index.html','books.html','arcade.html','comic.html','story.html','cats.html'];
   var b=document.createElement('button');b.type='button';b.className='navbtn';b.textContent='Menu';
   n.id=n.id||'mainnav';b.setAttribute('aria-controls',n.id);b.setAttribute('aria-expanded','false');
   n.parentNode.insertBefore(b,n);h.classList.add('js-nav');
@@ -20,3 +21,5 @@
   document.addEventListener('click',function(e){if(!more.contains(e.target))set(false);});
   document.addEventListener('keydown',function(e){if(e.key==='Escape'&&more.classList.contains('open')){set(false);mb.focus();}});
 })();
+
+
