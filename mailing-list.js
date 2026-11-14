@@ -1,4 +1,4 @@
-/* Mailing list signup. Dormant until a service is chosen: fill in ACTION below and the form appears
+/* Mailing list signup, live on Buttondown since 14 November 2026. The form appears
    on every page that has <div id="join-list"></div>. The form posts straight to the service in a new tab,
    so no keys are needed on the site.
      Buttondown: action "https://buttondown.com/api/emails/embed-subscribe/YOURNAME", field "email"
@@ -6,7 +6,7 @@
      Mailchimp:  action the "form action" URL from the embedded form,               field "EMAIL"   */
 (function () {
   "use strict";
-  var CONFIG = window.WGW_LIST || { action: "", field: "email", hidden: {} };
+  var CONFIG = window.WGW_LIST || { action: "https://buttondown.com/api/emails/embed-subscribe/williamgeorgeworks", field: "email", hidden: { embed: "1" } };
   var host = document.getElementById("join-list");
   if (!host || !CONFIG.action || !/^https:\/\//.test(CONFIG.action)) return;
   var sec = document.createElement("section");

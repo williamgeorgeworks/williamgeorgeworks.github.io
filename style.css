@@ -76,7 +76,7 @@ blockquote.motto cite{display:block;font-family:var(--hand);text-transform:none;
 .steps li::before{content:"";position:absolute;left:-12px;top:6px;width:20px;height:20px;border-radius:50%;background:var(--red);border:3px solid var(--ink)}
 .steps b{font-family:var(--display);font-weight:400;text-transform:uppercase;letter-spacing:.5px;font-size:21px;display:block}
 .accord{background:var(--card);border:3px solid var(--ink);padding:clamp(22px,5vw,56px);box-shadow:9px 9px 0 var(--ink);max-width:46em;margin:0 auto}
-.accord h1{font-size:clamp(36px,6vw,62px);text-align:center}
+.accord h1,.accord .atitle{font-size:clamp(36px,6vw,62px);text-align:center}
 .accord .sub{text-align:center;font-style:italic;margin:.6em 0 0}
 .accord h2{font-size:24px;margin:1.6em 0 .5em;border-bottom:2px solid var(--ink);padding-bottom:4px}
 .accord .say{font-family:var(--hand);color:var(--red);font-size:23px;margin-left:1em}
@@ -108,7 +108,7 @@ blockquote.ruling{margin:0}
 .petition h2{font-size:32px}
 .petition label{font-family:var(--display);text-transform:uppercase;letter-spacing:.5px;font-size:16px;margin-top:12px}
 .petition label span{font-family:var(--body);text-transform:none;letter-spacing:0;font-size:15px;color:var(--faint)}
-.petition input[type=text],.petition input[type=email],.petition textarea{font:inherit;font-size:18px;padding:10px 12px;border:3px solid var(--ink);background:#fff;color:var(--ink);width:100%;border-radius:0}
+.petition input[type=text],.petition input[type=email],.petition select,.petition textarea{font:inherit;font-size:18px;padding:10px 12px;border:3px solid var(--ink);background:#fff;color:var(--ink);width:100%;border-radius:0}
 .petition textarea{resize:vertical;line-height:1.45}
 .petition input:focus-visible,.petition textarea:focus-visible{outline:3px solid var(--red);outline-offset:2px}
 .petition .tick{font-family:var(--body);text-transform:none;letter-spacing:0;font-size:17px;display:flex;gap:10px;align-items:flex-start;margin:14px 0 6px}
@@ -197,6 +197,110 @@ section.band.trailer{padding-top:10px}
 .stage #promo-play,.trailer-bar #promo-play{position:static;transform:none;font-size:19px;white-space:nowrap}
 .trailer-bar #promo-play:hover{transform:translate(2px,2px)}
 .trailer-bar #promo-sound{font-size:19px;padding:11px 20px 10px;box-shadow:5px 5px 0 var(--ink)}
+
+/* cat photo galleries: one lead photo, then thumbnails; add <div class="catpics"> under any cat's heading */
+.who .catpics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:0 0 16px}
+.who .catpics a{display:block;border:3px solid var(--ink);overflow:hidden;background:var(--ink)}
+.who .catpics img{display:block;width:100%;height:100%;aspect-ratio:1/1;object-fit:cover;object-position:50% 25%;transition:transform .2s}
+.who .catpics a:hover img,.who .catpics a:focus-visible img{transform:scale(1.05)}
+.who .catpics .lead{grid-column:1/-1}
+.who .catpics .lead img{aspect-ratio:4/5;object-position:50% 30%}
+@media (prefers-reduced-motion:reduce){.who .catpics img{transition:none}}
+/* two-photo gallery: side by side instead of lead + thumbnails */
+.who .catpics.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.who .catpics.two .lead{grid-column:auto}
+.who .catpics.two img,.who .catpics.two .lead img{aspect-ratio:3/4}
+/* five-photo gallery: lead photo, then a 2x2 grid of thumbnails */
+.who .catpics.four{grid-template-columns:repeat(2,minmax(0,1fr))}
+.who .catpics.four .lead{grid-column:1/-1}
+.who .catpics.four img{aspect-ratio:1/1;object-position:50% 30%}
+.who .catpics.four .lead img{aspect-ratio:4/5}
+/* six-photo gallery: lead photo, three thumbnails, then two wider ones */
+.who .catpics.five{grid-template-columns:repeat(6,minmax(0,1fr))}
+.who .catpics.five a{grid-column:span 2}
+.who .catpics.five .lead{grid-column:1/-1}
+.who .catpics.five a:nth-child(n+5){grid-column:span 3}
+.who .catpics.five a:nth-child(n+5) img{aspect-ratio:3/2;object-position:50% 35%}
+/* arcade hall of fame */
+.petition select{appearance:auto}
+.hall{margin-top:18px;padding-top:14px;border-top:3px dashed var(--ink)}
+.hall h4{font-family:var(--display);font-weight:400;text-transform:uppercase;letter-spacing:.6px;font-size:16px;color:var(--red);margin:0 0 8px}
+.hall ol{list-style:none;margin:0;padding:0}
+.hall li{display:flex;flex-wrap:wrap;gap:2px 10px;align-items:baseline;font-size:18px;padding:3px 0}
+.hall .rank{font-family:var(--display);min-width:1.4em;color:var(--faint)}
+.hall .who{font-weight:600;overflow-wrap:anywhere}
+.hall .pts{font-family:var(--display);letter-spacing:.3px}
+.hall .when{font-size:14px;color:var(--faint)}
+.hall .none{font-style:italic;color:var(--faint);margin:0}
+.hall .beat{font-size:16px;margin:10px 0 0}
+/* Fold-away menu on phones (nav.js adds the button and the js-nav class) */
+.navbtn{display:none}
+@media (max-width:760px){
+header.site.js-nav .wrap{flex-wrap:wrap;align-items:center}
+header.site.js-nav .navbtn{display:inline-block;font-family:var(--display);text-transform:uppercase;letter-spacing:.8px;font-size:17px;line-height:1.2;background:var(--ink);color:var(--paper);border:0;border-radius:0;padding:8px 16px 6px;cursor:pointer;box-shadow:4px 4px 0 var(--red)}
+header.site.js-nav .navbtn:focus-visible{outline:3px solid var(--blue,#2b4fc2);outline-offset:3px}
+header.site.js-nav nav.main{display:none;flex-basis:100%;width:100%;grid-template-columns:1fr 1fr;gap:0 20px;border-top:3px solid var(--ink);margin-top:8px;padding-top:4px}
+header.site.js-nav.open nav.main{display:grid}
+header.site.js-nav nav.main a{padding:11px 0 9px;border-bottom:1px solid rgba(20,20,20,.18)}
+header.site.js-nav nav.main a[aria-current=page]{color:var(--red);border-bottom:3px solid var(--red)}
+}
+/* "Explore" menu on wider screens (nav.js builds it) */
+nav.main .more{position:relative;display:inline-block}
+nav.main .morebtn{font-family:var(--display);text-transform:uppercase;letter-spacing:.6px;font-size:17px;color:var(--ink);background:none;border:0;border-bottom:3px solid transparent;border-radius:0;padding:4px 0;cursor:pointer;line-height:inherit}
+nav.main .morebtn::after{content:"";display:inline-block;margin-left:7px;border:5px solid transparent;border-top-color:var(--ink);border-bottom-width:0;vertical-align:middle}
+nav.main .morebtn:hover,nav.main .morebtn.here,nav.main .more.open .morebtn{border-bottom-color:var(--red)}
+nav.main .morebtn:focus-visible{outline:3px solid var(--blue,#2b4fc2);outline-offset:3px}
+nav.main .morelist{display:none;position:absolute;right:0;top:calc(100% + 10px);z-index:30;min-width:230px;background:var(--paper);border:3px solid var(--ink);box-shadow:6px 6px 0 var(--ink);padding:8px 16px 10px}
+nav.main .more.open .morelist{display:grid}
+nav.main .morelist a{padding:8px 0 6px;border-bottom:1px solid rgba(20,20,20,.15);white-space:nowrap}
+nav.main .morelist a:last-child{border-bottom-color:transparent}
+nav.main .morelist a:hover,nav.main .morelist a[aria-current=page]{color:var(--red);border-bottom-color:var(--red)}
+@media (max-width:760px){
+header.site.js-nav nav.main .more,header.site.js-nav nav.main .morelist{display:contents}
+header.site.js-nav nav.main .morebtn{display:none}
+header.site.js-nav nav.main .morelist a{white-space:normal;border-bottom:1px solid rgba(20,20,20,.18)}
+header.site.js-nav nav.main .morelist a[aria-current=page]{border-bottom:3px solid var(--red)}
+}
+/* The one big button on the home page, and the three-tribunals note */
+.btn.big{font-size:26px;padding:15px 30px 13px;box-shadow:7px 7px 0 var(--red)}
+.btn.small.red{box-shadow:4px 4px 0 var(--ink)}
+.threeway{margin-top:14px;font-size:.98em;max-width:70ch;border-left:4px solid var(--red);padding-left:12px}
+/* Reading samples on the books page */
+.book .sample{grid-column:1/-1;border-top:2px dashed var(--ink);padding-top:14px;margin-top:4px}
+.sample summary{display:inline-block;list-style:none;cursor:pointer;font-family:var(--display);text-transform:uppercase;letter-spacing:.6px;font-size:16px;padding:8px 14px 7px;border:3px solid var(--ink);background:var(--card);color:var(--ink);box-shadow:4px 4px 0 var(--ink)}
+.sample summary::-webkit-details-marker{display:none}
+.sample summary::after{content:" +"}.sample[open] summary::after{content:" \2212"}
+.sample[open] summary{background:var(--ink);color:var(--paper);box-shadow:4px 4px 0 var(--red)}
+.sample summary:focus-visible{outline:3px solid var(--blue,#2b4fc2);outline-offset:3px}
+.sample-in{margin-top:18px;max-width:62ch;border-left:4px solid var(--red);padding:2px 0 2px 18px}
+.sample-in p{margin:0 0 .55em}
+.sample-in h4{font-family:var(--display);text-transform:uppercase;font-weight:400;font-size:22px;margin:0 0 8px}
+.sample-in ul,.sample-in ol{margin:0 0 .8em;padding-left:1.3em}
+.sample-in .brk{text-align:center;margin:.9em 0;color:var(--red)}
+.sample-in .sample-src{font-family:var(--hand,cursive);color:var(--red);margin-bottom:1em}
+.sample-in .sample-h{font-family:var(--display);text-transform:uppercase;letter-spacing:.6px;font-size:15px;margin:.8em 0 .3em}
+.sample-in .sample-note{font-size:.9em;font-style:italic;margin-top:.9em}
+.sample-in .sample-end{font-size:.85em;font-style:italic;opacity:.7;margin-top:1.2em}
+
+.who .portrait{display:block;width:100%;height:auto;aspect-ratio:1/1;object-fit:cover;border:3px solid var(--ink);margin:0 0 16px}
+.duo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:22px 0}
+.duo figure{margin:0}
+.duo img{display:block;width:100%;height:auto;aspect-ratio:1/1;object-fit:cover;border:3px solid var(--ink)}
+.duo figcaption{font-family:var(--hand);font-size:20px;color:var(--red);margin-top:6px}
+@media (max-width:520px){.duo{grid-template-columns:1fr}}
+.cast{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px;margin:0 0 28px}
+.cast.nine{grid-template-columns:repeat(3,minmax(0,1fr));max-width:760px;margin-left:auto;margin-right:auto}
+.cast figure{margin:0}
+.cast a{display:block;border:3px solid var(--ink);overflow:hidden;background:var(--ink)}
+.cast img{display:block;width:100%;height:auto;aspect-ratio:1/1;object-fit:cover;transition:transform .2s}
+.cast a:hover img,.cast a:focus-visible img{transform:scale(1.04)}
+.cast figcaption{margin-top:6px;line-height:1.15}
+.cast figcaption strong{display:block;font-family:var(--hand);font-size:22px;color:var(--red);font-weight:400}
+.cast figcaption span{display:block;font-size:14px}
+.solo{max-width:280px;margin:0 0 18px}
+.solo img{display:block;width:100%;height:auto;aspect-ratio:1/1;object-fit:cover;border:3px solid var(--ink)}
+@media (max-width:520px){.cast.nine figcaption strong{font-size:17px}.cast.nine figcaption span{font-size:11px}}
+@media (prefers-reduced-motion:reduce){.cast img{transition:none}}
 /* Employee of the Month badge */
 .has-eotm{position:relative}
 .eotm{position:absolute;top:-14px;right:-10px;z-index:2;transform:rotate(6deg);background:var(--red);color:var(--paper);border:3px solid var(--ink);padding:6px 12px 5px;font-family:var(--display);text-transform:uppercase;letter-spacing:.8px;font-size:13px;line-height:1.15;text-align:center;box-shadow:3px 3px 0 var(--ink)}
