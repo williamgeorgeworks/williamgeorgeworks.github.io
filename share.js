@@ -1,6 +1,6 @@
 /* Share buttons for the books and the games. Plain links only: no trackers, no third-party scripts.
    Books: every <article class="card book"> gets a row, pointing at its Amazon page if it has one, otherwise at its place on the books page.
-   Game cards on the arcade and home pages get a row too.
+   Game cards on the arcade and home pages get a row too, and so do the T-shirts.
    Games: a page that loads this script with data-title and data-text gets a "Share this game" strip above the footer. */
 (function(){
   var me=document.currentScript,SITE='https://williamgeorgeworks.co.uk/';
@@ -75,6 +75,18 @@
       e.appendChild(row({title:d.shareTitle||document.title,text:d.shareText||d.shareTitle||document.title,url:SITE+d.shareUrl,label:d.shareLabel||'Share'}));
     }
   }
-  function go(){books();cards();hooks();game();}
+  function shirts(){
+    /* T-shirts, on the shop page and the home page: share the shirt's own page at the printer's. */
+    var cs=document.querySelectorAll('article.card.product, article.card.game');
+    for(var i=0;i<cs.length;i++){
+      var c=cs[i],h=c.querySelector('h2,h3'),buy=c.querySelector('a.btn[href*="teemill.com/product/"]');
+      if(!h||!buy||c.querySelector('.wgs'))continue;
+      var title=h.textContent.trim();
+      var r=row({title:title+' T-shirt',text:'The \u201c'+title+'\u201d T-shirt, from William George Works:',url:buy.href,label:'Share this shirt'});
+      var at=buy.parentNode.tagName==='P'?buy.parentNode:buy;
+      at.parentNode.insertBefore(r,at.nextSibling);
+    }
+  }
+  function go(){books();cards();shirts();hooks();game();}
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',go);else go();
 })();
