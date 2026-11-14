@@ -80,13 +80,14 @@
     }
   }
   function shirts(){
-    /* T-shirts, on the shop page and the home page: share the shirt's own page at the printer's. */
+    /* Shop items (shirts, the mug, the jigsaw), on the shop page and the home page: share the item's own page at the printer's. */
     var cs=document.querySelectorAll('article.card.product, article.card.game');
     for(var i=0;i<cs.length;i++){
       var c=cs[i],h=c.querySelector('h2,h3'),buy=c.querySelector('a.btn[href*="teemill.com/product/"]');
       if(!h||!buy||c.querySelector('.wgs'))continue;
-      var title=h.textContent.trim();
-      var r=row({title:title+' T-shirt',text:'The \u201c'+title+'\u201d T-shirt, from William George Works:',url:buy.href,label:'Share this shirt'});
+      var title=h.textContent.trim(),kind=c.getAttribute('data-kind')||'T-shirt';
+      var noun=kind==='T-shirt'?'shirt':kind;
+      var r=row({title:title+' '+kind,text:'The \u201c'+title+'\u201d '+kind+', from William George Works:',url:buy.href,label:'Share this '+noun});
       var at=buy.parentNode.tagName==='P'?buy.parentNode:buy;
       at.parentNode.insertBefore(r,at.nextSibling);
     }
