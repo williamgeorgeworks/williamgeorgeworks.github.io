@@ -58,7 +58,7 @@
     if(!show){if(!f.hidden)f.hidden=true;return;}
     if(f.getAttribute('data-score')!==info.score||f.getAttribute('data-game')!==info.game){
       f.setAttribute('data-score',info.score);f.setAttribute('data-game',info.game);
-      f.querySelector('.msg').textContent='';f.querySelector('button').disabled=false;f.querySelector('button').textContent='Put me on the wall';
+      f.querySelector('.msg').textContent='';f.querySelector('button').disabled=false;var nn=f.querySelector(".nudge");if(nn)nn.hidden=true;f.querySelector('button').textContent='Put me on the wall';
     }
     var label='Score of '+info.score+'. Put your name on the wall:',bb=f.querySelector('b');
     if(bb.textContent!==label)bb.textContent=label;
@@ -68,6 +68,9 @@
     var f=document.createElement('form');f.className='wgw-qs';f.hidden=true;
     f.innerHTML='<b></b><div class="row"><input type="text" maxlength="24" autocomplete="nickname" placeholder="Your name or handle" aria-label="Your name or handle"><button type="submit">Put me on the wall</button></div><div class="sharerow"><button type="button" class="share">Share my score</button></div><small>Your name and score are published on the arcade page if they make the board.</small><div class="msg" role="status" aria-live="polite"></div>';
     var input=f.querySelector('input'),btn=f.querySelector('button'),msg=f.querySelector('.msg');
+    var nudge=document.createElement('p');nudge.className='nudge';nudge.hidden=true;nudge.style.cssText='margin:8px 0 0;font-size:15px';
+    nudge.innerHTML='Enjoying this? <a href="index.html#join-list">Get the odd email</a> when a new game or book lands.';f.appendChild(nudge);
+    function nudgeOn(){nudge.hidden=false;}
     try{input.value=localStorage.getItem('wgw-name')||'';}catch(e){}
     ['keydown','keyup','keypress'].forEach(function(t){f.addEventListener(t,function(e){e.stopPropagation();});});
     f.querySelector('.share').addEventListener('click',function(){shareCard(f,input.value.trim(),msg);});
@@ -81,8 +84,8 @@
       fetch(WORKER,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({game:info.game,name:name,score:info.score,website:''})})
         .then(function(r){return r.json().catch(function(){return {ok:false};});})
         .then(function(j){
-          if(j&&j.ok&&j.status==='added'){msg.textContent=(j.alsoPlace?(j.place?'In at number '+j.place+' on today\'s board and number '+j.alsoPlace+' on the main board. ':'Not a top-ten daily score, but good enough for number '+j.alsoPlace+' on the main board. '):'In at number '+j.place+'. ')+'It will be on the wall in about a minute.';btn.textContent='Done';}
-          else if(j&&j.ok&&j.status==='duplicate'){msg.textContent='That one is already on the wall.';btn.textContent='Done';}
+          if(j&&j.ok&&j.status==='added'){nudgeOn();msg.textContent=(j.alsoPlace?(j.place?'In at number '+j.place+' on today\'s board and number '+j.alsoPlace+' on the main board. ':'Not a top-ten daily score, but good enough for number '+j.alsoPlace+' on the main board. '):'In at number '+j.place+'. ')+'It will be on the wall in about a minute.';btn.textContent='Done';}
+          else if(j&&j.ok&&j.status==='duplicate'){nudgeOn();msg.textContent='That one is already on the wall.';btn.textContent='Done';}
           else if(j&&j.ok&&j.status==='not-top'){msg.textContent='Not quite enough for the board yet. Have another go.';btn.textContent='Done';}
           else{msg.className='msg bad';msg.textContent=(j&&j.error)||'The court is busy. Try again in a minute.';btn.disabled=false;btn.textContent='Put me on the wall';}
         })
