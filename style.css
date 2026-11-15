@@ -332,3 +332,17 @@ header.site.js-nav nav.main .morelist a[aria-current=page]{border-bottom:3px sol
 
 .hall.daily{margin-top:12px;border-top:3px dotted var(--blue)}
 .hall.daily h4{color:var(--blue)}
+
+/* engagement extras */
+.streak{margin:10px 0 14px;padding:8px 12px;border:3px dashed var(--ink);background:var(--card);font-size:17px}
+.streak small{display:block;color:var(--faint);margin-top:2px}
+.cotd{display:grid;grid-template-columns:140px 1fr;gap:16px;align-items:center;margin:18px 0;padding:14px;background:var(--card);border:3px solid var(--ink);box-shadow:7px 7px 0 var(--ink)}
+.cotd img{width:140px;height:186px;object-fit:cover;border:3px solid var(--ink);display:block}
+.cotd figcaption b{font-family:var(--display);text-transform:uppercase;letter-spacing:.6px;color:var(--red);font-size:20px}
+.cotd figcaption p{margin:6px 0}.cotd .ct,.cotd .cr{font-weight:700}
+@media(max-width:520px){.cotd{grid-template-columns:100px 1fr}.cotd img{width:100px;height:134px}}
+.badgelist{list-style:none;margin:0;padding:0}
+.badgelist li{padding:4px 0;font-size:17px}.badgelist b{display:block}.badgelist span{color:var(--faint);font-size:15px}
+.badgelist .locked{opacity:.55}
+.potwname{font-size:19px}
+.fine{font-size:14px;color:var(--faint);margin:6px 0 0}
