@@ -1,6 +1,115 @@
 {
  "editions": [
   {
+   "date": "2026-11-15",
+   "title": "Magenta Shelves, Smaller Chocolate And A Banana With Two Million Miles",
+   "standfirst": "Terry and Reggie work through the last few days' news. Everything in big type is made up. Everything in the boxes is real.",
+   "stories": [
+    {
+     "kicker": "Shops",
+     "headline": "Shops Sell 1.5% More; Black Friday Spotted Loitering By The Door",
+     "satire": "October retail sales crept up 1.5%, a figure that looks calm on a chart and frantic in a car park. Food did the heavy lifting, non-food stayed exactly where it was, and the whole country is now standing outside Black Friday on the 27th with its coat on, pretending not to check the clock. Reggie has pre-discounted several items he does not yet own, which he insists is just good planning.",
+     "real": "The BRC-KPMG Retail Sales Monitor shows UK retail sales up 1.5% year on year in the four weeks to 31 October, with food sales up 3.2%, non-food flat, and Black Friday falling on 27 November.",
+     "source": {
+      "name": "Retail Insight Network",
+      "url": "https://www.retail-insight-network.com/news/uk-retail-sales-grow-1-5-as-shoppers-hold-back-ahead-of-black-friday/"
+     }
+    },
+    {
+     "kicker": "Tech",
+     "headline": "Shelf Label Flashes Magenta; Biscuits Finally Found",
+     "satire": "Morrisons shoppers can now search for a product on their phone and watch the shelf label blink magenta to show where it has been hiding, which is the nearest a supermarket has come to playing hide and seek with itself. Terry wants the same thing installed in every lift, every loft and his house, where the remote control has been missing since Tuesday. Reggie has invoiced the biscuits for being found.",
+     "real": "Morrisons is adding a 'shop to light' feature to its More Card app across more than 270 supermarkets, so that a searched-for product's electronic shelf label flashes magenta.",
+     "source": {
+      "name": "Retail Times",
+      "url": "https://retailtimes.co.uk/morrisons-rolls-out-smart-flashing-shelf-labels-across-stores-ahead-of-the-festive-rush/"
+     }
+    },
+    {
+     "kicker": "Food",
+     "headline": "Pizza Gets A Thai Makeover; Margherita Becomes Mamargherita",
+     "satire": "Thai Square has opened a pizza arm at its Windsor restaurant, and the menu has a sense of humour about it, including a pun so confident that Terry stood up and applauded it alone. There is a Thai affogato to finish, because the dessert course was never asked how it felt about all this. Reggie is working on a lasagne-flavoured green curry and expects a medal for services to leftovers.",
+     "real": "Thai Square has opened a Bangkok Mama site at its Windsor restaurant, selling Thai-flavoured sourdough pizzas such as the Gang Panang and the Mamargherita, with gelato flavours that include Thai Affogato.",
+     "source": {
+      "name": "Restaurant Online",
+      "url": "https://www.restaurantonline.co.uk/Article/2026/11/13/thai-square-grows-its-bangkok-mama-concept-with-windsor-opening/"
+     }
+    },
+    {
+     "kicker": "Tech",
+     "headline": "Big Game Downloads Overnight; Broadband Briefly Does Press-Ups",
+     "satire": "A hugely anticipated video game began pre-loading at midnight on Tuesday, and by the small hours the nation's broadband was working a third harder than on an ordinary Tuesday. The busiest hour was 4am, which suggests plenty of households had decided sleep could be a rolling update. At 212 gigabytes, Reggie notes, that is a lot of luggage for something you cannot take on a train.",
+     "real": "Openreach says pre-loading of GTA VI, which began at midnight on Tuesday 10 November, raised its national downstream traffic by about 33% compared with an average Tuesday, with the biggest hourly rise at 4am; the game is about 212GB on PS5.",
+     "source": {
+      "name": "ISPreview",
+      "url": "https://ispreview.co.uk/index.php/2026/11/openreach-details-uk-broadband-traffic-impact-from-gta-6-pre-loading.html"
+     }
+    },
+    {
+     "kicker": "Prices",
+     "headline": "Christmas Chocolate Up 61%, Boxes Down In Size; Unwrapping Gets Quicker",
+     "satire": "A data report says festive chocolate costs 61% more while the boxes are getting smaller, which at least means the unwrapping is over sooner. Households are advised to eat the strawberry cream first, as tradition and arithmetic both suggest. Terry calls it the great selection-box shuffle. Reggie has a premium miniature range that arrives in an envelope, with a separate invoice for the envelope.",
+     "real": "A data-based report reported by Retail Times says Christmas chocolate costs 61% more while pack sizes are getting smaller.",
+     "source": {
+      "name": "Retail Times",
+      "url": "https://retailtimes.co.uk/christmas-chocolate-costs-61-more-as-pack-sizes-get-smaller-data-shows/"
+     }
+    },
+    {
+     "kicker": "Food",
+     "headline": "Free Mince Pie With Any Hot Drink, Three Days Only; Britain Suddenly Thirsty",
+     "satire": "Morrisons Cafes are handing out a free mince pie with any hot drink from Friday to Sunday, so a nation that was planning a perfectly sensible glass of water has remembered it is thirsty for tea. Queues are expected to form politely, then less politely, around the pastry. Terry has cleared his Sunday for research. Reggie is quietly reselling the Saturday slot.",
+     "real": "Morrisons is giving away a free mince pie with any hot drink in its Cafes nationwide from 13 to 15 November.",
+     "source": {
+      "name": "Retail Times",
+      "url": "https://retailtimes.co.uk/morrisons-makes-major-change-with-50000-free-pies-up-for-grabs/"
+     }
+    },
+    {
+     "kicker": "Transport",
+     "headline": "Flying Banana Passes Two Million Miles; Not Ripe For Retirement",
+     "satire": "Network Rail's measuring train, nicknamed the Flying Banana, has now covered more than two million miles, all of it staring at track and none of it complaining about the sandwiches. It scans at up to 125mph, which is faster than most of us manage to decide what to have for lunch. Terry wants it to host a chat show. Reggie is checking whether it is still under warranty.",
+     "real": "Network Rail says its New Measurement Train, nicknamed the Flying Banana, has covered more than two million miles since entering service in 2003, scanning track at up to 125mph.",
+     "source": {
+      "name": "Network Rail",
+      "url": "https://www.networkrailmediacentre.co.uk/news/two-million-miles-and-counting-railways-flying-banana-helps-keep-passengers-moving-through-autumn-and-winter"
+     }
+    },
+    {
+     "kicker": "Transport",
+     "headline": "Euston Travellers Told To Look Before They Leap; Nation Looks Twice",
+     "satire": "Anyone heading to or from London Euston at Christmas is being asked to check their journey before setting off, which the nation will do with the enthusiasm it keeps for flat-pack instructions. Upgrade work is under way, so the sensible plan is a quick look online, a flask, and sandwiches the size of a small suitcase. Reggie is selling pre-checked tickets, checked by himself, in his kitchen.",
+     "real": "Network Rail is asking passengers travelling to and from London Euston over Christmas to check before they travel because upgrade work is going on.",
+     "source": {
+      "name": "Network Rail",
+      "url": "https://www.networkrailmediacentre.co.uk/news/passengers-urged-to-check-before-travelling-to-and-from-london-euston-this-christmas"
+     }
+    },
+    {
+     "kicker": "Culture",
+     "headline": "Darts And Superheroes Team Up; Treble Twenty Gets A Cape",
+     "satire": "Target Darts has joined forces with Marvel for a new licensed collection, so a game usually played near a pub fruit machine can now carry a little superhero energy. Nobody expects the arrows to fly any straighter, but the Thursday team will be extremely well dressed. Terry is calling it the biggest crossover since the quiz machine met the jukebox. Reggie offers a cape with every set of flights, invoice enclosed.",
+     "real": "Target Darts has teamed up with Marvel to launch a new licensed collection.",
+     "source": {
+      "name": "Retail Times",
+      "url": "https://retailtimes.co.uk/target-darts-joins-forces-with-marvel-to-launch-an-all-new-licensed-collection/"
+     }
+    },
+    {
+     "kicker": "Shops",
+     "headline": "Supermarket Wine Hits £5.45; Dinner Parties Go Quietly Continental",
+     "satire": "Sainsbury's has launched a Bordeaux at £5.45, putting a respectable French red within reach of anyone who owns a corkscrew and a small amount of optimism. Terry describes it as the cheapest trip to France available without a ferry. Reggie says he has the same wine in a posher bottle and will be adding a handling fee for the label.",
+     "real": "Sainsbury's has launched a Bordeaux wine at £5.45.",
+     "source": {
+      "name": "Retail Times",
+      "url": "https://retailtimes.co.uk/sainsburys-launches-5-45-bordeaux-proving-great-wine-doesnt-need-a-premium-price-tag/"
+     }
+    }
+   ],
+   "terry": "And that's the news, ladies and gentlemen, every word of it made up apart from the boxes! Join us tomorrow, when something else will surely happen to somebody's shelf.",
+   "reggie": "Check the box underneath, my old son, that's where the truth lives. And if you enjoyed any of that, my fee is a fiver, payable on delivery, a nice little earner."
+  },
+  {
    "date": "2026-11-14",
    "title": "Launch Edition: Everyone's Worried, Nobody's Cold",
    "standfirst": "Terry and Reggie go through the last few days' news. Everything in big type is made up. Everything in the boxes is real.",
