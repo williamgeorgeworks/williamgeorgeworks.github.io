@@ -20,7 +20,8 @@
      "score": 2943,
      "date": "2026-11-15"
     }
-   ]
+   ],
+   "cap": 20000
   },
   "grand-theft-kitty": {
    "label": "Dreamies",
@@ -56,7 +57,8 @@
      "score": 3380,
      "date": "2026-11-14"
     }
-   ]
+   ],
+   "cap": 30000
   },
   "arthurs-tribunal": {
    "label": "points",
@@ -87,7 +89,8 @@
      "score": 1062,
      "date": "2026-11-15"
     }
-   ]
+   ],
+   "cap": 10000
   },
   "moulding-museum": {
    "label": "drips caught",
@@ -98,7 +101,8 @@
      "score": 28,
      "date": "2026-11-14"
     }
-   ]
+   ],
+   "cap": 30
   },
   "unemployable-arcade": {
    "label": "stars",
@@ -109,7 +113,8 @@
      "score": 12,
      "date": "2026-11-14"
     }
-   ]
+   ],
+   "cap": 12
   }
  }
 }

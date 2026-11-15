@@ -29,3 +29,7 @@ He puts the address into `scores.js`, switches the arcade page's wording from "a
 - Ties go to whoever got there first. Duplicates are ignored.
 - An emailed copy of every submission still goes to Ferret through Formspree, so notes and replies are not lost.
 - To remove a score, edit `scores.json` and delete the entry. To add rude words, edit `RUDE_*` at the top of the Worker (and redeploy).
+
+## Adding a new game later (no Cloudflare needed)
+
+In `scores.json`, add the game under `games` with `label`, `max` (or null), `cap` (the highest believable score), `title`, `unit` and `entries: []`. A game with a `cap` accepts scores, and a game with a `title` appears in the arcade form's dropdown by itself. Then add its card with a `data-hall` box to `arcade.html`.

@@ -11,14 +11,8 @@ const ORIGINS = [
   "https://www.williamgeorgeworks.co.uk",
   "https://williamgeorgeworks.github.io"
 ];
-/* Highest believable score per game. Scores are self-reported, so these only stop silly numbers. */
-const GAMES = {
-  "red-light-green-light": { label: "points", max: null, cap: 20000 },
-  "grand-theft-kitty": { label: "Dreamies", max: null, cap: 30000 },
-  "arthurs-tribunal": { label: "points", max: null, cap: 10000 },
-  "moulding-museum": { label: "drips caught", max: 30, cap: 30 },
-  "unemployable-arcade": { label: "stars", max: 12, cap: 12 }
-};
+/* Which games take scores, and the highest believable score for each, now live in scores.json:
+   a game accepts submissions only if it has a "cap" there. Adding a game never needs this file changed. */
 const KEEP_PER_GAME = 20;
 const TOP = 3;
 /* Rude words. Matched per word, after turning look-alike characters into letters, so Scunthorpe,
@@ -52,9 +46,10 @@ function isRude(name) {
     RUDE_START.some(w => t.startsWith(w)) ||
     RUDE_WORD.some(w => new RegExp("^" + w + "(s|es|ed|er|ers|ing|y|head|heads)?$").test(t)));
 }
+/* Checks the parts that do not depend on the game list. */
 function validate(input) {
-  const g = GAMES[input && input.game];
-  if (!g) return { error: "Unknown game." };
+  const slug = String(input && input.game || "");
+  if (!/^[a-z0-9-]{1,60}$/.test(slug)) return { error: "Unknown game." };
   const name = cleanName(input.name);
   if (name.length < 1) return { error: "Please give a name or handle." };
   if (/https?:|www\.|@.+\./i.test(name)) return { error: "Please leave links and emails out of the name." };
@@ -63,8 +58,7 @@ function validate(input) {
   if (!/^[0-9]{1,6}$/.test(s)) return { error: "The score must be a whole number." };
   const score = parseInt(s, 10);
   if (score < 1) return { error: "A score of nothing is a perfectly good score, but it does not go on the wall." };
-  if (score > g.cap) return { error: "That score is beyond what the court believes possible." };
-  return { game: input.game, name, score };
+  return { game: slug, name, score };
 }
 function today() { return new Date().toISOString().slice(0, 10); }
 function b64decode(b64) { const bin = atob(b64.replace(/\n/g, "")); const bytes = Uint8Array.from(bin, c => c.charCodeAt(0)); return new TextDecoder().decode(bytes); }
@@ -74,9 +68,10 @@ function ranked(entries) {
 }
 /* Pure decision, so it can be tested without GitHub. */
 function applyScore(data, v) {
-  const g = (data.games = data.games || {});
-  if (!g[v.game]) g[v.game] = { label: GAMES[v.game].label, max: GAMES[v.game].max, entries: [] };
-  const game = g[v.game];
+  const game = data.games && data.games[v.game];
+  if (!game || typeof game.cap !== "number") return { changed: false, error: "Unknown game." };
+  if (v.score > game.cap) return { changed: false, error: "That score is beyond what the court believes possible." };
+  game.entries = game.entries || [];
   const top = ranked(game.entries).slice(0, TOP);
   const third = top.length >= TOP ? top[TOP - 1].score : 0;
   if (v.score <= third) return { changed: false, reason: "not-top" };
@@ -138,6 +133,7 @@ export default {
     if (!env.GITHUB_TOKEN) return reply(500, { ok: false, error: "Not set up yet." }, origin);
     try {
       const out = await save(env, v);
+      if (out.error) return reply(400, { ok: false, error: out.error }, origin);
       if (out.changed) return reply(200, { ok: true, status: "added", place: out.place }, origin);
       return reply(200, { ok: true, status: out.reason }, origin);
     } catch (e) {

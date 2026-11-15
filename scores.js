@@ -50,6 +50,16 @@ var SCORES_WORKER='https://arcade-scores.benharding75.workers.dev';
   function el(tag,cls,text){var e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e;}
   function fmtDate(d){var p=String(d).split('-');if(p.length!==3)return '';var m=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][+p[1]-1];return m?(+p[2])+' '+m+' '+p[0]:'';}
   fetch('scores.json',{cache:'no-cache'}).then(function(r){return r.json();}).then(function(data){
+    /* A game listed in scores.json with a cap and a title appears in the form's dropdown automatically. */
+    if(sel){Object.keys(data.games||{}).forEach(function(slug){
+      var g=data.games[slug],have=false;
+      if(!g||typeof g.cap!=='number'||!g.title)return;
+      for(var i=0;i<sel.options.length;i++){if(sel.options[i].getAttribute('data-slug')===slug)have=true;}
+      if(have)return;
+      var o=document.createElement('option');o.value=g.title;o.setAttribute('data-slug',slug);
+      o.textContent=g.title+' ('+(g.unit||g.label)+')';sel.appendChild(o);
+    });
+    var q2=new URLSearchParams(location.search).get('game');if(q2)pick(q2);}
     holes.forEach(function(box){
       var g=(data.games||{})[box.getAttribute('data-hall')];
       if(!g)return;
