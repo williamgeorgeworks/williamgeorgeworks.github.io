@@ -1,6 +1,6 @@
-/* Checks news-data.json against the rules in NEWS-RULES.md that a machine can check. Usage: node tools/check-news.js */
+/* Checks news-data.json against the rules in NEWS-RULES.md that a machine can check. Usage: node tools/check-news.js [file]. The file defaults to news-data.json; the Daily Gaming Row uses gaming-data.json. */
 const fs = require("fs");
-const data = JSON.parse(fs.readFileSync(__dirname + "/../news-data.json", "utf8"));
+const data = JSON.parse(fs.readFileSync(__dirname + "/../" + (process.argv[2] || "news-data.json"), "utf8"));
 const errs = [], warn = [];
 const grim = /\b(murder\w*|kill(ed|ing)?|dead|death|died|dies|suicide|stabb\w*|rape\w*|abuse\w*|terror\w*|shooting|massacre|war|victim\w*|killed|fatal\w*)\b/i;
 if (!Array.isArray(data.editions)) errs.push("editions must be an array");

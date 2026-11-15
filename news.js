@@ -33,6 +33,7 @@
     out.appendChild(grid);
     add(out, add(el("div", "signoff"), line("T", ed.terry), line("R", ed.reggie)));
     var w = el("p", "wxlink"), wa = el("a", null, "Want the real weather? Terry and Reggie argue about that too."); wa.href = "weather.html"; w.appendChild(wa); out.appendChild(w);
+    var g = el("p", "wxlink"), ga = el("a", null, "Prefer the games? The Daily Gaming Row has Terry and Reggie arguing about those."); ga.href = "gaming.html"; g.appendChild(ga); out.appendChild(g);
     var days = document.getElementById("days"); days.textContent = "";
     if (eds.length > 1) eds.forEach(function (e) {
       var b = el("button", "chip", e.date); b.type = "button"; b.setAttribute("aria-pressed", e === ed ? "true" : "false");
