@@ -169,6 +169,11 @@
    "entries": [
     {
      "name": "Ferret",
+     "score": 339,
+     "date": "2026-11-15"
+    },
+    {
+     "name": "Ferret",
      "score": 327,
      "date": "2026-11-15"
     },
@@ -191,7 +196,13 @@
    "daily": true,
    "title": "Ferret's Ditch: Daily Challenge",
    "unit": "points today",
-   "entries": [],
+   "entries": [
+    {
+     "name": "Ferret",
+     "score": 339,
+     "date": "2026-11-15"
+    }
+   ],
    "alsoTo": "ferrets-ditch"
   }
  }
