@@ -1,37 +1,9 @@
-/* Player of the week and your badges. Week board is worked out from scores.json; badges from your own saves. */
+/* Player of the week. The week board is worked out from scores.json. Badges now live in badges.js. */
 (function () {
   "use strict";
   function el(t, c, x) { var e = document.createElement(t); if (c) e.className = c; if (x != null) e.textContent = x; return e; }
   function ukDate(d) { try { return new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/London" }).format(d); } catch (e) { return d.toISOString().slice(0, 10); } }
-  var potw = document.getElementById("potw"), badges = document.getElementById("badges");
-
-  if (badges) {
-    function load(k) { try { return JSON.parse(localStorage.getItem(k) || "null") || {}; } catch (e) { return {}; } }
-    var g = load("gtk-v1"), r = load("rlgl-v1"), f = load("fd-v1"), a = 0;
-    var fb = f.book || {}, fn = Object.keys(fb).filter(function (k) { return fb[k] > 0; }).length;
-    try { a = parseInt(localStorage.getItem("arthur-best") || "0", 10) || 0; } catch (e) {}
-    var list = [
-      ["Sticky Paws", "Steal 1,000 Dreamies in one Grand Theft Kitty run", +g.best >= 1000],
-      ["Master Thief", "Steal 5,000 Dreamies in one run", +g.best >= 5000],
-      ["Pillar of the Community", "Reach round 5 in Red Light, Green Light", +r.round >= 5],
-      ["Fish on the Slab", "Score 1,000 in Red Light, Green Light", +r.best >= 1000],
-      ["Order in Court", "Score 500 in Arthur's Tribunal", a >= 500],
-      ["Hung Jury", "Score 1,000 in Arthur's Tribunal", a >= 1000],
-      ["Not a Bite", "Play Ferret's Ditch", +f.played >= 1],
-      ["Tench Tamer", "Land a tench in Ferret's Ditch", +fb.tench > 0],
-      ["Specimen Hunter", "Land a specimen carp", +fb.specimen > 0],
-      ["Golden Moment", "Land the golden carp", +fb.golden > 0],
-      ["Ditch Legend", "Score 1,000 in Ferret's Ditch", +f.best >= 1000],
-      ["Full Book", "Catch everything in the Ferret's Ditch catch book", fn >= 11]
-    ];
-    var got = list.filter(function (x) { return x[2]; }).length;
-    badges.textContent = "";
-    badges.appendChild(el("h3", null, "Your badges (" + got + " of " + list.length + ")"));
-    var ul = el("ul", "badgelist");
-    list.forEach(function (x) { var li = el("li", x[2] ? "got" : "locked"); li.appendChild(el("b", null, (x[2] ? "★ " : "☆ ") + x[0])); li.appendChild(el("span", null, x[1])); ul.appendChild(li); });
-    badges.appendChild(ul);
-    badges.appendChild(el("p", "fine", "Kept in this browser only, so they will not follow you to another device."));
-  }
+  var potw = document.getElementById("potw");
 
   if (potw) {
     fetch("scores.json", { cache: "no-store" }).then(function (x) { return x.json(); }).then(function (d) {
