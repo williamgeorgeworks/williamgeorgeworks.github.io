@@ -27,18 +27,23 @@
    "max": null,
    "entries": [
     {
+     "name": "Jo",
+     "score": 6550,
+     "date": "2026-11-15"
+    },
+    {
+     "name": "Terry",
+     "score": 5555,
+     "date": "2026-11-15"
+    },
+    {
      "name": "TheFerret (management)",
      "score": 5380,
      "date": "2026-11-14"
     },
     {
-     "name": "TheFerret (management)",
-     "score": 3380,
-     "date": "2026-11-14"
-    },
-    {
      "name": "Jo",
-     "score": 6550,
+     "score": 3805,
      "date": "2026-11-15"
     },
     {
@@ -47,9 +52,9 @@
      "date": "2026-11-15"
     },
     {
-     "name": "Jo",
-     "score": 3805,
-     "date": "2026-11-15"
+     "name": "TheFerret (management)",
+     "score": 3380,
+     "date": "2026-11-14"
     }
    ]
   },
