@@ -4,6 +4,7 @@ on:
     branches: ['gaming/**']
 permissions:
   contents: write
+  pages: write
 concurrency:
   group: publish-main
   cancel-in-progress: false
@@ -32,3 +33,7 @@ jobs:
           node tools/make-feeds.js
           git add news.xml gaming.xml
           git diff --cached --quiet || (git commit -m "Refresh RSS feeds (automatic)" && git push origin main)
+      - name: Ask Pages to rebuild
+        run: gh api -X POST "repos/${GITHUB_REPOSITORY}/pages/builds" || true
+        env:
+          GH_TOKEN: ${{ github.token }}
