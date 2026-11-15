@@ -1,7 +1,8 @@
-/* Hall of fame: renders the top three published scores under each game on the arcade page.
+/* Hall of fame: renders each game's leaderboard (the best three, with the rest behind a button) on the arcade page.
    Data lives in scores.json. When SCORES_WORKER is set, submissions are checked and added to it
    automatically by a small Cloudflare Worker (see cloudflare-worker/README.md). While it is empty,
-   the form falls back to emailing Formspree and a human adds scores by hand. */
+   the form falls back to emailing Formspree and a human adds scores by hand.
+   Board length comes from "top" in scores.json (default 3). Game end screens use quickscore.js. */
 var SCORES_WORKER='https://arcade-scores.benharding75.workers.dev';
 (function(){
   /* Pre-fill the submission form from ?game=slug&score=123, or when a hall link is clicked. */
