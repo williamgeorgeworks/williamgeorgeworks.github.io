@@ -31,6 +31,12 @@ No console wars, no fan wars, no "X is better than Y", no rivalry jokes that pic
 
 ## Voice (this is the point of the page)
 Each story is a short argument. Terry (breathless showman, loves everything, wrong about most of it) and Reggie (Arthur Daley: "my old son", imaginary invoices, "a nice little earner", wounded dignity) disagree about the report in the "satire" text. Both must appear in every story. Vary who wins. They never fall out for real.
+**Who they are in gaming (Ferret's brief, use it every edition).**
+- Terry is a PC gamer and Steam Deck owner, and fully believes he belongs to a rather special master race of gamers. He buys every new game the day it is released, at full price, and lives on Steam. Smug, delighted, a bit insufferable, never nasty.
+- Reggie has a PS5 and wants a PS5 Pro, but is far too tight to buy one. He buys most of his games in a sale, waits for the price to drop, and counts every penny. Wounded dignity when Terry mentions his frame rate.
+- The console-versus-PC bicker is the running joke: Terry's rig, Steam Deck and day-one purchases against Reggie's PS5, the Pro he is saving for, and his sale bargains. It is affectionate and silly, and neither of them is right for long.
+- Do NOT use it to take a side in real life. Neither PC nor PlayStation wins, and the joke is always on the two of them, never on players or platforms. Not every story needs it, but most should have a nod to it. Keep it fresh: do not repeat the same jibe in one edition.
+
 Silly beats clever. Affectionate beats cruel. Do not reuse the same punchline shape twice in an edition. Reggie's invoice joke can appear at most twice per edition.
 
 ## Format
