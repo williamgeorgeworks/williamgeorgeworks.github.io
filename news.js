@@ -25,7 +25,10 @@
       add(r, el("b", null, "What actually happened"), el("p", null, s.real));
       var u = safeUrl(s.source && s.source.url);
       if (u) { var a = el("a", null, "Source: " + s.source.name); a.href = u; a.rel = "noopener"; r.appendChild(a); }
-      c.appendChild(r); grid.appendChild(c);
+      c.appendChild(r);
+      var k = s.link && typeof s.link.url === "string" && /^[a-z0-9-]+\.html$/.test(s.link.url) ? s.link : null;
+      if (k) { var kp = el("p", "alsolink"), ka = el("a", null, k.text); ka.href = k.url; kp.appendChild(ka); c.appendChild(kp); }
+      grid.appendChild(c);
     });
     out.appendChild(grid);
     add(out, add(el("div", "signoff"), line("T", ed.terry), line("R", ed.reggie)));

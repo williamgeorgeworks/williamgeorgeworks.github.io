@@ -40,3 +40,7 @@ Dry, affectionate and silly beats cruel. Punch up, never down.
 ## Format
 Edit news-data.json: add a new edition at the front of "editions" (newest first) and keep the newest 30.
 Run `node tools/check-news.js` before committing. It must print OK.
+
+
+## Optional site link
+A story may carry `"link": {"text": "...", "url": "page.html"}` pointing to one of our own pages (a plain filename ending .html, nothing else). Use it when a story genuinely connects, for example the big-game download story links to Grand Theft Kitty. It shows under the source box.
