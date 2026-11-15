@@ -161,13 +161,7 @@
   "ferrets-ditch": {
    "label": "points",
    "max": null,
-   "entries": [
-    {
-     "name": "Probe",
-     "score": 1,
-     "date": "2026-11-15"
-    }
-   ],
+   "entries": [],
    "cap": 5000,
    "top": 10,
    "title": "Ferret's Ditch",
@@ -181,13 +175,7 @@
    "daily": true,
    "title": "Ferret's Ditch: Daily Challenge",
    "unit": "points today",
-   "entries": [
-    {
-     "name": "Probe",
-     "score": 1,
-     "date": "2026-11-15"
-    }
-   ],
+   "entries": [],
    "alsoTo": "ferrets-ditch"
   }
  }
