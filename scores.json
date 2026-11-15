@@ -125,6 +125,16 @@
    ],
    "cap": 12,
    "top": 10
+  },
+  "grand-theft-kitty-daily": {
+   "label": "Dreamies",
+   "max": null,
+   "cap": 30000,
+   "top": 10,
+   "daily": true,
+   "title": "Grand Theft Kitty: Daily Challenge",
+   "unit": "Dreamies stolen today",
+   "entries": []
   }
  }
 }

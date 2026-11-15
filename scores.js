@@ -49,6 +49,7 @@ var SCORES_WORKER='https://arcade-scores.benharding75.workers.dev';
   var holes=document.querySelectorAll('[data-hall]');
   if(!holes.length||!window.fetch)return;
   function el(tag,cls,text){var e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e;}
+  function ukToday(){try{return new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/London'}).format(new Date());}catch(e){return new Date().toISOString().slice(0,10);}}
   function fmtDate(d){var p=String(d).split('-');if(p.length!==3)return '';var m=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][+p[1]-1];return m?(+p[2])+' '+m+' '+p[0]:'';}
   fetch('scores.json',{cache:'no-cache'}).then(function(r){return r.json();}).then(function(data){
     /* A game listed in scores.json with a cap and a title appears in the form's dropdown automatically. */
@@ -65,11 +66,12 @@ var SCORES_WORKER='https://arcade-scores.benharding75.workers.dev';
       var g=(data.games||{})[box.getAttribute('data-hall')];
       if(!g)return;
       var N=(typeof g.top==='number'&&g.top>=1)?Math.min(Math.floor(g.top),25):3;
-      var rows=(g.entries||[]).slice().sort(function(a,b){return (b.score-a.score)||String(a.date).localeCompare(String(b.date));}).slice(0,N);
+      var src=(g.entries||[]);if(g.daily){var today=ukToday();src=src.filter(function(e){return e.date===today;});}
+      var rows=src.slice().sort(function(a,b){return (b.score-a.score)||String(a.date).localeCompare(String(b.date));}).slice(0,N);
       box.textContent='';
-      box.appendChild(el('h4',null,'Top players'));
+      box.appendChild(el('h4',null,g.daily?'Today\u2019s daily challenge':'Top players'));
       if(!rows.length){
-        box.appendChild(el('p','none','Nobody yet. The leaderboard is wide open.'));
+        box.appendChild(el('p','none',g.daily?'Nobody has played today\u2019s run yet. It resets every morning, so be the first.':'Nobody yet. The leaderboard is wide open.'));
       }else{
         var ol=el('ol');
         rows.forEach(function(r,i){
@@ -77,7 +79,7 @@ var SCORES_WORKER='https://arcade-scores.benharding75.workers.dev';
           li.appendChild(el('span','rank',(i+1)+'.'));
           li.appendChild(el('span','who',r.name));
           li.appendChild(el('span','pts',r.score+(g.max?' of '+g.max:'')+' '+g.label));
-          var d=fmtDate(r.date); if(d)li.appendChild(el('span','when',d));
+          var d=g.daily?'':fmtDate(r.date); if(d)li.appendChild(el('span','when',d));
           if(i>=3)li.style.display='none';
           ol.appendChild(li);
         });

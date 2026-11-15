@@ -51,6 +51,7 @@ button{font:inherit;cursor:pointer}
   box-shadow:4px 4px 0 var(--ink)}
 .btn:hover{background:var(--blue)} .btn:active{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--ink)}
 .btn.quiet{background:var(--paper);color:var(--ink);font-size:.9rem;padding:6px 12px}
+.btn.alt{background:var(--blue);color:var(--paper);margin-left:6px}.btn.alt:hover{background:var(--red)}
 .btn:focus-visible,.mute:focus-visible,.catbtn:focus-visible{outline:3px solid var(--blue);outline-offset:3px}
 .row{display:flex;flex-wrap:wrap;gap:9px;justify-content:center}
 .share{font-size:.88rem;font-style:italic;user-select:all}
@@ -104,6 +105,8 @@ button{font:inherit;cursor:pointer}
         <div class="gang" id="gang"></div>
         <p class="perk" id="perk"></p>
         <button class="btn" id="startBtn" type="button">Start the caper</button>
+        <button class="btn alt" id="dailyBtn" type="button">Today&rsquo;s daily challenge</button>
+        <p id="dailyLine" style="font-size:.85rem;font-style:italic;margin-top:6px">Everyone gets the same promenade today, with the same cat, and a fresh leaderboard every morning.</p>
         <p id="bankLine" style="font-size:.85rem;font-style:italic"></p>
       </div>
 
@@ -215,9 +218,14 @@ function say(text,secs){G.say=text;G.sayT=secs||2.2;}
 function floatText(x,y,text,col,size){FL.push({x:x,y:y,text:text,col:col,age:0,size:size||24});}
 function speed(){return Math.min(470,225+G.heat*20)*(G.zoom>0?1.5:1);}
 
+var DAILY=false;
+function ukDate(){try{return new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/London'}).format(new Date());}catch(e){return new Date().toISOString().slice(0,10);}}
+function dateSeed(d){var h=2166136261;for(var i=0;i<d.length;i++){h^=d.charCodeAt(i);h=Math.imul(h,16777619);}return h>>>0;}
 function startGame(){
+  if(DAILY){if(!G.pick)G.pick=G.cat;G.cat=CATS[0];G.rngS=rng(dateSeed(ukDate()));}
+  else if(G.pick){G.cat=G.pick;G.pick=null;}
   var c=G.cat;
-  G.mode='play';G.time=0;G.score=0;G.maxLives=c.lives||3;G.lives=G.maxLives;G.streak=0;G.mult=1;G.heat=0;G.banner=0;G.spawnT=1.2;G.nipT=10;
+  G.mode='play';G.time=0;G.score=0;G.maxLives=c.lives||3;G.lives=G.maxLives;G.streak=0;G.mult=1;G.heat=0;G.banner=0;G.spawnT=1.2;G.nipT=10;G.lastY=500;
   G.zoom=0;G.inv=0;G.mood='idle';G.taken=0;G.sayCd=0;E=[];FX=[];FL=[];SP=[];P.y=P.ty=520;
   say(c.go,2.4);
   $('startPanel').hidden=true;$('overPanel').hidden=true;
@@ -225,19 +233,19 @@ function startGame(){
 }
 function endGame(){
   if(G.mode!=='play')return;G.mode='over';G.mood='hit';G.moodT=99;
-  var before=gangCount(),isBest=G.score>SAVE.best;
+  var before=gangCount(),isBest=!DAILY&&G.score>SAVE.best;
   if(isBest)SAVE.best=G.score;SAVE.bank+=G.score;save();
   var joined=[];for(var i=0;i<CATS.length;i++)if(unlocked(CATS[i])&&i>=before)joined.push(CATS[i].name);
   $('finalScore').textContent=G.score;
   $('verdict').textContent=rankFor(G.score);
-  $('bestLine').textContent=isBest&&G.score>0?'A new best. The gang is quietly proud.':'Your best run: '+SAVE.best+' Dreamies.';
+  $('bestLine').textContent=DAILY?'Today\u2019s daily challenge. Same promenade for everybody.':(isBest&&G.score>0?'A new best. The gang is quietly proud.':'Your best run: '+SAVE.best+' Dreamies.');
   var nx=nextLocked(),ul=$('unlockLine');
   if(joined.length)ul.innerHTML='<strong>'+joined.join(' and ')+(joined.length>1?' have':' has')+' joined the gang.</strong>';
   else if(nx)ul.textContent=(nx.need-SAVE.bank)+' more Dreamies in the bank and '+nx.name+' joins the gang.';
   else ul.textContent='The whole gang is out. The promenade will never be the same.';
-  $('shareText').textContent='I stole '+G.score+' Dreamies as '+G.cat.name+' in Grand Theft Kitty. The police know me as "'+rankFor(G.score)+'".';
+  $('shareText').textContent=DAILY?'I stole '+G.score+' Dreamies in today\u2019s Grand Theft Kitty daily challenge. Same promenade for everyone. Beat me:':'I stole '+G.score+' Dreamies as '+G.cat.name+' in Grand Theft Kitty. The police know me as "'+rankFor(G.score)+'".';
   $('copyBtn').textContent='Copy my score';
-  var sb=$('sendBtn');sb.style.display=G.score>0?'':'none';sb.href='arcade.html?game=grand-theft-kitty&score='+G.score+'#send-score';
+  var sb=$('sendBtn');sb.style.display=G.score>0?'':'none';sb.href='arcade.html?game='+(DAILY?'grand-theft-kitty-daily':'grand-theft-kitty')+'&score='+G.score+'#send-score';
   sheet();
   setTimeout(function(){$('overPanel').hidden=false;try{$('againBtn').focus({preventScroll:true});}catch(e){}},1000);
   sfx('over');
@@ -245,6 +253,10 @@ function endGame(){
 
 /* ---------- spawning ---------- */
 function spawn(){
+  if(!DAILY||!G.rngS)return spawn0();
+  var m=Math.random;Math.random=G.rngS;try{spawn0();}finally{Math.random=m;}
+}
+function spawn0(){
   var y=TOP+16+Math.random()*(BOT-TOP-32),h=G.heat,x=W+70;
   if(Math.abs(y-G.lastY)<80)y=y<(TOP+BOT)/2?y+160:y-160;
   G.lastY=y;
@@ -645,9 +657,10 @@ function sheet(){
   CATS.forEach(function(c){var li=document.createElement('li'),b=document.createElement('b'),s=document.createElement('span');b.textContent=c.name;
     s.textContent=unlocked(c)?' In the gang.':' Joins at '+c.need+' Dreamies banked.';li.appendChild(b);li.appendChild(document.createTextNode(' '+c.perk));li.appendChild(s);ul.appendChild(li);});
 }
-$('startBtn').addEventListener('click',startGame);
-$('againBtn').addEventListener('click',startGame);
-$('gangBtn').addEventListener('click',function(){G.mode='title';E=[];FX=[];G.mood='idle';G.sayT=0;G.heat=0;G.mult=1;G.score=0;G.lives=G.maxLives;buildGang();$('overPanel').hidden=true;$('startPanel').hidden=false;});
+$('startBtn').addEventListener('click',function(){DAILY=false;startGame();});
+$('dailyBtn').addEventListener('click',function(){DAILY=true;startGame();});
+$('againBtn').addEventListener('click',function(){startGame();});
+$('gangBtn').addEventListener('click',function(){DAILY=false;if(G.pick){G.cat=G.pick;G.pick=null;}G.mode='title';E=[];FX=[];G.mood='idle';G.sayT=0;G.heat=0;G.mult=1;G.score=0;G.lives=G.maxLives;buildGang();$('overPanel').hidden=true;$('startPanel').hidden=false;});
 $('copyBtn').addEventListener('click',function(){var t=$('shareText').textContent+' '+location.href.split('?')[0];
   if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(function(){$('copyBtn').textContent='Copied';},function(){$('copyBtn').textContent='Select the text below';});}else $('copyBtn').textContent='Select the text below';});
 $('muteBtn').addEventListener('click',function(){A.muted=!A.muted;if(A.master)A.master.gain.value=A.muted?0:1;this.textContent=A.muted?'Sound off':'Sound on';this.setAttribute('aria-pressed',A.muted?'true':'false');});

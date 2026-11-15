@@ -329,3 +329,6 @@ header.site.js-nav nav.main .morelist a[aria-current=page]{border-bottom:3px sol
 
 .hall .showmore{margin:8px 0 0;padding:6px 12px;font:inherit;font-weight:700;font-size:15px;background:transparent;border:2px solid var(--ink);cursor:pointer}
 .hall .showmore:hover{background:var(--ink);color:var(--paper)}
+
+.hall.daily{margin-top:12px;border-top:3px dotted var(--blue)}
+.hall.daily h4{color:var(--blue)}

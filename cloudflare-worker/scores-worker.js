@@ -1,7 +1,10 @@
-/* Arcade scores Worker.
-   Takes a score from the arcade form, checks it, and, if it makes a game's top three,
-   adds it to scores.json in the GitHub repo. GitHub Pages then republishes the site.
-   Secret needed: GITHUB_TOKEN (fine-grained token, this repo only, Contents: read and write). */
+/* William George Works Worker.
+   1. POST /        a score from the arcade: checked, and if it makes the board it is added to scores.json
+                    in the GitHub repo (GitHub Pages then republishes the site).
+   2. POST /vote    a Terry-or-Reggie vote on a Daily Gaming Row story (needs the VOTES KV binding).
+   3. GET  /tally   the vote counts for an edition, plus the running total.
+   Secret needed: GITHUB_TOKEN (fine-grained token, this repo only, Contents: read and write).
+   Binding needed for votes: VOTES (a Workers KV namespace). Scores work without it. */
 
 const REPO = "williamgeorgeworks/williamgeorgeworks.github.io";
 const BRANCH = "main";
@@ -25,7 +28,7 @@ function cors(origin) {
   const ok = ORIGINS.includes(origin);
   return {
     "Access-Control-Allow-Origin": ok ? origin : ORIGINS[0],
-    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type",
     "Vary": "Origin"
   };
@@ -60,7 +63,10 @@ function validate(input) {
   if (score < 1) return { error: "A score of nothing is a perfectly good score, but it does not go on the wall." };
   return { game: slug, name, score };
 }
-function today() { return new Date().toISOString().slice(0, 10); }
+function today() {
+  try { return new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/London" }).format(new Date()); }
+  catch (e) { return new Date().toISOString().slice(0, 10); }
+}
 function b64decode(b64) { const bin = atob(b64.replace(/\n/g, "")); const bytes = Uint8Array.from(bin, c => c.charCodeAt(0)); return new TextDecoder().decode(bytes); }
 function b64encode(text) { const bytes = new TextEncoder().encode(text); let bin = ""; bytes.forEach(b => (bin += String.fromCharCode(b))); return btoa(bin); }
 function ranked(entries) {
@@ -72,6 +78,14 @@ function applyScore(data, v) {
   if (!game || typeof game.cap !== "number") return { changed: false, error: "Unknown game." };
   if (v.score > game.cap) return { changed: false, error: "That score is beyond what the court believes possible." };
   game.entries = game.entries || [];
+  if (game.daily) {
+    /* A daily board shows only today's scores, one per player (their best). */
+    const day = today();
+    game.entries = game.entries.filter(e => e.date === day);
+    const mine = game.entries.find(e => e.name.toLowerCase() === v.name.toLowerCase());
+    if (mine && v.score <= mine.score) return { changed: false, reason: "duplicate" };
+    if (mine) game.entries = game.entries.filter(e => e !== mine);
+  }
   const TOP = typeof game.top === "number" ? Math.min(Math.max(Math.floor(game.top), 1), 25) : DEFAULT_TOP;
   const top = ranked(game.entries).slice(0, TOP);
   const last = top.length >= TOP ? top[TOP - 1].score : 0;
@@ -120,14 +134,59 @@ async function save(env, v) {
   throw new Error("busy");
 }
 
+const SIDES = ["terry", "reggie"];
+const MAX_STORY = 14;
+async function readTally(env) {
+  const raw = await env.VOTES.get("tally");
+  const t = raw ? JSON.parse(raw) : {};
+  t.total = t.total || { terry: 0, reggie: 0 };
+  t.editions = t.editions || {};
+  return t;
+}
+function viewTally(t, edition) {
+  return { ok: true, total: t.total, stories: (t.editions && t.editions[edition]) || {} };
+}
 export default {
   async fetch(request, env) {
     const origin = request.headers.get("Origin") || "";
+    const url = new URL(request.url);
+    const path = url.pathname.replace(/\/+$/, "") || "/";
     if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: cors(origin) });
+
+    if (request.method === "GET" && path === "/tally") {
+      if (!env.VOTES) return reply(503, { ok: false, error: "Votes are not set up yet." }, origin);
+      const edition = url.searchParams.get("edition") || "";
+      if (edition && !/^\d{4}-\d{2}-\d{2}$/.test(edition)) return reply(400, { ok: false, error: "Bad edition." }, origin);
+      try { return reply(200, viewTally(await readTally(env), edition), origin); }
+      catch (e) { return reply(502, { ok: false, error: "Try again in a minute." }, origin); }
+    }
+
     if (request.method !== "POST") return reply(405, { ok: false, error: "POST only." }, origin);
     if (!ORIGINS.includes(origin)) return reply(403, { ok: false, error: "Not from here." }, origin);
     let input;
     try { input = await request.json(); } catch (e) { return reply(400, { ok: false, error: "Bad request." }, origin); }
+
+    if (path === "/vote") {
+      if (!env.VOTES) return reply(503, { ok: false, error: "Votes are not set up yet." }, origin);
+      const edition = String(input && input.edition || "");
+      const story = Number(input && input.story);
+      const side = String(input && input.side || "");
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(edition) || !Number.isInteger(story) || story < 0 || story > MAX_STORY || !SIDES.includes(side))
+        return reply(400, { ok: false, error: "Bad vote." }, origin);
+      try {
+        const t = await readTally(env);
+        const e = (t.editions[edition] = t.editions[edition] || {});
+        const st = (e[story] = e[story] || { terry: 0, reggie: 0 });
+        st[side] += 1;
+        t.total[side] += 1;
+        const keep = Object.keys(t.editions).sort().slice(-60);
+        Object.keys(t.editions).forEach(k => { if (!keep.includes(k)) delete t.editions[k]; });
+        await env.VOTES.put("tally", JSON.stringify(t));
+        return reply(200, viewTally(t, edition), origin);
+      } catch (err) { return reply(502, { ok: false, error: "Try again in a minute." }, origin); }
+    }
+
+    if (path !== "/") return reply(404, { ok: false, error: "Not found." }, origin);
     if (input && input.website) return reply(200, { ok: true, status: "skipped" }, origin); /* honeypot */
     const v = validate(input);
     if (v.error) return reply(400, { ok: false, error: v.error }, origin);
