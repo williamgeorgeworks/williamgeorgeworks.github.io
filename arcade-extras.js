@@ -7,7 +7,8 @@
 
   if (badges) {
     function load(k) { try { return JSON.parse(localStorage.getItem(k) || "null") || {}; } catch (e) { return {}; } }
-    var g = load("gtk-v1"), r = load("rlgl-v1"), a = 0;
+    var g = load("gtk-v1"), r = load("rlgl-v1"), f = load("fd-v1"), a = 0;
+    var fb = f.book || {}, fn = Object.keys(fb).filter(function (k) { return fb[k] > 0; }).length;
     try { a = parseInt(localStorage.getItem("arthur-best") || "0", 10) || 0; } catch (e) {}
     var list = [
       ["Sticky Paws", "Steal 1,000 Dreamies in one Grand Theft Kitty run", +g.best >= 1000],
@@ -15,7 +16,13 @@
       ["Pillar of the Community", "Reach round 5 in Red Light, Green Light", +r.round >= 5],
       ["Fish on the Slab", "Score 1,000 in Red Light, Green Light", +r.best >= 1000],
       ["Order in Court", "Score 500 in Arthur's Tribunal", a >= 500],
-      ["Hung Jury", "Score 1,000 in Arthur's Tribunal", a >= 1000]
+      ["Hung Jury", "Score 1,000 in Arthur's Tribunal", a >= 1000],
+      ["Not a Bite", "Play Ferret's Ditch", +f.played >= 1],
+      ["Tench Tamer", "Land a tench in Ferret's Ditch", +fb.tench > 0],
+      ["Specimen Hunter", "Land a specimen carp", +fb.specimen > 0],
+      ["Golden Moment", "Land the golden carp", +fb.golden > 0],
+      ["Ditch Legend", "Score 1,000 in Ferret's Ditch", +f.best >= 1000],
+      ["Full Book", "Catch everything in the Ferret's Ditch catch book", fn >= 11]
     ];
     var got = list.filter(function (x) { return x[2]; }).length;
     badges.textContent = "";

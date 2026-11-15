@@ -157,6 +157,26 @@
     }
    ],
    "alsoTo": "grand-theft-kitty"
+  },
+  "ferrets-ditch": {
+   "label": "points",
+   "max": null,
+   "entries": [],
+   "cap": 5000,
+   "top": 10,
+   "title": "Ferret's Ditch",
+   "unit": "points"
+  },
+  "ferrets-ditch-daily": {
+   "label": "points",
+   "max": null,
+   "cap": 5000,
+   "top": 10,
+   "daily": true,
+   "title": "Ferret's Ditch: Daily Challenge",
+   "unit": "points today",
+   "entries": [],
+   "alsoTo": "ferrets-ditch"
   }
  }
 }
