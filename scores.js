@@ -1,5 +1,8 @@
 /* Hall of fame: renders the top three published scores under each game on the arcade page.
-   Data lives in scores.json and is edited by hand after a human has checked each submission. */
+   Data lives in scores.json. When SCORES_WORKER is set, submissions are checked and added to it
+   automatically by a small Cloudflare Worker (see cloudflare-worker/README.md). While it is empty,
+   the form falls back to emailing Formspree and a human adds scores by hand. */
+var SCORES_WORKER='';
 (function(){
   /* Pre-fill the submission form from ?game=slug&score=123, or when a hall link is clicked. */
   var sel=document.getElementById('sc-game'),scoreBox=document.getElementById('sc-score');
@@ -12,6 +15,36 @@
     if(g)pick(g);
     if(sc&&scoreBox&&/^[0-9]{1,6}$/.test(sc))scoreBox.value=sc;
   }catch(e){}
+
+  /* Automatic submission */
+  var form=sel&&sel.form;
+  if(form&&SCORES_WORKER&&window.fetch){
+    var msg=document.getElementById('sc-msg'),btn=form.querySelector('button[type=submit]');
+    function say(t,ok){if(!msg)return;msg.hidden=false;msg.textContent=t;msg.className='formmsg '+(ok?'good':'bad');}
+    form.addEventListener('submit',function(ev){
+      ev.preventDefault();
+      var fd=new FormData(form),slug=sel.options[sel.selectedIndex].getAttribute('data-slug');
+      var trap=form.querySelector('[name=_gotcha]');
+      var body={game:slug,name:fd.get('name'),score:fd.get('score'),website:trap?trap.value:''};
+      if(btn){btn.disabled=true;btn.textContent='Lodging...';}
+      /* An emailed copy still goes to Ferret, quietly, so notes and replies are not lost. */
+      try{fetch(form.action,{method:'POST',body:fd,headers:{'Accept':'application/json'}}).catch(function(){});}catch(e){}
+      fetch(SCORES_WORKER,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})
+        .then(function(r){return r.json().catch(function(){return {ok:false};});})
+        .then(function(j){
+          if(btn){btn.disabled=false;btn.textContent='Lodge my score';}
+          if(j&&j.ok&&j.status==='added'){say('In at number '+j.place+'. It will be on the wall in about a minute. Refresh the page to see it.',true);form.reset();}
+          else if(j&&j.ok&&j.status==='duplicate'){say('That one is already on the wall.',true);}
+          else if(j&&j.ok&&j.status==='not-top'){say('Thank you. That is not quite in the top three yet, so it has not gone on the wall. Have another go.',true);}
+          else if(j&&j.ok){say('Thank you.',true);}
+          else{say((j&&j.error)||'The court is busy. Please try again in a minute.',false);}
+        })
+        .catch(function(){
+          if(btn){btn.disabled=false;btn.textContent='Lodge my score';}
+          say('Could not reach the court. Please try again in a minute.',false);
+        });
+    });
+  }
   var holes=document.querySelectorAll('[data-hall]');
   if(!holes.length||!window.fetch)return;
   function el(tag,cls,text){var e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e;}
