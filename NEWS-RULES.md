@@ -1,7 +1,7 @@
 # The Daily Row: editorial rules
 
 The Daily Row is a satirical news page (news.html) written from real, recent UK news, read out by Terry and Reggie.
-A new edition is drafted each morning as a pull request. Ferret approves it by merging. Nothing goes live unmerged.
+A new edition is drafted each morning on a `news/YYYY-MM-DD` branch. From 15 Nov 2026 Ferret has chosen to publish automatically: when the branch is pushed, a GitHub Action (`.github/workflows/publish-news.yml`) runs `node tools/check-news.js` and, only if it prints OK, merges the branch into main. There is no human check, so the rules below matter more, and news.html carries a disclaimer saying so. If the checker fails, nothing goes live.
 Edit this file to change how the daily writer behaves.
 
 ## The golden rule (from Ferret)

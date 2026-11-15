@@ -1,0 +1,29 @@
+name: Publish Daily Row
+on:
+  push:
+    branches: ['news/**']
+permissions:
+  contents: write
+concurrency:
+  group: publish-news
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Check the edition
+        run: node tools/check-news.js
+      - name: Merge into main
+        run: |
+          git config user.name "Reginald Quill"
+          git config user.email "noreply@anthropic.com"
+          git checkout main
+          git pull --ff-only origin main
+          git merge --no-edit "origin/${GITHUB_REF_NAME}" -m "Publish ${GITHUB_REF_NAME} (automatic, checker passed)"
+          git push origin main
