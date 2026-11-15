@@ -50,3 +50,7 @@ Routes: `POST /` takes a score, `POST /vote` takes a vote, `GET /tally?edition=Y
 ## Daily boards that also feed a main board
 
 A game in scores.json can carry `"alsoTo": "<main game slug>"`. A score posted to it is also offered to that main board (top ten rules as normal), so a strong Daily Challenge run lands on both. Grand Theft Kitty Daily Challenge uses this.
+
+## v7: private page counter
+
+`hits.js` (on every page) posts the page name, and the referring site once per visit, to `POST /hit`. The Worker keeps one KV key per day (`h:YYYY-MM-DD`, kept 60 days) holding view counts per page, visits and referrers. No cookies, no IDs, bots and Do Not Track skipped, counting pauses at 700 views a day to protect the free KV write allowance. `stats.html` (noindex, not linked) reads `GET /stats`. Optional: add a Worker secret `STATS_KEY` and the stats page will ask for it. Visit `stats.html?me` once on your own devices to stop counting yourself.

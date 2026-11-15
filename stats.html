@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>Site stats (private)</title>
+<style>
+body{font:16px/1.5 system-ui,Arial,sans-serif;background:#141414;color:#f6f2e7;margin:0;padding:18px;max-width:760px;margin:0 auto}
+h1{font-size:1.5rem;margin:.2em 0}h2{font-size:1.1rem;margin:1.4em 0 .4em;color:#ffd9d9}
+.cards{display:flex;gap:10px;flex-wrap:wrap}.c{background:#222;border-radius:10px;padding:12px 16px;flex:1;min-width:120px}.c b{display:block;font-size:1.8rem}
+table{width:100%;border-collapse:collapse}td,th{padding:6px 8px;border-bottom:1px solid #333;text-align:left}td:last-child,th:last-child{text-align:right}
+.bar{height:60px;display:flex;align-items:flex-end;gap:2px}.bar i{flex:1;background:#d1202f;min-height:2px;border-radius:2px 2px 0 0}
+small,.note{color:#cfc9b8}a{color:#ffd9d9}select,input,button{font:inherit;padding:6px 10px;border-radius:6px;border:1px solid #555;background:#222;color:#f6f2e7}
+</style></head><body>
+<h1>Site stats</h1><p class="note">Private page. Counts only: day, page and which site sent the visitor. No cookies, nothing personal. Bots are skipped and counting pauses at 700 views a day.</p>
+<p><label>Show <select id="d"><option value="7">last 7 days</option><option value="30" selected>last 30 days</option><option value="60">last 60 days</option></select></label>
+<span id="keyrow" hidden> <input id="k" placeholder="stats key" type="password"> <button id="go">Go</button></span></p>
+<p><button id="me">Don't count my own visits on this device</button> <small id="mesg"></small></p>
+<div id="out">Loading...</div>
+<script>
+var W='https://arcade-scores.benharding75.workers.dev/stats';
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function topN(map,n){return Object.keys(map).map(function(k){return[k,map[k]]}).sort(function(a,b){return b[1]-a[1]}).slice(0,n)}
+function render(j){
+  var days=j.days.slice().reverse(),views=0,visits=0,pages={},refs={},max=1;
+  days.forEach(function(d){views+=d.views;visits+=d.visits;max=Math.max(max,d.views);
+    for(var p in d.pages)pages[p]=(pages[p]||0)+d.pages[p];for(var r in d.refs)refs[r]=(refs[r]||0)+d.refs[r];});
+  var h='<div class="cards"><div class="c"><b>'+views+'</b>page views</div><div class="c"><b>'+visits+'</b>visits</div><div class="c"><b>'+(days.length?(views/days.length).toFixed(1):0)+'</b>views a day</div></div>';
+  h+='<h2>Views per day</h2><div class="bar">'+days.map(function(d){return'<i title="'+d.date+': '+d.views+'" style="height:'+Math.round(d.views/max*100)+'%"></i>'}).join('')+'</div>';
+  h+='<h2>Top pages</h2><table>'+topN(pages,15).map(function(p){return'<tr><td>'+esc(p[0])+'</td><td>'+p[1]+'</td></tr>'}).join('')+'</table>';
+  var tr=topN(refs,10);h+='<h2>Where visitors came from</h2>'+(tr.length?'<table>'+tr.map(function(p){return'<tr><td>'+esc(p[0])+'</td><td>'+p[1]+'</td></tr>'}).join('')+'</table>':'<p class="note">Nothing yet (direct visits and private browsers show up as nothing).</p>');
+  document.getElementById('out').innerHTML=h;
+}
+function load(){
+  var key=sessionStorage.getItem('wgw-stats-key')||'',u=W+'?days='+document.getElementById('d').value+(key?'&key='+encodeURIComponent(key):'');
+  fetch(u).then(function(r){return r.json()}).then(function(j){
+    if(j.ok){document.getElementById('keyrow').hidden=true;render(j);}
+    else{document.getElementById('keyrow').hidden=false;document.getElementById('out').textContent=j.error||'Could not load.';}
+  }).catch(function(){document.getElementById('out').textContent='Could not reach the counter.'});
+}
+document.getElementById('d').onchange=load;
+document.getElementById('go').onclick=function(){sessionStorage.setItem('wgw-stats-key',document.getElementById('k').value);load();};
+document.getElementById('me').onclick=function(){try{localStorage.setItem('wgw-nostats','1');document.getElementById('mesg').textContent='Done. This device is no longer counted.';}catch(e){}};
+if(/[?&]me\b/.test(location.search)){try{localStorage.setItem('wgw-nostats','1');}catch(e){}}
+load();
+</script></body></html>

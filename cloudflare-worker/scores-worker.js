@@ -5,6 +5,8 @@
    3. GET  /tally   the vote counts for an edition, plus the running total.
    4. POST /board   a message for Reggie's message board. It is checked, encrypted so that only Reggie's private key can
                     read it, and added to board-inbox.json. Reggie reads the post, replies and publishes board.json.
+   5. POST /hit     a page view for the private stats counter (no cookies, nothing personal: day, page, referrer site).
+   6. GET  /stats   the counts for the stats page. If you add a secret called STATS_KEY it must be given as ?key=.
    Secret needed: GITHUB_TOKEN (fine-grained token, this repo only, Contents: read and write).
    Binding needed for votes: VOTES (a Workers KV namespace). Scores work without it. */
 
@@ -231,6 +233,56 @@ async function readTally(env) {
 function viewTally(t, edition) {
   return { ok: true, total: t.total, stories: (t.editions && t.editions[edition]) || {} };
 }
+
+/* ---------- privacy-friendly page counter (v7) ---------- */
+const HIT_DAILY_CAP = 700; /* stays inside the free KV write allowance, which is shared with votes and the board */
+const HIT_KEEP_DAYS = 60;
+function hitDay(d) { return (d || new Date()).toISOString().slice(0, 10); }
+function cleanPage(p) {
+  p = String(p == null ? "" : p).split("?")[0].split("#")[0];
+  if (!/^\/[A-Za-z0-9_\-.\/]{0,60}$/.test(p)) return null;
+  return p === "/" || p === "/index.html" ? "/" : p.replace(/\.html$/, "");
+}
+function cleanRef(r) {
+  try { const h = new URL(String(r)).hostname.replace(/^www\./, ""); return /^[a-z0-9.\-]{3,60}$/i.test(h) ? h.toLowerCase() : ""; } catch (e) { return ""; }
+}
+function recordHit(day, page, ref, first) {
+  day = day && typeof day === "object" ? day : {};
+  day.n = (day.n || 0) + 1;
+  day.p = day.p || {};
+  day.p[page] = (day.p[page] || 0) + 1;
+  if (first) {
+    day.v = (day.v || 0) + 1;
+    if (ref && ref !== "williamgeorgeworks.co.uk" && ref !== "williamgeorgeworks.github.io") {
+      day.r = day.r || {};
+      if (day.r[ref] || Object.keys(day.r).length < 30) day.r[ref] = (day.r[ref] || 0) + 1;
+    }
+  }
+  return day;
+}
+async function addHit(env, input, ua) {
+  if (/bot|crawl|spider|slurp|preview|monitor|curl|python|node-fetch/i.test(ua || "")) return { ok: true, counted: false };
+  const page = cleanPage(input && input.page);
+  if (!page) return { ok: false, error: "Bad page." };
+  const key = "h:" + hitDay();
+  let day = null;
+  try { day = JSON.parse((await env.VOTES.get(key)) || "null"); } catch (e) { day = null; }
+  if (day && day.n >= HIT_DAILY_CAP) return { ok: true, counted: false };
+  day = recordHit(day, page, cleanRef(input && input.ref), !!(input && input.first));
+  await env.VOTES.put(key, JSON.stringify(day), { expirationTtl: HIT_KEEP_DAYS * 86400 });
+  return { ok: true, counted: true };
+}
+async function readStats(env, days) {
+  days = Math.max(1, Math.min(HIT_KEEP_DAYS, days || 30));
+  const out = [], now = Date.now();
+  for (let i = 0; i < days; i++) {
+    const d = hitDay(new Date(now - i * 86400000));
+    let v = null;
+    try { v = JSON.parse((await env.VOTES.get("h:" + d)) || "null"); } catch (e) { v = null; }
+    out.push({ date: d, views: v ? v.n || 0 : 0, visits: v ? v.v || 0 : 0, pages: v ? v.p || {} : {}, refs: v ? v.r || {} : {} });
+  }
+  return { ok: true, cap: HIT_DAILY_CAP, days: out };
+}
 export default {
   async fetch(request, env) {
     const origin = request.headers.get("Origin") || "";
@@ -252,10 +304,23 @@ export default {
       catch (e) { return reply(502, { ok: false, error: "Try again in a minute." }, origin); }
     }
 
+    if (request.method === "GET" && path === "/stats") {
+      if (!env.VOTES) return reply(503, { ok: false, error: "Not set up yet." }, origin);
+      if (env.STATS_KEY && url.searchParams.get("key") !== env.STATS_KEY) return reply(403, { ok: false, error: "Wrong key." }, origin);
+      try { return reply(200, await readStats(env, parseInt(url.searchParams.get("days") || "30", 10)), origin); }
+      catch (e) { return reply(502, { ok: false, error: "Try again in a minute." }, origin); }
+    }
+
     if (request.method !== "POST") return reply(405, { ok: false, error: "POST only." }, origin);
     if (!ORIGINS.includes(origin)) return reply(403, { ok: false, error: "Not from here." }, origin);
     let input;
     try { input = await request.json(); } catch (e) { return reply(400, { ok: false, error: "Bad request." }, origin); }
+
+    if (path === "/hit") {
+      if (!env.VOTES) return reply(200, { ok: true, counted: false }, origin);
+      try { return reply(200, await addHit(env, input, request.headers.get("User-Agent")), origin); }
+      catch (e) { return reply(200, { ok: true, counted: false }, origin); }
+    }
 
     if (path === "/board") {
       if (!env.VOTES || !env.GITHUB_TOKEN) return reply(503, { ok: false, error: "The post room is closed for now." }, origin);
@@ -308,4 +373,4 @@ export default {
     }
   }
 };
-export { validate, applyScore, applyScoreEverywhere, cleanName, isRude, validateBoard, sealBoard };
+export { cleanPage, cleanRef, recordHit, addHit, readStats, validate, applyScore, applyScoreEverywhere, cleanName, isRude, validateBoard, sealBoard };
