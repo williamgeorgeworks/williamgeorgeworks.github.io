@@ -35,7 +35,7 @@ var SCORES_WORKER='https://arcade-scores.benharding75.workers.dev';
           if(btn){btn.disabled=false;btn.textContent='Lodge my score';}
           if(j&&j.ok&&j.status==='added'){say('In at number '+j.place+'. It will be on the wall in about a minute. Refresh the page to see it.',true);form.reset();}
           else if(j&&j.ok&&j.status==='duplicate'){say('That one is already on the wall.',true);}
-          else if(j&&j.ok&&j.status==='not-top'){say('Thank you. That is not quite in the top three yet, so it has not gone on the wall. Have another go.',true);}
+          else if(j&&j.ok&&j.status==='not-top'){say('Thank you. That is not quite good enough to make the board yet, so it has not gone on the wall. Have another go.',true);}
           else if(j&&j.ok){say('Thank you.',true);}
           else{say((j&&j.error)||'The court is busy. Please try again in a minute.',false);}
         })
@@ -63,7 +63,8 @@ var SCORES_WORKER='https://arcade-scores.benharding75.workers.dev';
     holes.forEach(function(box){
       var g=(data.games||{})[box.getAttribute('data-hall')];
       if(!g)return;
-      var rows=(g.entries||[]).slice().sort(function(a,b){return (b.score-a.score)||String(a.date).localeCompare(String(b.date));}).slice(0,3);
+      var N=(typeof g.top==='number'&&g.top>=1)?Math.min(Math.floor(g.top),25):3;
+      var rows=(g.entries||[]).slice().sort(function(a,b){return (b.score-a.score)||String(a.date).localeCompare(String(b.date));}).slice(0,N);
       box.textContent='';
       box.appendChild(el('h4',null,'Top players'));
       if(!rows.length){
@@ -76,9 +77,16 @@ var SCORES_WORKER='https://arcade-scores.benharding75.workers.dev';
           li.appendChild(el('span','who',r.name));
           li.appendChild(el('span','pts',r.score+(g.max?' of '+g.max:'')+' '+g.label));
           var d=fmtDate(r.date); if(d)li.appendChild(el('span','when',d));
+          if(i>=3)li.style.display='none';
           ol.appendChild(li);
         });
         box.appendChild(ol);
+        if(rows.length>3){
+          var more=el('button','showmore','Show the whole top '+N);more.type='button';
+          var open=false;
+          more.addEventListener('click',function(){open=!open;Array.prototype.forEach.call(ol.children,function(li,i){if(i>=3)li.style.display=open?'':'none';});more.textContent=open?'Show the top three only':'Show the whole top '+N;});
+          box.appendChild(more);
+        }
       }
       var p=el('p','beat');
       p.appendChild(document.createTextNode(rows.length?'Think you can beat that? ':'Be the first. '));

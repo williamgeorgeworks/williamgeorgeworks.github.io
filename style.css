@@ -326,3 +326,6 @@ header.site.js-nav nav.main .morelist a[aria-current=page]{border-bottom:3px sol
 .formmsg{margin:14px 0 0;padding:10px 14px;border:2px solid var(--ink);font-weight:700}
 .formmsg.good{background:#e3f6dc}
 .formmsg.bad{background:#fde3e1}
+
+.hall .showmore{margin:8px 0 0;padding:6px 12px;font:inherit;font-weight:700;font-size:15px;background:transparent;border:2px solid var(--ink);cursor:pointer}
+.hall .showmore:hover{background:var(--ink);color:var(--paper)}

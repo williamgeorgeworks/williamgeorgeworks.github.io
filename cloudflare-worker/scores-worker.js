@@ -13,8 +13,8 @@ const ORIGINS = [
 ];
 /* Which games take scores, and the highest believable score for each, now live in scores.json:
    a game accepts submissions only if it has a "cap" there. Adding a game never needs this file changed. */
-const KEEP_PER_GAME = 20;
-const TOP = 3;
+const KEEP_PER_GAME = 40;
+const DEFAULT_TOP = 3; /* board length; a game can set "top" (1 to 25) in scores.json */
 /* Rude words. Matched per word, after turning look-alike characters into letters, so Scunthorpe,
    Hancock and Dickens stay welcome. Kept short on purpose; Ferret can add to it. */
 const RUDE_ANYWHERE = ["fuck", "nigg", "fagg", "hitler"];
@@ -72,9 +72,10 @@ function applyScore(data, v) {
   if (!game || typeof game.cap !== "number") return { changed: false, error: "Unknown game." };
   if (v.score > game.cap) return { changed: false, error: "That score is beyond what the court believes possible." };
   game.entries = game.entries || [];
+  const TOP = typeof game.top === "number" ? Math.min(Math.max(Math.floor(game.top), 1), 25) : DEFAULT_TOP;
   const top = ranked(game.entries).slice(0, TOP);
-  const third = top.length >= TOP ? top[TOP - 1].score : 0;
-  if (v.score <= third) return { changed: false, reason: "not-top" };
+  const last = top.length >= TOP ? top[TOP - 1].score : 0;
+  if (v.score <= last) return { changed: false, reason: "not-top" };
   if (game.entries.some(e => e.name.toLowerCase() === v.name.toLowerCase() && e.score === v.score)) return { changed: false, reason: "duplicate" };
   game.entries.push({ name: v.name, score: v.score, date: today() });
   game.entries = ranked(game.entries).slice(0, KEEP_PER_GAME);
