@@ -1,121 +1,121 @@
 {
- "editions": [
-  {
-   "date": "2026-11-15",
-   "title": "Zelda Sells Five Million; Cats Get A Simulator",
-   "standfirst": "Terry and Reggie go through the last few days in gaming and argue about all of it. Everything in big type is made up, and so is the arguing. Everything in the boxes is real.",
-   "terry": "That's the gaming news, ladies and gentlemen! Every word made up apart from the boxes, which are real, and slightly less shouty. Press start tomorrow morning, seven ish!",
-   "reggie": "Check the box underneath, my old son, that's where the truth lives. And if the arguing gets you down, my fee for refereeing is a tenner, payable in cash, no console required.",
-   "stories": [
+  "editions": [
     {
-     "kicker": "Zelda",
-     "headline": "Hero Sells 5.2 Million Copies Before Anyone Has Found The Last Heart Piece",
-     "satire": "Terry calls it the greatest comeback in history and wants a parade for a man whose main skill is a small flute. Reggie points out the hero never says a word and still out-earns the pair of them, which he calls the perfect business model. They argued about it until teatime, then Reggie raised an invoice for services as a silent protagonist. It is for a tenner, and it is silent too.",
-     "real": "Nintendo said the Legend of Zelda: Ocarina of Time remake sold more than 5.2 million copies worldwide in its first four days on Switch 2 after its 5 November launch, which it says is the fastest start for any game it has published on the console.",
-     "source": {
-      "name": "Video Games Chronicle",
-      "url": "https://www.videogameschronicle.com/news/the-legend-of-zelda-ocarina-of-time-remake-sold-5-2-million-in-its-first-four-days-nintendo-says/"
-     }
-    },
-    {
-     "kicker": "Xbox",
-     "headline": "Fourteen Games Launch In One Day; Nation Can Now Be A Cat, A Banker Or A Cleaner",
-     "satire": "Terry has chosen the cat, on the grounds that nobody expects a cat to file a tax return. Reggie has gone for the banker and has already approved himself for a very friendly loan. They argued for an hour over who gets the house cleaner, then agreed that whoever loses has to do the real washing up. Terry is still looking for the kitten's off switch.",
-     "real": "PureXbox counted 14 games launching on Xbox on 13 November, including Cat Simulator, Banker Simulator and House Cleaner Simulator.",
-     "source": {
-      "name": "PureXbox",
-      "url": "https://www.purexbox.com/news/2026/11/13plus-xbox-games-are-releasing-today-including-a-retro-inspired-shooter-november-13"
-     },
-     "link": {
-      "text": "Want a cat game with tricycles and a promenade full of Dreamies? Play Grand Theft Kitty.",
-      "url": "grand-theft-kitty.html"
-     }
-    },
-    {
-     "kicker": "Shooter",
-     "headline": "Third Instalment Confirmed 'In Production'; Production Confirmed To Be Where Games Come From",
-     "satire": "Terry announced it to the studio at full volume and is now doing a lap of honour round the sofa. Reggie wants it in writing, in triplicate, with a delivery date and a small deposit, my old son. They disagreed on whether three is a number to get excited about, and settled it by counting on their fingers. There was a recount. Reggie won on a technicality.",
-     "real": "Game Informer reported on 13 November that Wolfenstein 3 is officially in production.",
-     "source": {
-      "name": "Game Informer",
-      "url": "https://gameinformer.com/2026/11/13/wolfenstein-3-is-officially-in-production"
-     }
-    },
-    {
-     "kicker": "PlayStation",
-     "headline": "God Of War Spin-Off Heads For The PS4; The Console Is Thrilled To Be Asked",
-     "satire": "Terry wept at the news and then asked what a PS4 was. Reggie has one in the loft, under a tea chest, and describes it as vintage and therefore appreciating. They argued over whether a console that has been up in the loft for years counts as retired or just resting. Reggie says it is resting and wants to charge it a storage fee.",
-     "real": "Instant Gaming reported on 13 November that the Metroidvania spin-off God of War: Sons of Sparta will get a free content update and launch on PS4 on 16 November.",
-     "source": {
-      "name": "Instant Gaming",
-      "url": "https://news.instant-gaming.com/en/articles/23017-god-of-war-sons-of-sparta-is-getting-new-content-and-will-be-released-on-ps4-on-november-16"
-     }
-    },
-    {
-     "kicker": "Halo",
-     "headline": "Halo Remake Gets Firefight Mode; Terry Insists On Being The Fire",
-     "satire": "Terry says he will be the Fire. Reggie says that makes him the Fight, and also the one who does the paperwork afterwards. They have not fought, which is rather the opposite of the brief. The argument went on for forty minutes before somebody pointed out that the mode is for several players at once, and the two of them had been sitting on the same sofa.",
-     "real": "Instant Gaming reported on 13 November that Halo: Campaign Evolved, the remake of the first Halo's story, is getting a new mode called Firefight.",
-     "source": {
-      "name": "Instant Gaming",
-      "url": "https://news.instant-gaming.com/en/articles/23007-halo-campaign-evolved-is-getting-a-new-mode-called-firefight"
-     }
-    },
-    {
-     "kicker": "Awards",
-     "headline": "Golden Trophies Await; Nominees Told To Look Casual Until Tuesday",
-     "satire": "Terry has written four acceptance speeches in the shower, all of them better than any shortlist could deserve. Reggie has put himself forward for Best Supporting Invoice and expects to be unopposed. They argued about who gets to thank whom first, and agreed to thank the cats, who were not consulted. Nominees have until Tuesday to practise a face for losing graciously.",
-     "real": "Final Weapon reported on 14 November that the Game Awards 2026 nominees will be announced in a live stream on 17 November, with the ceremony itself on 10 December.",
-     "source": {
-      "name": "Final Weapon",
-      "url": "https://finalweapon.net/2026/11/14/the-game-awards-2026-nominees-to-be-revealed-on-november-17"
-     }
-    },
-    {
-     "kicker": "Big Game",
-     "headline": "Boxed Edition Contains A Code, Not A Disc; Nation Opens Box, Finds Slightly Fancier Receipt",
-     "satire": "Terry opened the box expecting a disc and found a card with a code on it. He is calling it a very elaborate envelope. Reggie is delighted: a smart box with nothing in it is the oldest trick in the book, he says, and he has sold a fair few in his time. They argued over whether the box counts as part of the game, and Reggie has put in a bid for all the empty ones.",
-     "real": "A roundup of Rockstar's Newswire post of 10 November says boxed copies of GTA VI, due in shops from 12 November, contain a download code rather than a disc, and that the pre-load needs up to 212 GB of space.",
-     "source": {
-      "name": "Neonsect",
-      "url": "https://neonsect.com/gta-6/gta-6-file-size-preload/"
-     },
-     "link": {
-      "text": "Our games need no box, no code and no 212GB. Visit the arcade.",
-      "url": "arcade.html"
-     }
-    },
-    {
-     "kicker": "Rockstar",
-     "headline": "Ten Games In Twelve Years, Then Thirteen Years For The Next; Maths Teacher Applauds",
-     "satire": "Terry did the sums on his fingers and ran out of fingers somewhere around Vice City. Reggie thinks it is the only business where the longer you keep the customer waiting, the more they thank you, and he intends to try it with his invoices. They argued over whether this counts as a clever idea or just a very long lunch. The calendar has not commented.",
-     "real": "GamesRadar noted on 14 November that Rockstar released the first ten Grand Theft Auto games in just twelve years, as the 13-year wait for GTA 6 comes to an end.",
-     "source": {
-      "name": "GamesRadar",
-      "url": "https://www.gamesradar.com/news/archive/2026/11/"
-     }
-    },
-    {
-     "kicker": "PlayStation",
-     "headline": "Parcel-Delivery Game Joins Subscription Library; Nation Told To Take Its Time",
-     "satire": "Terry has promised to carry every parcel across the whole country by hand and is already out of breath on the landing. Reggie says the real money is in the boxes, not the walking, and has offered to supply the boxes at a very fair price. They argued about who has to carry the heavy one. The cat, who weighs less than both, has gone on ahead.",
-     "real": "Fandomwire reported on 14 November that PlayStation's November Game Catalog additions include the PS5 game Death Stranding 2: On the Beach, arriving on 17 November.",
-     "source": {
-      "name": "Fandomwire",
-      "url": "https://fandomwire.com/playstation-reveals-ps-plus-game-catalog-november-2026-all-games/"
-     }
-    },
-    {
-     "kicker": "Online",
-     "headline": "Minigame Loses Certain Words; Minigame Asks Which Ones",
-     "satire": "Terry typed a word to see if it had gone. Reggie typed his invoice number. Both were refused, and the keyboard now appears to be on a go-slow. They argued about which of them had written the worst word and agreed it was the one Terry will not repeat. Reggie wants it noted that his invoice number is a very clean number and he was the injured party.",
-     "real": "GamesRadar reported on 14 November that Final Fantasy 14 patched certain words out of Keyboard Brawler, a limited-time minigame in the game.",
-     "source": {
-      "name": "GamesRadar",
-      "url": "https://www.gamesradar.com/news/archive/2026/11/"
-     }
+      "date": "2026-11-15",
+      "title": "Zelda Sells Five Million; Cats Get A Simulator",
+      "standfirst": "Terry (PC, Steam Deck, master race, full price on day one) and Reggie (PS5, saving for a Pro, waiting for the sale) go through the last few days in gaming and argue about all of it. Everything in big type is made up, and so is the arguing. Everything in the boxes is real.",
+      "terry": "That's the gaming news, ladies and gentlemen! Every word made up apart from the boxes, which are real, and run beautifully at a locked 144 frames. Press start tomorrow morning, seven ish!",
+      "reggie": "Check the box underneath, my old son, that's where the truth lives. And if the arguing gets you down, wait a month and it'll be half price. My fee for refereeing is a tenner, payable in cash, no console required.",
+      "stories": [
+        {
+          "kicker": "Zelda",
+          "headline": "Hero Sells 5.2 Million Copies Before Anyone Has Found The Last Heart Piece",
+          "satire": "Terry says a handheld that plays everything is the only civilised way to celebrate, and wants it known that he bought it on day one, at full price, like a gentleman. Reggie is waiting for the sale and says five million people can't be wrong, only early. They argued about whether a master race is allowed to wait for a console to come down in price. Reggie raised an invoice for services as a silent hero. It is for a tenner, and it is silent too.",
+          "real": "Nintendo said the Legend of Zelda: Ocarina of Time remake sold more than 5.2 million copies worldwide in its first four days on Switch 2 after its 5 November launch, which it says is the fastest start for any game it has published on the console.",
+          "source": {
+            "name": "Video Games Chronicle",
+            "url": "https://www.videogameschronicle.com/news/the-legend-of-zelda-ocarina-of-time-remake-sold-5-2-million-in-its-first-four-days-nintendo-says/"
+          }
+        },
+        {
+          "kicker": "Xbox",
+          "headline": "Fourteen Games Launch In One Day; Nation Can Now Be A Cat, A Banker Or A Cleaner",
+          "satire": "Terry bought all fourteen on release day, on Steam, at full price, and is now a cat with a very high spec. Reggie is holding out for seventy per cent off and has put the banker on his PS5 wishlist until further notice. They argued over who gets the house cleaner, and Terry said it runs at a smoother frame rate on a proper rig. Reggie said a smoother frame rate does not make the washing up any drier.",
+          "real": "PureXbox counted 14 games launching on Xbox on 13 November, including Cat Simulator, Banker Simulator and House Cleaner Simulator.",
+          "source": {
+            "name": "PureXbox",
+            "url": "https://www.purexbox.com/news/2026/11/13plus-xbox-games-are-releasing-today-including-a-retro-inspired-shooter-november-13"
+          },
+          "link": {
+            "text": "Want a cat game with tricycles and a promenade full of Dreamies? Play Grand Theft Kitty.",
+            "url": "grand-theft-kitty.html"
+          }
+        },
+        {
+          "kicker": "Shooter",
+          "headline": "Third Instalment Confirmed 'In Production'; Production Confirmed To Be Where Games Come From",
+          "satire": "Terry has pre-ordered a game that does not exist yet, at full price, on the strength of the number three alone. Reggie says he will pick it up in about 2029, in a sale, for the price of a sausage roll, and will be perfectly happy. They argued over which of them gets the better deal: the early adopter who pays the most, or the man who gets the game after everyone else has found all the secrets. Nobody has checked the date. The studio has not been consulted.",
+          "real": "Game Informer reported on 13 November that Wolfenstein 3 is officially in production.",
+          "source": {
+            "name": "Game Informer",
+            "url": "https://gameinformer.com/2026/11/13/wolfenstein-3-is-officially-in-production"
+          }
+        },
+        {
+          "kicker": "PlayStation",
+          "headline": "God Of War Spin-Off Heads For The PS4; The Console Is Thrilled To Be Asked",
+          "satire": "Reggie is delighted. His PS5 is waiting for a Pro it cannot afford, so a spin-off arriving on the old PS4 in the loft feels like a very small win, and he has gone up with a torch. Terry says the master race do not look backwards and has asked, once more, what a PS4 is. They argued about whether a console in a loft counts as retired or resting. Reggie says resting, and that he will wait for the price of the PS4 to go down a bit more.",
+          "real": "Instant Gaming reported on 13 November that the Metroidvania spin-off God of War: Sons of Sparta will get a free content update and launch on PS4 on 16 November.",
+          "source": {
+            "name": "Instant Gaming",
+            "url": "https://news.instant-gaming.com/en/articles/23017-god-of-war-sons-of-sparta-is-getting-new-content-and-will-be-released-on-ps4-on-november-16"
+          }
+        },
+        {
+          "kicker": "Halo",
+          "headline": "Halo Remake Gets Firefight Mode; Terry Insists On Being The Fire",
+          "satire": "Terry says he will be the Fire, and has bought a headset for the occasion, at full price, to hear it properly. Reggie says that makes him the Fight, and he will join in as soon as the new mode comes down in a sale. They argued for forty minutes about whether a game that plays better on a rig beats a game that plays slightly worse on a sofa with a biscuit. Somebody pointed out that the mode is for several players, and the two of them are on the same sofa.",
+          "real": "Instant Gaming reported on 13 November that Halo: Campaign Evolved, the remake of the first Halo's story, is getting a new mode called Firefight.",
+          "source": {
+            "name": "Instant Gaming",
+            "url": "https://news.instant-gaming.com/en/articles/23007-halo-campaign-evolved-is-getting-a-new-mode-called-firefight"
+          }
+        },
+        {
+          "kicker": "Awards",
+          "headline": "Golden Trophies Await; Nominees Told To Look Casual Until Tuesday",
+          "satire": "Terry has written four acceptance speeches, bought a bow tie at full price and says the master race expects to take the lot. Reggie has put himself forward for Best Supporting Invoice and expects to be unopposed, with a bargain bundle thrown in. They argued about who thanks whom first, and agreed to thank the cats, who were not consulted. Nominees have until Tuesday to practise a face for losing graciously. Terry is practising on a very good webcam.",
+          "real": "Final Weapon reported on 14 November that the Game Awards 2026 nominees will be announced in a live stream on 17 November, with the ceremony itself on 10 December.",
+          "source": {
+            "name": "Final Weapon",
+            "url": "https://finalweapon.net/2026/11/14/the-game-awards-2026-nominees-to-be-revealed-on-november-17"
+          }
+        },
+        {
+          "kicker": "Big Game",
+          "headline": "Boxed Edition Contains A Code, Not A Disc; Nation Opens Box, Finds Slightly Fancier Receipt",
+          "satire": "Terry opened the box and found a card with a code on it, and has now installed the pre-load, which has eaten most of his storage. He says the master race can take a few hundred gigabytes on the chin. Reggie is delighted: a smart box with nothing in it is the oldest trick going, and he will wait for the discount, thank you very much. They argued over whether a box counts as part of the game. Reggie has put a bid in for all the empty ones.",
+          "real": "A roundup of Rockstar's Newswire post of 10 November says boxed copies of GTA VI, due in shops from 12 November, contain a download code rather than a disc, and that the pre-load needs up to 212 GB of space.",
+          "source": {
+            "name": "Neonsect",
+            "url": "https://neonsect.com/gta-6/gta-6-file-size-preload/"
+          },
+          "link": {
+            "text": "Our games need no box, no code and no 212GB. Visit the arcade.",
+            "url": "arcade.html"
+          }
+        },
+        {
+          "kicker": "Rockstar",
+          "headline": "Ten Games In Twelve Years, Then Thirteen Years For The Next; Maths Teacher Applauds",
+          "satire": "Terry bought every one of the ten on release day, at full price, and says the master race has been paying for the privilege since Vice City. Reggie has been waiting for a sale for thirteen years and believes it is nearly due. They argued over whether paying the most is a hobby or a medical condition. Reggie thinks it is the only business where the longer the customer waits, the more they thank you, and he intends to try it with his rent. The calendar has not commented.",
+          "real": "GamesRadar noted on 14 November that Rockstar released the first ten Grand Theft Auto games in just twelve years, as the 13-year wait for GTA 6 comes to an end.",
+          "source": {
+            "name": "GamesRadar",
+            "url": "https://www.gamesradar.com/news/archive/2026/11/"
+          }
+        },
+        {
+          "kicker": "PlayStation",
+          "headline": "Parcel-Delivery Game Joins Subscription Library; Nation Told To Take Its Time",
+          "satire": "Reggie is thrilled, because a game that arrives free with a subscription is the best sale there is, and has booked himself a whole weekend of it. Terry says the master race would rather pay full price than borrow a thing from a library, and has bought a second copy to be safe. They argued about who carries the heavy parcel. Terry has a very good chair. Reggie has a very good excuse. The cat has gone on ahead with the small one.",
+          "real": "Fandomwire reported on 14 November that PlayStation's November Game Catalog additions include the PS5 game Death Stranding 2: On the Beach, arriving on 17 November.",
+          "source": {
+            "name": "Fandomwire",
+            "url": "https://fandomwire.com/playstation-reveals-ps-plus-game-catalog-november-2026-all-games/"
+          }
+        },
+        {
+          "kicker": "Online",
+          "headline": "Minigame Loses Certain Words; Minigame Asks Which Ones",
+          "satire": "Terry typed a word to see if it had gone, on a keyboard that lights up in nine colours, and was refused in all nine. Reggie typed it on a controller, one letter at a time, and was refused at a much more dignified pace. They argued about which of them had written the worst word and agreed it was the one Terry will not repeat. Reggie wants it noted that a bargain keyboard from a car boot would have been refused too, and for a good deal less.",
+          "real": "GamesRadar reported on 14 November that Final Fantasy 14 patched certain words out of Keyboard Brawler, a limited-time minigame in the game.",
+          "source": {
+            "name": "GamesRadar",
+            "url": "https://www.gamesradar.com/news/archive/2026/11/"
+          }
+        }
+      ]
     }
-   ]
-  }
- ]
+  ]
 }
