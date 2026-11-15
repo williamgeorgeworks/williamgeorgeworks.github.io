@@ -34,7 +34,7 @@ var SCORES_WORKER='https://arcade-scores.benharding75.workers.dev';
         .then(function(r){return r.json().catch(function(){return {ok:false};});})
         .then(function(j){
           if(btn){btn.disabled=false;btn.textContent='Lodge my score';}
-          if(j&&j.ok&&j.status==='added'){say('In at number '+j.place+'. It will be on the wall in about a minute. Refresh the page to see it.',true);form.reset();}
+          if(j&&j.ok&&j.status==='added'){say((j.alsoPlace?(j.place?'In at number '+j.place+' on today\'s board and number '+j.alsoPlace+' on the main board. ':'Good enough for number '+j.alsoPlace+' on the main board. '):'In at number '+j.place+'. ')+'It will be on the wall in about a minute. Refresh the page to see it.',true);form.reset();}
           else if(j&&j.ok&&j.status==='duplicate'){say('That one is already on the wall.',true);}
           else if(j&&j.ok&&j.status==='not-top'){say('Thank you. That is not quite good enough to make the board yet, so it has not gone on the wall. Have another go.',true);}
           else if(j&&j.ok){say('Thank you.',true);}

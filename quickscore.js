@@ -47,7 +47,7 @@
       fetch(WORKER,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({game:info.game,name:name,score:info.score,website:''})})
         .then(function(r){return r.json().catch(function(){return {ok:false};});})
         .then(function(j){
-          if(j&&j.ok&&j.status==='added'){msg.textContent='In at number '+j.place+'. It will be on the wall in about a minute.';btn.textContent='Done';}
+          if(j&&j.ok&&j.status==='added'){msg.textContent=(j.alsoPlace?(j.place?'In at number '+j.place+' on today\'s board and number '+j.alsoPlace+' on the main board. ':'Not a top-ten daily score, but good enough for number '+j.alsoPlace+' on the main board. '):'In at number '+j.place+'. ')+'It will be on the wall in about a minute.';btn.textContent='Done';}
           else if(j&&j.ok&&j.status==='duplicate'){msg.textContent='That one is already on the wall.';btn.textContent='Done';}
           else if(j&&j.ok&&j.status==='not-top'){msg.textContent='Not quite enough for the board yet. Have another go.';btn.textContent='Done';}
           else{msg.className='msg bad';msg.textContent=(j&&j.error)||'The court is busy. Try again in a minute.';btn.disabled=false;btn.textContent='Put me on the wall';}

@@ -100,6 +100,17 @@ function applyScore(data, v) {
   return { changed: true, place };
 }
 
+/* A score on a board with "alsoTo" (the Daily Challenge) is also offered to that main board, so a great daily run
+   lands on both. Each board applies its own rules (top ten, one entry per player on a daily board). */
+function applyScoreEverywhere(data, v) {
+  const out = applyScore(data, v);
+  const game = data.games && data.games[v.game];
+  const parent = game && typeof game.alsoTo === "string" ? data.games[game.alsoTo] : null;
+  if (!parent || typeof parent.cap !== "number" || parent.daily || parent.alsoTo) return out;
+  const alt = applyScore(data, { ...v, game: game.alsoTo });
+  if (!alt.changed) return out;
+  return { changed: true, place: out.changed ? out.place : undefined, alsoPlace: alt.place, alsoGame: game.alsoTo };
+}
 async function gh(env, path, init) {
   return fetch("https://api.github.com/repos/" + REPO + path, {
     ...init,
@@ -118,12 +129,12 @@ async function save(env, v) {
     if (!r.ok) throw new Error("read " + r.status);
     const file = await r.json();
     const data = JSON.parse(b64decode(file.content));
-    const out = applyScore(data, v);
+    const out = applyScoreEverywhere(data, v);
     if (!out.changed) return out;
     const put = await gh(env, "/contents/" + FILE, {
       method: "PUT",
       body: JSON.stringify({
-        message: "Arcade: " + v.name + " scores " + v.score + " in " + v.game + " (automatic)",
+        message: "Arcade: " + v.name + " scores " + v.score + " in " + v.game + (out.alsoGame ? " and " + out.alsoGame : "") + " (automatic)",
         content: b64encode(JSON.stringify(data, null, 1) + "\n"),
         sha: file.sha,
         branch: BRANCH,
@@ -290,11 +301,11 @@ export default {
     try {
       const out = await save(env, v);
       if (out.error) return reply(400, { ok: false, error: out.error }, origin);
-      if (out.changed) return reply(200, { ok: true, status: "added", place: out.place }, origin);
+      if (out.changed) return reply(200, { ok: true, status: "added", place: out.place, alsoPlace: out.alsoPlace }, origin);
       return reply(200, { ok: true, status: out.reason }, origin);
     } catch (e) {
       return reply(502, { ok: false, error: "The court is busy. Please try again in a minute." }, origin);
     }
   }
 };
-export { validate, applyScore, cleanName, isRude, validateBoard, sealBoard };
+export { validate, applyScore, applyScoreEverywhere, cleanName, isRude, validateBoard, sealBoard };

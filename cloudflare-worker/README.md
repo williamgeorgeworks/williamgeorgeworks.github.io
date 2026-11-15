@@ -46,3 +46,7 @@ Re-paste `scores-worker.js` (Edit code, replace everything, Deploy), same as the
 4. Until step 3 is done the Terry v Reggie vote stays hidden on the Gaming Row; scores keep working throughout.
 
 Routes: `POST /` takes a score, `POST /vote` takes a vote, `GET /tally?edition=YYYY-MM-DD` returns the counts. Games marked `"daily": true` in scores.json keep only today's entries (UK date), one per player.
+
+## Daily boards that also feed a main board
+
+A game in scores.json can carry `"alsoTo": "<main game slug>"`. A score posted to it is also offered to that main board (top ten rules as normal), so a strong Daily Challenge run lands on both. Grand Theft Kitty Daily Challenge uses this.
