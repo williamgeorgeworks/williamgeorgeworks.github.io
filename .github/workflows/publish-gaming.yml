@@ -31,7 +31,8 @@ jobs:
       - name: Refresh RSS feeds
         run: |
           node tools/make-feeds.js
-          git add news.xml gaming.xml
+          node tools/make-sitemap.js
+          git add news.xml gaming.xml sitemap.xml
           git diff --cached --quiet || (git commit -m "Refresh RSS feeds (automatic)" && git push origin main)
       - name: Ask Pages to rebuild
         run: gh api -X POST "repos/${GITHUB_REPOSITORY}/pages/builds" || true
