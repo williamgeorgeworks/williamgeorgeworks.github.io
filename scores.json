@@ -1,10 +1,26 @@
 {
- "updated": "2026-11-14",
+ "updated": "2026-11-15",
  "games": {
   "red-light-green-light": {
    "label": "points",
    "max": null,
-   "entries": [{"name": "TheFerret (management)", "score": 2996, "date": "2026-11-14"}]
+   "entries": [
+    {
+     "name": "TheFerret (management)",
+     "score": 2996,
+     "date": "2026-11-14"
+    },
+    {
+     "name": "Jo",
+     "score": 3700,
+     "date": "2026-11-15"
+    },
+    {
+     "name": "Jo",
+     "score": 2943,
+     "date": "2026-11-15"
+    }
+   ]
   },
   "grand-theft-kitty": {
    "label": "Dreamies",
@@ -19,6 +35,21 @@
      "name": "TheFerret (management)",
      "score": 3380,
      "date": "2026-11-14"
+    },
+    {
+     "name": "Jo",
+     "score": 6550,
+     "date": "2026-11-15"
+    },
+    {
+     "name": "Jo",
+     "score": 3760,
+     "date": "2026-11-15"
+    },
+    {
+     "name": "Jo",
+     "score": 3805,
+     "date": "2026-11-15"
     }
    ]
   },
@@ -40,6 +71,16 @@
      "name": "Chairperson",
      "score": 800,
      "date": "2026-11-14"
+    },
+    {
+     "name": "Jo",
+     "score": 1999,
+     "date": "2026-11-15"
+    },
+    {
+     "name": "Jo",
+     "score": 1062,
+     "date": "2026-11-15"
     }
    ]
   },
