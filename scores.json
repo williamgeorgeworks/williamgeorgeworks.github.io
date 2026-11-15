@@ -77,13 +77,18 @@
    "max": null,
    "entries": [
     {
-     "name": "BanditBurns",
-     "score": 832,
-     "date": "2026-11-14"
+     "name": "Jo",
+     "score": 1999,
+     "date": "2026-11-15"
     },
     {
-     "name": "TheFerret (management)",
-     "score": 776,
+     "name": "Jo",
+     "score": 1062,
+     "date": "2026-11-15"
+    },
+    {
+     "name": "BanditBurns",
+     "score": 832,
      "date": "2026-11-14"
     },
     {
@@ -92,13 +97,13 @@
      "date": "2026-11-14"
     },
     {
-     "name": "Jo",
-     "score": 1999,
-     "date": "2026-11-15"
+     "name": "TheFerret (management)",
+     "score": 776,
+     "date": "2026-11-14"
     },
     {
-     "name": "Jo",
-     "score": 1062,
+     "name": "Ferret",
+     "score": 70,
      "date": "2026-11-15"
     }
    ],
