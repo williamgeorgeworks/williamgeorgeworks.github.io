@@ -88,6 +88,14 @@
         })
         .catch(function(){msg.className='msg bad';msg.textContent='Could not reach the court. Try again in a minute.';btn.disabled=false;btn.textContent='Put me on the wall';});
     });
+    /* The big "Send in your score" button posts the score itself, so nobody is taken off to the arcade page by mistake. */
+    a.addEventListener('click',function(ev){
+      if(f.hidden)return;
+      ev.preventDefault();
+      if(btn.disabled||btn.textContent==='Done')return;
+      if(input.value.trim()){if(f.requestSubmit)f.requestSubmit();else btn.click();}
+      else{input.focus();msg.className='msg bad';msg.textContent='Type your name or handle, then tap Put me on the wall.';try{f.scrollIntoView({block:'center',behavior:'smooth'});}catch(e){}}
+    });
     a.parentNode.insertBefore(f,a.nextSibling);a._qs=f;
   }
   function scan(){
