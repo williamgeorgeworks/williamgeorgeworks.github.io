@@ -2,7 +2,7 @@
    Data lives in scores.json. When SCORES_WORKER is set, submissions are checked and added to it
    automatically by a small Cloudflare Worker (see cloudflare-worker/README.md). While it is empty,
    the form falls back to emailing Formspree and a human adds scores by hand. */
-var SCORES_WORKER='';
+var SCORES_WORKER='https://arcade-scores.benharding75.workers.dev';
 (function(){
   /* Pre-fill the submission form from ?game=slug&score=123, or when a hall link is clicked. */
   var sel=document.getElementById('sc-game'),scoreBox=document.getElementById('sc-score');
