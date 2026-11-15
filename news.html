@@ -46,6 +46,22 @@
 .line .sayer{display:block;font-family:var(--display);text-transform:uppercase;letter-spacing:.6px;font-size:14px;color:var(--faint)}
 .notes{margin-top:34px}.notes ul{margin:0;padding-left:1.2em}.notes li{margin-bottom:.6em;font-size:17px;line-height:1.5}
 .extra{display:inline-block;margin:0 0 16px;padding:8px 16px 6px;background:var(--red);color:#fff;border:3px solid var(--ink);box-shadow:5px 5px 0 var(--ink);font-family:var(--display);text-transform:uppercase;letter-spacing:1px;font-size:clamp(20px,5.5vw,34px);line-height:1.1;transform:rotate(-1.2deg)}
+.pinned{margin:0 0 30px;background:#17275f;color:#fff;border:4px solid var(--ink);box-shadow:8px 8px 0 var(--red);position:relative}
+.pinbar{margin:0;padding:8px 14px 6px;background:#ffd23f;color:var(--ink);border-bottom:4px solid var(--ink);font-family:var(--display);text-transform:uppercase;letter-spacing:1px;font-size:15px}
+.pinbody{display:grid;grid-template-columns:1fr;gap:0}
+@media(min-width:820px){.pinbody{grid-template-columns:minmax(0,5fr) minmax(0,6fr)}}
+.pinshot{position:relative;display:block;background:#fff;border-bottom:4px solid var(--ink);min-width:0}
+@media(min-width:820px){.pinshot{border-bottom:0;border-right:4px solid var(--ink)}}
+.pinshot img{display:block;width:100%;height:100%;object-fit:contain;background:#fff}
+.pinshot .stamp{position:absolute;top:14px;right:14px;padding:6px 12px 3px;background:var(--red);color:#fff;border:3px solid var(--ink);font-family:var(--display);text-transform:uppercase;letter-spacing:1px;font-size:20px;transform:rotate(6deg);box-shadow:3px 3px 0 var(--ink)}
+.pintext{padding:18px 18px 8px;min-width:0}
+.pinned .flash{margin:0 0 4px;font-family:'Permanent Marker',cursive;font-size:20px;color:#ffd23f;transform:rotate(-1deg)}
+.pinned h2{margin:0 0 10px;font-family:var(--display);text-transform:uppercase;font-weight:400;font-size:clamp(34px,8vw,54px);line-height:1.02;color:#fff;text-shadow:3px 3px 0 var(--red)}
+.pinned .deck{font-size:19px;line-height:1.4;color:#ffe9a6}
+.pinned p{font-size:17px;line-height:1.5}
+.pinned .hot{margin:0 0 12px;padding-left:1.2em;font-size:17px;line-height:1.45}.pinned .hot li{margin-bottom:.35em}
+.pinned .cta{margin:14px 0}
+.pinned .small{font-size:13px;line-height:1.45;color:#c9d3f5;margin:0 0 12px}
 .wxlink{margin:18px 0 0}
 .alsolink{margin:12px 0 0;font-family:var(--display);text-transform:uppercase;letter-spacing:.5px;font-size:15px}.alsolink a{color:var(--red)}
 </style>
@@ -63,6 +79,19 @@
 <section class="band" style="padding-top:10px"><div class="wrap">
 <p class="satirebar"><b>Satire.</b> The stories in big type are made up for fun. The boxes marked &ldquo;What actually happened&rdquo; are the real news, taken from the sources linked.</p>
 <p class="satirebar"><b>No editor.</b> The Daily Row publishes itself, with nobody checking it first. Reggie is perfectly capable of a balls-up and could inadvertently upset the nation. If he has, <a href="letters.html">write to the tribunal</a> and we will fix it, and the invoice for the apology is on him.</p>
+<article class="pinned" aria-labelledby="pin-h">
+<p class="pinbar"><span class="pin" aria-hidden="true">&#128204;</span> Pinned &middot; Stays here while the news below changes every day</p>
+<div class="pinbody">
+<a class="pinshot" style="display:flex;align-items:center" href="grand-theft-kitty.html"><img src="thumb-grand-theft-kitty.jpg" width="800" height="500" alt="Screenshot of Grand Theft Kitty: a masked cat on a red tricycle with a sack marked SWAG, a constable, a seagull and pedestrians clutching packets of Dreamies" loading="lazy"><span class="stamp">Out now</span></a>
+<div class="pintext">
+<p class="flash">William George Works announces&hellip;</p>
+<h2 id="pin-h">Grand Theft Kitty is out now</h2>
+<p class="deck">This week the biggest names in gaming are battling for your attention. We have decided to go head to head with them, armed with six cats and a handful of tricycles.</p>
+<p>It is our first <b>Triple-D title</b>, which is what you get when you cannot afford the third A. Six cats. Six tricycles. One promenade full of people who only popped out for Dreamies. Ride into anyone holding a packet, swerve round everything else, and keep your crime spree going for a bigger take.</p>
+<ul class="hot"><li>Constables! Seagulls! Bollards! A pot of catnip for the zoomies!</li><li>Free in your browser. No download, no pre-loading, no waiting up until 4am.</li><li>Collect the whole gang, one stolen packet at a time.</li></ul>
+<p class="cta"><a class="btn" href="grand-theft-kitty.html">Play Grand Theft Kitty now</a></p>
+<p class="small"><b>Not satire:</b> this one is real, and the game really is out. Dreamies is a trade mark of its owner, who has nothing to do with this game and has not endorsed it. Neither has anybody behind any other game this one might resemble. No pedestrians were harmed. The cats were not consulted.</p>
+</div></div></article>
 <div id="days" class="chips" aria-label="Earlier editions"></div>
 <div id="paper" aria-live="polite"><p class="status">Fetching the front page...</p></div>
 <noscript><p class="status bad">This page needs JavaScript to show the paper.</p></noscript>
