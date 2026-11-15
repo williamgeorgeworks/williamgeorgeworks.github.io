@@ -34,6 +34,10 @@ He puts the address into `scores.js`, switches the arcade page's wording from "a
 
 In `scores.json`, add the game under `games` with `label`, `max` (or null), `cap` (the highest believable score), `title`, `unit` and `entries: []`. A game with a `cap` accepts scores, and a game with a `title` appears in the arcade form's dropdown by itself. Then add its card with a `data-hall` box to `arcade.html`.
 
+## Version 4: Daily Row votes and Best of the week
+
+Re-paste `scores-worker.js` (Edit code, replace everything, Deploy), same as the version 3 step 1. No new bindings needed. Adds `n-` (Daily Row) editions, a `fave` vote and `GET /tally?editions=a,b,c`.
+
 ## Version 3: daily boards and votes (extra one-time step)
 
 1. Open the Worker in Cloudflare, choose Edit code, replace everything with the contents of https://williamgeorgeworks.co.uk/cloudflare-worker/scores-worker.js and click Deploy.

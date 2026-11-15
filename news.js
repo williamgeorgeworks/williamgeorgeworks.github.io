@@ -14,6 +14,7 @@
   }
   function draw(ed, eds) {
     var out = document.getElementById("paper"); out.textContent = "";
+    out.setAttribute("data-edition", ed.date);
     var mast = el("header", "masthead");
     add(mast, el("p", "when", pretty(ed.date)), el("h2", null, ed.title), el("p", "standfirst", ed.standfirst));
     out.appendChild(mast);

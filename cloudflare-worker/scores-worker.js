@@ -134,7 +134,8 @@ async function save(env, v) {
   throw new Error("busy");
 }
 
-const SIDES = ["terry", "reggie"];
+const SIDES = ["terry", "reggie", "fave"];
+const EDITION_RE = /^(n-)?\d{4}-\d{2}-\d{2}$/; /* n- marks a Daily Row edition; plain dates are the Gaming Row */
 const MAX_STORY = 14;
 async function readTally(env) {
   const raw = await env.VOTES.get("tally");
@@ -156,8 +157,14 @@ export default {
     if (request.method === "GET" && path === "/tally") {
       if (!env.VOTES) return reply(503, { ok: false, error: "Votes are not set up yet." }, origin);
       const edition = url.searchParams.get("edition") || "";
-      if (edition && !/^\d{4}-\d{2}-\d{2}$/.test(edition)) return reply(400, { ok: false, error: "Bad edition." }, origin);
-      try { return reply(200, viewTally(await readTally(env), edition), origin); }
+      if (edition && !EDITION_RE.test(edition)) return reply(400, { ok: false, error: "Bad edition." }, origin);
+      const many = (url.searchParams.get("editions") || "").split(",").filter(Boolean);
+      if (many.length > 10 || many.some(x => !EDITION_RE.test(x))) return reply(400, { ok: false, error: "Bad editions." }, origin);
+      try {
+        const t = await readTally(env);
+        if (many.length) { const eds = {}; many.forEach(x => { eds[x] = t.editions[x] || {}; }); return reply(200, { ok: true, total: t.total, editions: eds }, origin); }
+        return reply(200, viewTally(t, edition), origin);
+      }
       catch (e) { return reply(502, { ok: false, error: "Try again in a minute." }, origin); }
     }
 
@@ -171,15 +178,16 @@ export default {
       const edition = String(input && input.edition || "");
       const story = Number(input && input.story);
       const side = String(input && input.side || "");
-      if (!/^\d{4}-\d{2}-\d{2}$/.test(edition) || !Number.isInteger(story) || story < 0 || story > MAX_STORY || !SIDES.includes(side))
+      if (!EDITION_RE.test(edition) || !Number.isInteger(story) || story < 0 || story > MAX_STORY || !SIDES.includes(side))
         return reply(400, { ok: false, error: "Bad vote." }, origin);
       try {
         const t = await readTally(env);
         const e = (t.editions[edition] = t.editions[edition] || {});
         const st = (e[story] = e[story] || { terry: 0, reggie: 0 });
-        st[side] += 1;
-        t.total[side] += 1;
-        const keep = Object.keys(t.editions).sort().slice(-60);
+        st[side] = (st[side] || 0) + 1;
+        if (side !== "fave") t.total[side] += 1;
+        const keep = [];
+        [k => k.startsWith("n-"), k => !k.startsWith("n-")].forEach(pick => keep.push(...Object.keys(t.editions).filter(pick).sort().slice(-60)));
         Object.keys(t.editions).forEach(k => { if (!keep.includes(k)) delete t.editions[k]; });
         await env.VOTES.put("tally", JSON.stringify(t));
         return reply(200, viewTally(t, edition), origin);
