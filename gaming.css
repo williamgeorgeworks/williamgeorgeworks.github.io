@@ -61,3 +61,20 @@
 .pagehead.gamer .arcadebridge a{color:var(--g-night)}
 .pagehead.gamer .arcadebridge a:hover{background:#fff}
 .extra.gamerextra{display:table}
+
+/* Terry v Reggie votes */
+.band.gamerband .scoreboard{margin:16px 0 0;padding:10px 14px;background:var(--g-night);color:#fff;border:3px solid var(--g-lime);box-shadow:5px 5px 0 var(--g-pink);display:inline-block}
+.band.gamerband .scoreboard b{display:block;font-family:var(--display);text-transform:uppercase;letter-spacing:.06em;color:var(--g-lime);font-weight:400}
+.band.gamerband .scoreboard p{margin:4px 0;font-family:var(--display);font-size:1.6rem}
+.band.gamerband .scoreboard .st{color:var(--g-cyan)}.band.gamerband .scoreboard .sr{color:var(--g-pink)}
+.band.gamerband .scoreboard small{color:#cfc8ff}
+.band.gamerband .vote{margin:14px 0 4px;padding:10px 12px;border:3px dashed var(--g-purple);background:#f6f3ff}
+.band.gamerband .vote b{display:block;margin-bottom:8px;color:var(--g-night)}
+.band.gamerband .vrow{display:flex;gap:8px;flex-wrap:wrap}
+.band.gamerband .vbtn{flex:1 1 150px;padding:9px 10px;font:inherit;font-weight:700;color:#fff;border:3px solid var(--g-night);cursor:pointer}
+.band.gamerband .vbtn.terry{background:var(--g-purple)}.band.gamerband .vbtn.reggie{background:var(--g-pink)}
+.band.gamerband .vbtn:hover:not(:disabled){filter:brightness(1.1);transform:translate(-1px,-1px)}.band.gamerband .vbtn:disabled{opacity:.6;cursor:default}
+.band.gamerband .vbar{display:flex;height:30px;border:3px solid var(--g-night);overflow:hidden;font-weight:700;color:#fff;font-size:.9rem}
+.band.gamerband .vbar span{display:flex;align-items:center;padding:0 8px;min-width:0;white-space:nowrap;overflow:hidden}
+.band.gamerband .vbar .vt{background:var(--g-purple)}.band.gamerband .vbar .vr{background:var(--g-pink);justify-content:flex-end}
+.band.gamerband .vbad{display:block;margin-top:6px;color:#a3141f}
