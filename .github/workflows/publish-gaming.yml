@@ -27,3 +27,8 @@ jobs:
           git pull --ff-only origin main
           git merge --no-edit "origin/${GITHUB_REF_NAME}" -m "Publish ${GITHUB_REF_NAME} (automatic, checker passed)"
           git push origin main
+      - name: Refresh RSS feeds
+        run: |
+          node tools/make-feeds.js
+          git add news.xml gaming.xml
+          git diff --cached --quiet || (git commit -m "Refresh RSS feeds (automatic)" && git push origin main)
