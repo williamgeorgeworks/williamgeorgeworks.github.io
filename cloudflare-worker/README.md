@@ -33,3 +33,12 @@ He puts the address into `scores.js`, switches the arcade page's wording from "a
 ## Adding a new game later (no Cloudflare needed)
 
 In `scores.json`, add the game under `games` with `label`, `max` (or null), `cap` (the highest believable score), `title`, `unit` and `entries: []`. A game with a `cap` accepts scores, and a game with a `title` appears in the arcade form's dropdown by itself. Then add its card with a `data-hall` box to `arcade.html`.
+
+## Version 3: daily boards and votes (extra one-time step)
+
+1. Open the Worker in Cloudflare, choose Edit code, replace everything with the contents of https://williamgeorgeworks.co.uk/cloudflare-worker/scores-worker.js and click Deploy.
+2. Create a KV namespace (Storage and databases, then KV, then Create, name it `wgw-votes`).
+3. Open the Worker, then Settings, Bindings, Add, KV namespace. Set the variable name to exactly `VOTES`, choose `wgw-votes`, and save.
+4. Until step 3 is done the Terry v Reggie vote stays hidden on the Gaming Row; scores keep working throughout.
+
+Routes: `POST /` takes a score, `POST /vote` takes a vote, `GET /tally?edition=YYYY-MM-DD` returns the counts. Games marked `"daily": true` in scores.json keep only today's entries (UK date), one per player.
