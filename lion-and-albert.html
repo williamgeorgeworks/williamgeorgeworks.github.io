@@ -108,7 +108,16 @@ button:focus-visible{outline:3px solid var(--mustard);outline-offset:2px}
 .wallace{transform-origin:300px 262px}
 @keyframes heave{0%{transform:none}30%{transform:translateX(-10px) rotate(-3deg)}60%{transform:translateX(4px) rotate(2deg)}100%{transform:none}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
-body{flex-direction:column;align-items:center;justify-content:flex-start}#app{flex:1 1 auto;height:auto;min-height:0}
+#orig{position:absolute;inset:0;z-index:30;background:var(--shade);display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:12px;padding:20px;overflow:auto}
+#orig[hidden]{display:none}
+#orig h2{font-family:var(--display);font-size:22px;margin:0;text-transform:uppercase;letter-spacing:.04em}
+#orig .frame{position:relative;width:100%;aspect-ratio:16/9;background:#000;border:3px solid var(--paper)}
+#orig .frame iframe,#orig .frame button{position:absolute;inset:0;width:100%;height:100%;border:0}
+#orig .frame button{background:#000;color:#fff;font-weight:700;letter-spacing:.06em;text-transform:uppercase;display:flex;align-items:center;justify-content:center;gap:10px;font-size:16px}
+#orig .frame button:hover{background:#1b1b1b}
+#orig a{color:var(--mustard)}
+#orig .small{font-size:14px;opacity:.9;margin:0}
+html,body{height:auto;min-height:100%}body{flex-direction:column;align-items:center;justify-content:flex-start}#app{flex:0 0 auto;height:max(580px,calc(100vh - 32px));height:max(580px,calc(100svh - 32px));min-height:0}
 </style>
 </head>
 <body>
@@ -138,6 +147,7 @@ body{flex-direction:column;align-items:center;justify-content:flex-start}#app{fl
     <div class="row">
       <button class="btn" id="begin" type="button">Begin with music</button>
       <button class="btn ghost" id="beginq" type="button">Begin quietly</button>
+      <button class="btn ghost" id="hear" type="button">Hear the original</button>
     </div>
     <p class="small">After the comic monologue by Marriott Edgar (1880 to 1951), written for Stanley Holloway. Every line of dialogue here is new; none of Edgar's verse is reproduced. Pictures and music are original.</p>
   </section>
@@ -162,8 +172,14 @@ body{flex-direction:column;align-items:center;justify-content:flex-start}#app{fl
     <h2>The Ramsbottom ledger</h2>
     <ul id="ledger"></ul>
     <p class="small">Wallace was not available for comment. Edgar later wrote a sequel, The Return of Albert, in which the matter is reopened.</p>
-    <div class="row"><button class="btn" id="again" type="button">Go again</button></div>
+    <div class="row"><button class="btn" id="again" type="button">Go again</button><button class="btn ghost" id="hear2" type="button">Hear the original</button></div>
   </section>
+  <div id="orig" hidden role="dialog" aria-modal="true" aria-labelledby="orighead">
+    <h2 id="orighead">The original, as told by Stanley Holloway</h2>
+    <div class="frame" id="origframe"><button type="button" id="origplay">&#9654; Play the recording</button></div>
+    <p class="small">This is a recording on YouTube, posted by its uploader, and it loads only when you press play. If it will not play here, <a href="https://www.youtube.com/watch?v=oaw-savyK0s" target="_blank" rel="noopener">watch it on YouTube</a>. The game is our own story, set on the same day out.</p>
+    <div class="row"><button class="btn" id="origclose" type="button">Back to the game</button></div>
+  </div>
 </div>
 
 <script>
@@ -563,6 +579,12 @@ $("next").addEventListener("click",advance);
 $("chapgo").addEventListener("click",()=>{st.i++;show()});
 $("eatengo").addEventListener("click",()=>{st.i++;show()});
 $("mute").addEventListener("click",()=>setSound(!A.on));
+let origWas=false;
+function openOrig(){origWas=A.on;if(origWas)setSound(false);$("orig").hidden=false;$("origclose").focus()}
+function closeOrig(){$("orig").hidden=true;const fr=$("origframe");fr.innerHTML='<button type="button" id="origplay">&#9654; Play the recording</button>';$("origplay").addEventListener("click",playOrig);if(origWas)setSound(true)}
+function playOrig(){const fr=$("origframe");fr.innerHTML="";const i=document.createElement("iframe");i.src="https://www.youtube-nocookie.com/embed/oaw-savyK0s?rel=0&autoplay=1";i.title="Stanley Holloway, The Lion and Albert (YouTube)";i.allow="autoplay; encrypted-media; picture-in-picture";i.allowFullscreen=true;i.referrerPolicy="strict-origin-when-cross-origin";fr.appendChild(i)}
+$("hear").addEventListener("click",openOrig);$("hear2").addEventListener("click",openOrig);$("origclose").addEventListener("click",closeOrig);$("origplay").addEventListener("click",playOrig);
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("orig").hidden)closeOrig()});
 $("stage").addEventListener("click",()=>{if($("choices").hidden&&st.i>=0)advance()});
 document.addEventListener("keydown",e=>{
   if(e.target.tagName==="BUTTON"&&(e.key===" "||e.key==="Enter"))return;
