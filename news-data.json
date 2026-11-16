@@ -1,6 +1,45 @@
 {
  "editions": [
   {
+   "date": "2026-11-16",
+   "title": "Britain Gets Cold, Wet And Slippery; Rinks Open Just In Case",
+   "standfirst": "A short edition from Terry and Reggie: only three stories this morning passed the date check and the golden rule. Everything in big type is made up. Everything in the boxes is real.",
+   "stories": [
+    {
+     "kicker": "Weather",
+     "headline": "Saturday Hits Minus Seven; Rain Books Tuesday Slot, Brings Wind As Plus-One",
+     "satire": "Saturday dropped to a brisk minus seven in one corner of Oxfordshire, while a Scottish island quietly collected a bathful of rain, and the rest of us stood at the window holding a mug and a grudge. Monday opens bright and chilly, which is the weather's way of saying it is just popping out. Tuesday and Wednesday are down for rain, wind and a dusting on the hills. Terry has already put on three jumpers and a look of triumph. Reggie is selling single gloves at half price, a nice little earner, and has promised the other one is in the post.",
+     "real": "A weekly forecast briefing published on 15 November says Saturday 14 November reached -7.2°C at South Newington and Stornoway recorded 39.0 mm of rain. It says Monday 16 November starts cold and bright with rain and wind reaching the southwest later, and that Tuesday and Wednesday are wetter and windier, with hill snow possible in northern Britain.",
+     "source": {
+      "name": "The Observatory (Substack)",
+      "url": "https://observatoryanalysis.substack.com/p/weather-and-disruption-watch-uk-week-337"
+     }
+    },
+    {
+     "kicker": "Bills",
+     "headline": "Energy Bill Number To Be Revealed On The 25th; Nation Practises Its Poker Face",
+     "satire": "The big gas-and-electric number for the new year will be announced on the 25th, and the whole country is rehearsing its reaction in the hallway mirror. Some will gasp, some will shrug, and a brave few will pretend they were never listening. Terry is planning a countdown with a drum roll and a very small envelope. Reggie has pre-printed a receipt for the number, whatever it turns out to be, with a modest handling fee for being present when it happened. The thermostat, as ever, has been asked to stay out of it.",
+     "real": "The same briefing says Ofgem will announce the January to March energy price cap on 25 November, and that the current October to December cap is a typical annualised £1,723.",
+     "source": {
+      "name": "The Observatory (Substack)",
+      "url": "https://observatoryanalysis.substack.com/p/weather-and-disruption-watch-uk-week-337"
+     }
+    },
+    {
+     "kicker": "Daft",
+     "headline": "London Adds Two More Ice Rinks; Pavements Politely Decline To Compete",
+     "satire": "London already had three ice rinks open and is adding two more this week, so the capital will shortly have five places to fall over on purpose, in a city where falling over on purpose is traditionally free and happens outside the chemist. Hyde Park's winter wonderland opens on the 19th, with a booked entry slot, because even fun now needs a time and a confirmation email. Terry has strapped on skates and refuses to explain why. Reggie has launched Reggie's Slip Insurance, premium payable in advance, claims payable in due course, which is never.",
+     "real": "A London listings post published on 14 November says Hyde Park Winter Wonderland opens on 19 November and runs until 3 January 2027, with entry slots booked in advance. It also says three London seasonal ice rinks are already open, with two more joining during the week of 16 November.",
+     "source": {
+      "name": "Londonist Listings (Substack)",
+      "url": "https://londonistlistings.substack.com/p/tthings-to-do-in-london-this-week-16-22-november-2026"
+     }
+    }
+   ],
+   "terry": "And that's the news, ladies and gentlemen, a short one today, but every word of it made up apart from the boxes! Join us tomorrow, when the weather will do something and we will pretend to be surprised. Check the box underneath, that's where the truth lives!",
+   "reggie": "Short and sweet today, my old son, like a dodgy pie. Everything above is invention and everything in the boxes is gospel. My fee for the edition is a fiver, payable on delivery, a nice little earner."
+  },
+  {
    "date": "2026-11-15",
    "title": "World Declines To End; Banana Clocks Two Million Miles",
    "standfirst": "Terry and Reggie work through the last few days' news. Everything in big type is made up. Everything in the boxes is real.",
