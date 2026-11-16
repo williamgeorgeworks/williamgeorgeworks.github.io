@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url><loc>https://williamgeorgeworks.co.uk/</loc><lastmod>2026-11-15</lastmod><changefreq>daily</changefreq></url>
-<url><loc>https://williamgeorgeworks.co.uk/contact.html</loc><lastmod>2026-11-15</lastmod><changefreq>monthly</changefreq></url>
 <url><loc>https://williamgeorgeworks.co.uk/accord.html</loc><lastmod>2026-11-15</lastmod><changefreq>monthly</changefreq></url>
 <url><loc>https://williamgeorgeworks.co.uk/advent-calendar.html</loc><lastmod>2026-11-15</lastmod><changefreq>monthly</changefreq></url>
 <url><loc>https://williamgeorgeworks.co.uk/arcade.html</loc><lastmod>2026-11-15</lastmod><changefreq>daily</changefreq></url>
@@ -10,9 +9,10 @@
 <url><loc>https://williamgeorgeworks.co.uk/books.html</loc><lastmod>2026-11-15</lastmod><changefreq>monthly</changefreq></url>
 <url><loc>https://williamgeorgeworks.co.uk/cats.html</loc><lastmod>2026-11-15</lastmod><changefreq>monthly</changefreq></url>
 <url><loc>https://williamgeorgeworks.co.uk/comic.html</loc><lastmod>2026-11-15</lastmod><changefreq>monthly</changefreq></url>
+<url><loc>https://williamgeorgeworks.co.uk/contact.html</loc><lastmod>2026-11-15</lastmod><changefreq>monthly</changefreq></url>
 <url><loc>https://williamgeorgeworks.co.uk/dear-terry.html</loc><lastmod>2026-11-15</lastmod><changefreq>monthly</changefreq></url>
 <url><loc>https://williamgeorgeworks.co.uk/employee-of-the-month.html</loc><lastmod>2026-11-15</lastmod><changefreq>monthly</changefreq></url>
-<url><loc>https://williamgeorgeworks.co.uk/ferrets-ditch.html</loc><changefreq>monthly</changefreq></url>
+<url><loc>https://williamgeorgeworks.co.uk/ferrets-ditch.html</loc><lastmod>2026-11-15</lastmod><changefreq>monthly</changefreq></url>
 <url><loc>https://williamgeorgeworks.co.uk/gaming.html</loc><lastmod>2026-11-15</lastmod><changefreq>daily</changefreq></url>
 <url><loc>https://williamgeorgeworks.co.uk/grand-theft-kitty.html</loc><lastmod>2026-11-15</lastmod><changefreq>monthly</changefreq></url>
 <url><loc>https://williamgeorgeworks.co.uk/invoices.html</loc><lastmod>2026-11-15</lastmod><changefreq>monthly</changefreq></url>
