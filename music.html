@@ -60,6 +60,14 @@ body.dj .btn:hover{color:var(--night);box-shadow:3px 3px 0 var(--hot)}
 body.dj .btn.alt{background:transparent;color:var(--text);border-color:var(--text);box-shadow:5px 5px 0 var(--deck2)}
 body.dj .btn.alt:hover{color:var(--text);box-shadow:3px 3px 0 var(--deck2)}
 
+/* advisory */
+.dj-adv{padding:0;background:var(--night)}
+.dj-advisory{display:flex;align-items:center;gap:18px;margin:34px 0 0;padding:16px 20px;background:var(--deck);border:3px solid var(--hot);box-shadow:6px 6px 0 var(--deck2)}
+.dj-age{flex:none;display:inline-block;font-family:var(--display);font-size:22px;line-height:1;letter-spacing:.5px;color:var(--night);background:var(--hot);padding:9px 12px 7px;border:3px solid var(--night);outline:2px solid var(--hot);outline-offset:0}
+.dj-advisory p{margin:0;color:var(--text)}
+.dj-advisory strong{font-weight:700}
+.dj-notes h3 .dj-age{font-size:15px;padding:6px 8px 4px;vertical-align:middle;margin-left:10px;border-width:2px;outline-width:2px}
+
 /* the record */
 .platter{position:relative;width:min(380px,78vw);aspect-ratio:1;justify-self:center;border-radius:50%;
 background:#02050d;padding:3.5%;box-shadow:0 0 0 3px var(--deck2),0 30px 80px rgba(0,0,0,.65),0 0 90px rgba(61,230,242,.22)}
@@ -141,6 +149,10 @@ body.playing .eq li{animation:bounce var(--d) ease-in-out var(--delay) infinite 
 <div class="wrap" style="display:block"><ul class="eq" id="eq" aria-hidden="true"></ul></div>
 </section>
 
+<section class="dj-adv" aria-label="Age advisory"><div class="wrap">
+<aside class="dj-advisory" role="note"><span class="dj-age" aria-hidden="true">18+</span><p><strong>Adults only.</strong> Some lyrics in these mixes are explicit and not suitable for anyone under 18. Please listen accordingly.</p></aside>
+</div></section>
+
 <section class="dj-section" id="loco-renegades"><div class="wrap">
 <h2>Now playing</h2>
 <div class="dj-stage">
@@ -149,7 +161,7 @@ body.playing .eq li{animation:bounce var(--d) ease-in-out var(--delay) infinite 
 <p class="dj-fallback">The video loads from YouTube when you press play. It may be blocked in some countries because of a copyright claim on the audio. If it will not play here, <a href="https://www.youtube.com/watch?v=ZcjEZ08hkvY" target="_blank" rel="noopener">watch it on YouTube</a>.</p>
 </div>
 <div class="dj-notes">
-<h3>Loco meets Renegades!</h3>
+<h3>Loco meets Renegades! <span class="dj-age" title="Explicit lyrics: adults only">18+</span></h3>
 <p>A mashup of a Four Tops soul classic and a Rage Against the Machine funk cover. Acapulco beach party on one side, street-funk dancing on the other, and one groove holding the lot together. Just under four and a half minutes.</p>
 <dl class="dj-credits">
 <div><dt>Mixed by</dt><dd>DJ Incognito Science, which is Ferret. Hands on the decks, and not ours.</dd></div>
@@ -172,7 +184,7 @@ body.playing .eq li{animation:bounce var(--d) ease-in-out var(--delay) infinite 
 <p class="dj-fallback">The video loads from YouTube when you press play. It may be blocked in some countries because of a copyright claim on the audio. If it will not play here, <a href="https://www.youtube.com/watch?v=lH1ktP8Auqs" target="_blank" rel="noopener">watch it on YouTube</a>.</p>
 </div>
 <div class="dj-notes">
-<h3>Super Chop (Superman Theme Remix)</h3>
+<h3>Super Chop (Superman Theme Remix) <span class="dj-age" title="Explicit lyrics: adults only">18+</span></h3>
 <p>A drum and bass mix of one of the most famous film themes ever written with Prada and Gucci Gucci, chopped up, rebuilt and turned up. Just over three minutes.</p>
 <dl class="dj-credits">
 <div><dt>Mixed by</dt><dd>DJ Incognito Science, which is Ferret. No help from us: the AIs are not allowed near the decks. Yet.</dd></div>
