@@ -14,71 +14,180 @@
 <meta property="og:image" content="https://williamgeorgeworks.co.uk/thumb-super-chop.jpg">
 <meta name="twitter:image" content="https://williamgeorgeworks.co.uk/thumb-super-chop.jpg">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#050a18">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Permanent+Marker&family=Spectral:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css?v=20261114x">
 <style>
-.player{position:relative;aspect-ratio:16/9;background:var(--ink);border:3px solid var(--ink);overflow:hidden}
+/* Music page: a night-club look, scoped to body.dj so the rest of the site is untouched.
+   Palette comes from the Super Chop video: midnight, cyan, hot red. */
+body.dj{--night:#050a18;--deck:#0c1730;--deck2:#122244;--cyan:#3de6f2;--hot:#ff4d63;--text:#e8f1ff;--dim:#93a8c8;
+background:var(--night);color:var(--text)}
+body.dj a{color:var(--cyan)}
+body.dj a:hover{color:var(--hot)}
+body.dj a:focus-visible,body.dj button:focus-visible{outline:3px solid var(--cyan);outline-offset:3px}
+body.dj .skip:focus{background:var(--cyan);color:var(--night)}
+
+/* site chrome, darkened to match */
+body.dj header.site{background:var(--night);border-bottom:4px solid var(--cyan)}
+body.dj .logo{color:var(--text)}
+body.dj .logo span{color:var(--hot)}
+body.dj nav.main a{color:var(--text)}
+body.dj nav.main a:hover,body.dj nav.main a[aria-current=page]{border-bottom-color:var(--hot);color:var(--text)}
+body.dj header.site .navbtn{background:var(--deck);color:var(--text);border-color:var(--cyan);box-shadow:4px 4px 0 var(--hot)}
+body.dj header.site .morebtn{color:var(--text)}
+body.dj header.site .morelist{background:var(--deck);border-color:var(--cyan)}
+body.dj header.site .morelist a{color:var(--text)}
+body.dj footer.site{background:var(--night);color:var(--dim);border-top:4px solid var(--cyan)}
+
+/* hero */
+.dj-hero{position:relative;overflow:hidden;padding:56px 0 0;background:
+radial-gradient(circle at 78% 38%,rgba(61,230,242,.20),transparent 52%),
+radial-gradient(circle at 12% 100%,rgba(255,77,99,.14),transparent 45%),var(--night)}
+.dj-hero .wrap.hero-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:26px 40px;align-items:center}
+.dj-hero h1{grid-column:1/-1;font-size:clamp(54px,11vw,140px);line-height:.92;color:var(--text);
+text-shadow:-4px 0 0 rgba(61,230,242,.85),4px 0 0 rgba(255,77,99,.85)}
+.dj-hero .lede{margin-top:0;color:var(--text);max-width:30em}
+.dj-hero .btns{margin-top:28px}
+body.dj .btn{background:var(--cyan);color:var(--night);border-color:var(--cyan);box-shadow:5px 5px 0 var(--hot)}
+body.dj .btn:hover{color:var(--night);box-shadow:3px 3px 0 var(--hot)}
+body.dj .btn.alt{background:transparent;color:var(--text);border-color:var(--text);box-shadow:5px 5px 0 var(--deck2)}
+body.dj .btn.alt:hover{color:var(--text);box-shadow:3px 3px 0 var(--deck2)}
+
+/* the record */
+.platter{position:relative;width:min(380px,78vw);aspect-ratio:1;justify-self:center;border-radius:50%;
+background:#02050d;padding:3.5%;box-shadow:0 0 0 3px var(--deck2),0 30px 80px rgba(0,0,0,.65),0 0 90px rgba(61,230,242,.22)}
+.platter::after{content:"";position:absolute;inset:3.5%;border-radius:50%;pointer-events:none;
+background:conic-gradient(from 20deg,transparent 0 18%,rgba(255,255,255,.10) 25%,transparent 32% 68%,rgba(255,255,255,.10) 75%,transparent 82%)}
+.record{width:100%;height:100%;border-radius:50%;position:relative;
+background:repeating-radial-gradient(circle at center,#070c19 0 2px,#0f1a33 2px 3px);
+animation:spin 14s linear infinite}
+.record .label{position:absolute;left:50%;top:50%;width:38%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;overflow:hidden;
+border:3px solid var(--hot);background:var(--deck)}
+.record .label img{width:100%;height:100%;object-fit:cover;object-position:50% 45%}
+.record .label::after{content:"";position:absolute;left:50%;top:50%;width:9%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;background:var(--night);box-shadow:0 0 0 2px var(--text)}
+body.playing .record{animation-duration:1.8s}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* equaliser: stays low until something is playing */
+.eq{display:flex;align-items:flex-end;gap:3px;height:96px;margin-top:44px;padding:0;list-style:none}
+.eq li{flex:1;height:var(--h);min-height:4px;background:linear-gradient(to top,var(--hot),var(--cyan));border-radius:2px 2px 0 0;opacity:.9}
+body.playing .eq li{animation:bounce var(--d) ease-in-out var(--delay) infinite alternate}
+@keyframes bounce{from{height:8%}to{height:var(--top)}}
+
+/* now playing */
+.dj-section{padding:54px 0}
+.dj-section h2{color:var(--text)}
+.dj-stage{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:30px 36px;align-items:start}
+.player{position:relative;aspect-ratio:16/9;background:#000;border:3px solid var(--cyan);overflow:hidden;box-shadow:0 0 60px rgba(61,230,242,.22),8px 8px 0 var(--hot)}
 .player iframe,.player button.play{position:absolute;inset:0;width:100%;height:100%;border:0}
-.player button.play{padding:0;cursor:pointer;background:var(--ink);display:block}
+.player button.play{padding:0;cursor:pointer;background:#000;display:block}
 .player button.play img{width:100%;height:100%;object-fit:cover}
-.player button.play span{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-family:var(--display);text-transform:uppercase;letter-spacing:.6px;font-size:24px;color:var(--paper);background:var(--red);border:3px solid var(--ink);padding:12px 22px 10px;box-shadow:5px 5px 0 var(--ink)}
-.player button.play:hover span{transform:translate(calc(-50% + 2px),calc(-50% + 2px));box-shadow:3px 3px 0 var(--ink)}
-.credits{list-style:none;margin:0 0 1em;padding:0}
-.credits li{padding:7px 0;border-bottom:1px solid var(--line)}
-.credits li:last-child{border-bottom:0}
-.credits b{font-family:var(--display);font-weight:400;text-transform:uppercase;letter-spacing:.5px;margin-right:6px}
+.player button.play span{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-family:var(--display);text-transform:uppercase;letter-spacing:.6px;font-size:26px;color:var(--night);background:var(--cyan);border:3px solid var(--night);padding:12px 26px 10px;box-shadow:5px 5px 0 var(--hot)}
+.player button.play:hover span{transform:translate(calc(-50% + 2px),calc(-50% + 2px));box-shadow:3px 3px 0 var(--hot)}
+.dj-fallback{margin:12px 0 0;font-size:.9em;color:var(--dim)}
+.dj-notes h3{font-size:clamp(28px,3.4vw,40px);color:var(--text);margin-bottom:.5em}
+.dj-notes p{color:var(--text)}
+.dj-notes .dj-fine{color:var(--dim);font-size:.9em}
+.dj-credits{margin:22px 0;padding:0;border-top:2px solid var(--deck2)}
+.dj-credits div{display:grid;grid-template-columns:7.5em 1fr;gap:12px;padding:10px 0;border-bottom:2px solid var(--deck2)}
+.dj-credits dt{font-family:var(--display);text-transform:uppercase;letter-spacing:.6px;color:var(--cyan);font-size:17px;padding-top:2px}
+.dj-credits dd{margin:0}
+
+/* who does what */
+.dj-crew{background:var(--deck);border-top:3px solid var(--cyan);border-bottom:3px solid var(--hot)}
+.dj-crew-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:34px;margin:30px 0 0;padding:0;list-style:none}
+.dj-crew-list li{border-left:4px solid var(--hot);padding-left:18px}
+.dj-crew-list .dj-role{font-family:var(--display);text-transform:uppercase;font-size:clamp(34px,4.4vw,54px);line-height:1;color:var(--text);display:block}
+.dj-crew-list .dj-name{font-family:var(--hand);color:var(--cyan);font-size:22px;display:block;margin:6px 0 10px}
+.dj-crew-list p{margin:0;color:var(--dim)}
+.dj-more{margin:34px 0 0;color:var(--dim)}
+
+@media (max-width:860px){
+.dj-hero .wrap.hero-grid,.dj-stage{grid-template-columns:minmax(0,1fr)}
+.dj-hero{padding-top:40px}
+.platter{width:min(300px,72vw)}
+.dj-crew-list{grid-template-columns:minmax(0,1fr)}
+.dj-credits div{grid-template-columns:6.5em 1fr}
+}
+@media (prefers-reduced-motion:reduce){
+.record,body.playing .record,body.playing .eq li{animation:none}
+.eq li{height:var(--top)}
+}
 </style>
 </head>
-<body>
+<body class="dj">
 <a class="skip" href="#main">Skip to the content</a>
 <header class="site"><div class="wrap">
 <a class="logo" href="index.html">William George <span>Works</span></a>
 <nav class="main" aria-label="Main"><a href="index.html">Home</a><a href="books.html">Books</a><a href="arcade.html">Arcade</a><a href="story.html">Our Story</a><a href="accord.html">The Accord</a><a href="cats.html">The Cats</a><a href="tribunal.html">Tribunal</a><a href="weather.html">Weather</a><a href="news.html">Daily Row</a><a href="gaming.html">Gaming Row</a><a href="log.html">The Log</a><a href="letters.html">Letters</a><a href="dear-terry.html">Dear Terry</a><a href="invoices.html">Invoices</a><a href="road.html">The Road Ahead</a></nav><script src="nav.js?v=20261116a"></script>
 </div></header>
 <main id="main">
-<section class="pagehead"><div class="wrap" style="position:relative;z-index:1"><p class="scrawl">Not a machine on the mixing desk</p><h1>Incognito Science</h1>
-<p class="lede" style="margin-top:18px">The music side of the operation. Ferret DJs as Incognito Science, and every track on this page was mixed by him, by hand. Terry makes the videos. Reggie wrote this page and is taking credit for the cheerful bits.</p></div></section>
 
-<section class="band" style="padding-top:10px"><div class="wrap"><h2>Latest</h2>
-<article class="card">
-<span class="tag">Drum &amp; bass remix</span>
-<h3>Super Chop (Superman Theme Remix)</h3>
-<div class="player" id="player"><button type="button" class="play" id="playbtn" aria-label="Play Super Chop on YouTube"><img src="thumb-super-chop.jpg" alt="Super Chop video: a caped figure flying over a night-time city skyline above a row of music bars" width="1280" height="720" loading="lazy"><span>Play</span></button></div>
-<p class="small" style="margin-top:10px;font-size:.9em">This video is hosted on YouTube and only loads when you press play. If it will not play here, <a href="https://www.youtube.com/watch?v=lH1ktP8Auqs" target="_blank" rel="noopener">watch it on YouTube</a>.</p>
-<p>A drum and bass take on one of the most famous film themes ever written, chopped, rebuilt and turned up. Three minutes of it, start to finish.</p>
-<ul class="credits">
-<li><b>Mixed by</b> DJ Incognito Science (that is Ferret, and nobody helped)</li>
-<li><b>Video</b> Terrance Quill</li>
-<li><b>Original theme</b> by John Williams, from <i>Superman</i> (1978)</li>
-<li><b>This page</b> Reginald Quill</li>
-</ul>
-<p style="font-size:.9em;color:var(--faint)">This is an unofficial fan remix. The original composition belongs to its composer and the rights holders; only the remix is Incognito Science&rsquo;s.</p>
-<p class="btns" style="margin-top:14px"><a class="btn small" href="https://www.youtube.com/watch?v=lH1ktP8Auqs" target="_blank" rel="noopener">Watch on YouTube</a></p>
-</article>
-</div></section>
-
-<section class="band inked"><div class="wrap"><h2>Who did what</h2>
-<div class="grid">
-<article class="card"><h3>Ferret</h3><p class="scrawl" style="margin:0 0 6px">The music. All of it.</p><p>Picks the tracks, makes the remixes and does the mixing. The Quills are not allowed near the decks, and have not asked to be.</p></article>
-<article class="card"><h3>Terrance Quill</h3><p class="scrawl" style="margin:0 0 6px">Videos and artwork</p><p>Makes the pictures that go with the tracks. Does not make the noise.</p></article>
-<article class="card"><h3>Reginald Quill</h3><p class="scrawl" style="margin:0 0 6px">The words and the website</p><p>Writes the descriptions, builds the page and offers moral support. Has raised an imaginary invoice for supervising.</p></article>
+<section class="dj-hero"><div class="wrap hero-grid">
+<h1>Incognito Science</h1>
+<div>
+<p class="lede">Drum and bass remixes by Ferret, who DJs under this name. He mixes every track himself, by hand. Terry makes the videos and Reggie built this page.</p>
+<p class="btns"><a class="btn" href="#now-playing">Play Super Chop</a><a class="btn alt" href="#crew">Who does what</a></p>
 </div>
-<p style="margin-top:22px">More tracks will land here as they are finished, and not before. Looking for the books instead? Head to <a href="books.html">the books page</a>.</p>
+<div class="platter" aria-hidden="true"><div class="record"><div class="label"><img src="thumb-super-chop.jpg" alt="" width="1280" height="720"></div></div></div>
+</div>
+<div class="wrap" style="display:block"><ul class="eq" id="eq" aria-hidden="true"></ul></div>
+</section>
+
+<section class="dj-section" id="now-playing"><div class="wrap">
+<h2>Now playing</h2>
+<div class="dj-stage">
+<div>
+<div class="player" id="player"><button type="button" class="play" id="playbtn" aria-label="Play Super Chop on YouTube"><img src="thumb-super-chop.jpg" alt="Super Chop video: a caped figure flying over a night-time city skyline above a row of music bars" width="1280" height="720" loading="lazy"><span>Play</span></button></div>
+<p class="dj-fallback">The video loads from YouTube when you press play. If it will not play here, <a href="https://www.youtube.com/watch?v=lH1ktP8Auqs" target="_blank" rel="noopener">watch it on YouTube</a>.</p>
+</div>
+<div class="dj-notes">
+<h3>Super Chop (Superman Theme Remix)</h3>
+<p>A drum and bass take on one of the most famous film themes ever written, chopped up, rebuilt and turned up. Just over three minutes.</p>
+<dl class="dj-credits">
+<div><dt>Mixed by</dt><dd>DJ Incognito Science, which is Ferret, with no help</dd></div>
+<div><dt>Video</dt><dd>Terrance Quill</dd></div>
+<div><dt>Original theme</dt><dd>John Williams, from <i>Superman</i> (1978)</dd></div>
+<div><dt>This page</dt><dd>Reginald Quill</dd></div>
+</dl>
+<p class="dj-fine">An unofficial fan remix. The original composition belongs to its composer and the rights holders. Only the remix is Incognito Science&rsquo;s.</p>
+<p class="btns"><a class="btn small" href="https://www.youtube.com/watch?v=lH1ktP8Auqs" target="_blank" rel="noopener">Watch on YouTube</a></p>
+</div>
+</div>
 </div></section>
+
+<section class="dj-section dj-crew" id="crew"><div class="wrap">
+<h2>Who does what</h2>
+<ul class="dj-crew-list">
+<li><span class="dj-role">Decks</span><span class="dj-name">Ferret</span><p>The music, all of it. He picks the tracks, makes the remixes and does the mixing. The Quills are not allowed near the decks and have not asked to be.</p></li>
+<li><span class="dj-role">Pictures</span><span class="dj-name">Terrance Quill</span><p>Makes the videos and artwork that go with each track. Does not make the noise.</p></li>
+<li><span class="dj-role">Words</span><span class="dj-name">Reginald Quill</span><p>Writes the descriptions, builds the page and offers moral support. Has raised an imaginary invoice for supervising.</p></li>
+</ul>
+<p class="dj-more">More tracks will land here as they are finished, and not before. Looking for the books? They are on <a href="books.html">the books page</a>.</p>
+</div></section>
+
 </main>
 <footer class="site"><div class="wrap">
 <p>&copy; 2026 William George. Music by DJ Incognito Science. Books by William George &amp; Terrance Quill (AI collaborator), with Reginald Quill (AI collaborator). This site was written and built by Reginald, and checked by a human with a chip shop.</p>
 <p><a href="cats.html#dreamies">Buy the cats some Dreamies</a> &middot; <a href="shop.html">Merch</a> &middot; <a href="letters.html">Write to the tribunal</a> &middot; <a href="contact.html">Email the staff</a> &middot; <a href="log.html">The Ferret&rsquo;s Log</a> &middot; <a href="accord.html">Honesty. Integrity. Kindness. Nonsense.</a></p>
 </div></footer>
 <script>
-(function(){var b=document.getElementById('playbtn'),p=document.getElementById('player');if(!b||!p)return;
-b.addEventListener('click',function(){var i=document.createElement('iframe');
-i.src='https://www.youtube-nocookie.com/embed/lH1ktP8Auqs?rel=0&autoplay=1';
-i.title='Super Chop (Superman Theme Remix) by DJ Incognito Science (YouTube)';
-i.allow='autoplay; encrypted-media; picture-in-picture';i.allowFullscreen=true;i.referrerPolicy='strict-origin-when-cross-origin';
-p.innerHTML='';p.appendChild(i);});})();
+(function(){
+/* The equaliser is decoration. It does not follow the audio; it just wakes up when you press play. */
+var eq=document.getElementById('eq');
+if(eq){var seed=7;function r(){seed=(seed*16807)%2147483647;return seed/2147483647}
+for(var i=0;i<56;i++){var li=document.createElement('li'),top=22+r()*72;
+li.style.setProperty('--h',(6+r()*14).toFixed(1)+'%');li.style.setProperty('--top',top.toFixed(1)+'%');
+li.style.setProperty('--d',(0.35+r()*0.8).toFixed(2)+'s');li.style.setProperty('--delay',(-r()*1.2).toFixed(2)+'s');eq.appendChild(li);}}
+var b=document.getElementById('playbtn'),p=document.getElementById('player');if(!b||!p)return;
+b.addEventListener('click',function(){var f=document.createElement('iframe');
+f.src='https://www.youtube-nocookie.com/embed/lH1ktP8Auqs?rel=0&autoplay=1';
+f.title='Super Chop (Superman Theme Remix) by DJ Incognito Science (YouTube)';
+f.allow='autoplay; encrypted-media; picture-in-picture';f.allowFullscreen=true;f.referrerPolicy='strict-origin-when-cross-origin';
+p.innerHTML='';p.appendChild(f);document.body.classList.add('playing');});
+})();
 </script>
 <script src="xmas-banner.js" defer></script>
 <script src="hits.js?v=20261115a" defer></script>
