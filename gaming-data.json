@@ -1,6 +1,133 @@
 {
   "editions": [
     {
+      "date": "2026-11-16",
+      "title": "Doom Gets A Horde Mode; Reggie Gets A Sale Notice",
+      "standfirst": "Terry (PC, Steam Deck, master race, full price on day one) and Reggie (PS5, saving for a Pro, waiting for the sale) read through the latest gaming news and argue about every bit of it. Everything in big type is made up, and so is the arguing. Everything in the boxes is real.",
+      "stories": [
+        {
+          "kicker": "Doom",
+          "headline": "Free Horde Mode Arrives With Nineteen Arenas; Sofa Counted As A Twentieth",
+          "satire": "Reggie wants to know whether a mode counts as free if you have to own an expansion first. Terry says it absolutely does, because he has owned the expansion since the day it came out, at full price, and would like that noted in the minutes. Reggie says he will join the horde as soon as the expansion drops in a sale, and has promised to count the arenas twice to be sure. Terry wins this one, by the narrowest of margins and the widest of smiles.",
+          "real": "id Software's free horde mode for DOOM: The Dark Ages is due on 16 November for players who own the Revelations expansion, and its trailer shows 19 arenas.",
+          "source": {
+            "name": "Push Square",
+            "url": "https://www.pushsquare.com/news/2026/11/doom-the-dark-ages-and-horde-mode-is-a-match-made-in-heaven"
+          }
+        },
+        {
+          "kicker": "Fortnite",
+          "headline": "Masked Mystery Character To Be Unmasked On 5 December; Nation Given Three Weeks To Guess Wrong",
+          "satire": "Terry has guessed already, at full price, with total confidence, and is certain the answer is somebody who owns a Steam Deck. Reggie has placed a bet too: nothing, on nobody, which he calls the only safe wager in gaming. They argued about whether guessing wrongly early is better than not guessing at all. Reggie wins, since he cannot possibly be wrong about a bet he has not made, and has asked for that to be written down.",
+          "real": "Epic says the identity of Fortnite's masked Captain X will be revealed at a live event on 5 December, which also closes the Treasure Hunters season. Epic has not confirmed any of the fan theories.",
+          "source": {
+            "name": "Instant Gaming",
+            "url": "https://news.instant-gaming.com/en/articles/23013-epic-will-reveal-who-fortnite-s-captain-x-is-on-december-5"
+          }
+        },
+        {
+          "kicker": "Card Game",
+          "headline": "Deckbuilder Adds A New Character And Two Modes; The Cards Were Not Consulted",
+          "satire": "Terry says a card game is the natural habitat of the master race, because shuffling is basically overclocking. Reggie says he has played cards for years using a pack from a pub, which was free and has all fifty-two cards, give or take the three of clubs. They argued over whether a new character is a new friend or a new rival. Neither of them has a deck. Terry has a spreadsheet of one. Nobody wins, and the three of clubs is still missing.",
+          "real": "Slay the Spire 2's biggest update so far, version 0.113.0, reached the beta branch and adds a new playable character, two new game modes and many bug fixes, according to Instant Gaming.",
+          "source": {
+            "name": "Instant Gaming",
+            "url": "https://news.instant-gaming.com/en/articles/23008-slay-the-spire-2-gets-its-biggest-update-yet"
+          }
+        },
+        {
+          "kicker": "Racing",
+          "headline": "Open-World Racer Heads For PS5 In January; Reggie Starts Practising Parking",
+          "satire": "Reggie is thrilled, and has reserved a space on the sofa for the occasion. Terry has been driving it since day one, at full price, and says he has seen everything in it twice. Reggie says that is perfect, because by the time the game reaches him in a sale it will be fully patched, fully explored and fully spoiled, which he calls a premium experience. Reggie wins. Terry has gone to look for a shortcut.",
+          "real": "A roadmap for Forza Horizon 6 says the game comes to PS5 in January 2027, with Series 8 and Series 9 content arriving before the end of 2026.",
+          "source": {
+            "name": "Instant Gaming",
+            "url": "https://news.instant-gaming.com/en/articles/23024-forza-horizon-6-presents-the-roadmap-for-late-2026-and-2027"
+          }
+        },
+        {
+          "kicker": "Tomb Raider",
+          "headline": "Adventurer Gets A Second Batch Of Boxes; Shelf Declared Limited, Like The Edition",
+          "satire": "Terry does not buy boxes. The master race keeps its shelves empty and its library enormous, and he finds a shelf full of cases rather quaint. Reggie loves a box, and likes the word limited even more, until he remembers that limited means paying promptly. They argued over who owns the console it fits. Neither of them does. Terry wins on shelf space, Reggie wins on dust, and the adventurer is still hanging off a ledge somewhere, waiting for a verdict.",
+          "real": "Limited Run Games announced a new batch of physical Switch 2 copies of Tomb Raider: Definitive Edition to mark the series' 30th anniversary, after the first batch sold out quickly.",
+          "source": {
+            "name": "Instant Gaming",
+            "url": "https://news.instant-gaming.com/en/articles/23026-tomb-raider-definitive-edition-is-getting-a-restock-on-switch-2"
+          }
+        },
+        {
+          "kicker": "Big Game",
+          "headline": "Launch Day To Get A Twenty-Four-Hour Stream; Kettle Asked To Brace Itself",
+          "satire": "Terry will watch every minute on a second monitor and calls it multitasking. Reggie will watch the first ten minutes, a bit of the middle and the end, then catch up on the highlights, all for free, and wants it known that this is a very respectable way to buy a game. Terry says it is not buying anything. Reggie says exactly. Reggie wins on price, Terry wins on stamina, and the kettle has handed in its notice.",
+          "real": "YouTube's official channel will carry a 24-hour GTA VI stream starting at midnight on 19 November, with a pre-show from 11pm, according to Instant Gaming.",
+          "source": {
+            "name": "Instant Gaming",
+            "url": "https://news.instant-gaming.com/en/articles/23001-youtube-x-gta-vi-a-collaboration-of-titans-live-on-november-19-at-12-a-m"
+          },
+          "link": {
+            "text": "Fancy a big game that downloads in seconds? Try the arcade.",
+            "url": "arcade.html"
+          }
+        },
+        {
+          "kicker": "Awards",
+          "headline": "London Hands Out Twenty-Five Golden Joysticks; Nation's Mantelpiece Measured",
+          "satire": "Terry voted in every category and says the trophies ought to be handed straight to the PC. Reggie voted once, on the grounds that he is a man of principle and the voting was free, and has awarded himself a gold joystick for services to bargain hunting. He has raised an invoice for the engraving. Terry points out that a trophy in a Steam library cannot be dusted. Reggie says that is a selling point. Reggie wins, with a trophy that does not exist.",
+          "real": "The 44th Golden Joystick Awards took place in London with 25 awards in total, most chosen by fan vote and three by a panel of judges, according to Instant Gaming.",
+          "source": {
+            "name": "Instant Gaming",
+            "url": "https://news.instant-gaming.com/en/articles/22990-these-are-the-winners-of-the-golden-joystick-awards"
+          }
+        },
+        {
+          "kicker": "Apps",
+          "headline": "Game-Tracking Site Gets A Phone App; Backlog Now Available In Pocket Size",
+          "satire": "Terry's backlog lives on Steam, grows on release day and is, he says, an investment. Reggie's backlog is made entirely of sale bargains he has not yet opened, and he is quietly proud that every single one cost less than a sandwich. They argued about whose pile is bigger. A phone app can now settle it, which neither of them wants. Reggie wins, because his pile was cheaper, and Terry's has a lot more digits.",
+          "real": "Backloggd's mobile app entered closed beta on 13 November for Patreon members, Android first, with a public beta planned for spring 2027, according to Instant Gaming.",
+          "source": {
+            "name": "Instant Gaming",
+            "url": "https://news.instant-gaming.com/en/articles/23020-the-video-game-catalogue-platform-backloggd-is-getting-beta-on-mobile"
+          }
+        },
+        {
+          "kicker": "PlayStation",
+          "headline": "PS5 Gets A Smarter Picture Booster; Pro Wish-List Suddenly Feels Awkward",
+          "satire": "Reggie is delighted, since a free boost for his ordinary PS5 means one fewer reason to buy the Pro, and every reason he does not have is worth a pound. He has moved the Pro to the pending tray. Terry says the master race had sharp pixels years ago, from a box with a fan like a jet engine. Reggie says the sofa is quieter. Reggie wins, with wounded dignity intact, and Terry has gone quiet about frame rates.",
+          "real": "Sony's QSSR graphics enhancer is live in Marvel's Spider-Man 2 on the base PS5, and Push Square reports it is due to reach more games in the coming weeks.",
+          "source": {
+            "name": "Push Square",
+            "url": "https://www.pushsquare.com/news/2026/11/base-ps5s-qssr-enhancer-coming-to-6-more-games-in-spider-man-2-now"
+          }
+        },
+        {
+          "kicker": "Subscriptions",
+          "headline": "Subscription Sale Starts Today For Two Weeks; Reggie Studies The Small Print Like A Treaty",
+          "satire": "Reggie signed up ages ago, which means the discount is not for him, and he has taken it very personally. He is considering leaving and rejoining as a brand new customer in a different hat. Terry says Steam has no subscription, so no catch, no small print and no hat. Reggie says Steam has sales too, and Terry has never once waited for one. A draw: the hat stays in the cupboard, and Reggie's dignity has been put on hold.",
+          "real": "Sony's PS Plus memberships go on sale from 16 November for two weeks, but the discounted prices apply only to new sign-ups, according to Push Square.",
+          "source": {
+            "name": "Push Square",
+            "url": "https://www.pushsquare.com/news/2026/11/ps-plus-subscriptions-on-sale-from-tomorrow-but-theres-a-big-catch"
+          },
+          "link": {
+            "text": "Want to see what a price looks like when it is free? Try the arcade.",
+            "url": "arcade.html"
+          }
+        },
+        {
+          "kicker": "Arcade Racer",
+          "headline": "Taxi Game Announces Fifth And Final Stop; Meter Left Running",
+          "satire": "Terry wants the final stop to be wherever his rig is, and expects a tip. Reggie has already sent the fare for all five stops in a single invoice, plus a small charge for the journey that has not happened yet, and calls it a nice little earner. Terry says nobody is paying, since the game is not due until next year. Reggie says that is why he is billing early. Reggie wins, on a technicality he has not explained.",
+          "real": "SEGA confirmed India as the fifth and final destination of Crazy Taxi: World Tour, joining the West Coast, Germany, Japan and Brazil, and Push Square says the game is due in 2027.",
+          "source": {
+            "name": "Push Square",
+            "url": "https://www.pushsquare.com/news/2026/11/crazy-taxi-makes-a-stop-in-india-for-the-final-leg-of-its-world-tour"
+          }
+        }
+      ],
+      "terry": "And that, ladies and gentlemen, is Monday! Every word made up apart from the boxes, which are real, and arrived on release day at full price. Back tomorrow, and bring a spare monitor!",
+      "reggie": "Check the boxes, my old son, that's where the truth lives. Everything else is a bargain, and a bargain is only a bargain if you wait for it. Back tomorrow, and mind the kettle."
+    },
+    {
       "date": "2026-11-15",
       "title": "Zelda Sells Five Million; Cats Get A Simulator",
       "standfirst": "Terry (PC, Steam Deck, master race, full price on day one) and Reggie (PS5, saving for a Pro, waiting for the sale) go through the last few days in gaming and argue about all of it. Everything in big type is made up, and so is the arguing. Everything in the boxes is real.",
