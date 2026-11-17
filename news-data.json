@@ -1,6 +1,115 @@
 {
  "editions": [
   {
+   "date": "2026-11-17",
+   "title": "Snow Books A Morning Slot; Moomins Move Into A Windmill",
+   "standfirst": "A bigger edition from Terry and Reggie: ten stories, all drawn from real news of the last few days. Everything in big type is made up. Everything in the boxes is real.",
+   "stories": [
+    {
+     "kicker": "Weather",
+     "headline": "Snow Gets A Midnight-To-Eleven Slot; Britain Rehearses Its Surprised Face",
+     "satire": "The Met Office has put out a yellow warning for snow overnight until eleven on Tuesday morning, which gives the white stuff a firm start time and, for once, a firm finish. A centimetre or so may settle on higher ground and rather more on the hills, and the rest of us will peer out of the window and announce it is only sleet with ambition. Terry has booked a snowman for the studio and is auditioning carrots. Reggie has put up a sign saying SHOVELS, ONE CAREFUL OWNER, NEVER USED, a nice little earner.",
+     "real": "The Met Office issued a yellow warning for snow covering parts of southern Scotland and northern and central England, in force from 00:00 to 11:00 on Tuesday 17 November. It says 1 to 5 cm could settle above 200 metres and 5 to 15 cm above 300 to 400 metres.",
+     "source": {
+      "name": "Met Office",
+      "url": "https://www.metoffice.gov.uk/about-us/news-and-media/media-centre/weather-and-climate-news/2026/snow-warning-in-force-as-unsettled-weather-continues-"
+     }
+    },
+    {
+     "kicker": "Prices",
+     "headline": "Petrol Slips To 165.2p; Drivers Loosen Their Grip On The Wheel, Slightly",
+     "satire": "The average litre of petrol has drifted down to 165.2p, nearly ten pence under its October high, and a nation of drivers is cautiously unclenching its shoulders. A further dip is tipped to knock about five pounds fifty off a full tank, which is roughly one sausage roll and a small sense of triumph. Terry plans to celebrate by driving to the end of the road and back, just to feel it. Reggie has offered to locate the missing five pounds fifty down the back of your sofa for a modest finder's fee, my old son.",
+     "real": "The AA's figures published on 16 November put the average price of petrol at 165.2p a litre at the start of the week, down 9.5p from a high of 174.7p in the first week of October. The article says a further fall would save about £5.50 on a typical 55-litre tank.",
+     "source": {
+      "name": "Fleet World",
+      "url": "https://fleetworld.co.uk/petrol-prices-set-for-10p-drop-this-week-but-campaigners-warn-diesel-is-barely-budging/"
+     }
+    },
+    {
+     "kicker": "Culture",
+     "headline": "Moomins Move Into A Windmill; Windmill Not Consulted",
+     "satire": "A Moomin pop-up shop opens on Friday in a roundhouse at the foot of London's oldest surviving windmill, so the sails will spend the winter looking down on pancakes shaped like a house. The windmill has seen three centuries of the capital go by and has never before been asked to stand next to a bubble tea. Terry has applied to become a Moomin and is waiting to hear. Reggie has secured a limited run of woolly Moomin-style hats, all one size, all, he swears, your size.",
+     "real": "Retail Times reports that the Quentin Blake Centre for Illustration is hosting a Moomin pop-up from Friday 20 November to 20 December in a 1709 roundhouse at the base of London's oldest surviving windmill in Clerkenwell. It is open Fridays to Sundays, 11am to 4pm, and its cafe has a Moomin-themed winter menu including Moominhouse pancakes.",
+     "source": {
+      "name": "Retail Times",
+      "url": "https://retailtimes.co.uk/new-pop-up-moomin-shop-in-londons-oldest-windmill/"
+     }
+    },
+    {
+     "kicker": "Adverts",
+     "headline": "Christmas Advert Season Gains A Thirty-Second Contender; Nation Checks The Calendar",
+     "satire": "Another Christmas advert has landed, this one a brisk half minute, which in this year's festive scramble is the equivalent of nipping in for milk and leaving. Shorter cuts of fifteen and six seconds follow on social media in December, so by Boxing Day the whole story will have been trimmed to a raised eyebrow. Terry is filming a one-second Christmas advert in his dressing room and weeping on cue. Reggie sells one-second Christmas cards: front, back, and gone before you've read the front.",
+     "real": "Retail Times reports that Samsung UK launched its Christmas campaign 'It starts with a gift' on 16 November, led by a 30-second film called 'The Surprise'. It says 15-second and 6-second edits arrive on social media on 2 December.",
+     "source": {
+      "name": "Retail Times",
+      "url": "https://retailtimes.co.uk/samsung-uk-has-launched-it-starts-with-a-gift-a-new-christmas-campaign/"
+     }
+    },
+    {
+     "kicker": "Work",
+     "headline": "Half Of Shop Workers Have Tried A Robot Helper; Slightly Fewer Say It Saved A Minute",
+     "satire": "Half of retail workers have tried an AI helper at work, and just under half of those say it saves them time, which leaves the rest spending their saved time wondering where it went. Fewer than a quarter have had formal training, so most are learning on the job, as people have done since the invention of the job. Terry asked a chatbot for a joke and was handed a spreadsheet. Reggie has billed the staff canteen for time saved, retroactively, and invoice number one is already in the post.",
+     "real": "A Deloitte UK survey of 25,000 UK workers, reported on 16 November, found that 50% of retail workers had used generative AI at work, against 63% of the wider UK workforce. It says 48% of the retail workers who had used it agreed it saves them time, and 23% said they had formal training from their employer.",
+     "source": {
+      "name": "Retail Times",
+      "url": "https://retailtimes.co.uk/retail-workers-lag-behind-rest-of-uk-workforce-in-ai-productivity-gains/"
+     }
+    },
+    {
+     "kicker": "Shops",
+     "headline": "Black Friday Arrives In Its Shoes Early; Oxfords Drop To £83.30",
+     "satire": "Black Friday has not officially started, but one shoe retailer has put its offers out already, so the shoes have finally got somewhere before the rest of us. A lace-up Oxford slides from £119 to £83.30, and the nation now faces several days of wondering whether a bargain today still counts as a bargain on the day itself. Terry is holding out until the last possible moment to buy shoes he does not need. Reggie has priced his own Oxfords for Black Friday, Black Saturday and Black Wednesday: three reductions, one shoe, no returns.",
+     "real": "Retail Times reports that Dune London confirmed its Black Friday 2026 offers on 16 November, with up to 30% off men's footwear sitewide, boots under £100 and shoes under £80. It gives the example of Stanlakes Lace Up Oxford Shoes, marked 30% off, reduced from £119 to £83.30.",
+     "source": {
+      "name": "Retail Times",
+      "url": "https://retailtimes.co.uk/luxury-footwear-brand-dune-london-has-confirmed-its-black-friday-2026-offers/"
+     }
+    },
+    {
+     "kicker": "Transport",
+     "headline": "Britain's Low Bridges Log A Caller Every Five Hours; Not One Has Been Offered A Tea",
+     "satire": "Network Rail has counted 1,706 bridge strikes in a year, which works out at one every five hours, so a typical low bridge now gets visitors more regularly than a rural bus. The bridges, being stationary by nature, have taken it on the chin, or rather on the underside, and have asked only for a sign and a bit of height awareness. Terry has measured himself against every doorframe in the studio and declares himself safe. Reggie is selling pocket tape measures, accurate to within one lorry.",
+     "real": "Network Rail reported on 15 November that there were 1,706 bridge strikes between 1 April 2025 and 31 March 2026, about one every five hours, causing 185,319 minutes of passenger delay and costing about £13.25m. It released the figures for Road Safety Week as part of its 'Wise Up, Size Up' campaign.",
+     "source": {
+      "name": "Network Rail",
+      "url": "https://www.networkrailmediacentre.co.uk/news/mind-the-height-network-rail-reveals-britains-ten-most-bashed-bridges"
+     }
+    },
+    {
+     "kicker": "Pubs",
+     "headline": "Brewery Opens Pub Upstairs; Beer's Commute Shortened To One Staircase",
+     "satire": "A Walthamstow brewery is opening a pub above itself, which cuts the beer's journey from tank to glass to roughly one flight of stairs. The pint will arrive so fresh it has barely finished being told what it is. With eighty seats inside and eighty outside, the outdoor ones in late November will go to the truly committed and anyone who left a coat on one. Terry will pull the first pint and is practising his cheers face in the cellar mirror. Reggie is offering Stairway Season Tickets, every step individually priced.",
+     "real": "Restaurant Online's weekly round-up of 13 November says East London Brewing Co. is opening The Black Horse Tap above its Walthamstow brewery later this month, with 80 covers inside and 80 outside.",
+     "source": {
+      "name": "Restaurant Online",
+      "url": "https://www.restaurantonline.co.uk/Article/2026/11/13/friday-five-the-weeks-top-stories/"
+     }
+    },
+    {
+     "kicker": "Motoring",
+     "headline": "Charging Network Scores 4.2 Out Of 5; Nation Wonders What The Other 0.8 Is Doing",
+     "satire": "A network of rapid chargers has scored 4.2 out of 5 from the people who use it and taken second place, which in motoring terms is a respectable silver and a firm handshake. The missing 0.8 is thought to be spent deciding what to do with twenty minutes and a vending machine. Terry will rate everything 4.2 out of 5 from now on, including breakfast and the weather. Reggie rates his own services a full five out of five, based on a survey of one, carried out by himself, in the mirror.",
+     "real": "Retail Times reported on 16 November that MFG EV Power came second in the large rapid and ultra-rapid category of Zapmap's 2026/27 EV Driver Recommended awards, with an overall satisfaction rating of 4.2 out of 5. The awards draw on 5,346 EV driver responses collected in September and October.",
+     "source": {
+      "name": "Retail Times",
+      "url": "https://retailtimes.co.uk/drivers-rank-mfg-ev-power-second-among-uks-large-rapid-networks/"
+     }
+    },
+    {
+     "kicker": "Weather",
+     "headline": "Thursday Pops Up To Twelve Degrees; Friday Sends It Straight Back Outside",
+     "satire": "After a few brisk days, Thursday is lined up to reach about twelve degrees in the south-west, which the south-west will treat as a heatwave and the north will treat as a rumour. Friday night then brings a hard frost, so the mild spell is essentially a long lunch break. Terry has packed a sun hat and a scarf in the same bag and refuses to choose between them. Reggie has reversible coats on special offer, and the price reverses too, my old son.",
+     "real": "The Met Office's week-ahead blog, published on 16 November, says Thursday could reach about 12°C in the south-west and 7 or 8°C in northern areas. It says a widespread frost is expected on Friday night, with some sheltered spots possibly reaching -8°C.",
+     "source": {
+      "name": "Met Office",
+      "url": "https://www.metoffice.gov.uk/blog/2026/week-ahead-a-wintry-start-before-colder-brighter-weather-arrives"
+     }
+    }
+   ],
+   "terry": "And that's the news, ladies and gentlemen, ten stories and not a single one of them was fully made up! Well, the big print was, but check the boxes underneath, that's where the truth lives. Wrap up warm, mind the bridges, and join us tomorrow for more of the same, only different!",
+   "reggie": "Ten stories, my old son, and every one of them on the house. The big type is invention, the boxes are gospel, and my fee for the edition is a fiver, payable on delivery, a nice little earner. Mind how you go, and mind the bridges."
+  },
+  {
    "date": "2026-11-16",
    "title": "Britain Gets Cold, Wet And Slippery; Rinks Open Just In Case",
    "standfirst": "A short edition from Terry and Reggie: only three stories this morning passed the date check and the golden rule. Everything in big type is made up. Everything in the boxes is real.",
