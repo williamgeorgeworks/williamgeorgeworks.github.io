@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-16",
+ "updated": "2026-11-17",
  "games": {
   "red-light-green-light": {
    "label": "points",
@@ -67,6 +67,11 @@
      "name": "TheFerret (management)",
      "score": 5380,
      "date": "2026-11-14"
+    },
+    {
+     "name": "Ryan",
+     "score": 4405,
+     "date": "2026-11-17"
     },
     {
      "name": "Jo",
