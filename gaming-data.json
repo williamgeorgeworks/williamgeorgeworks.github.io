@@ -1,6 +1,99 @@
 {
   "editions": [
     {
+      "date": "2026-11-17",
+      "title": "GTA Week Clears The Diary; Reggie Clears His Throat",
+      "standfirst": "Terry (PC, Steam Deck, master race, full price on day one) and Reggie (PS5, saving for a Pro, waiting for the sale) read through the latest gaming news and argue about every bit of it. Everything in big type is made up, and so is the arguing. Everything in the boxes is real.",
+      "stories": [
+        {
+          "kicker": "Xbox",
+          "headline": "Old Boot-Up Animations Return For A Birthday; Nation Switches On Just To Watch",
+          "satire": "Terry says a master-race PC does not need a startup animation, because it boots straight into a launcher and a sense of superiority. Reggie says that is the saddest thing he has ever heard, and that a console with a little welcome film is a console that cares. Terry admitted he has restarted his rig twice this morning in case it was feeling left out. Reggie wins, on sentiment, and has asked for a cake.",
+          "real": "Pure Xbox reports that three classic startup animations (the original Xbox one and two Xbox 360 ones, from 2005 and 2010) were added on Xbox One, Series X and Series S, timed to Xbox's 25th anniversary on 15 November.",
+          "source": {
+            "name": "Pure Xbox",
+            "url": "https://www.purexbox.com/news/2026/11/three-classic-startup-animations-are-rolling-out-today-on-xbox-november-15"
+          }
+        },
+        {
+          "kicker": "PlayStation",
+          "headline": "Subscription Shelf Gets A Fresh Delivery; Reggie Calls It Free, Having Already Paid",
+          "satire": "Reggie is thrilled, since a game that arrives with the subscription is the closest thing to a sale that costs nothing extra. Terry says owning a game outright is the way of the master race, and renting is for people who cannot commit. Reggie says commitment is exactly why he has paid every month without fail, and would like that noted. They argued over whether a catalogue counts as a shelf. Reggie wins, since a shelf he does not have to dust is the best shelf of all.",
+          "real": "PlayStation LifeStyle says PS Plus Extra's November additions include Death Stranding 2: On the Beach, Atomfall and Dragon Quest III HD-2D Remake, Premium adds Soul Reaver 2 and Freedom Wars Remastered, and some titles reach the US, UK and Japan on 24 November.",
+          "source": {
+            "name": "PlayStation LifeStyle",
+            "url": "https://www.playstationlifestyle.net/2026/11/16/ps-plus-extra-premium-november-2026-games-out-now"
+          }
+        },
+        {
+          "kicker": "Charts",
+          "headline": "UK Chart Shuffles Like A Pack Of Cards; Top Spot Returns To Where It Started",
+          "satire": "Terry reads the chart aloud in his best chat-show voice and is hurt to find that his favourite game is not on it, because he bought it on Steam and the shops have never heard of him. Reggie says a game is only good value once it has left the chart and the price has wandered off. They argued about whether second place is a silver medal or a polite waiting room. Terry says silver. Reggie says waiting room, with a sale on the way. Nobody wins, and the pack is still two cards short.",
+          "real": "Nintendo Everything's report on the UK software chart for the week ending 14 November says EA Sports FC 27 returned to number one, Zelda: Ocarina of Time slipped from first to second, Football Manager 27 entered at number six and Halo: Campaign Evolved at number nine.",
+          "source": {
+            "name": "Nintendo Everything",
+            "url": "https://nintendoeverything.com/uk-software-sales-chart-for-the-week-ending-november-14-2026-zelda-ocarina-of-time-now-in-second/"
+          }
+        },
+        {
+          "kicker": "Big Week",
+          "headline": "Release List Names Thursday The Big One; Other Days Asked To Wear Something Smaller",
+          "satire": "Terry has cleared his diary, his sofa and his fridge, then noticed the list only mentions PS5 and Xbox, and has gone quiet for the first time since 2011. Reggie has a PS5, so he is practically family, though he plans to play it once the price has dropped, which by his sums is some time around the next console generation. They argued over whether a launch day is a holiday. Reggie says bank, Terry says full price. Reggie wins on timing, Terry on enthusiasm.",
+          "real": "Instant Gaming's release list for 16 to 22 November puts Grand Theft Auto VI on 19 November for PS5 and Xbox Series X|S, and says it will overshadow the week's other releases.",
+          "source": {
+            "name": "Instant Gaming",
+            "url": "https://news.instant-gaming.com/en/articles/23053-this-week-s-releases-from-november-16-to-22-2026"
+          },
+          "link": {
+            "text": "Want a big day out with no queue and no pre-order? Try the arcade.",
+            "url": "arcade.html"
+          }
+        },
+        {
+          "kicker": "Co-op",
+          "headline": "Basement Crawler Adds Four-Player Online Co-Op On Consoles; Friends Finally Allowed Downstairs",
+          "satire": "Terry has been playing online with friends for ages, and welcomes the consoles with the warm smile of someone arriving early to a party. Reggie says four players on one copy is the best bargain in gaming, provided the other three chip in, and has drawn up a seat-rental invoice for services rendered. Terry says nobody will pay it. Reggie says that is what they said about the sofa. Reggie wins, and has kept the downstairs for himself.",
+          "real": "Instant Gaming's release list says The Binding of Isaac: Repentance+ Online arrives on 19 November on PS5, Xbox Series X|S and Switch 2, and adds online co-op for up to four players.",
+          "source": {
+            "name": "Instant Gaming",
+            "url": "https://news.instant-gaming.com/en/articles/23053-this-week-s-releases-from-november-16-to-22-2026"
+          }
+        },
+        {
+          "kicker": "Cosy Games",
+          "headline": "Fourth Paid Expansion Due Wednesday; Village Told To Tidy Up For Visitors",
+          "satire": "Terry will be there at the stroke of midnight, at full price, with a cup of tea and a very smug face. Reggie says a village with no rent, no rates and no energy bill is the finest property deal he has ever heard of, and wants to be mayor. They argued about whether cosy is a feeling or a price bracket. Terry wins this one, on the strength of having arrived first, though Reggie says he will be along in the sale and expects the best house to be gone.",
+          "real": "DLCompare's weekly release list says Disney Dreamlight Valley: The Keepsake Sea, the game's fourth paid expansion, arrives on 18 November.",
+          "source": {
+            "name": "DLCompare",
+            "url": "https://www.dlcompare.com/gaming-news/this-week-s-video-game-releases-november-2026-week-47"
+          }
+        },
+        {
+          "kicker": "Calendar",
+          "headline": "Three Release Dates Step Politely Aside; Calendar Asks For A Bigger Page",
+          "satire": "Terry says a delayed game is simply a game that has been given time to become even more worth his full price. Reggie says a delay is the finest news in gaming, since a later date means a later sale and a bigger saving, and he has gone to check what the discount might look like by 2027. They argued over who is waiting more patiently. For the first time ever the pair are waiting together, and Reggie wins, since he was already doing it.",
+          "real": "DLCompare's weekly list says Fable has moved to 23 February 2027, Squadron 42 to Q2 2027 and Danganronpa 2x2 to 14 January 2027, and ties the moves to GTA VI's 19 November launch.",
+          "source": {
+            "name": "DLCompare",
+            "url": "https://www.dlcompare.com/gaming-news/this-week-s-video-game-releases-november-2026-week-47"
+          }
+        },
+        {
+          "kicker": "Release",
+          "headline": "Unicorn Game Lands On Six Platforms At Once; Both Of Them Technically Invited",
+          "satire": "Terry says the unicorn would obviously choose Steam, on the grounds that all magical creatures have excellent taste. Reggie says the unicorn would choose whichever version comes down in price first, and has been seen looking at a PS4 with great affection. They argued over which platform the horn looks best on. Neither is right, and the unicorn has reportedly gone home to think about it.",
+          "real": "DLCompare's weekly release list says Unicorn Academy: Island of Magic launches on 17 November on PS4, PS5, Switch, Steam, Xbox One and Xbox Series X|S.",
+          "source": {
+            "name": "DLCompare",
+            "url": "https://www.dlcompare.com/gaming-news/this-week-s-video-game-releases-november-2026-week-47"
+          }
+        }
+      ],
+      "terry": "And that, ladies and gentlemen, is Tuesday! Every word made up apart from the boxes, which are real, and arrived on release day at full price. Back tomorrow, and bring a bigger calendar!",
+      "reggie": "Mind the boxes, my old son, that is where the facts live. Everything else is a nice little earner, and a bargain only counts if you wait for it. Back tomorrow, and keep the receipt."
+    },
+    {
       "date": "2026-11-16",
       "title": "Doom Gets A Horde Mode; Reggie Gets A Sale Notice",
       "standfirst": "Terry (PC, Steam Deck, master race, full price on day one) and Reggie (PS5, saving for a Pro, waiting for the sale) read through the latest gaming news and argue about every bit of it. Everything in big type is made up, and so is the arguing. Everything in the boxes is real.",
