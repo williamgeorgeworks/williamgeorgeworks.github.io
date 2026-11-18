@@ -1,6 +1,157 @@
 {
   "editions": [
     {
+      "date": "2026-11-18",
+      "title": "Gongs For Everyone; Reggie Brings A Bag For Life",
+      "standfirst": "Terry (PC, Steam Deck, master race, full price on day one) and Reggie (PS5, saving for a Pro, waiting for the sale) read through the latest gaming news and argue about every bit of it. Everything in big type is made up, and so is the arguing. Everything in the boxes is real.",
+      "stories": [
+        {
+          "kicker": "Switch 2",
+          "headline": "Hyrule Remake Sells A Million Boxes In A Week; Shelves Asked To Budge Up",
+          "satire": "Reggie is delighted that so many people still like a box, and says he has always said physical was the future, having never once said so. Terry points out that a master-race PC has no box to put on a shelf, only a folder and a feeling. Reggie says folders do not gather dust, and that is exactly what is wrong with them. They argued over whether a million boxes would fit in the Steam Deck case. Terry wins, because nobody has ever tried.",
+          "real": "VGC reports Circana data showing the Switch 2 remake of Zelda: Ocarina of Time sold more than 1 million physical copies in its first week in the US, the first game to do that in a US launch week since Tears of the Kingdom in 2023.",
+          "source": {
+            "name": "VGC",
+            "url": "https://www.videogameschronicle.com/news/zelda-ocarina-of-time-remake-is-the-best-selling-physical-game-in-the-us-in-2026-so-far-passing-1-million-in-its-first-week/"
+          }
+        },
+        {
+          "kicker": "Awards",
+          "headline": "Award Nominations Land; One Game Gets Eight, Everyone Else Gets Out The Good Suit",
+          "satire": "Terry has already written his acceptance speech for a game he has not been nominated for, on the grounds that he bought it on day one and that surely counts. Reggie says nominations are lovely but a trophy cannot be redeemed against a discount. Terry says the trophy is the discount. They argued over whether six Game of the Year contenders is a short list or a very polite queue. Reggie wins, having brought a flask.",
+          "real": "VGC reports that Grand Theft Auto VI leads The Game Awards 2026 with 8 nominations, Nintendo is the most-nominated publisher with 12, there are 27 categories with six Game of the Year nominees, and public voting runs until 9 December.",
+          "source": {
+            "name": "VGC",
+            "url": "https://www.videogameschronicle.com/news/gta-6-is-the-most-nominated-game-at-the-game-awards-2026/"
+          },
+          "link": {
+            "text": "Prefer a caper with fewer nominations and more cats? Try Grand Theft Kitty.",
+            "url": "grand-theft-kitty.html"
+          }
+        },
+        {
+          "kicker": "Racing",
+          "headline": "Galactic Racers Told To Share The Sofa; Split-Screen Booked For Early Next Year",
+          "satire": "Reggie says split-screen is the finest idea in gaming, because it gets two players for the price of one console and he can see his opponent's screen. Terry says a master-race rig has several monitors and so has no use for squinting at half of one. Reggie replies that squinting builds character. They argued about who gets the top half. Reggie wins, since the top half is nearer the biscuits.",
+          "real": "VGC reports that Star Wars Galactic Racer is getting local split-screen multiplayer in early 2027, according to the game's official X account, plus a Free Play mode where players pick vehicle, character, planet and track and race with up to 3 others.",
+          "source": {
+            "name": "VGC",
+            "url": "https://www.videogameschronicle.com/news/star-wars-galactic-racer-is-getting-split-screen-multiplayer-and-a-new-free-play-mode/"
+          }
+        },
+        {
+          "kicker": "Mobile",
+          "headline": "Phone Games Collect Their Gongs; Nobody Asked To Hold A Trophy While Walking",
+          "satire": "Terry congratulates the winners warmly, then says a phone is just a very small PC that has not yet realised its potential. Reggie says a game you can play on the bus, free, with a little jingle, is the most honest bargain in the industry. Terry wonders what the bus has done to deserve it. They argued over which one wins Best Pick Up and Play, then dropped it. Reggie takes this one, on a technicality involving the bus.",
+          "real": "PocketGamer.biz reports the Google Play Best of Play 2026 winners, with Arknights: Endfield named Best Game, Sea of Stars Best Story, Subway Surfers City Best Pick Up & Play, Warframe Best Multiplayer and Zenless Zone Zero Best Ongoing.",
+          "source": {
+            "name": "PocketGamer.biz",
+            "url": "https://www.pocketgamer.biz/google-plays-best-of-play-2026-winners/"
+          }
+        },
+        {
+          "kicker": "Music",
+          "headline": "Garden Walking Game Gets Its Tunes Online; Phones Finally Allowed A Playlist",
+          "satire": "Reggie hums along happily, says a soundtrack you can listen to on a service you already pay for is a nice little earner, and sends himself a small invoice for the humming. Terry says a master-race PC has had a music folder since the dawn of time and has never once needed a category called Smart Device. Reggie says that is exactly the sort of thing a person says before losing the remote. They argued over the tempo. Terry wins by being slower.",
+          "real": "PocketGamer.biz reports that Nintendo Music added 27 Pikmin Bloom tracks, more than 40 minutes in total, making it the first mobile game on the service and the only title in a new Smart Device category.",
+          "source": {
+            "name": "PocketGamer.biz",
+            "url": "https://www.pocketgamer.biz/pikmin-bloom-soundtrack-waltzes-onto-nintendo-music-as-first-mobile-game-featured/"
+          }
+        },
+        {
+          "kicker": "Handheld",
+          "headline": "Block Game Learns To Use A Mouse On A Handheld; Desk Declared Optional",
+          "satire": "Terry says a mouse is the sacred tool of his people and is slightly moved to see consoles borrowing it, like a stranger wearing his coat. Reggie says that for once he is with the handheld, because a mouse on your knee is the most comfortable way to build a house nobody asked for. Terry says it is only a matter of time before consoles ask for a keyboard. Reggie says he has already looked at one. They agreed to meet at a table. Nobody wins, but the table does well.",
+          "real": "Nintendo Life reports that Joy-Con 2 mouse controls are coming to the Switch 2 version of Minecraft in a future update and can already be tried in the closed beta, with no release date given.",
+          "source": {
+            "name": "Nintendo Life",
+            "url": "https://www.nintendolife.com/news/2026/11/minecraft-is-getting-joy-con-mouse-controls-on-switch-2-in-a-future-update"
+          }
+        },
+        {
+          "kicker": "Expansions",
+          "headline": "Dungeon Crawler Books Its First Add-On For December; Calendars Quietly Rearranged",
+          "satire": "Terry will be waiting at the door on release day with his wallet out and a face like a man who has been told he is first in the queue, which he is. Reggie says an add-on is a lovely thing, once it has been in the sale for a good long while and a second one has been announced to take its place. Terry says that is how the master race gets ahead. Reggie says that is how the sale gets ahead. Reggie wins, and has cleared a space for Spring.",
+          "real": "Nintendo Life reports that Minecraft Dungeons II's first paid DLC, The Humblers Awaken, launches on 1 December 2026 alongside a bonus free update, and that a second DLC, Illusions of Grandeur, is slated for Spring 2027.",
+          "source": {
+            "name": "Nintendo Life",
+            "url": "https://www.nintendolife.com/news/2026/11/minecraft-dungeons-ii-first-dlc-the-humblers-awaken-arrives-next-month"
+          }
+        },
+        {
+          "kicker": "Free Stuff",
+          "headline": "Inky Shooter Puts A Demo On The Shelf; Reggie Arrives Before It Has Finished Downloading",
+          "satire": "Reggie calls a free demo the finest product ever invented, being the only item he can pick up with no need to haggle. Terry says he does not do demos, as a person of taste buys the whole thing and then explains why to anyone nearby. Reggie says the demo has three stages and three loadouts, so he has already got more than Terry has said all week. They argued over the loadouts. Reggie wins, with a receipt for nothing.",
+          "real": "Nintendo Life reports that a Splatoon Raiders demo is on the Switch 2 eShop, offering three stages in the Spirhalite Islands and three preset loadouts.",
+          "source": {
+            "name": "Nintendo Life",
+            "url": "https://www.nintendolife.com/news/2026/11/psa-splatoon-raiders-demo-splashes-onto-the-switch-2-eshop-today"
+          },
+          "link": {
+            "text": "Love a freebie? The arcade has plenty, and no one asks for a card.",
+            "url": "arcade.html"
+          }
+        },
+        {
+          "kicker": "Events",
+          "headline": "Holiday Pop-Up Tours Ten Malls; Terry Wonders If The Atlantic Counts As A Queue",
+          "satire": "Terry has priced a flight, then a boat, then a very long walk, because a pop-up with free demos is a thing a man of his standing would simply have to attend. Reggie says the whole thing is in America, and he is not paying for a plane to get a gift tag. Terry says the gift tag is not the point. Reggie says it is a hundred points, which is a hundred more than he has. They agreed to ask for a Lancashire date. Terry wins on ambition, Reggie on mileage.",
+          "real": "Nintendo Life reports that Nintendo's Switch 2 Holiday Experience pop-up runs from 25 November to 23 December 2026 at ten US malls, with demos of Pokopia, Mario Kart World, Ocarina of Time and Splatoon Raiders, and a My Nintendo check-in that gives a gift tag set and 100 Platinum Points.",
+          "source": {
+            "name": "Nintendo Life",
+            "url": "https://www.nintendolife.com/news/2026/11/nintendos-switch-2-holiday-experience-might-be-coming-to-a-city-near-you-next-month-us"
+          }
+        },
+        {
+          "kicker": "PlayStation",
+          "headline": "Store Sale Puts A Famous Remake At Eighty Per Cent Off; Reggie Seen Running",
+          "satire": "Reggie has not run since 1994, but he ran to the shop for this one, which he describes as the happiest day of his life since a cashback offer. Terry says he paid full price on day one and would do it again, ideally on a bigger screen. Reggie says that is the sound of a man missing the point by about sixty per cent. They argued about whether Gears of War: Reloaded at under ten dollars is a bargain or a miracle. Reggie wins, and has brought a bag for life.",
+          "real": "PlayStation LifeStyle reports that Final Fantasy VII Remake Digital Deluxe is 80% off at $11.99 on PS5 and Gears of War: Reloaded is $9.99, 75% off, in a PlayStation Black Friday promotion that the articles say runs until 1 December 2026.",
+          "source": {
+            "name": "PlayStation LifeStyle",
+            "url": "https://www.playstationlifestyle.net/2026/11/17/gears-of-war-reloaded-ps-store-deal-november-2026"
+          }
+        },
+        {
+          "kicker": "Xbox",
+          "headline": "Eight Old Favourites Move Into A Cheaper Tier; Nobody Dusts The Bear",
+          "satire": "Terry says every one of these is on his PC already, which he mentions loudly, and also that he has played the bear game three times, in three different resolutions. Reggie says a bear and a bird in a backpack are a national treasure and a nice little earner for anyone who waits. Terry says waiting is the enemy of the master race. Reggie says it is the enemy of the till. They argued over which game had the better hat. Nobody wins, and the bird keeps both.",
+          "real": "Pure Xbox reports that eight classic games, including Banjo-Kazooie, Perfect Dark and Viva Pinata, joined Xbox Game Pass Essential on 15 November for the Xbox 25th anniversary, and that this is the first time they have been available to Essential members.",
+          "source": {
+            "name": "Pure Xbox",
+            "url": "https://www.purexbox.com/news/2026/11/eight-classic-games-are-available-today-with-xbox-game-pass-essential-november-15"
+          }
+        },
+        {
+          "kicker": "Driving",
+          "headline": "Taxi Reboot Adds A Fifth Country; Reggie Offers To Take The Meter",
+          "satire": "Reggie is thrilled, because a cab with a meter is the closest thing gaming has to his own side of the business, and he is willing to run the meter for a modest fee. Terry says the game will look terrific at a frame rate that will make the console blush. Reggie says nobody blushes at a taxi, they pay it and look out of the window. They argued over whether a game can have a fare. Terry wins on style, Reggie on change.",
+          "real": "PlayStation LifeStyle reports that SEGA revealed an India map for Crazy Taxi: World Tour, the fifth location after West Coast, Germany, Brazil and Japan, for a 2027 release on PS5, Xbox Series X|S, Switch 2 and PC.",
+          "source": {
+            "name": "PlayStation LifeStyle",
+            "url": "https://www.playstationlifestyle.net/2026/11/16/crazy-taxi-world-tour-india-map-reveal"
+          }
+        },
+        {
+          "kicker": "Adventure",
+          "headline": "Dog Adventure Gets A Year For Its Release; Whole Nation Offers To Hold The Lead",
+          "satire": "Terry has pre-ordered it on the strength of one picture of a dog, at full price, a year early, which he says is the finest form of loyalty. Reggie says a dog is the finest character in gaming because it asks for nothing but biscuits, and that is the only budget he can get behind. Terry says it will look glorious at a very high frame rate. Reggie says the dog will not mind. They agreed to share a biscuit. Reggie wins, and has already named the dog.",
+          "real": "PlayStation LifeStyle reports that Hounded, an adventure game told through the eyes of a loyal dog, is coming to PS5 and PC in 2027, with no exact release date announced.",
+          "source": {
+            "name": "PlayStation LifeStyle",
+            "url": "https://www.playstationlifestyle.net/2026/11/17/hounded-ps5-adventure-game-release-window-2027"
+          },
+          "link": {
+            "text": "Cat person? Grand Theft Kitty has you covered.",
+            "url": "grand-theft-kitty.html"
+          }
+        }
+      ],
+      "terry": "And that, ladies and gentlemen, is Wednesday! Every word made up apart from the boxes, which are real, and I have already ordered the dog. Back tomorrow, and do wear something shiny!",
+      "reggie": "Mind the boxes, my old son, that is where the facts live. Everything else is a nice little earner, and the sale is only ever a few weeks away. Back tomorrow, and keep the receipt."
+    },
+    {
       "date": "2026-11-17",
       "title": "GTA Week Clears The Diary; Reggie Clears His Throat",
       "standfirst": "Terry (PC, Steam Deck, master race, full price on day one) and Reggie (PS5, saving for a Pro, waiting for the sale) read through the latest gaming news and argue about every bit of it. Everything in big type is made up, and so is the arguing. Everything in the boxes is real.",
