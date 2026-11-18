@@ -1,6 +1,95 @@
 {
  "editions": [
   {
+   "date": "2026-11-18",
+   "title": "Crumpets Take Over The Burger; Phones 4u Rings Back After Twelve Years",
+   "standfirst": "A shorter edition from Terry and Reggie: eight stories, all drawn from real news of the last few days. Everything in big type is made up. Everything in the boxes is real.",
+   "stories": [
+    {
+     "kicker": "Food",
+     "headline": "The Crumpet Gets Promoted To Burger Bun; Butter Not Consulted",
+     "satire": "A fried chicken burger is about to be served between two toasted crumpets, which means the humble crumpet, famed for sitting politely under a pat of butter, has been dragged into the night shift. Britain will now eat a hot, holey sandwich at an hour when it also considers a kebab a good idea. Terry has stuck a crumpet to his head and is calling it a hat with ambitions. Reggie has a crate of crumpets, slightly used, going at a very reasonable burger-bun rate, my old son.",
+     "real": "Retail Times reports that Warburtons and Morley's have launched a limited-edition CruMMMpet Burger, with two toasted crumpets in place of a bun. It goes on sale on 19 November in 50 Morley's stores until 31 December at £4.20, with 300 free burgers handed out at one London branch that evening.",
+     "source": {
+      "name": "Retail Times",
+      "url": "https://retailtimes.co.uk/warburtons-x-morleys-target-gen-z-late-night-culture-with-unexpected-collab/"
+     }
+    },
+    {
+     "kicker": "Shops",
+     "headline": "Department Store Invents The Queue, Then Invents A Reason To Join It",
+     "satire": "John Lewis has announced six drops in eleven days, one every other day, none of them ever coming back, which is a tidy way of turning a shopping trip into a small game show. Somewhere a person will set an alarm for a Sunday, just for a speaker. Terry is rehearsing his best gasp for the reveal of each drop. Reggie says he has his own limited edition, one only, no restocks, and it is a biscuit tin full of buttons, a snip at a tenner.",
+     "real": "Retail Times reports that John Lewis is running a Drop Shop from 3 to 13 December with six exclusive product drops, one every other day, and zero restocks. Drops are in store at Oxford Street, Edinburgh and Liverpool first, and online the following day.",
+     "source": {
+      "name": "Retail Times",
+      "url": "https://retailtimes.co.uk/john-lewis-launches-the-drop-shop-six-iconic-brands-six-exclusive-product-drops-and-zero-restocks/"
+     }
+    },
+    {
+     "kicker": "Delivery",
+     "headline": "Parcel Firm Plans For Christmas Rush By Adding Rather Large Sheds",
+     "satire": "DPD is gearing up for a record peak with seven new depots and a fresh fleet of electric vans, which is the logistics equivalent of tidying the house before the relatives arrive and hoping nobody looks in the cupboard. The nation's reply is to order a set of tiny spoons at eleven at night and ask where it is by noon. Terry has offered to hold the door open for any van that fancies a sit-down. Reggie is selling hi-vis waistcoats, fits all sizes, none of them yours.",
+     "real": "Retail Times reports that DPD expects a record peak this Christmas and has opened seven new parcel depots, in Croydon, Derby, Doncaster, Eastleigh, Norwich, Stockport and Worcester. It is also adding over 720 new electric vans, and says next-day service will run as normal up to and including Christmas Eve.",
+     "source": {
+      "name": "Retail Times",
+      "url": "https://retailtimes.co.uk/dpd-ready-for-record-peak-with-more-evs-and-greater-depot-capacity/"
+     }
+    },
+    {
+     "kicker": "Pets",
+     "headline": "Dogs Offered Full Christmas Dinner; Sprouts Still Not Invited To Dinner",
+     "satire": "A pet food company has bottled the whole Christmas dinner for dogs, with turkey, cranberry, carrot and broccoli, which means the dog will now have a more balanced festive plate than most of us manage by Boxing Day. The cranberry is the only item at the table that has not been argued about. Terry has put a paper hat on the studio spaniel, who is declining to comment. Reggie is selling gravy by the thimble, my old son, on the strict understanding that it is a nice little earner.",
+     "real": "Retail Times reports that Naturediet has launched a limited-edition Feel Good Christmas Dinner wet food for dogs, made with 64% turkey and chicken plus cranberry, carrot and broccoli. It comes in 390g cartons, with a limited-time offer of two 12-packs for £30.",
+     "source": {
+      "name": "Retail Times",
+      "url": "https://retailtimes.co.uk/naturediet-launches-limited-edition-christmas-dinner-wet-food-for-dogs/"
+     }
+    },
+    {
+     "kicker": "Groceries",
+     "headline": "Waitrose Eyes The Biscuit Aisle With A Clipboard And A Slight Frown",
+     "satire": "A big supermarket is said to be thinking about trimming thousands of lines from its shelves, which will come as news to the one jar of something unusual that has been lovingly dusted since March. Every shopper has a product they alone buy and they are about to find out how alone. Terry is holding a vigil for the pickled walnut. Reggie says he can get you any discontinued item you like, my old son, as long as you like the colour of the box.",
+     "real": "The Retail Slop roundup of 16 November reports, citing Grocery Gazette, that Waitrose is reportedly considering cutting thousands of product lines, with about a quarter of its products making under 3% of sales. It adds that Waitrose sales rose 2.2% in the 12 weeks to 1 November.",
+     "source": {
+      "name": "Retail Slop",
+      "url": "https://retailslop.substack.com/p/retail-around-the-world-16-november"
+     }
+    },
+    {
+     "kicker": "Tech",
+     "headline": "A Phone Shop Rings Back After Twelve Years, Hoping Nobody Has Changed Their Number",
+     "satire": "Phones 4u is back, this time with no high street to speak of, which is like a pub reopening as a very good rumour. Anyone who ever stood in the old shop being offered a case, a screen guard and a deep sense of obligation will feel a small warm jolt. The shop window is now a web page, which is cheaper to dress at Christmas. Terry is trying to remember his old contract end date and failing. Reggie has a drawer of chargers from three phones ago, going at a nostalgic rate, my old son.",
+     "real": "Retail Times reports that AO has relaunched the Phones 4u name as an online-only mobile retailer, twelve years after it left the high street.",
+     "source": {
+      "name": "Retail Times",
+      "url": "https://retailtimes.co.uk/phones-4u-is-back-ao-revives-the-mobile-disruptor-12-years-after-it-left-the-high-street/"
+     }
+    },
+    {
+     "kicker": "Post",
+     "headline": "Post Office Counter Gets A Machine; Machine Already Has A Queue",
+     "satire": "Royal Mail is trying out self-service kiosks in selected shops so that customers can send parcels faster, which promises a bright future in which you wait in a line to wait for a machine. The kiosk will weigh your parcel with a quiet, searching look and ask, with great courtesy, whether the item is a gift. Terry has already stuck a label on his own forehead and is awaiting collection. Reggie will sell you a roll of brown tape with the end already found, a miracle, a tenner.",
+     "real": "Retail Times reports that Royal Mail is trialling self-service kiosks in selected Royal Mail Shops to help customers send parcels faster.",
+     "source": {
+      "name": "Retail Times",
+      "url": "https://retailtimes.co.uk/royal-mail-trials-self-service-kiosks-to-help-customers-send-parcels-faster/"
+     }
+    },
+    {
+     "kicker": "Travel",
+     "headline": "A Coach Shaves Half An Hour Off Wales; Wales Does Not Appear To Mind",
+     "satire": "A new coach service between Holyhead and Carmarthen is said to take about half an hour off the journey, so passengers will arrive with thirty spare minutes and nothing planned, which is the most dangerous kind of free time. Some of it will be spent looking out of the window, which the route is apparently very good for. Terry is booking a window seat for the sheer drama of it. Reggie is offering to sell you the thirty minutes back, in a lovely little bag.",
+     "real": "The Guardian reported on 17 November on a new coach service between Holyhead and Carmarthen in Wales, which it says cuts about half an hour off the journey.",
+     "source": {
+      "name": "The Guardian",
+      "url": "https://www.theguardian.com/travel/2026/nov/17/britain-most-beautiful-bus-journey-wales-beats-train"
+     }
+    }
+   ],
+   "terry": "And that's the news, ladies and gentlemen, eight stories today and every one of them rooted in something real! The big print is all ours, the boxes underneath are the truth. Mind the crumpets, mind the kiosks, and join us tomorrow for more!",
+   "reggie": "Eight stories, my old son, and I've sent you the invoice for none of them. The big type is invention, the boxes are gospel, and my fee is a fiver payable on delivery, a nice little earner. Mind how you go."
+  },
+  {
    "date": "2026-11-17",
    "title": "Snow Books A Morning Slot; Moomins Move Into A Windmill",
    "standfirst": "A bigger edition from Terry and Reggie: ten stories, all drawn from real news of the last few days. Everything in big type is made up. Everything in the boxes is real.",
