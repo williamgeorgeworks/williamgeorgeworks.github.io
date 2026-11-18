@@ -3,9 +3,15 @@
   "winner": "reggie",
   "names": {
     "reggie": "Reggie",
-    "terry": "Terry"
+    "terry": "Terry",
+    "arthur": "Arthur",
+    "spyro": "Spyro",
+    "tilly": "Tilly",
+    "trixie": "Trixie",
+    "dexter": "Dexter",
+    "daisy": "Daisy"
   },
-  "note": "Each month: change 'month' and 'winner', and add the new winner at the front of 'history'. The badge shows only while 'month' is the current UK month, so it switches itself off if left alone.",
+  "note": "Automatic from December 2026: on the 1st of each month a scheduled task draws the winner at random from the staff (Reggie, Terry and the six cats, skipping anyone who won in the last three months), changes 'month' and 'winner', adds the winner at the front of 'history', and rewrites the certificate on employee-of-the-month.html. The badge shows only while 'month' is the current UK month, so it switches itself off if left alone.",
   "history": [
     {
       "month": "2026-11",
