@@ -233,6 +233,11 @@
      "date": "2026-11-16"
     },
     {
+     "name": "TheFerret",
+     "score": 431,
+     "date": "2026-11-18"
+    },
+    {
      "name": "Ferret",
      "score": 339,
      "date": "2026-11-15"
@@ -268,9 +273,9 @@
    "unit": "points today",
    "entries": [
     {
-     "name": "Ferret",
-     "score": 339,
-     "date": "2026-11-15"
+     "name": "TheFerret",
+     "score": 431,
+     "date": "2026-11-18"
     }
    ],
    "alsoTo": "ferrets-ditch"
