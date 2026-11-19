@@ -1,6 +1,125 @@
 {
  "editions": [
   {
+   "date": "2026-11-19",
+   "title": "Potatoes Shrink To Fit; A Station Reopens After Sixty-Two Years Of Thinking About It",
+   "standfirst": "Eleven stories from Terry and Reggie, all drawn from real news of the last few days. Everything in big type is made up. Everything in the boxes is real.",
+   "stories": [
+    {
+     "kicker": "Food",
+     "headline": "Pastry Brand Fills The Shelves And Quietly Eyes A Bigger Slice",
+     "satire": "Jus-Rol has been rolling out new pastry rounds, a sticky caramel bun and a big block of sweet shortcrust, which is a lot of dough for one brand to be on a roll about. Somewhere a person who swore they would never bake again is staring at a ready-rolled circle and feeling oddly capable. Terry has draped a puff pastry sheet over his shoulders and is calling it a cape of destiny. Reggie has a rolling pin, barely used, one careful owner, going for the price of a round and a half, my old son.",
+     "real": "Retail Times reports that Jus-Rol is launching new shortcrust and puff pastry rounds at £1.90 each on Ocado, and a Sticky Caramel Bun pack at £3.00 in Asda from the end of November. It also reports the brand holds a 30.4% market share.",
+     "source": {
+      "name": "Retail Times",
+      "url": "https://retailtimes.co.uk/jus-rol-the-uks-number-one-pastry-brand-is-launching-a-wave-of-new-products/"
+     }
+    },
+    {
+     "kicker": "Shops",
+     "headline": "Advent Calendar Introduced For People Who Are Already Counting Down",
+     "satire": "A twelve-door advent calendar has arrived for people who are expecting, which means somewhere a household has gone from counting sleeps to counting doors, and nobody has had a lie-in since. There are only twelve doors, so there is no room for the usual week-three slump where you open three at once. Terry insists the real surprise is behind door number twelve and has refused to say more. Reggie is offering a calendar of his own, twelve doors, eleven of which open onto the same cupboard.",
+     "real": "Retail Times reports that Tommee Tippee has a limited-edition Countdown Calendar with twelve doors, one for each week of the final trimester, holding over £260 of products for £29.99. A second drop goes on sale on its website at 12pm on Thursday 19 November while stocks last.",
+     "source": {
+      "name": "Retail Times",
+      "url": "https://retailtimes.co.uk/tommee-tippee-announces-launch-of-the-countdown-calendar/"
+     }
+    },
+    {
+     "kicker": "Groceries",
+     "headline": "Small Potatoes Become Big Business At A Pound A Bag",
+     "satire": "A pile of undersized potatoes has been given a name, a price and a place in the supermarket, so the small spud finally gets its moment in the roasting tin. They need no peeling, which is the first time in history a potato has offered to do some of the work. Terry is holding one up to the camera like a diamond. Reggie says he has been selling these for years, mate, he just called them hand-picked, a nice little earner.",
+     "real": "Retail Times reports that Waitrose has launched Mini Roaster Potatoes at £1. It says this year’s heatwaves and water shortages left growers with many undersized potatoes, so Waitrose relaxed its specifications to stop them being rejected, and the potatoes need no peeling.",
+     "source": {
+      "name": "Retail Times",
+      "url": "https://retailtimes.co.uk/waitrose-launches-1-mini-roaster-potatoes-to-support-2026-british-crop/"
+     }
+    },
+    {
+     "kicker": "Weather",
+     "headline": "Britain Meets Snow, Reaches For The Same Sentence It Always Does",
+     "satire": "A yellow warning for snow covered parts of southern Scotland, northern England and the Midlands, and the nation instantly began saying the sentence it keeps for this occasion, the one with the word typical in it. A centimetre or two settled in places, and a great many people checked the window three times before believing it. Terry is out in a scarf reporting live from a front step. Reggie has a tin of snow, slightly melted, going for a reasonable price, my old son.",
+     "real": "uknip reports that the Met Office had a yellow snow warning from midnight to 11am on Tuesday 17 November for parts of southern Scotland, northern England and the Midlands. It says 1 to 5 cm was expected to settle in some places, with 5 to 15 cm on ground above roughly 300 to 400 metres.",
+     "source": {
+      "name": "UKNIP",
+      "url": "https://uknip.co.uk/news/uk/uk-news/met-office-yellow-snow-warning-17-november-2026-uk/"
+     }
+    },
+    {
+     "kicker": "Restaurants",
+     "headline": "All You Can Eat, But The Clock Has Opinions",
+     "satire": "Bella Italia is offering bottomless dough balls, bottomless carbonara and, for one day only, bottomless pigs in blankets, and each comes with a ninety-minute timer, so the bottom turns out to have a lid on it. The real challenge is not hunger but admin: keeping track of which bottomless you are in. Terry has booked all three and plans to arrive wearing elasticated everything. Reggie is launching a bottomless cup of tea, he will bring the first cup, the rest are on the invoice.",
+     "real": "Retail Times reports that Bella Italia is running three 90-minute bottomless offers: dough balls from 17 to 19 November at an average cost of £7, carbonara from 24 to 26 November at an average £17, and pigs in blankets on 10 December only at an average £5.29. Some sites are excluded.",
+     "source": {
+      "name": "Retail Times",
+      "url": "https://retailtimes.co.uk/bella-italia-launches-series-of-festive-offers-in-the-run-up-to-christmas/"
+     }
+    },
+    {
+     "kicker": "Tech",
+     "headline": "Wi-Fi Bandwidth Plan Reaches Its Destination, Estimated Arrival: Sooner Or Later",
+     "satire": "Ofcom has set out how a slice of radio space will be shared between Wi-Fi and mobile, with clearing in the busiest areas pencilled in for 2032, which in router terms is roughly the time it takes the little light to stop blinking. A great many households will be reassured to hear that there is a plan and mildly alarmed to hear the date. Terry has already written 2032 on the family calendar next to the bins. Reggie says he can fix your signal today, my old son, for a fee, by standing near the window.",
+     "real": "ISPreview reports that Ofcom will adopt 88 high density areas for mobile use of the Upper 6GHz band and start revoking 156 fixed links, with Wi-Fi getting a priority portion at 6425 to 6585 MHz. Full clearance in the 88 areas is targeted for 2032, with some mobile use possibly from 2030.",
+     "source": {
+      "name": "ISPreview",
+      "url": "https://www.ispreview.co.uk/index.php/2026/11/ofcom-updates-on-release-of-upper-6ghz-band-for-uk-mobile-and-wi-fi.html"
+     }
+    },
+    {
+     "kicker": "Tech",
+     "headline": "Broadband With No Engineer Visit Removes The Best Part Of The Week",
+     "satire": "Vodafone is bundling TV and Netflix with its 5G Broadband at thirteen pounds a month, and the set-up needs no engineer visit, which will leave a lot of people with an entirely free Saturday and nobody to wait in for. The sofa-bound will be reassured to learn they can have telly without having to be home between eight and one. Terry is offering to stand at the window with a clipboard anyway, for old times. Reggie wants to know if there is a bundle that includes a biscuit, there should be.",
+     "real": "Verge Magazine reports that Vodafone TV is now available to new 5G Broadband customers, with a new Vodafone TV + Netflix package at £13 a month including Netflix Standard with Ads, which costs £7.99 alone. It says 5G Broadband offers speeds of up to 150Mbps and can be set up without an engineer visit.",
+     "source": {
+      "name": "Verge Magazine",
+      "url": "https://vergemagazine.co.uk/vodafone-expands-tv-to-5g-broadband-customers-and-launches-new-13-netflix-plan/"
+     }
+    },
+    {
+     "kicker": "Shops",
+     "headline": "Twenty-Four Cans, Twenty-Four Days, Zero Chance Of An Early Night",
+     "satire": "Tesco is stocking an energy drink advent calendar, one can behind each door, and the country has worked out that December is about to become a month of very alert people. Around forty thousand have been made and there are rumours of another sell-out, so the first rule of advent is get there before the sleeper does. Terry opened door one and has not stopped talking since. Reggie says his calendar has twenty-four doors and it is the same door, 24 times, my old son.",
+     "real": "Verge Magazine reports that about 40,000 Red Bull advent calendars are available across 811 Tesco stores, priced £25 with a Clubcard, with 24 cans that work out at just over £1 each. It says demand is expected to be high and another sell-out is likely.",
+     "source": {
+      "name": "Verge Magazine",
+      "url": "https://vergemagazine.co.uk/red-bull-advent-calendar-returns-to-tesco-for-christmas-2026-with-24-cans-for-25"
+     }
+    },
+    {
+     "kicker": "Travel",
+     "headline": "A Branch Line Gets A Station After Sixty-Two Years Of Thinking About It",
+     "satire": "A new Bristol station is about to open on a line that last saw regular passengers in 1964, so the sign saying coming soon has finally earned its keep. It will have two platforms and a footbridge, and an hourly train, which is at least more than the rest of us got on Sunday. Terry is rehearsing the ribbon-cutting with a pair of kitchen scissors. Reggie has a clock from the old days, running a bit slow, he says, but then again so was the line, my old son.",
+     "real": "Railway Business Daily reports that the Office of Rail and Road has authorised the new Bristol Brabazon station, so passengers can travel from Monday 23 November. It restores passenger services on the Henbury Line for the first time since 1964, with Great Western Railway running an hourly service to start with and two platforms linked by an accessible footbridge.",
+     "source": {
+      "name": "Railway Business Daily",
+      "url": "https://news.railbusinessdaily.com/orr-authorises-bristol-brabazon-station-ahead-of-opening-next-week/"
+     }
+    },
+    {
+     "kicker": "Events",
+     "headline": "Wine Pop-Up Offers A Year Of Free Wine And A Very Long Sit Down",
+     "satire": "A two-day wine pop-up is opening in central London with samples on the table and a competition to win a whole year of wine, which is the most optimistic prize in the country, given it is the same length as a year. Terry has entered four times, under four different hats. Reggie says he does a year of wine too, same terms, you pay now and he promises to deliver, a nice little earner.",
+     "real": "Retail Times reports that Hardys is running a two-day pop-up at Outernet London, near Tottenham Court Road station, on Friday 27 November from 4pm to 8pm and Saturday 28 November from 12pm to 8pm. Visitors can sample the wines and enter a competition to win a year’s supply of wine.",
+     "source": {
+      "name": "Retail Times",
+      "url": "https://retailtimes.co.uk/hardys-turns-a-london-bottle-shop-upside-down-to-bring-almost-unbelievable-to-life/"
+     }
+    },
+    {
+     "kicker": "Shops",
+     "headline": "Perfume Shop Sets A Deadline So Near You Can Practically Smell It",
+     "satire": "The Perfume Shop is offering a quarter off when you spend over sixty pounds, and the offer ends tomorrow, which is the sales equivalent of someone shouting hurry from the shop doorway. A number of people will discover this afternoon that they have an urgent and fully justified need for a bottle. Terry has sprayed himself so liberally he can be tracked from the next postcode. Reggie says his own scent is called Eau de Invoice, my old son, and it is not on offer.",
+     "real": "Retail Times reports that The Perfume Shop is offering 25% off purchases over £60, and the offer ends on 20 November.",
+     "source": {
+      "name": "Retail Times",
+      "url": "https://retailtimes.co.uk/scent-sational-savings-this-black-friday-at-the-perfume-shop/"
+     }
+    }
+   ],
+   "terry": "And that’s the news, ladies and gentlemen, eleven stories today and every one of them rooted in something real! Pastry, potatoes, snow and a station, and not a dull moment between them. The big print is all ours, the boxes underneath are the truth. Join us tomorrow for more!",
+   "reggie": "Eleven stories, my old son, and I have sent you an invoice for the lot of them, payable at your convenience, which is to say never. Big type is invention, the boxes are gospel, and my fee is a mince pie, a nice little earner. Mind how you go."
+  },
+  {
    "date": "2026-11-18",
    "title": "Crumpets Take Over The Burger; Phones 4u Rings Back After Twelve Years",
    "standfirst": "A shorter edition from Terry and Reggie: eight stories, all drawn from real news of the last few days. Everything in big type is made up. Everything in the boxes is real.",
