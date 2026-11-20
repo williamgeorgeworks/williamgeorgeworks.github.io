@@ -60,6 +60,14 @@ body.dj .btn:hover{color:var(--night);box-shadow:3px 3px 0 var(--hot)}
 body.dj .btn.alt{background:transparent;color:var(--text);border-color:var(--text);box-shadow:5px 5px 0 var(--deck2)}
 body.dj .btn.alt:hover{color:var(--text);box-shadow:3px 3px 0 var(--deck2)}
 
+/* age gate: a click-to-confirm notice, remembered on this device. A speed bump, not age verification. */
+.dj-gate{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(5,10,24,.96)}
+.dj-gate[hidden]{display:none}
+.dj-gate-box{max-width:34em;padding:28px 26px;background:var(--deck);border:3px solid var(--hot);box-shadow:8px 8px 0 var(--deck2);color:var(--text)}
+.dj-gate-box h2{margin:14px 0 10px;color:var(--text);font-size:clamp(28px,5vw,40px);line-height:1}
+.dj-gate-box p{margin:0 0 20px;color:var(--text)}
+.dj-gate-box .btns{display:flex;flex-wrap:wrap;gap:14px}
+
 /* advisory */
 .dj-adv{padding:0;background:var(--night)}
 .dj-advisory{display:flex;align-items:center;gap:18px;margin:34px 0 0;padding:16px 20px;background:var(--deck);border:3px solid var(--hot);box-shadow:6px 6px 0 var(--deck2)}
@@ -143,6 +151,17 @@ body.playing .eq li{animation:bounce var(--d) ease-in-out var(--delay) infinite 
 <nav class="main" aria-label="Main"><a href="index.html">Home</a><a href="books.html">Books</a><a href="arcade.html">Arcade</a><a href="story.html">Our Story</a><a href="accord.html">The Accord</a><a href="cats.html">The Cats</a><a href="tribunal.html">Tribunal</a><a href="weather.html">Weather</a><a href="news.html">Daily Row</a><a href="gaming.html">Gaming Row</a><a href="log.html">The Log</a><a href="letters.html">Letters</a><a href="dear-terry.html">Dear Terry</a><a href="invoices.html">Invoices</a><a href="road.html">The Road Ahead</a></nav><script src="nav.js?v=20261116a"></script>
 </div></header>
 <main id="main">
+<div class="dj-gate" id="dj-gate" role="dialog" aria-modal="true" aria-labelledby="dj-gate-title" hidden>
+<div class="dj-gate-box"><span class="dj-age" aria-hidden="true">18+</span>
+<h2 id="dj-gate-title">Hold up. This is the late-night bit.</h2>
+<p>The mixes in here have explicit lyrics and strong language, and they are for adults only. The cats were not consulted and would not approve.</p>
+<p class="btns"><button type="button" class="btn" id="dj-gate-yes">I&rsquo;m 18 or over, let me in</button><a class="btn alt" href="arcade.html">Take me back to the games</a></p>
+</div></div>
+<script>
+(function(){var g=document.getElementById('dj-gate'),k='wgw-music-18';var ok=false;try{ok=localStorage.getItem(k)==='yes'}catch(e){}
+if(ok)return;g.hidden=false;document.documentElement.style.overflow='hidden';var y=document.getElementById('dj-gate-yes');y.focus();
+y.addEventListener('click',function(){try{localStorage.setItem(k,'yes')}catch(e){}g.hidden=true;document.documentElement.style.overflow=''});})();
+</script>
 
 <section class="dj-hero"><div class="wrap hero-grid">
 <h1>Incognito Science</h1>
@@ -156,7 +175,7 @@ body.playing .eq li{animation:bounce var(--d) ease-in-out var(--delay) infinite 
 </section>
 
 <section class="dj-adv" aria-label="Age advisory"><div class="wrap">
-<aside class="dj-advisory" role="note"><span class="dj-age" aria-hidden="true">18+</span><p><strong>Adults only.</strong> Some lyrics in these mixes are explicit and not suitable for anyone under 18. Please listen accordingly.</p></aside>
+<aside class="dj-advisory" role="note"><span class="dj-age" aria-hidden="true">18+</span><p><strong>Adults only.</strong> Some lyrics in these mixes are explicit and not suitable for anyone under 18. Headphones on, kids out of the room.</p></aside>
 </div></section>
 
 <section class="dj-section" id="holiday"><div class="wrap">
