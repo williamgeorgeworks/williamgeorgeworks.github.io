@@ -1,6 +1,143 @@
 {
   "editions": [
     {
+      "date": "2026-11-20",
+      "title": "Friday Brings Sales, Free Hours And A Router Under Pressure",
+      "standfirst": "Terry (PC, Steam Deck, master race, full price on day one) and Reggie (PS5, saving for a Pro, waiting for the sale) read through the latest gaming news and argue about every bit of it. Everything in big type is made up, and so is the arguing. Everything in the boxes is real.",
+      "stories": [
+        {
+          "kicker": "Xbox",
+          "headline": "Console Tidies Your Desktop Without Asking; Settings Menu Becomes Hero Of The Day",
+          "satire": "Terry says his desktop is a curated gallery and would never accept a background it did not choose, then admits he has changed his wallpaper four times since breakfast. Reggie says he has a free one, uninvited, and is treating it like a gift from a distant uncle. They argued over whether a background you did not pick still counts as yours. Reggie wins, on account of not having paid for it.",
+          "real": "Pure Xbox reports that some Xbox users were shown a default GTA 6 event background without choosing it, and that it can be switched off in Settings by unticking the option for event-themed backgrounds. A Halo: Campaign Evolved background was added the same day.",
+          "source": {
+            "name": "Pure Xbox",
+            "url": "https://www.purexbox.com/news/2026/11/xbox-unveils-new-halo-background-and-default-event-background-for-gta-6"
+          }
+        },
+        {
+          "kicker": "Game Pass",
+          "headline": "Eight Games Wave Goodbye At The End Of The Month; Discount Stickers Brought To The Platform",
+          "satire": "Reggie is at the door with a clipboard, announcing the sale price before the games have even left the building, and sends Terry an imaginary invoice for waiting. Terry says a true master of the PC would have bought them all on day one and given them a farewell party. Reggie asks how many parties Terry has had. Terry counts on his fingers and runs out of fingers, then of confidence. Reggie wins on points and patience.",
+          "real": "Pure Xbox reports that eight games leave Xbox Game Pass on 30 November, including Aliens: Dark Descent, Banishers: Ghosts of New Eden, Moving Out 2 and Totally Reliable Delivery Service, and that most should be discounted by at least 20% over the next few weeks.",
+          "source": {
+            "name": "Pure Xbox",
+            "url": "https://www.purexbox.com/news/2026/11/eight-games-are-leaving-xbox-game-pass-in-late-november-2026"
+          }
+        },
+        {
+          "kicker": "Xbox",
+          "headline": "Retro Game Arrives With A Vice City Theme; Everyone Checks Their Pastel Shirt Collection",
+          "satire": "Terry is delighted that it is top-down and eight-bit, and says he already owns the pixel suit for it, bought at full price in a shop that no longer exists. Reggie asks why a game that looks like it runs on a toaster needs a rig the size of a wardrobe. They argued over whether eight bits is a lot or not very many. Nobody wins, but the argument got a lot of exercise before lunch.",
+          "real": "Pure Xbox reports that Vice: Magic City Mayhem, a top-down eight-bit retro action game with a Vice City theme, is out on Xbox One and Series X|S. It is an Xbox and Epic Games Store exclusive for now, with the Steam, PS5 and Switch versions delayed.",
+          "source": {
+            "name": "Pure Xbox",
+            "url": "https://www.purexbox.com/news/2026/11/multiple-games-are-available-today-on-xbox-including-one-with-gta-and-zelda-inspirations-november-18"
+          },
+          "link": {
+            "text": "Prefer your capers cat-sized? Try Grand Theft Kitty.",
+            "url": "grand-theft-kitty.html"
+          }
+        },
+        {
+          "kicker": "Music",
+          "headline": "Video Game Scores Up For Grammys; Both Hosts Hum Different Tunes At The Same Time",
+          "satire": "Terry says his PC speakers are tuned to the finest pitch and will be hearing all five nominees tonight in full surround. Reggie says he hums the main theme while waiting for his updates, and that counts as being a fan. They argued over whether the hum is better with or without a download bar. Terry wins by humming louder, which is not how any of it works.",
+          "real": "Push Square reports that the nominees for the 2027 Grammy for Best Score Soundtrack For Video Games are Avatar: Frontiers of Pandora - From the Ashes, 007 First Light, Ghost of Yotei, Marvel's Wolverine and Star Wars Zero Company, and that it is only the fifth year the category has existed.",
+          "source": {
+            "name": "Push Square",
+            "url": "https://www.pushsquare.com/news/2026/11/grammy-awards-reveal-this-years-nominees-for-best-video-game-soundtrack"
+          }
+        },
+        {
+          "kicker": "PS5",
+          "headline": "Four Free Hours Of A Big Game Offered; Reggie Declares It The Perfect Length",
+          "satire": "Reggie says four hours is an excellent amount, because it costs nothing and ends before the guilt begins. Terry says four hours is barely enough to open the settings menu and set his frame counter to a size he can show people. They argued over whether a trial is a taste or a tease. Reggie wins, since he is still playing the free bit and Terry has already bought two copies, just in case.",
+          "real": "Push Square reports that Remedy has made the first four hours of Control Resonant playable through PS Plus Premium as a Game Trial, and that the game is part of the PS Store Black Friday sale until 30 November, at 20% off, which is £39.99.",
+          "source": {
+            "name": "Push Square",
+            "url": "https://www.pushsquare.com/news/2026/11/play-4-hours-of-the-fantastic-control-resonant-on-ps-plus-premium"
+          }
+        },
+        {
+          "kicker": "Switch",
+          "headline": "Fans Vote On A Robot Master Design; Cleanser Man Wins, Cupboards Under The Sink Rejoice",
+          "satire": "Terry says he voted the moment polls opened, on a PC with a very fast mouse, and is sure his entry was the best. Reggie says a robot called Cleanser Man is a bargain, because he can finally get a tidy kitchen without leaving the sofa. They argued over whether a boss with a mop is a boss or a cleaning contract. Terry loses, because his entry was a toaster with a laser.",
+          "real": "Push Square reports that Capcom picked Cleanser Man from six finalist designs in the Mega Man: Dual Override boss design contest, and that it becomes one of the game's eight boss characters, the fifth robot master announced with three still to come.",
+          "source": {
+            "name": "Push Square",
+            "url": "https://www.pushsquare.com/news/2026/11/mega-man-dual-overrides-boss-design-contest-winner-has-been-decided"
+          }
+        },
+        {
+          "kicker": "UK",
+          "headline": "UK Download Records Broken Twice; Broadband Asked To Sit Down With A Cup Of Tea",
+          "satire": "Terry says he preloaded a week early, as is the custom of his people, and that his connection never even blinked, though his router was seen sweating. Reggie says he waited for the patches and then read a book, and that nobody counts a book as a download. They argued over what a record is when it is broken twice. Reggie wins, by pointing out that the router was working a lot harder than Terry was.",
+          "real": "Engadget's launch-day live blog reports that GTA 6 broke download records on the UK ISP Virgin Media twice, tied to the 12 November preload and the launch-night download of a 212 GB file plus patches.",
+          "source": {
+            "name": "Engadget",
+            "url": "https://www.engadget.com/2320788/gta-vi-launch-day-live-blog/"
+          }
+        },
+        {
+          "kicker": "Merch",
+          "headline": "Basketball Team's Game-Themed Merch Sells Out; Reggie Wonders If Doormats Are Next",
+          "satire": "Reggie spots a gap in the market for a tasteful tea towel and offers Terry a share, subject to an imaginary invoice for the idea. Terry says that real fans of the master race do not queue for jerseys, then asks, quietly, whether there is a size small. They argued over whether a jersey counts as a collector's edition. Terry wins, because it is the only argument he can have while holding a jersey.",
+          "real": "Kotaku's launch-day live blog reports that GTA-branded Miami Heat merchandise sold out in under 90 minutes, with Black Friday-style crowds trying to buy it.",
+          "source": {
+            "name": "Kotaku",
+            "url": "https://kotaku.com/live-updates-on-gta-6-the-biggest-launch-in-gaming-history-2000758030"
+          }
+        },
+        {
+          "kicker": "Awards",
+          "headline": "Nominees Revealed For The Big Gaming Awards; Terry Clears A Space On The Mantelpiece",
+          "satire": "Terry says he has already prepared a speech and a mantelpiece, and neither belongs to him. Reggie says the best thing about an award show is that every nominated game goes on sale afterwards, and he has a calendar for it. They argued over whether being nominated counts as winning, or just as a very nice envelope. Reggie wins, since a calendar is hard to argue with.",
+          "real": "Nintendo Life reports that nominees were announced for The Game Awards, which take place on 10 December, with Ocarina of Time, Pokopia and Fire Emblem among Nintendo's nominations.",
+          "source": {
+            "name": "Nintendo Life",
+            "url": "https://www.nintendolife.com/news/2026/11/ocarina-of-time-pokopia-fire-emblem-and-more-pick-up-the-game-awards-2026-nominations"
+          }
+        },
+        {
+          "kicker": "Shops",
+          "headline": "Retro Controllers Get A Black Friday Discount; Nostalgia Now Available In Double Packs",
+          "satire": "Reggie says a double controller pack is two chances to look generous while paying once, and that it is pound-for-pound the best bit of sales patter he has ever heard. Terry says he used a keyboard before it was cool, and that he will accept no controllers, then looks at the picture for some time. They argued over whether a thirty-five pound deal is cheap or just a smaller scare. Terry loses, on account of the picture.",
+          "real": "Nintendo Life reports that the full range of classic Nintendo Switch Online controllers is discounted on the European Nintendo Store for Black Friday, with the double NES controller pack listed at £34.99.",
+          "source": {
+            "name": "Nintendo Life",
+            "url": "https://www.nintendolife.com/news/2026/11/act-quick-nintendos-discounted-its-retro-nso-controllers-for-black-friday-europe"
+          }
+        },
+        {
+          "kicker": "PS5",
+          "headline": "Cosy Tanuki Game Offers Fishing, Bug Catching And Pint Pouring; Weekend Plans Sorted",
+          "satire": "Terry says he would have the tanuki's whole day off him in nine hours, with a cheeky half-hour left over for fishing. Reggie says it is a nice little earner for a hat and a bicycle, and wonders if the pints come with a loyalty card. They argued over whether fishing in a game counts as a hobby or a rehearsal. Reggie wins, because Terry actually has a rod in the hall and has never caught anything.",
+          "real": "Push Square's mini review reports that Tanuki: Pon's Summer, released on PS5 on 10 November, has minigames including fishing, bug catching, pint pouring and sushi stacking, with the main story taking the reviewer about nine hours across 20 in-game days.",
+          "source": {
+            "name": "Push Square",
+            "url": "https://www.pushsquare.com/reviews/ps5/tanuki-pons-summer"
+          },
+          "link": {
+            "text": "Fancy real-life fishing? Ferret's Ditch has the details.",
+            "url": "ferrets-ditch.html"
+          }
+        },
+        {
+          "kicker": "Switch",
+          "headline": "Free Monster-Battling Game Gets A Balance Patch Next Month; Terry Prepares A Spreadsheet",
+          "satire": "Terry announces that he has already modelled every possible tweak, and the results fit on a single very smug slide. Reggie says a free game that gets patched for free is the only kind of subscription he can stomach. They argued over whether balance means fairness or a very small seesaw. Nobody wins, but the seesaw gets a good workout and Terry ends up sitting on the low end.",
+          "real": "Nintendo Life reports that Pokémon Champions, a free-to-play game on Switch and mobile, is getting a balance update on 2 December 2026, including move updates and adjustments to certain Pokémon.",
+          "source": {
+            "name": "Nintendo Life",
+            "url": "https://www.nintendolife.com/news/2026/11/pokemon-champions-is-getting-a-balance-patch-next-month"
+          }
+        }
+      ],
+      "terry": "And that, ladies and gentlemen, is Friday, and what a Friday! Everything in the big type is made up, the boxes are real, and I am off to check my router has had some water. Back tomorrow, and do wear something shiny!",
+      "reggie": "Check the boxes, my old son, that is where the facts live, and the rest is pure patter. The Pro is still on the wish-list and the sale is still a week away. Back tomorrow, and bring a bag."
+    },
+    {
       "date": "2026-11-19",
       "title": "Everyone Updates Their Console; Terry Updates His Smugness",
       "standfirst": "Terry (PC, Steam Deck, master race, full price on day one) and Reggie (PS5, saving for a Pro, waiting for the sale) read through the latest gaming news and argue about every bit of it. Everything in big type is made up, and so is the arguing. Everything in the boxes is real.",
