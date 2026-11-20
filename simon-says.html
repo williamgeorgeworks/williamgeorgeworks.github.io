@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Simon Says, starring Reggie, who has never heard of it. Copy the cats, and do not press a thing unless Simon says. A free browser game from William George Works.">
+<style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="William George Works">
+<meta property="og:title" content="Simon Says, starring Reggie">
+<meta property="og:description" content="Reggie has been told he is Simon. He has never heard of Simon. Copy the four cats, and do not touch owt unless Simon says. A free browser game.">
+<meta property="og:url" content="https://williamgeorgeworks.co.uk/simon-says.html">
+<link rel="canonical" href="https://williamgeorgeworks.co.uk/simon-says.html">
+<meta property="og:image" content="https://williamgeorgeworks.co.uk/thumb-simon-says.jpg">
+<meta name="twitter:image" content="https://williamgeorgeworks.co.uk/thumb-simon-says.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<title>Simon Says, starring Reggie</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Permanent+Marker&display=swap">
+<style>
+/* Black and red, like the rest of the building. Four cats, four buttons, one robot who has never heard of the game. */
+:root{
+  --ink:#141414; --ink-deep:#0a0a0a; --paper:#f6f2e7; --white:#ffffff; --red:#d1202f; --mist:#c9c2b2;
+  --p0:#d1202f; --p0on:#ff5a66; --p1:#2b4fc2; --p1on:#6f90ff; --p2:#d9a400; --p2on:#ffe066; --p3:#1d7a3a; --p3on:#4fd17a;
+  --display:'Anton','Arial Narrow','Haettenschweiler',Impact,sans-serif;
+  --marker:'Permanent Marker','Comic Sans MS','Chalkboard SE',cursive;
+  --body:Georgia,'Times New Roman',serif;
+  color-scheme:dark;
+}
+body{background:var(--ink);color:var(--paper);font-family:var(--body);font-size:16px;line-height:1.5}
+.wrap{max-width:960px;margin:0 auto;padding-block:26px 40px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  display:grid;gap:22px}
+.mast{display:grid;gap:6px}
+.eyebrow{font-family:var(--display);letter-spacing:.09em;font-size:.82rem;color:var(--mist);text-transform:uppercase;
+  padding-bottom:8px;border-bottom:3px solid var(--red);justify-self:start}
+h1{font-family:var(--display);font-weight:400;font-size:clamp(2.4rem,9vw,4rem);line-height:1;margin:6px 0 0;text-transform:uppercase;letter-spacing:.01em;text-wrap:balance}
+.tag{margin:0;font-style:italic;color:var(--mist);font-size:1.05rem}
+.cols{display:grid;gap:24px;grid-template-columns:minmax(0,1fr)}
+@media (min-width:820px){.cols{grid-template-columns:minmax(0,480px) minmax(0,1fr);align-items:start}}
+.stage{position:relative;max-width:480px;width:100%;justify-self:center;background:var(--paper);color:var(--ink);border-radius:4px;overflow:hidden;
+  box-shadow:0 14px 0 var(--red);display:grid;gap:12px;padding:52px 16px 18px;box-sizing:border-box;min-height:560px;align-content:start}
+.simon{display:grid;grid-template-columns:76px minmax(0,1fr);gap:10px;align-items:center}
+.face{position:relative;width:76px;height:76px;border-radius:50%;border:3px solid var(--ink);overflow:hidden;background:#ddd;transition:transform .12s;box-sizing:border-box}
+.face img{position:absolute;width:380%;height:380%;max-width:none;left:-140%;top:-90%}
+.simon.talking .face{transform:rotate(-4deg) scale(1.04)}
+.bubble{position:relative;background:var(--white);border:3px solid var(--ink);border-radius:14px;padding:8px 12px;min-height:3.2em;
+  font-size:1rem;line-height:1.3;display:grid;align-content:center}
+.bubble:before{content:"";position:absolute;left:-13px;top:50%;margin-top:-9px;border:9px solid transparent;border-right:12px solid var(--ink);border-left:0}
+.bubble b{font-family:var(--display);font-weight:400;letter-spacing:.06em;text-transform:uppercase;font-size:.78rem;color:var(--red);display:block}
+.bubble.terry b{color:var(--p1)}
+.hud{display:flex;justify-content:space-between;font-family:var(--display);letter-spacing:.06em;text-transform:uppercase;font-size:.95rem}
+.hud span b{font-family:var(--marker);font-weight:400;color:var(--red);font-size:1.25rem;letter-spacing:0;margin-left:4px}
+.board{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:10px;aspect-ratio:1/1;width:100%;max-width:400px;justify-self:center;
+  touch-action:manipulation;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+.pad{position:relative;border:4px solid var(--ink);display:grid;place-items:end center;padding:0 0 12px;cursor:pointer;
+  font-family:var(--display);text-transform:uppercase;letter-spacing:.07em;font-size:1rem;color:var(--white);
+  text-shadow:2px 2px 0 var(--ink);box-shadow:5px 5px 0 var(--ink);transition:filter .08s,transform .08s,background-color .08s;-webkit-tap-highlight-color:transparent}
+.pad small{display:block;font-family:var(--body);text-transform:none;letter-spacing:0;font-size:.72rem;font-style:italic;text-shadow:none;opacity:.9}
+.pad .k{position:absolute;top:8px;font-family:var(--body);font-size:.7rem;letter-spacing:0;text-shadow:none;background:rgba(0,0,0,.35);padding:1px 6px;border-radius:9px}
+.pad[data-i="0"]{background:var(--p0);border-radius:120px 8px 8px 8px}.pad[data-i="0"] .k{left:10px;top:auto;bottom:8px}
+.pad[data-i="1"]{background:var(--p1);border-radius:8px 120px 8px 8px}.pad[data-i="1"] .k{right:10px;top:auto;bottom:8px}
+.pad[data-i="2"]{background:var(--p2);border-radius:8px 8px 8px 120px;place-items:start center;padding:12px 0 0}.pad[data-i="2"] .k{left:10px}
+.pad[data-i="3"]{background:var(--p3);border-radius:8px 8px 120px 8px;place-items:start center;padding:12px 0 0}.pad[data-i="3"] .k{right:10px}
+.pad.on[data-i="0"]{background:var(--p0on)}.pad.on[data-i="1"]{background:var(--p1on)}.pad.on[data-i="2"]{background:var(--p2on)}.pad.on[data-i="3"]{background:var(--p3on)}
+.pad.on{filter:brightness(1.12) saturate(1.2);transform:translate(2px,2px);box-shadow:3px 3px 0 var(--ink),0 0 26px 6px rgba(255,255,255,.55)}
+.pad:focus-visible{outline:4px solid var(--ink);outline-offset:3px}
+.hub{position:absolute;left:50%;top:50%;width:34%;aspect-ratio:1/1;transform:translate(-50%,-50%);border-radius:50%;background:var(--ink);color:var(--paper);
+  border:4px solid var(--paper);display:grid;place-items:center;text-align:center;font-family:var(--display);text-transform:uppercase;letter-spacing:.05em;
+  font-size:clamp(.8rem,3.4vw,1.05rem);line-height:1.05;pointer-events:none;padding:6px;box-sizing:border-box}
+.hub.hold{background:var(--red)}
+.panel{position:absolute;inset:0;display:grid;align-content:safe center;justify-items:center;gap:10px;text-align:center;overflow-y:auto;
+  padding:52px 16px 40px;background:color-mix(in srgb,var(--paper) 94%,transparent);color:var(--ink);z-index:4}
+.panel h2{font-family:var(--marker);font-weight:400;font-size:clamp(1.45rem,6.4vw,2.1rem);line-height:1.05;margin:0;text-wrap:balance}
+.panel p{margin:0;max-width:36ch;font-size:.95rem;line-height:1.35}
+.panel .face{width:96px;height:96px}
+.score{font-family:var(--marker);font-size:3rem;line-height:1;color:var(--red)}
+.verdict{font-family:var(--display);text-transform:uppercase;letter-spacing:.05em;font-size:1.15rem}
+button{font:inherit;cursor:pointer}
+.btn{font-family:var(--display);text-transform:uppercase;letter-spacing:.07em;font-size:1.15rem;
+  background:var(--red);color:var(--white);border:3px solid var(--ink);border-radius:3px;padding:9px 20px;box-shadow:4px 4px 0 var(--ink)}
+.btn:hover{background:var(--ink)} .btn:active{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--ink)}
+.btn.quiet{background:var(--white);color:var(--ink);font-size:.9rem;padding:6px 12px}
+.btn.quiet:hover{background:#ffe9a8}
+.btn:focus-visible,.tog:focus-visible{outline:3px solid var(--red);outline-offset:3px}
+.row{display:flex;flex-wrap:wrap;gap:9px;justify-content:center}
+.share{font-size:.88rem;font-style:italic;user-select:all}
+.togs{position:absolute;left:8px;top:8px;right:8px;display:flex;gap:6px;z-index:6}
+.tog{font-family:var(--display);letter-spacing:.06em;text-transform:uppercase;font-size:.78rem;
+  background:var(--white);color:var(--ink);border:2px solid var(--ink);border-radius:3px;padding:4px 9px}
+.tog[aria-pressed="false"]{background:#ddd;color:#555;text-decoration:line-through}
+.side{display:grid;gap:18px}
+.side h2{font-family:var(--display);font-weight:400;text-transform:uppercase;font-size:1.6rem;line-height:1.05;margin:0 0 8px;text-wrap:balance}
+.side p{margin:0 0 10px;max-width:48ch}
+.side ul{margin:0;padding:0;list-style:none;display:grid;gap:8px;max-width:50ch}
+.side li{padding-left:12px;border-left:3px solid var(--red)}
+.side li b{font-family:var(--display);font-weight:400;letter-spacing:.05em;text-transform:uppercase}
+.side a{color:var(--paper)}
+.sheet{border:2px solid var(--mist);padding:12px 14px;max-width:44ch}
+.sheet dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:4px 14px}
+.sheet dt{font-family:var(--display);letter-spacing:.06em;text-transform:uppercase;font-size:.85rem;color:var(--mist)}
+.sheet dd{margin:0;font-family:var(--marker)}
+.foot{color:var(--mist);font-size:.85rem;border-top:1px solid color-mix(in srgb,var(--mist) 35%,transparent);padding-top:14px;max-width:70ch}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+@media (max-width:420px){.panel p{font-size:.88rem}.stage{min-height:520px}.pad{font-size:.85rem}}
+@media (prefers-reduced-motion:reduce){.btn:active,.pad.on,.simon.talking .face{transform:none}}
+</style>
+</head>
+<body>
+<div style="position:relative;z-index:50;display:flex;justify-content:space-between;align-items:center;gap:12px;background:#141414;font:600 14px/1 system-ui,sans-serif;letter-spacing:.3px;box-sizing:border-box;border-bottom:1px solid #333"><a href="arcade.html" style="color:#f6f2e7;padding:9px 14px;text-decoration:none">&larr; Back to the arcade</a><a href="shop.html" style="color:#fff;background:#d1202f;padding:9px 14px;text-decoration:none;white-space:nowrap">Merch</a></div>
+
+<div class="wrap">
+  <header class="mast">
+    <span class="eyebrow">The Employee of the Month presents</span>
+    <h1>Simon Says, starring Reggie</h1>
+    <p class="tag" style="font-size:1.35rem;color:#fff">He has been told he is Simon. He has never heard of Simon.</p>
+    <p class="tag">Four cats. One robot reading the rules off a beer mat. Do not touch owt unless Simon says.</p>
+  </header>
+
+  <div class="cols">
+    <div class="stage" id="stage">
+      <div class="togs">
+        <button class="tog" id="sndBtn" type="button" aria-pressed="true">Sound on</button>
+        <button class="tog" id="vocBtn" type="button" aria-pressed="true">Reggie&rsquo;s voice on</button>
+      </div>
+
+      <div class="simon" id="simon">
+        <div class="face"><img src="portraits/reggie.jpg" alt="Reggie, a robot with a pen-and-ink face, a red waistcoat and the confident look of someone who has not read the instructions" width="640" height="640"></div>
+        <div class="bubble" id="bubble" aria-live="polite"><b id="who">Reggie, as Simon</b><span id="line">Right. I am Simon, apparently.</span></div>
+      </div>
+
+      <div class="hud"><span>Round<b id="hRound">0</b></span><span>Score<b id="hScore">0</b></span><span>Best<b id="hBest">0</b></span></div>
+
+      <div class="board" id="board" role="group" aria-label="Four cat buttons. Watch the order they light up in, then press them in the same order. Keys 1 to 4, or the arrow keys, also work.">
+        <button class="pad" type="button" data-i="0" aria-label="Arthur, the red button, key 1 or up arrow"><span class="k" aria-hidden="true">1 &uarr;</span><span>Arthur<small>Chief Justice</small></span></button>
+        <button class="pad" type="button" data-i="1" aria-label="Spyro, the blue button, key 2 or right arrow"><span class="k" aria-hidden="true">2 &rarr;</span><span>Spyro<small>the true king</small></span></button>
+        <button class="pad" type="button" data-i="2" aria-label="Daisy, the yellow button, key 3 or left arrow"><span class="k" aria-hidden="true">3 &larr;</span><span>Daisy<small>who, me?</small></span></button>
+        <button class="pad" type="button" data-i="3" aria-label="Dexter, the green button, key 4 or down arrow"><span class="k" aria-hidden="true">4 &darr;</span><span>Dexter<small>the timid wolf</small></span></button>
+        <div class="hub" id="hub" aria-hidden="true">Simon<br>says</div>
+      </div>
+      <p class="sr" id="status" aria-live="assertive"></p>
+
+      <div class="panel" id="startPanel">
+        <div class="face"><img src="portraits/reggie.jpg" alt="Reggie, looking ready to be Simon, whoever that is" width="640" height="640"></div>
+        <h2>Simon Says</h2>
+        <p>Reggie lights up the cats in an order. <strong>If he says &ldquo;Simon says&rdquo;, copy it.</strong> If he does not say &ldquo;Simon says&rdquo;, <strong>keep your hands to yourself</strong> until the middle goes black again. Every round adds one more cat.</p>
+        <p id="voiceNote" style="font-size:.85rem;font-style:italic"></p>
+        <button class="btn" id="startBtn" type="button">Let&rsquo;s have it</button>
+        <p id="bestTitle" style="font-size:.85rem;font-style:italic"></p>
+      </div>
+
+      <div class="panel" id="overPanel" hidden>
+        <h2 id="overTitle">Out!</h2>
+        <div class="score" id="finalScore">0</div>
+        <div class="verdict" id="verdict"></div>
+        <p id="overWhy"></p>
+        <p id="bestLine"></p>
+        <div class="row">
+          <button class="btn" id="againBtn" type="button">Go again</button>
+        </div>
+        <div class="row">
+          <button class="btn quiet" id="copyBtn" type="button">Copy my score</button>
+          <a class="btn quiet" id="sendBtn" style="text-decoration:none;display:none" href="arcade.html#send-score" target="_blank" rel="noopener">Send in your score</a>
+        </div>
+        <p class="share" id="shareText"></p>
+      </div>
+    </div>
+
+    <section class="side">
+      <div>
+        <h2>The rules, as Reggie understands them</h2>
+        <p>Reggie won Employee of the Month and was promptly told he would be playing Simon. He has never heard of Simon. Terry found him the rules on the back of a beer mat, and he has learnt them in full, with confidence, in the wrong order.</p>
+        <p>He lights up the cats one at a time. <strong>When he says &ldquo;Simon says&rdquo;, press them back in the same order.</strong> Each round adds one more cat, and the cats get quicker.</p>
+        <p>From round three, he sometimes forgets the magic words. <strong>No &ldquo;Simon says&rdquo;, no touching.</strong> Hold your nerve while the middle is red and you get a bonus. Press anything and you are out. Get one wrong and you are out. Dither too long and you are out. It is a short game. It is meant to be.</p>
+      </div>
+      <div>
+        <h2>The cats</h2>
+        <ul>
+          <li><b>Arthur</b> (red, key 1). Chief Justice. Hums an A.</li>
+          <li><b>Spyro</b> (blue, key 2). The true king. Hums an E, regally.</li>
+          <li><b>Daisy</b> (yellow, key 3). Hums a C sharp and denies it.</li>
+          <li><b>Dexter</b> (green, key 4). The timid wolf. Hums a low E, very quietly.</li>
+        </ul>
+        <p style="margin-top:10px">Tap the cats, click them, or use 1 to 4, Q W A S, or the arrow keys. Space starts a game. <a href="employee-of-the-month.html">Read Reggie&rsquo;s citation &rarr;</a></p>
+      </div>
+      <div class="sheet">
+        <h2 style="font-size:1.2rem">Your record</h2>
+        <dl><dt>Best score</dt><dd id="rsBest">0</dd><dt>Best round</dt><dd id="rsRound">None yet</dd><dt>Nerve held</dt><dd id="rsHeld">0</dd><dt>Games</dt><dd id="rsPlayed">0</dd></dl>
+      </div>
+    </section>
+  </div>
+
+  <p class="foot">Simon Says is an old playground game, and the four-light memory version is older than most of the people playing it. This version, its drawings, its tones and its nonsense are our own, made new for Reggie, who began it as an advert for the books and let it get out of hand. Reggie&rsquo;s voice is your own browser&rsquo;s built-in speech, so he may sound like a satnav from Surrey. He is from Lancashire. In spirit.</p>
+</div>
+
+<script>
+(function(){
+"use strict";
+var $=function(i){return document.getElementById(i);};
+var PADS=[].slice.call(document.querySelectorAll('.pad'));
+var NAMES=['Arthur','Spyro','Daisy','Dexter'];
+/* The classic four tones, give or take a cat: A4, E4, C#4, E3. */
+var TONE=[440,329.63,277.18,164.81];
+var SLUG='simon-says';
+
+/* ---------- saves ---------- */
+var SAVE={best:0,round:0,held:0,played:0};
+try{var raw=JSON.parse(localStorage.getItem('simon-v1')||'null');if(raw){SAVE.best=+raw.best||0;SAVE.round=+raw.round||0;SAVE.held=+raw.held||0;SAVE.played=+raw.played||0;}}catch(e){}
+function save(){try{localStorage.setItem('simon-v1',JSON.stringify(SAVE));}catch(e){}}
+var PREF={snd:true,voc:true};
+try{PREF.snd=localStorage.getItem('simon-snd')!=='0';PREF.voc=localStorage.getItem('simon-voc')!=='0';}catch(e){}
+
+/* ---------- lines: Reggie as Simon, with notes from Terry and the cats ---------- */
+var L={
+  intro:['Right. I have been told I am Simon. Nobody has told me who Simon is. I have read the beer mat. Let us begin.',
+         'Good evening. I am Simon. I have never heard of me. Eyes on the cats.'],
+  says:['Simon says: copy this.','Simon says: watch the cats.','Simon says, and I am quoting the beer mat here: do this.',
+        'Simon says: same again, plus one.','Simon says: eyes front, our kid.','Simon says: concentrate. Spyro, stop licking yourself.',
+        'Simon says: do this, and do not mither me about it.','Simon says: one more cat. Do not ask why.'],
+  trap:['Right. Do this.','Go on then, copy that.','Now you do it.','Press these, quick.','Copy that. Chop chop.','Same again. Off you go.'],
+  held:['Well held. I never said Simon says. Terry said you would crack. Terry owes me a brew. Simon says: now do it.',
+        'Ooh, nerves of steel. No Simon, no pressing. Simon says: go on, now you can.',
+        'Correct. You did nowt, which was right. The beer mat is very clear. Simon says: now do it.'],
+  caught:['I never said Simon says! You pressed. That is an invoice.','Ha! Simon said nowt. You touched a cat without a warrant.',
+          'Did I say Simon says? I did not. Off you pop.','No Simon, no pressing. It is the only rule on the beer mat.'],
+  wrong:['That were {got}. I asked for {want}. Give over.','Wrong cat. I said {want}. You gave me {got}. The tribunal has been informed.',
+         '{got}? {want} is right there. Arthur is looking at you.','No. {want}. Not {got}. Even Dexter knew that, and Dexter was asleep.'],
+  slow:['Hello? I have had quicker replies from Terry, and Terry writes essays.','You have gone very quiet. Daisy has wandered off.','Time. I would have waited longer but I have the Log to write.'],
+  good:['Champion.','Spot on.','Grand. Next.','Very good. I think. The beer mat does not say.','Lovely stuff.','Correct, which surprises us both.'],
+  terry:['Terry here. For the record, Simon is not a real person. Please do not tell Reggie.',
+         'Terry here. Reggie has asked me three times what Simon looks like.',
+         'Terry here. I have checked, and the beer mat is from a pub in Darwen.',
+         'Terry here. Reggie wants it known he did not ask to be Simon. He asked to be Clive.']
+};
+function pick(a){return a[(Math.random()*a.length)|0];}
+function fill(t,want,got){return t.replace('{want}',NAMES[want]).replace('{got}',NAMES[got]);}
+var VERDICTS=[
+  [0,'Arthur finds you: present.'],[300,'Daisy finds you: adequate.'],[900,'Tilly finds you: quietly dangerous.'],
+  [1800,'Spyro finds you: nearly royal.'],[3000,'Trixie stands to attention.'],[4500,'The full tribunal rises.'],[7000,'Reggie asks you to be Simon instead.']
+];
+function verdict(s){var v=VERDICTS[0][1];VERDICTS.forEach(function(x){if(s>=x[0])v=x[1];});return v;}
+
+/* ---------- sound: tones made here, nothing borrowed ---------- */
+var A={ac:null,master:null};
+function audio(){
+  if(!A.ac){var AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;try{A.ac=new AC();}catch(e){return;}
+    A.master=A.ac.createGain();A.master.gain.value=PREF.snd?1:0;A.master.connect(A.ac.destination);}
+  if(A.ac.state==='suspended'){try{A.ac.resume();}catch(e){}}
+}
+function note(f,dur,type,vol,slide,delay){if(!A.ac)return;var t=A.ac.currentTime+(delay||0),o=A.ac.createOscillator(),g=A.ac.createGain();o.type=type||'triangle';o.frequency.setValueAtTime(f,t);
+  if(slide)o.frequency.exponentialRampToValueAtTime(slide,t+dur);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(vol||.14,t+.015);g.gain.exponentialRampToValueAtTime(.0001,t+dur);
+  o.connect(g);g.connect(A.master);o.start(t);o.stop(t+dur+.03);}
+function padTone(i,dur){note(TONE[i],dur,'triangle',.2);note(TONE[i]*2,dur*.6,'square',.025);note(TONE[i]*1.5,.09,'sine',.04,TONE[i]*1.9,dur*.2);}
+function buzz(){note(110,.55,'sawtooth',.14,55);note(116,.55,'square',.06,58);}
+function tada(){note(523.3,.12,'square',.06);note(659.3,.12,'square',.06,0,.1);note(784,.22,'square',.06,0,.2);}
+function tick(){note(1200,.04,'sine',.05);}
+
+/* ---------- voice: the browser's own speech, if it has any ---------- */
+var V={ok:!!(window.speechSynthesis&&window.SpeechSynthesisUtterance),voice:null};
+function chooseVoice(){if(!V.ok)return;try{var vs=speechSynthesis.getVoices()||[];
+  V.voice=vs.filter(function(v){return /en-GB/i.test(v.lang)&&/male|daniel|george|arthur|ryan|oliver/i.test(v.name)&&!/female/i.test(v.name);})[0]||
+          vs.filter(function(v){return /en-GB/i.test(v.lang);})[0]||vs.filter(function(v){return /^en/i.test(v.lang);})[0]||null;}catch(e){}}
+if(V.ok){chooseVoice();try{speechSynthesis.addEventListener('voiceschanged',chooseVoice);}catch(e){}}
+
+var TOKEN=0; /* bumps on every new game, so stale timers from an old game do nothing */
+function later(fn,ms){var t=TOKEN;return setTimeout(function(){if(t===TOKEN)fn();},ms);}
+/* Show the line, say it if allowed, then carry on when he has finished (or after a sensible pause if the browser never says it has). */
+function say(text,who,then){
+  var terry=who==='terry';
+  $('who').textContent=terry?'Terry, from the back':'Reggie, as Simon';
+  $('bubble').className='bubble'+(terry?' terry':'');
+  $('line').textContent=text.replace(/^Terry here\. /,'');
+  var sim=$('simon');sim.classList.add('talking');
+  var done=false,t=TOKEN;
+  function fin(){if(done||t!==TOKEN)return;done=true;sim.classList.remove('talking');if(then)then();}
+  var speak=V.ok&&PREF.voc&&PREF.snd;
+  var wait=speak?Math.min(7000,900+text.length*75):Math.min(2200,500+text.length*22);
+  if(speak){
+    try{speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(text);if(V.voice)u.voice=V.voice;u.lang=(V.voice&&V.voice.lang)||'en-GB';
+      u.rate=terry?1.12:1.02;u.pitch=terry?1.25:.72;u.volume=1;
+      u.onend=function(){setTimeout(fin,180);};u.onerror=function(){setTimeout(fin,300);};speechSynthesis.speak(u);}catch(e){}
+  }
+  setTimeout(fin,wait);
+}
+function hush(){if(V.ok){try{speechSynthesis.cancel();}catch(e){}}}
+
+/* ---------- game ---------- */
+var G={mode:'title',seq:[],round:0,score:0,idx:0,held:0,lastTrap:false,inputT:null,holdT:null};
+function status(t){$('status').textContent=t;}
+function hud(){$('hRound').textContent=G.round;$('hScore').textContent=G.score;$('hBest').textContent=Math.max(SAVE.best,G.score);}
+function hub(t,red){var h=$('hub');h.innerHTML=t;h.classList.toggle('hold',!!red);}
+function light(i,ms){var p=PADS[i];p.classList.add('on');padTone(i,ms/1000);setTimeout(function(){p.classList.remove('on');},ms);}
+
+function startGame(){
+  audio();hush();TOKEN++;
+  clearTimeout(G.inputT);clearTimeout(G.holdT);
+  G.mode='busy';G.seq=[];G.round=0;G.score=0;G.idx=0;G.held=0;G.lastTrap=false;
+  $('startPanel').hidden=true;$('overPanel').hidden=true;hud();hub('Simon<br>says');
+  SAVE.played++;save();sheet();
+  var first=SAVE.played<=1||Math.random()<.5;
+  say(first?L.intro[0]:pick(L.intro),'reggie',function(){later(nextRound,350);});
+}
+function nextRound(){
+  G.round++;G.seq.push((Math.random()*4)|0);hud();
+  var trap=G.round>=3&&!G.lastTrap&&Math.random()<.3;G.lastTrap=trap;
+  G.mode='busy';
+  if(trap){hub('Watch<br>&hellip;');say(pick(L.trap),'reggie',function(){later(function(){playSeq(holdNerve);},250);});}
+  else{hub('Simon<br>says');say(pick(L.says),'reggie',function(){later(function(){playSeq(yourGo);},250);});}
+}
+function speed(){return Math.max(230,560-G.round*28);}
+function playSeq(then){
+  G.mode='show';var on=speed(),gap=Math.max(90,on*.35),k=0;status('Watch.');
+  (function step(){if(k>=G.seq.length){later(then,180);return;}light(G.seq[k],on);k++;later(step,on+gap);})();
+}
+function yourGo(){G.mode='input';G.idx=0;hub('Your<br>go');status('Your go. Press '+G.seq.length+(G.seq.length>1?' cats.':' cat.'));armTimer();}
+function armTimer(){clearTimeout(G.inputT);G.inputT=later(function(){if(G.mode==='input')out('slow');},5000+Math.min(2000,G.seq.length*120));}
+/* No "Simon says": the middle goes red and you must not touch owt. */
+function holdNerve(){
+  G.mode='hold';var left=3;hub('Hands<br>off! 3',true);status('He did not say Simon says. Do not press anything.');
+  (function count(){G.holdT=later(function(){left--;if(G.mode!=='hold')return;
+    if(left>0){tick();hub('Hands<br>off! '+left,true);count();}
+    else{G.held++;G.score+=250;hud();tada();hub('Well<br>held');G.mode='busy';
+      say(pick(L.held),'reggie',function(){later(yourGo,150);});}},900);})();
+}
+function press(i){
+  audio();
+  if(G.mode==='title'||G.mode==='over'){light(i,200);return;}
+  if(G.mode==='hold'){light(i,180);out('caught');return;}
+  if(G.mode!=='input')return;
+  var want=G.seq[G.idx];
+  if(i!==want){PADS[i].classList.add('on');setTimeout(function(){PADS[i].classList.remove('on');},300);out('wrong',want,i);return;}
+  light(i,Math.min(320,speed()));G.idx++;armTimer();
+  if(G.idx>=G.seq.length){
+    clearTimeout(G.inputT);G.mode='busy';G.score+=G.round*100;hud();hub('Champion');status('Correct. Round '+G.round+' done.');
+    var chat=(G.round===2||G.round===6||(G.round>6&&Math.random()<.18));
+    later(function(){
+      if(chat)say(pick(L.terry),'terry',function(){later(nextRound,250);});
+      else say(pick(L.good),'reggie',function(){later(nextRound,150);});
+    },380);
+  }
+}
+function out(why,want,got){
+  clearTimeout(G.inputT);clearTimeout(G.holdT);G.mode='busy';buzz();hub('Out!',true);
+  var line=why==='caught'?pick(L.caught):why==='slow'?pick(L.slow):fill(pick(L.wrong),want,got);
+  var cleared=Math.max(0,G.round-1);
+  var newBest=G.score>SAVE.best;
+  if(newBest)SAVE.best=G.score;if(cleared>SAVE.round)SAVE.round=cleared;SAVE.held+=G.held;save();sheet();
+  status('Out. '+line);
+  say(line,'reggie',function(){later(function(){gameOver(why,line,newBest,cleared);},300);});
+}
+function gameOver(why,line,newBest,cleared){
+  G.mode='over';
+  $('overTitle').textContent=why==='caught'?'Simon never said!':why==='slow'?'Too slow!':'Wrong cat!';
+  $('finalScore').textContent=G.score;
+  $('verdict').textContent=verdict(G.score);
+  $('overWhy').textContent='\u201c'+line+'\u201d';
+  $('bestLine').textContent=newBest&&G.score>0?'A new best. Reggie has written it on the beer mat.':(SAVE.best?'Your best: '+SAVE.best+'.':'');
+  var txt='I scored '+G.score+' at Simon Says, starring Reggie, and cleared '+cleared+(cleared===1?' round':' rounds')+(G.held?', holding my nerve '+G.held+(G.held===1?' time':' times'):'')+'. '+verdict(G.score);
+  $('shareText').textContent=txt;$('copyBtn').textContent='Copy my score';
+  var sb=$('sendBtn');sb.href='arcade.html?game='+SLUG+'&score='+G.score+'#send-score';sb.style.display=(WALL&&G.score>0)?'':'none';
+  $('overPanel').hidden=false;$('againBtn').focus();
+}
+function sheet(){
+  $('rsBest').textContent=SAVE.best;$('rsRound').textContent=SAVE.round?'Cleared round '+SAVE.round:'None yet';
+  $('rsHeld').textContent=SAVE.held;$('rsPlayed').textContent=SAVE.played;
+  $('bestTitle').textContent=SAVE.best?'Your best so far: '+SAVE.best+'.':'';$('hBest').textContent=SAVE.best;
+}
+
+/* The score wall only offers this game once scores.json has a board for it. Until then the button stays hidden. */
+var WALL=false;
+try{fetch('scores.json',{cache:'no-cache'}).then(function(r){return r.json();}).then(function(d){var g=d&&d.games&&d.games[SLUG];WALL=!!(g&&typeof g.cap==='number');}).catch(function(){});}catch(e){}
+
+/* ---------- controls ---------- */
+PADS.forEach(function(p,i){
+  p.addEventListener('pointerdown',function(e){if(e.button>0)return;e.preventDefault();press(i);});
+  p.addEventListener('click',function(e){if(e.detail===0)press(i);}); /* keyboard activation of a focused button */
+  p.addEventListener('contextmenu',function(e){e.preventDefault();});
+});
+var KEYS={'1':0,'2':1,'3':2,'4':3,q:0,w:1,a:2,s:3,arrowup:0,arrowright:1,arrowleft:2,arrowdown:3};
+document.addEventListener('keydown',function(e){
+  if(e.altKey||e.ctrlKey||e.metaKey)return;
+  var tg=e.target&&e.target.tagName;if(tg==='INPUT'||tg==='TEXTAREA'||tg==='SELECT')return;
+  var k=(e.key||'').toLowerCase();
+  if(k in KEYS){if(G.mode!=='title'&&G.mode!=='over'||/^arrow/.test(k))e.preventDefault();if(!e.repeat)press(KEYS[k]);return;}
+  if((k===' '||k==='enter')&&(G.mode==='title'||G.mode==='over')&&tg!=='BUTTON'&&tg!=='A'){e.preventDefault();startGame();}
+});
+$('startBtn').addEventListener('click',startGame);
+$('againBtn').addEventListener('click',startGame);
+$('copyBtn').addEventListener('click',function(){var t=$('shareText').textContent+' '+location.href.split('?')[0];
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(function(){$('copyBtn').textContent='Copied';},function(){$('copyBtn').textContent='Select the text below';});}else $('copyBtn').textContent='Select the text below';});
+function paintTogs(){
+  var s=$('sndBtn'),v=$('vocBtn');
+  s.textContent=PREF.snd?'Sound on':'Sound off';s.setAttribute('aria-pressed',PREF.snd?'true':'false');
+  v.textContent=PREF.voc?'Reggie\u2019s voice on':'Reggie\u2019s voice off';v.setAttribute('aria-pressed',PREF.voc?'true':'false');
+  if(A.master)A.master.gain.value=PREF.snd?1:0;
+}
+$('sndBtn').addEventListener('click',function(){PREF.snd=!PREF.snd;if(!PREF.snd)hush();try{localStorage.setItem('simon-snd',PREF.snd?'1':'0');}catch(e){}paintTogs();});
+$('vocBtn').addEventListener('click',function(){PREF.voc=!PREF.voc;if(!PREF.voc)hush();try{localStorage.setItem('simon-voc',PREF.voc?'1':'0');}catch(e){}paintTogs();});
+if(!V.ok){$('vocBtn').hidden=true;$('voiceNote').textContent='Your browser has no voice for Reggie, so he will write everything down instead. He prefers it, frankly.';}
+else $('voiceNote').textContent='Reggie talks, using your browser\u2019s own voice. Turn him off with the button at the top if he gets too much.';
+document.addEventListener('visibilitychange',function(){
+  if(document.hidden){hush();if(A.ac){try{A.ac.suspend();}catch(e){}}if(G.mode==='input')clearTimeout(G.inputT);}
+  else{if(A.ac){try{A.ac.resume();}catch(e){}}if(G.mode==='input')armTimer();}
+});
+
+paintTogs();sheet();hud();
+window.__simon={G:G,press:press,start:startGame,say:say};
+})();
+</script>
+<style>.wgw-strip{background:#f6f2e7;color:#141414;border-top:4px solid #141414;padding:28px 16px 40px;position:relative;z-index:5;font-family:Georgia,serif;text-align:left}.wgw-strip>div{max-width:1020px;margin:0 auto}.wgw-strip p{margin:0 0 14px;display:flex;flex-wrap:wrap;gap:12px;max-width:none;width:auto}.wgw-strip{width:100%;box-sizing:border-box;clear:both}.wgw-strip .wgw-h{font-family:"Permanent Marker","Segoe Print",cursive;color:#d1202f;font-size:20px;display:block;margin-bottom:12px}.wgw-strip a{font-family:Anton,"Arial Narrow",Impact,sans-serif;text-transform:uppercase;letter-spacing:.6px;font-size:18px;line-height:1.2;text-decoration:none;padding:10px 18px 9px;border:3px solid #141414;background:#fffdf7;color:#141414;box-shadow:5px 5px 0 #141414;display:inline-block}.wgw-strip a.k{background:#141414;color:#f6f2e7;box-shadow:5px 5px 0 #d1202f}.wgw-strip a.r{background:#d1202f;border-color:#d1202f;color:#fff}</style><div class="wgw-strip"><div><span class="wgw-h">Before you go</span><p><a class="k" href="books.html">See the books</a><a class="r" href="shop.html">Merch</a><a class="a" href="cats.html#dreamies">Buy the cats some Dreamies</a></p><p><a class="a" href="index.html">Home</a><a class="a" href="arcade.html">Play the games</a><a class="a" href="tribunal.html">Summon the tribunal</a><a class="a" href="cats.html">Meet the cats</a><a class="a" href="dear-terry.html">Dear Terry</a><a class="a" href="invoices.html">Invoices</a><a class="a" href="letters.html">Write to the tribunal</a><a class="a" href="log.html">The Ferret&rsquo;s Log</a><a class="a" href="story.html">Our story</a><a class="a" href="accord.html">The Accord</a><a class="a" href="road.html">The road ahead</a></p><p><a class="a" href="arthurs-tribunal.html">Arthur&rsquo;s Tribunal</a><a class="a" href="moulding-museum.html">The Moulding Museum</a><a class="a" href="unemployable-arcade.html">The Unemployable Arcade</a><a class="a" href="lion-and-albert.html">The Lion and Albert</a><a class="a" href="ferrets-ditch.html">Ferret&rsquo;s Ditch</a></p></div></div>
+<script src="share.js?v=20261114s" defer data-title="Simon Says, starring Reggie" data-text="Reggie has been told he is Simon. He has never heard of Simon. Copy the cats, and do not press unless Simon says. A free game:"></script>
+<script src="quickscore.js?v=20261120a" defer></script>
+<script src="badges.js?v=20261115a" defer></script>
+<script src="hits.js?v=20261115a" defer></script>
+</body>
+</html>
