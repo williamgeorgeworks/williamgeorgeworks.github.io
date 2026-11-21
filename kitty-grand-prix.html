@@ -246,8 +246,8 @@ var POSPTS=[3000,2200,1600,1100,700,400];
 function catBy(id){for(var i=0;i<CATS.length;i++)if(CATS[i].id===id)return CATS[i];return CATS[0];}
 
 /* ---------- saved progress ---------- */
-var SAVE={cat:'arthur',cls:0,open:0,races:0,wins:0,best:[0,0,0],score:0};
-try{var raw=JSON.parse(localStorage.getItem('kgp-v1')||'null');if(raw){['cls','open','races','wins','score'].forEach(function(k){SAVE[k]=+raw[k]||0;});if(typeof raw.cat==='string')SAVE.cat=raw.cat;if(raw.best&&raw.best.length===3)SAVE.best=raw.best.map(function(v){return +v||0;});}}catch(e){}
+var SAVE={cat:'arthur',cls:0,open:0,races:0,wins:0,best:[0,0,0],score:0,pod:0,clean:0,fish:0,wc:[0,0,0],cats:{}};
+try{var raw=JSON.parse(localStorage.getItem('kgp-v1')||'null');if(raw){['cls','open','races','wins','score','pod','clean','fish'].forEach(function(k){SAVE[k]=+raw[k]||0;});if(raw.wc&&raw.wc.length===3)SAVE.wc=raw.wc.map(function(v){return +v||0;});if(raw.cats&&typeof raw.cats==='object')CATS.forEach(function(c){if(+raw.cats[c.id]>0)SAVE.cats[c.id]=+raw.cats[c.id];});if(typeof raw.cat==='string')SAVE.cat=raw.cat;if(raw.best&&raw.best.length===3)SAVE.best=raw.best.map(function(v){return +v||0;});}}catch(e){}
 SAVE.open=clamp(SAVE.open|0,0,2);SAVE.cls=clamp(SAVE.cls|0,0,SAVE.open);
 function save(){try{localStorage.setItem('kgp-v1',JSON.stringify(SAVE));}catch(e){}}
 function fmt(t){var m=Math.floor(t/60),s=t-m*60;return m+':'+(s<10?'0':'')+s.toFixed(2);}
@@ -333,7 +333,7 @@ function makeKart(cat,slot,isPlayer){
   var back=3+slot*2.3,n=nodeAt(-Math.round(back)),lat=(slot%2?3.6:-3.6);
   return {cat:cat,me:isPlayer,x:n.x+n.nx*lat,z:n.z+n.nz*lat,y:n.y,h:n.a,va:n.a,v:0,steer:0,seg:((-Math.round(back)%N)+N)%N,prog:-Math.round(back),frac:0,lat:lat,
     nip:0,boostT:0,spinT:0,spinA:0,bumpT:0,slipT:0,fin:false,finT:0,place:0,mood:'idle',moodT:0,
-    lane:lat,laneT:rnd(1,3),skill:1,react:rnd(.02,.4),seed:(Math.random()*1e9)|0,rank:slot,wall:false,grass:false,spins:0};
+    lane:lat,laneT:rnd(1,3),skill:1,react:rnd(.02,.4),seed:(Math.random()*1e9)|0,rank:slot,wall:false,grass:false,spins:0,walls:0};
 }
 function setupRace(demo){
   var others=CATS.filter(function(c){return demo||c!==G.cat;}),i;
@@ -403,7 +403,7 @@ function drive(k,inp,dt){
     k.x-=p.nx*over*s;k.z-=p.nz*over*s;k.lat=s*(LIM-1.3);k.wall=true;
     var fwd=Math.cos(wrapA(k.va-p.a))>=0?p.a:p.a+Math.PI;
     k.h+=wrapA(fwd-k.h)*Math.min(1,5*dt);k.va+=wrapA(fwd-k.va)*Math.min(1,7*dt);
-    if(k.bumpT<=0){k.v*=.72;k.bumpT=.6;if(k===ME){sfx('bonk');G.shake=.2;floatOn(k,'CLANG!',C.red,24);}}
+    if(k.bumpT<=0){k.v*=.72;k.bumpT=.6;if(k===ME){k.walls++;sfx('bonk');G.shake=.2;floatOn(k,'CLANG!',C.red,24);}}
     else k.v-=k.v*1.2*dt;
   }
   /* pads, catnip and wet fish */
@@ -412,7 +412,7 @@ function drive(k,inp,dt){
   for(i=0;i<NIPS.length;i++){o=NIPS[i];if(o.t>0||k.nip>=3)continue;d=(o.x-k.x)*(o.x-k.x)+(o.z-k.z)*(o.z-k.z);
     if(d<6.2){o.t=7;k.nip++;if(k===ME){sfx('nip');floatOn(k,'Catnip!',C.green,22);zoomLabel();}}}
   for(i=0;i<FISH.length;i++){o=FISH[i];if(o.t>0)continue;d=(o.x-k.x)*(o.x-k.x)+(o.z-k.z)*(o.z-k.z);
-    if(d<4.4){o.t=11;if(k.boostT>0){floatOn(k,'Flattened!',C.blue,20);if(k===ME)sfx('bonk');}else{spin(k,'WET FISH!');if(k===ME)sfx('fish');}}}
+    if(d<4.4){o.t=11;if(k.boostT>0){floatOn(k,'Flattened!',C.blue,20);if(k===ME)sfx('bonk');}else{spin(k,'WET FISH!');if(k===ME){sfx('fish');SAVE.fish++;save();}}}}
   /* smoke, dust and the green glow of the zoomies */
   if(!reduce&&k.v>8&&PT.length<70){
     if(boosting&&Math.random()<dt*40)puff(k,C.nip,.5);
@@ -536,7 +536,7 @@ function finish(){
   G.mode='done';G.lapSeen=1;
   var pos=ME.place,cl=CLASSES[G.cls],par=150/cl.sp;
   var pts=Math.round((POSPTS[pos-1]+Math.max(0,Math.round((par-ME.finT)*15))+Math.min(10,G.overtakes)*50)*cl.mult);
-  G.score=pts;SAVE.races++;if(pos===1)SAVE.wins++;
+  G.score=pts;SAVE.races++;if(pos<=3)SAVE.pod++;if(pos===1){SAVE.wins++;SAVE.wc[G.cls]++;SAVE.cats[G.cat.id]=(SAVE.cats[G.cat.id]||0)+1;if(!ME.spins&&!ME.walls)SAVE.clean++;}
   var newBest=!SAVE.best[G.cls]||ME.finT<SAVE.best[G.cls];if(newBest)SAVE.best[G.cls]=+ME.finT.toFixed(2);
   var newScore=pts>SAVE.score;if(newScore)SAVE.score=pts;
   var opened=false;if(pos<=3&&G.cls===SAVE.open&&SAVE.open<2){SAVE.open++;opened=true;}
@@ -1190,7 +1190,7 @@ if(window.__KGP_TEST)window.__KGP={G:G,K:function(){return K;},me:function(){ret
 <style>.wgw-strip{background:#f6f2e7;color:#141414;border-top:4px solid #141414;padding:28px 16px 40px;position:relative;z-index:5;font-family:Georgia,serif;text-align:left}.wgw-strip>div{max-width:1020px;margin:0 auto}.wgw-strip p{margin:0 0 14px;display:flex;flex-wrap:wrap;gap:12px;max-width:none;width:auto}.wgw-strip{width:100%;box-sizing:border-box;clear:both}.wgw-strip .wgw-h{font-family:"Permanent Marker","Segoe Print",cursive;color:#d1202f;font-size:20px;display:block;margin-bottom:12px}.wgw-strip a{font-family:Anton,"Arial Narrow",Impact,sans-serif;text-transform:uppercase;letter-spacing:.6px;font-size:18px;line-height:1.2;text-decoration:none;padding:10px 18px 9px;border:3px solid #141414;background:#fffdf7;color:#141414;box-shadow:5px 5px 0 #141414;display:inline-block}.wgw-strip a.k{background:#141414;color:#f6f2e7;box-shadow:5px 5px 0 #d1202f}.wgw-strip a.r{background:#d1202f;border-color:#d1202f;color:#fff}</style><div class="wgw-strip"><div><span class="wgw-h">Before you go</span><p><a class="k" href="books.html">See the books</a><a class="r" href="shop.html">Merch</a><a class="a" href="cats.html#dreamies">Buy the cats some Dreamies</a></p><p><a class="a" href="index.html">Home</a><a class="a" href="arcade.html">Play the games</a><a class="a" href="tribunal.html">Summon the tribunal</a><a class="a" href="cats.html">Meet the cats</a><a class="a" href="dear-terry.html">Dear Terry</a><a class="a" href="invoices.html">Invoices</a><a class="a" href="letters.html">Write to the tribunal</a><a class="a" href="log.html">The Ferret&rsquo;s Log</a><a class="a" href="story.html">Our story</a><a class="a" href="accord.html">The Accord</a><a class="a" href="road.html">The road ahead</a></p><p><a class="a" href="grand-theft-kitty.html">Grand Theft Kitty</a><a class="a" href="arthurs-tribunal.html">Arthur&rsquo;s Tribunal</a><a class="a" href="moulding-museum.html">The Moulding Museum</a><a class="a" href="unemployable-arcade.html">The Unemployable Arcade</a><a class="a" href="lion-and-albert.html">The Lion and Albert</a><a class="a" href="ferrets-ditch.html">Ferret&rsquo;s Ditch</a></p></div></div>
 <script src="share.js?v=20261114s" defer data-title="The Kitty Grand Prix" data-text="Six cats in six karts are racing round the promenade and nobody has read the rules. The Kitty Grand Prix, a free 3D game:"></script>
 <script src="quickscore.js?v=20261121a" defer></script>
-<script src="badges.js?v=20261115a" defer></script>
+<script src="badges.js?v=20261122a" defer></script>
 <script src="hits.js?v=20261115a" defer></script>
 </body>
 </html>
