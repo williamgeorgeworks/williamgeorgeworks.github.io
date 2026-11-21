@@ -391,3 +391,46 @@ section.band.inked a:hover{color:#fff;text-decoration:underline}
 .older [hidden]{display:none}
 /* Books on a phone: the cover sits in the corner and the words run round and under it, using the full width */
 @media (max-width:560px){.book{display:block}.book::after{content:"";display:table;clear:both}.book>.cover{float:left;width:96px;margin:2px 14px 8px 0}.book .btns,.book .sample{clear:both}}
+/* Home page, condensed (21 Nov 2026): tiles for games and merch, a shelf of covers, and directory lists */
+.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
+a.tile{display:flex;flex-direction:column;background:var(--card);color:var(--ink);border:3px solid var(--ink);box-shadow:5px 5px 0 var(--ink);text-decoration:none;min-width:0}
+section.band.inked a.tile{color:var(--ink);box-shadow:5px 5px 0 var(--red)}
+a.tile:hover,a.tile:focus-visible{transform:translate(2px,2px);box-shadow:3px 3px 0 var(--red);color:var(--ink)}
+.tile .pic{display:block;aspect-ratio:16/10;background:var(--ink);overflow:hidden;border-bottom:3px solid var(--ink)}
+.tile .pic img{display:block;width:100%;height:100%;object-fit:cover;object-position:top}
+.tile .pic.sq{aspect-ratio:1/1;background:#fff}
+.tile .pic.sq img{object-fit:contain;object-position:center}
+.tile .pic.advent{background:#0d2218;display:flex;align-items:center;justify-content:center}
+.tile .pic.advent i{font-family:var(--display);font-style:normal;font-size:54px;line-height:1;color:#d9a93f;border:3px solid #d9a93f;padding:6px 12px 2px}
+.tile b{display:block;font-family:var(--display);font-weight:400;text-transform:uppercase;letter-spacing:.4px;font-size:18px;line-height:1.1;padding:10px 12px 3px;overflow-wrap:anywhere}
+.tile>span:last-child{display:block;font-size:15px;line-height:1.3;color:var(--faint);padding:0 12px 11px}
+.tile.more{justify-content:center;background:var(--ink);color:var(--paper)}
+.tile.more b{font-size:22px}
+.tile.more>span:last-child{color:var(--paper)}
+a.tile.more:hover,a.tile.more:focus-visible{color:var(--paper)}
+.shelf{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:18px}
+.shelf a{display:block;text-decoration:none;color:var(--ink);min-width:0}
+.shelf .cover{display:flex;font-size:14px;padding:6px}
+.shelf b{display:block;font-family:var(--display);font-weight:400;text-transform:uppercase;letter-spacing:.3px;font-size:15px;line-height:1.12;margin-top:7px;overflow-wrap:anywhere}
+.shelf a:hover b,.shelf a:focus-visible b{color:var(--red)}
+.shelf a:hover .cover,.shelf a:focus-visible .cover{transform:translate(2px,2px)}
+@media (min-width:761px){.tiles.six{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (min-width:960px){.tiles.six{grid-template-columns:repeat(6,minmax(0,1fr))}.tiles.six .tile b{font-size:16px}.tiles.six .tile.more b{font-size:18px}}
+h3.sub{margin:30px 0 14px}
+p.note{margin:22px 0 0;font-size:.95em}
+section.band .card ul.dir{list-style:none;margin:0;padding:0}
+section.band .card ul.dir li{border-top:2px solid var(--line)}
+section.band .card ul.dir li:first-child{border-top:0}
+section.band .card ul.dir a{display:block;padding:11px 0 10px;text-decoration:none;color:var(--ink)}
+section.band .card ul.dir li:last-child a{padding-bottom:2px}
+section.band .card ul.dir b{display:block;font-family:var(--display);font-weight:400;text-transform:uppercase;letter-spacing:.4px;font-size:20px;line-height:1.15}
+section.band .card ul.dir b::after{content:" \2192";color:var(--red)}
+section.band .card ul.dir span{display:block;color:var(--faint);font-size:.9em;line-height:1.35;margin-top:2px}
+section.band .card ul.dir a:hover b,section.band .card ul.dir a:focus-visible b{color:var(--red)}
+section.band .card ul.dir .tag{font-style:normal;font-size:12px;margin:0 0 0 4px;vertical-align:3px;background:var(--red)}
+.card>h3+ul.dir{margin-top:6px}
+blockquote.motto.small{font-size:clamp(20px,3vw,30px);margin-top:34px;padding-top:22px;border-top:4px solid var(--ink);max-width:none}
+blockquote.motto.small cite{color:var(--red);font-size:19px;margin-top:10px}
+article.card.book[id]{scroll-margin-top:16px}
+@media (max-width:760px){.tiles{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.shelf{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.tile b{font-size:16px;padding:8px 9px 2px}.tile>span:last-child{font-size:14px;padding:0 9px 9px}.tile.more b{font-size:19px}.shelf b{font-size:13px}.shelf .cover{font-size:11px;padding:4px}}
+@media (prefers-reduced-motion:reduce){a.tile:hover,a.tile:focus-visible,.shelf a:hover .cover{transform:none}}
