@@ -256,9 +256,11 @@ function tick(){note(1200,.04,'sine',.05);}
 
 /* ---------- voice: the browser's own speech, if it has any ---------- */
 var V={ok:!!(window.speechSynthesis&&window.SpeechSynthesisUtterance),voice:null};
-function chooseVoice(){if(!V.ok)return;try{var vs=speechSynthesis.getVoices()||[];
-  V.voice=vs.filter(function(v){return /en-GB/i.test(v.lang)&&/male|daniel|george|arthur|ryan|oliver/i.test(v.name)&&!/female/i.test(v.name);})[0]||
-          vs.filter(function(v){return /en-GB/i.test(v.lang);})[0]||vs.filter(function(v){return /^en/i.test(v.lang);})[0]||null;}catch(e){}}
+/* Reggie: regal standing, a bit of a geezer. Posh but street. Deep, unhurried British men first, in order of swagger. */
+var REGGIE_VOICES=[/thomas/i,/ryan/i,/arthur/i,/daniel/i,/google uk english male/i,/george/i,/oliver/i,/male/i];
+function chooseVoice(){if(!V.ok)return;try{var vs=speechSynthesis.getVoices()||[],gb=vs.filter(function(v){return /en[-_]GB/i.test(v.lang)&&!/female/i.test(v.name);}),pick=null;
+  for(var i=0;i<REGGIE_VOICES.length&&!pick;i++){pick=gb.filter(function(v){return REGGIE_VOICES[i].test(v.name);}).sort(function(a,b){return /natural|online/i.test(b.name)-/natural|online/i.test(a.name);})[0]||null;}
+  V.voice=pick||gb[0]||vs.filter(function(v){return /^en/i.test(v.lang);})[0]||null;}catch(e){}}
 if(V.ok){chooseVoice();try{speechSynthesis.addEventListener('voiceschanged',chooseVoice);}catch(e){}}
 
 var TOKEN=0; /* bumps on every new game, so stale timers from an old game do nothing */
@@ -276,7 +278,7 @@ function say(text,who,then){
   var wait=speak?Math.min(7000,900+text.length*75):Math.min(2200,500+text.length*22);
   if(speak){
     try{speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(text);if(V.voice)u.voice=V.voice;u.lang=(V.voice&&V.voice.lang)||'en-GB';
-      u.rate=terry?1.12:1.02;u.pitch=terry?1.25:.72;u.volume=1;
+      u.rate=terry?1.12:.92;u.pitch=terry?1.25:.82;u.volume=1;
       u.onend=function(){setTimeout(fin,180);};u.onerror=function(){setTimeout(fin,300);};speechSynthesis.speak(u);}catch(e){}
   }
   setTimeout(fin,wait);
