@@ -8,7 +8,7 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="William George Works">
 <meta property="og:title" content="Simon Says, starring Reggie">
-<meta property="og:description" content="Reggie has been told he is Simon. He has never heard of Simon. Copy the four cats, and do not touch owt unless Simon says. A free browser game.">
+<meta property="og:description" content="Reggie has been told he is Simon. He has never heard of Simon. Copy the four cats, and do not touch anything unless Simon says. A free browser game.">
 <meta property="og:url" content="https://williamgeorgeworks.co.uk/simon-says.html">
 <link rel="canonical" href="https://williamgeorgeworks.co.uk/simon-says.html">
 <meta property="og:image" content="https://williamgeorgeworks.co.uk/thumb-simon-says.jpg">
@@ -48,7 +48,11 @@ h1{font-family:var(--display);font-weight:400;font-size:clamp(2.4rem,9vw,4rem);l
 .bubble:before{content:"";position:absolute;left:-13px;top:50%;margin-top:-9px;border:9px solid transparent;border-right:12px solid var(--ink);border-left:0}
 .bubble b{font-family:var(--display);font-weight:400;letter-spacing:.06em;text-transform:uppercase;font-size:.78rem;color:var(--red);display:block}
 .bubble.terry b{color:var(--p1)}
-.hud{display:flex;justify-content:space-between;font-family:var(--display);letter-spacing:.06em;text-transform:uppercase;font-size:.95rem}
+.hud{position:relative;display:flex;justify-content:space-between;font-family:var(--display);letter-spacing:.06em;text-transform:uppercase;font-size:.95rem}
+.pts-pop{position:absolute;right:0;top:-8px;transform:translateY(-100%);font-family:var(--display);letter-spacing:.06em;text-transform:uppercase;
+  font-size:1.05rem;color:var(--red);text-shadow:1px 1px 0 var(--paper);pointer-events:none;opacity:0;transition:opacity .2s ease,transform .35s ease;white-space:nowrap}
+.pts-pop.show{opacity:1;transform:translateY(calc(-100% - 4px))}
+.topbar a{min-height:44px;display:inline-flex;align-items:center;box-sizing:border-box}
 .hud span b{font-family:var(--marker);font-weight:400;color:var(--red);font-size:1.25rem;letter-spacing:0;margin-left:4px}
 .board{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:10px;aspect-ratio:1/1;width:100%;max-width:400px;justify-self:center;
   touch-action:manipulation;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
@@ -77,16 +81,18 @@ h1{font-family:var(--display);font-weight:400;font-size:clamp(2.4rem,9vw,4rem);l
 .verdict{font-family:var(--display);text-transform:uppercase;letter-spacing:.05em;font-size:1.15rem}
 button{font:inherit;cursor:pointer}
 .btn{font-family:var(--display);text-transform:uppercase;letter-spacing:.07em;font-size:1.15rem;
-  background:var(--red);color:var(--white);border:3px solid var(--ink);border-radius:3px;padding:9px 20px;box-shadow:4px 4px 0 var(--ink)}
+  background:var(--red);color:var(--white);border:3px solid var(--ink);border-radius:3px;padding:9px 20px;box-shadow:4px 4px 0 var(--ink);
+  min-height:44px;box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center}
 .btn:hover{background:var(--ink)} .btn:active{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--ink)}
-.btn.quiet{background:var(--white);color:var(--ink);font-size:.9rem;padding:6px 12px}
+.btn.quiet{background:var(--white);color:var(--ink);font-size:.9rem;padding:9px 12px;min-height:44px;box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center}
 .btn.quiet:hover{background:#ffe9a8}
 .btn:focus-visible,.tog:focus-visible{outline:3px solid var(--red);outline-offset:3px}
 .row{display:flex;flex-wrap:wrap;gap:9px;justify-content:center}
 .share{font-size:.88rem;font-style:italic;user-select:all}
 .togs{position:absolute;left:8px;top:8px;right:8px;display:flex;gap:6px;z-index:6}
 .tog{font-family:var(--display);letter-spacing:.06em;text-transform:uppercase;font-size:.78rem;
-  background:var(--white);color:var(--ink);border:2px solid var(--ink);border-radius:3px;padding:4px 9px}
+  background:var(--white);color:var(--ink);border:2px solid var(--ink);border-radius:3px;padding:8px 12px;
+  min-height:44px;box-sizing:border-box;display:inline-flex;align-items:center}
 .tog[aria-pressed="false"]{background:#ddd;color:#555;text-decoration:line-through}
 .side{display:grid;gap:18px}
 .side h2{font-family:var(--display);font-weight:400;text-transform:uppercase;font-size:1.6rem;line-height:1.05;margin:0 0 8px;text-wrap:balance}
@@ -102,18 +108,19 @@ button{font:inherit;cursor:pointer}
 .foot{color:var(--mist);font-size:.85rem;border-top:1px solid color-mix(in srgb,var(--mist) 35%,transparent);padding-top:14px;max-width:70ch}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 @media (max-width:420px){.panel p{font-size:.88rem}.stage{min-height:520px}.pad{font-size:.85rem}}
-@media (prefers-reduced-motion:reduce){.btn:active,.pad.on,.simon.talking .face{transform:none}}
+@media (prefers-reduced-motion:reduce){.btn:active,.pad.on,.simon.talking .face,.pts-pop,.pts-pop.show{transform:none;transition:none}
+  .pts-pop.show{opacity:1}}
 </style>
 </head>
 <body>
-<div style="position:relative;z-index:50;display:flex;justify-content:space-between;align-items:center;gap:12px;background:#141414;font:600 14px/1 system-ui,sans-serif;letter-spacing:.3px;box-sizing:border-box;border-bottom:1px solid #333"><a href="arcade.html" style="color:#f6f2e7;padding:9px 14px;text-decoration:none">&larr; Back to the arcade</a><a href="shop.html" style="color:#fff;background:#d1202f;padding:9px 14px;text-decoration:none;white-space:nowrap">Merch</a></div>
+<div class="topbar" style="position:relative;z-index:50;display:flex;justify-content:space-between;align-items:center;gap:12px;background:#141414;font:600 14px/1 system-ui,sans-serif;letter-spacing:.3px;box-sizing:border-box;border-bottom:1px solid #333;padding-top:env(safe-area-inset-top,0px)"><a href="arcade.html" style="color:#f6f2e7;padding:0 14px;text-decoration:none">&larr; Back to the arcade</a><a href="shop.html" style="color:#fff;background:#d1202f;padding:0 14px;text-decoration:none;white-space:nowrap">Merch</a></div>
 
 <div class="wrap">
   <header class="mast">
     <span class="eyebrow">The Employee of the Month presents</span>
     <h1>Simon Says, starring Reggie</h1>
     <p class="tag" style="font-size:1.35rem;color:#fff">He has been told he is Simon. He has never heard of Simon.</p>
-    <p class="tag">Four cats. One robot reading the rules off a beer mat. Do not touch owt unless Simon says.</p>
+    <p class="tag">Four cats. One robot reading the rules off a beer mat. Do not touch anything unless Simon says.</p>
   </header>
 
   <div class="cols">
@@ -125,10 +132,10 @@ button{font:inherit;cursor:pointer}
 
       <div class="simon" id="simon">
         <div class="face"><img src="portraits/reggie.jpg" alt="Reggie, a robot with a pen-and-ink face, a red waistcoat and the confident look of someone who has not read the instructions" width="640" height="640"></div>
-        <div class="bubble" id="bubble" aria-live="polite"><b id="who">Reggie, as Simon</b><span id="line">Right. I am Simon, apparently.</span></div>
+        <div class="bubble" id="bubble" aria-live="polite"><b id="who">Reggie, as Simon</b><span id="line">Right. I'm Simon, apparently. Don't ask.</span></div>
       </div>
 
-      <div class="hud"><span>Round<b id="hRound">0</b></span><span>Score<b id="hScore">0</b></span><span>Best<b id="hBest">0</b></span></div>
+      <div class="hud"><span>Round<b id="hRound">0</b></span><span>Score<b id="hScore">0</b></span><span>Best<b id="hBest">0</b></span><span class="pts-pop" id="ptsPop" aria-hidden="true"></span></div>
 
       <div class="board" id="board" role="group" aria-label="Four cat buttons. Watch the order they light up in, then press them in the same order. Keys 1 to 4, or the arrow keys, also work.">
         <button class="pad" type="button" data-i="0" aria-label="Arthur, the red button, key 1 or up arrow"><span class="k" aria-hidden="true">1 &uarr;</span><span>Arthur<small>Chief Justice</small></span></button>
@@ -189,7 +196,7 @@ button{font:inherit;cursor:pointer}
     </section>
   </div>
 
-  <p class="foot">Simon Says is an old playground game, and the four-light memory version is older than most of the people playing it. This version, its drawings, its tones and its nonsense are our own, made new for Reggie, who began it as an advert for the books and let it get out of hand. Reggie&rsquo;s voice is your own browser&rsquo;s built-in speech, so he may sound like a satnav from Surrey. He is from Lancashire. In spirit.</p>
+  <p class="foot">Simon Says is an old playground game, and the four-light memory version is older than most of the people playing it. This version, its drawings, its tones and its nonsense are our own, made new for Reggie, who began it as an advert for the books and let it get out of hand. Reggie&rsquo;s voice is your own browser&rsquo;s built-in speech, so he may sound like a satnav from Surrey. In spirit he is a posh-but-street East End geezer, and he will not be told otherwise.</p>
 </div>
 
 <script>
@@ -211,24 +218,26 @@ try{PREF.snd=localStorage.getItem('simon-snd')!=='0';PREF.voc=localStorage.getIt
 
 /* ---------- lines: Reggie as Simon, with notes from Terry and the cats ---------- */
 var L={
-  intro:['Right. I have been told I am Simon. Nobody has told me who Simon is. I have read the beer mat. Let us begin.',
-         'Good evening. I am Simon. I have never heard of me. Eyes on the cats.'],
-  says:['Simon says: copy this.','Simon says: watch the cats.','Simon says, and I am quoting the beer mat here: do this.',
-        'Simon says: same again, plus one.','Simon says: eyes front, our kid.','Simon says: concentrate. Spyro, stop licking yourself.',
-        'Simon says: do this, and do not mither me about it.','Simon says: one more cat. Do not ask why.'],
-  trap:['Right. Do this.','Go on then, copy that.','Now you do it.','Press these, quick.','Copy that. Chop chop.','Same again. Off you go.'],
-  held:['Well held. I never said Simon says. Terry said you would crack. Terry owes me a brew. Simon says: now do it.',
-        'Ooh, nerves of steel. No Simon, no pressing. Simon says: go on, now you can.',
-        'Correct. You did nowt, which was right. The beer mat is very clear. Simon says: now do it.'],
-  caught:['I never said Simon says! You pressed. That is an invoice.','Ha! Simon said nowt. You touched a cat without a warrant.',
-          'Did I say Simon says? I did not. Off you pop.','No Simon, no pressing. It is the only rule on the beer mat.'],
-  wrong:['That were {got}. I asked for {want}. Give over.','Wrong cat. I said {want}. You gave me {got}. The tribunal has been informed.',
+  intro:['Evening. I\'m Simon. Never heard of him. Eyes on the cats.',
+         'Right. They tell me I\'m Simon. Never heard of the bloke. Eyes on the cats.'],
+  says:['Simon says: copy this, if you wouldn\'t mind.','Simon says: watch the cats. Keep up.',
+        'Simon says \u2014 and I\'m quoting the beer mat here \u2014 do this.',
+        'Simon says: same again, plus one. Don\'t look at me, I don\'t make the rules. Oh, hang on, I do.',
+        'Simon says: eyes front, my son.','Simon says: concentrate. Spyro, stop licking yourself, there\'s a gentleman present.',
+        'Simon says: do this, and do not start giving me grief about it.','Simon says: one more cat. Don\'t ask why.'],
+  trap:['Right. Do this for me.','Go on then. Copy that.','Come on. Your turn.','Press these, sharpish.','Copy that. Chop chop.','Same again. Off you trot.'],
+  held:['Well held. I never said Simon says. Simon says: now do it.',
+        'Nerves of steel. Simon says: go on, now you can.',
+        'You did nothing. That was right. Simon says: now do it.'],
+  caught:['I never said Simon says! You pressed. That\'s an invoice, that is.','Ha! Simon said nothing. You touched a cat without a warrant.',
+          'Did I say Simon says? I did not. Off you trot.','No Simon, no pressing. It\'s the only rule on the beer mat, my son.'],
+  wrong:['That was {got}. I asked for {want}. Leave it out.','Wrong cat. I said {want}. You gave me {got}. The tribunal has been informed.',
          '{got}? {want} is right there. Arthur is looking at you.','No. {want}. Not {got}. Even Dexter knew that, and Dexter was asleep.'],
-  slow:['Hello? I have had quicker replies from Terry, and Terry writes essays.','You have gone very quiet. Daisy has wandered off.','Time. I would have waited longer but I have the Log to write.'],
-  good:['Champion.','Spot on.','Grand. Next.','Very good. I think. The beer mat does not say.','Lovely stuff.','Correct, which surprises us both.'],
-  terry:['Terry here. For the record, Simon is not a real person. Please do not tell Reggie.',
-         'Terry here. Reggie has asked me three times what Simon looks like.',
-         'Terry here. I have checked, and the beer mat is from a pub in Darwen.',
+  slow:['Hello? I\'ve had quicker replies from Terry, and Terry writes essays.','You\'ve gone very quiet. Daisy has wandered off.','Time. I\'d have waited longer, but I\'ve got the Log to write.'],
+  good:['Lovely jubbly.','Spot on.','Lovely. Next.','Very good. I think. The beer mat does not say.','Lovely stuff.','Correct, which surprises us both.'],
+  terry:['Terry here. For the record, Simon is not a real person. Please don\'t tell Reggie.',
+         'Terry here. Reggie has asked me three times what Simon looks like. I don\'t have an answer.',
+         'Terry here. I\'ve checked, and the beer mat is from a pub in Darwen. That does explain a few things.',
          'Terry here. Reggie wants it known he did not ask to be Simon. He asked to be Clive.']
 };
 function pick(a){return a[(Math.random()*a.length)|0];}
@@ -266,6 +275,10 @@ if(V.ok){chooseVoice();try{speechSynthesis.addEventListener('voiceschanged',choo
 var TOKEN=0; /* bumps on every new game, so stale timers from an old game do nothing */
 function later(fn,ms){var t=TOKEN;return setTimeout(function(){if(t===TOKEN)fn();},ms);}
 /* Show the line, say it if allowed, then carry on when he has finished (or after a sensible pause if the browser never says it has). */
+function primeSpeech(){
+  if(!V.ok)return;
+  try{var u=new SpeechSynthesisUtterance(' ');u.volume=0;u.rate=5;u.lang='en-GB';speechSynthesis.speak(u);}catch(e){}
+}
 function say(text,who,then){
   var terry=who==='terry';
   $('who').textContent=terry?'Terry, from the back':'Reggie, as Simon';
@@ -274,32 +287,52 @@ function say(text,who,then){
   var sim=$('simon');sim.classList.add('talking');
   var done=false,t=TOKEN;
   function fin(){if(done||t!==TOKEN)return;done=true;sim.classList.remove('talking');if(then)then();}
-  var speak=V.ok&&PREF.voc&&PREF.snd;
-  var wait=speak?Math.min(7000,900+text.length*75):Math.min(2200,500+text.length*22);
-  if(speak){
-    try{speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(text);if(V.voice)u.voice=V.voice;u.lang=(V.voice&&V.voice.lang)||'en-GB';
+  var speak=V.ok&&PREF.voc;
+  var wait=speak?Math.min(4500,700+text.length*55):Math.min(1800,400+text.length*20);
+  function speakNow(){
+    if(t!==TOKEN)return;
+    try{var u=new SpeechSynthesisUtterance(text);if(V.voice)u.voice=V.voice;u.lang=(V.voice&&V.voice.lang)||'en-GB';
       u.rate=terry?1.12:.92;u.pitch=terry?1.25:.82;u.volume=1;
-      u.onend=function(){setTimeout(fin,180);};u.onerror=function(){setTimeout(fin,300);};speechSynthesis.speak(u);}catch(e){}
+      u.onend=function(){setTimeout(fin,120);};u.onerror=function(){setTimeout(fin,200);};speechSynthesis.speak(u);}catch(e){}
+  }
+  if(speak){
+    try{
+      if(speechSynthesis.speaking||speechSynthesis.pending){speechSynthesis.cancel();setTimeout(function(){if(t===TOKEN)speakNow();},80);}
+      else speakNow();
+    }catch(e){}
   }
   setTimeout(fin,wait);
 }
 function hush(){if(V.ok){try{speechSynthesis.cancel();}catch(e){}}}
 
 /* ---------- game ---------- */
-var G={mode:'title',seq:[],round:0,score:0,idx:0,held:0,lastTrap:false,inputT:null,holdT:null};
+var G={mode:'title',seq:[],round:0,score:0,idx:0,held:0,lastTrap:false,inputT:null,holdT:null,holdLeft:0,holdUntil:0,holdRemain:0};
 function status(t){$('status').textContent=t;}
 function hud(){$('hRound').textContent=G.round;$('hScore').textContent=G.score;$('hBest').textContent=Math.max(SAVE.best,G.score);}
 function hub(t,red){var h=$('hub');h.innerHTML=t;h.classList.toggle('hold',!!red);}
 function light(i,ms){var p=PADS[i];p.classList.add('on');padTone(i,ms/1000);setTimeout(function(){p.classList.remove('on');},ms);}
+function flashPts(label){
+  var el=$('ptsPop');if(!el)return;
+  el.textContent=label;el.classList.remove('show');
+  try{el.offsetWidth;}catch(e){}
+  el.classList.add('show');
+  clearTimeout(flashPts.t);
+  flashPts.t=setTimeout(function(){el.classList.remove('show');},1400);
+}
+function padsPlayable(on){
+  var b=$('board');
+  if(b){try{b.inert=!on;}catch(e){}}
+  PADS.forEach(function(p){if(on)p.removeAttribute('tabindex');else p.setAttribute('tabindex','-1');});
+}
 
 function startGame(){
-  audio();hush();TOKEN++;
+  audio();hush();primeSpeech();TOKEN++;
   clearTimeout(G.inputT);clearTimeout(G.holdT);
-  G.mode='busy';G.seq=[];G.round=0;G.score=0;G.idx=0;G.held=0;G.lastTrap=false;
-  $('startPanel').hidden=true;$('overPanel').hidden=true;hud();hub('Simon<br>says');
+  G.mode='busy';G.seq=[];G.round=0;G.score=0;G.idx=0;G.held=0;G.lastTrap=false;G.holdLeft=0;G.holdRemain=0;
+  $('startPanel').hidden=true;$('overPanel').hidden=true;padsPlayable(true);hud();hub('Simon<br>says');
   SAVE.played++;save();sheet();
   var first=SAVE.played<=1||Math.random()<.5;
-  say(first?L.intro[0]:pick(L.intro),'reggie',function(){later(nextRound,350);});
+  say(first?L.intro[0]:pick(L.intro),'reggie',function(){later(nextRound,200);});
 }
 function nextRound(){
   G.round++;G.seq.push((Math.random()*4)|0);hud();
@@ -315,13 +348,40 @@ function playSeq(then){
 }
 function yourGo(){G.mode='input';G.idx=0;hub('Your<br>go');status('Your go. Press '+G.seq.length+(G.seq.length>1?' cats.':' cat.'));armTimer();}
 function armTimer(){clearTimeout(G.inputT);G.inputT=later(function(){if(G.mode==='input')out('slow');},5000+Math.min(2000,G.seq.length*120));}
-/* No "Simon says": the middle goes red and you must not touch owt. */
+/* No "Simon says": the middle goes red and you must not touch anything. Three true seconds, pauseable. */
 function holdNerve(){
-  G.mode='hold';var left=3;hub('Hands<br>off! 3',true);status('He did not say Simon says. Do not press anything.');
-  (function count(){G.holdT=later(function(){left--;if(G.mode!=='hold')return;
-    if(left>0){tick();hub('Hands<br>off! '+left,true);count();}
-    else{G.held++;G.score+=250;hud();tada();hub('Well<br>held');G.mode='busy';
-      say(pick(L.held),'reggie',function(){later(yourGo,150);});}},900);})();
+  G.mode='hold';G.holdLeft=3;G.holdRemain=1000;G.holdUntil=Date.now()+1000;
+  hub('Hands<br>off! 3',true);status('He did not say Simon says. Do not press anything.');
+  armHold();
+}
+function armHold(){
+  clearTimeout(G.holdT);
+  if(G.mode!=='hold')return;
+  var ms=Math.max(0,G.holdUntil-Date.now());
+  G.holdT=later(function(){
+    if(G.mode!=='hold')return;
+    G.holdLeft--;
+    if(G.holdLeft>0){
+      tick();hub('Hands<br>off! '+G.holdLeft,true);
+      G.holdRemain=1000;G.holdUntil=Date.now()+1000;armHold();
+    }else{
+      G.held++;G.score+=250;hud();tada();
+      flashPts('+250 nerves of steel');
+      status('+250 nerves of steel. Now copy the cats.');
+      hub('Well<br>held');G.mode='busy';
+      say(pick(L.held),'reggie',function(){later(yourGo,80);});
+    }
+  },ms);
+}
+function pauseHold(){
+  if(G.mode!=='hold')return;
+  clearTimeout(G.holdT);
+  G.holdRemain=Math.max(0,G.holdUntil-Date.now());
+}
+function resumeHold(){
+  if(G.mode!=='hold')return;
+  G.holdUntil=Date.now()+(G.holdRemain||0);
+  armHold();
 }
 function press(i){
   audio();
@@ -332,12 +392,14 @@ function press(i){
   if(i!==want){PADS[i].classList.add('on');setTimeout(function(){PADS[i].classList.remove('on');},300);out('wrong',want,i);return;}
   light(i,Math.min(320,speed()));G.idx++;armTimer();
   if(G.idx>=G.seq.length){
-    clearTimeout(G.inputT);G.mode='busy';G.score+=G.round*100;hud();hub('Champion');status('Correct. Round '+G.round+' done.');
+    clearTimeout(G.inputT);G.mode='busy';
+    var pts=G.round*100;G.score+=pts;hud();hub('Lovely');
+    flashPts('+'+pts);status('Correct. Round '+G.round+' done. +'+pts+'.');
     var chat=(G.round===2||G.round===6||(G.round>6&&Math.random()<.18));
     later(function(){
-      if(chat)say(pick(L.terry),'terry',function(){later(nextRound,250);});
-      else say(pick(L.good),'reggie',function(){later(nextRound,150);});
-    },380);
+      if(chat)say(pick(L.terry),'terry',function(){later(nextRound,80);});
+      else say(pick(L.good),'reggie',function(){later(nextRound,80);});
+    },200);
   }
 }
 function out(why,want,got){
@@ -359,7 +421,7 @@ function gameOver(why,line,newBest,cleared){
   var txt='I scored '+G.score+' at Simon Says, starring Reggie, and cleared '+cleared+(cleared===1?' round':' rounds')+(G.held?', holding my nerve '+G.held+(G.held===1?' time':' times'):'')+'. '+verdict(G.score);
   $('shareText').textContent=txt;$('copyBtn').textContent='Copy my score';
   var sb=$('sendBtn');sb.href='arcade.html?game='+SLUG+'&score='+G.score+'#send-score';sb.style.display=(WALL&&G.score>0)?'':'none';
-  $('overPanel').hidden=false;$('againBtn').focus();
+  $('overPanel').hidden=false;padsPlayable(false);$('againBtn').focus();
 }
 function sheet(){
   $('rsBest').textContent=SAVE.best;$('rsRound').textContent=SAVE.round?'Cleared round '+SAVE.round:'None yet';
@@ -395,15 +457,16 @@ function paintTogs(){
   v.textContent=PREF.voc?'Reggie\u2019s voice on':'Reggie\u2019s voice off';v.setAttribute('aria-pressed',PREF.voc?'true':'false');
   if(A.master)A.master.gain.value=PREF.snd?1:0;
 }
-$('sndBtn').addEventListener('click',function(){PREF.snd=!PREF.snd;if(!PREF.snd)hush();try{localStorage.setItem('simon-snd',PREF.snd?'1':'0');}catch(e){}paintTogs();});
+$('sndBtn').addEventListener('click',function(){PREF.snd=!PREF.snd;try{localStorage.setItem('simon-snd',PREF.snd?'1':'0');}catch(e){}paintTogs();});
 $('vocBtn').addEventListener('click',function(){PREF.voc=!PREF.voc;if(!PREF.voc)hush();try{localStorage.setItem('simon-voc',PREF.voc?'1':'0');}catch(e){}paintTogs();});
 if(!V.ok){$('vocBtn').hidden=true;$('voiceNote').textContent='Your browser has no voice for Reggie, so he will write everything down instead. He prefers it, frankly.';}
 else $('voiceNote').textContent='Reggie talks, using your browser\u2019s own voice. Turn him off with the button at the top if he gets too much.';
 document.addEventListener('visibilitychange',function(){
-  if(document.hidden){hush();if(A.ac){try{A.ac.suspend();}catch(e){}}if(G.mode==='input')clearTimeout(G.inputT);}
-  else{if(A.ac){try{A.ac.resume();}catch(e){}}if(G.mode==='input')armTimer();}
+  if(document.hidden){hush();if(A.ac){try{A.ac.suspend();}catch(e){}}if(G.mode==='input')clearTimeout(G.inputT);if(G.mode==='hold')pauseHold();}
+  else{if(A.ac){try{A.ac.resume();}catch(e){}}if(G.mode==='input')armTimer();if(G.mode==='hold')resumeHold();}
 });
 
+padsPlayable(false);
 paintTogs();sheet();hud();
 window.__simon={G:G,press:press,start:startGame,say:say};
 })();
