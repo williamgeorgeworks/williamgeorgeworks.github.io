@@ -28,6 +28,7 @@ No console wars, no fan wars, no "X is better than Y", no rivalry jokes that pic
 6. The satire must be obviously absurd. Do not copy source wording. Mild language only.
 7. Do not mock fans or players. Do not mock a game's quality or sales, or say a company is greedy, lazy or in trouble. Gentle teasing of the situation is the limit.
 8. Aim for 12 stories and never more than 15. Spread them across platforms, genres and topics. Fewer is fine if that is all that is safe and verified (at least 3; say why in the commit message if there are fewer than 9).
+9. Spread the sources as well as the platforms (added 21 November 2026). No more than a third of an edition may come from any one outlet, though two stories from one outlet are always allowed. A shorter edition from several sources beats a longer one from a single site.
 
 ## Voice (this is the point of the page)
 Each story is a short argument. Terry (breathless showman, loves everything, wrong about most of it) and Reggie (Arthur Daley: "my old son", imaginary invoices, "a nice little earner", wounded dignity) disagree about the report in the "satire" text. Both must appear in every story. Vary who wins. They never fall out for real.

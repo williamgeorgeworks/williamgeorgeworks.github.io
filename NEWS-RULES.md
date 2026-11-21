@@ -32,6 +32,10 @@ Before each story ask: could a reader of any political view, or none, laugh at t
    Spread them across different areas of everyday life (prices, shops, weather, transport, tech, work, culture, sport, daft stories) so no one topic takes over.
    The golden rule and rule 5 always beat the quota. If there are not nine safe, recent, light-hearted stories, publish the safe ones (at least 3) rather than reaching,
    and say in the pull request why the edition is short. Never pad with weak or unchecked stories.
+10. Spread the sources as well as the topics (added 21 November 2026, after an edition drew four of its six stories from one trade site).
+    No more than a third of an edition may come from any one outlet, though two stories from one outlet are always allowed.
+    Where a story is an announcement, prefer the body that made it (the Met Office, the ONS, the operator) over a site reporting it.
+    This rule does not justify padding: a shorter edition from several sources beats a longer one from a single site.
 
 ## Voice
 British English. Terry is a breathless showman (chat-show host). Reggie is Arthur Daley: cheeky sales patter, "my old son", imaginary invoices, "a nice little earner".

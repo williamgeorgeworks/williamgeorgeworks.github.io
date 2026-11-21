@@ -486,7 +486,7 @@ function dayWord(n){ return n === 1 ? "1 day" : n + " days"; }
   var previewDay = (pv >= 1 && pv <= 24) ? pv : 0;
   var limit = openUpTo(now, previewDay);
   var todayNo = (now.getMonth() === 11 && now.getDate() <= 24) ? now.getDate() : 0;
-  var KEY = "wgwAdvent:" + now.getFullYear() + (previewDay ? ":preview" : "");
+  var KEY = "wgwAdvent:" + (now.getMonth() === 0 ? now.getFullYear() - 1 : now.getFullYear()) + (previewDay ? ":preview" : "");
   var state = {open:{}, pick:{}};
 
   function load(){

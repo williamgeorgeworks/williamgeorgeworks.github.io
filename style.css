@@ -41,6 +41,7 @@ section.band{padding:56px 0;position:relative}
 section.band.inked{background:var(--ink);color:var(--paper)}
 section.band.inked a{color:#ffd9d9}
 section.band.inked .scrawl{color:#ff6b6b}
+section.band.inked .card .scrawl{color:var(--red)}
 .pagehead{padding:54px 0 26px;position:relative;overflow:hidden}
 .pagehead h1{font-size:clamp(44px,8vw,88px)}
 .grid{display:grid;gap:26px}
@@ -382,3 +383,11 @@ section.band.inked a:hover{color:#fff;text-decoration:underline}
 .post .pic.right{float:right;margin-left:22px}
 .post .pic.left{float:left;margin-right:22px}
 @media (max-width:640px){.post .pic.right,.post .pic.left,.post .pic.right.tall,.post .pic.left.tall{float:none;width:100%;max-width:340px;margin:0 0 14px}}
+/* Long pages (the Log, the invoices): older.js folds the older entries behind a button */
+.card[hidden]{display:none!important}
+.older{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:8px 0 26px}
+.older button.btn{cursor:pointer;font-size:17px}
+.older span{font-style:italic}
+.older [hidden]{display:none}
+/* Books on a phone: the cover sits in the corner and the words run round and under it, using the full width */
+@media (max-width:560px){.book{display:block}.book::after{content:"";display:table;clear:both}.book>.cover{float:left;width:96px;margin:2px 14px 8px 0}.book .btns,.book .sample{clear:both}}
