@@ -264,6 +264,8 @@ header.site.js-nav nav.main .morelist a[aria-current=page]{border-bottom:3px sol
 /* The one big button on the home page, and the three-tribunals note */
 .btn.big{font-size:26px;padding:15px 30px 13px;box-shadow:7px 7px 0 var(--red)}
 .btn.small.red{box-shadow:4px 4px 0 var(--ink)}
+.btn.big.red{box-shadow:7px 7px 0 var(--ink)}
+.btn.big.red:hover{box-shadow:4px 4px 0 var(--ink)}
 .threeway{margin-top:14px;font-size:.98em;max-width:70ch;border-left:4px solid var(--red);padding-left:12px}
 /* Reading samples on the books page */
 .book .sample{grid-column:1/-1;border-top:2px dashed var(--ink);padding-top:14px;margin-top:4px}
