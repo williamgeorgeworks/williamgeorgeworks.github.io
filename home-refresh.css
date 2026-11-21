@@ -1,0 +1,57 @@
+/* Home page refresh (preview). Scoped to the home page; loaded only by index.html. */
+.hero.fresh{padding:56px 0 64px}
+.hero.fresh .hero-grid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:44px;align-items:center}
+.hero.fresh .lede{max-width:40em}
+.hero.fresh .btns .btn.big.alt{box-shadow:7px 7px 0 var(--ink)}
+.hero-desk{display:grid;gap:22px}
+.desk-card{background:var(--card);border:3px solid var(--ink);padding:16px 18px;box-shadow:7px 7px 0 var(--red);position:relative}
+.desk-book{display:grid;grid-template-columns:104px minmax(0,1fr);gap:16px;transform:rotate(1.2deg)}
+.desk-news{transform:rotate(-1deg);box-shadow:7px 7px 0 var(--blue)}
+.desk-cover{display:block;border:3px solid var(--ink);background:var(--ink);align-self:start;transition:transform .2s}
+.desk-cover img{display:block;width:100%;height:auto}
+.desk-cover:hover,.desk-cover:focus-visible{transform:rotate(-3deg) scale(1.04)}
+.desk-title{font-size:24px;margin:6px 0 6px}
+.desk-card p{margin:0 0 8px;font-size:16px;line-height:1.45}
+.desk-credit{font-style:italic;color:var(--faint);font-size:14px!important}
+.desk-card .btns{margin-top:10px;gap:10px}
+.desk-note{font-size:14px!important;color:var(--faint);margin-top:10px!important}
+.hero.fresh h1{font-size:clamp(46px,6.4vw,92px)}
+.desk-news ul.dir{list-style:none;margin:6px 0 0;padding:0}
+.desk-news ul.dir li{border-top:2px solid var(--line)}
+.desk-news ul.dir li:first-child{border-top:0}
+.desk-news ul.dir a{display:block;padding:9px 0 8px;text-decoration:none;color:var(--ink)}
+.desk-news ul.dir b{display:block;font-family:var(--display);font-weight:400;text-transform:uppercase;letter-spacing:.4px;font-size:19px;line-height:1.15}
+.desk-news ul.dir b::after{content:" \2192";color:var(--red)}
+.desk-news ul.dir span{display:block;font-size:16px;line-height:1.4;margin-top:3px}
+.desk-news ul.dir a:hover b{color:var(--red)}
+.live{font-family:var(--display);text-transform:uppercase;letter-spacing:.6px;font-size:15px;color:var(--red);display:flex;align-items:center;gap:8px}
+.live i{width:11px;height:11px;border-radius:50%;background:var(--red);display:inline-block;animation:livepulse 1.8s ease-in-out infinite}
+@keyframes livepulse{0%,100%{box-shadow:0 0 0 0 rgba(209,32,47,.55)}60%{box-shadow:0 0 0 8px rgba(209,32,47,0)}}
+/* the inked word: a brush stroke drawn under "magnificent" */
+.hero h1 em.inked{position:relative;display:inline-block;z-index:0}
+.hero h1 em.inked::after{content:"";position:absolute;left:-2%;right:-4%;bottom:-.05em;height:.1em;background:var(--ink);border-radius:40% 60% 55% 45%/60% 40% 60% 40%;z-index:-1;transform-origin:left center;animation:brush .9s .5s cubic-bezier(.6,0,.2,1) both;opacity:.9}
+@keyframes brush{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+/* splats land with a splosh, then drift a little */
+.hero.fresh .splat,.ink-pop{animation:splosh .6s cubic-bezier(.2,1.5,.4,1) both,drift 9s 1s ease-in-out infinite alternate}
+.hero.fresh .splat.r{animation-delay:.25s,1.2s}
+.hero.fresh .splat.b{animation-delay:.45s,1.4s}
+.ink-pop.late{animation-delay:.3s,1.3s}
+@keyframes splosh{0%{transform:scale(0) rotate(-25deg);opacity:0}70%{opacity:1}100%{transform:none;opacity:1}}
+@keyframes drift{from{transform:none}to{transform:translate(4px,-6px) rotate(3deg)}}
+.scrawl.wobble{animation:wobble 1.2s .2s ease-in-out both}
+@keyframes wobble{0%{transform:rotate(-2deg) translateY(-8px);opacity:0}40%{transform:rotate(1deg);opacity:1}70%{transform:rotate(-3deg)}100%{transform:rotate(-2deg)}}
+.hero-desk .desk-card{animation:deal .6s cubic-bezier(.2,1.2,.4,1) both}
+.hero-desk .desk-news{animation-delay:.18s}
+@keyframes deal{from{opacity:0;translate:30px 12px}to{opacity:1;translate:0 0}}
+section.inky{position:relative;overflow:hidden}
+section.inky>.wrap{position:relative;z-index:1}
+/* a little life on the tiles */
+a.tile{transition:transform .18s ease}
+a.tile:nth-child(odd):hover,a.tile:nth-child(odd):focus-visible{transform:rotate(-1.2deg) translateY(-3px)}
+a.tile:nth-child(even):hover,a.tile:nth-child(even):focus-visible{transform:rotate(1.2deg) translateY(-3px)}
+/* section headings slide in as they scroll into view, where the browser supports it */
+@supports (animation-timeline:view()){main section.band h2{animation:inkin linear both;animation-timeline:view();animation-range:entry 0% entry 60%}}
+@keyframes inkin{from{opacity:.2;transform:translateX(-18px)}to{opacity:1;transform:none}}
+@media (max-width:900px){.hero.fresh .hero-grid{grid-template-columns:1fr;gap:34px}.hero-desk{max-width:560px}}
+@media (max-width:520px){.desk-book{grid-template-columns:84px minmax(0,1fr);gap:12px}.desk-title{font-size:21px}.desk-card{transform:none}.ink-pop{display:none}.hero.fresh .btns .btn.big{font-size:21px;padding:12px 20px 11px}}
+@media (prefers-reduced-motion:reduce){.hero.fresh .splat,.ink-pop,.scrawl.wobble,.hero-desk .desk-card,.live i,.hero h1 em.inked::after,main section.band h2{animation:none!important}a.tile,.desk-cover{transition:none}a.tile:hover,a.tile:focus-visible,.desk-cover:hover{transform:none!important}}
