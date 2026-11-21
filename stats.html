@@ -9,7 +9,7 @@ table{width:100%;border-collapse:collapse}td,th{padding:6px 8px;border-bottom:1p
 .bar{height:60px;display:flex;align-items:flex-end;gap:2px}.bar i{flex:1;background:#d1202f;min-height:2px;border-radius:2px 2px 0 0}
 small,.note{color:#cfc9b8}a{color:#ffd9d9}select,input,button{font:inherit;padding:6px 10px;border-radius:6px;border:1px solid #555;background:#222;color:#f6f2e7}
 </style></head><body>
-<h1>Site stats</h1><p class="note">Private page. Counts only: day, page and which site sent the visitor. No cookies, nothing personal. Bots are skipped and counting pauses at 700 views a day.</p>
+<h1>Site stats</h1><p class="note">Private page. The numbers are locked behind a key that only the Ferret and his machines have. Counts only: day, page and which site sent the visitor. No cookies, nothing personal. Bots are skipped and counting pauses at 700 views a day.</p>
 <p><label>Show <select id="d"><option value="7">last 7 days</option><option value="30" selected>last 30 days</option><option value="60">last 60 days</option></select></label>
 <span id="keyrow" hidden> <input id="k" placeholder="stats key" type="password"> <button id="go">Go</button></span></p>
 <p><button id="me">Don't count my own visits on this device</button> <small id="mesg"></small></p>
@@ -29,8 +29,9 @@ function render(j){
   document.getElementById('out').innerHTML=h;
 }
 function load(){
-  var key=sessionStorage.getItem('wgw-stats-key')||'',u=W+'?days='+document.getElementById('d').value+(key?'&key='+encodeURIComponent(key):'');
-  fetch(u).then(function(r){return r.json()}).then(function(j){
+  /* The key goes in a header, never in the address, and is kept only for this browser tab. */
+  var key=sessionStorage.getItem('wgw-stats-key')||'',u=W+'?days='+document.getElementById('d').value;
+  fetch(u,key?{headers:{'Authorization':'Bearer '+key},cache:'no-store'}:{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){
     if(j.ok){document.getElementById('keyrow').hidden=true;render(j);}
     else{document.getElementById('keyrow').hidden=false;document.getElementById('out').textContent=j.error||'Could not load.';}
   }).catch(function(){document.getElementById('out').textContent='Could not reach the counter.'});

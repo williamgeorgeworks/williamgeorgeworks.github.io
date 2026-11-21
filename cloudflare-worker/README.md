@@ -54,3 +54,18 @@ A game in scores.json can carry `"alsoTo": "<main game slug>"`. A score posted t
 ## v7: private page counter
 
 `hits.js` (on every page) posts the page name, and the referring site once per visit, to `POST /hit`. The Worker keeps one KV key per day (`h:YYYY-MM-DD`, kept 60 days) holding view counts per page, visits and referrers. No cookies, no IDs, bots and Do Not Track skipped, counting pauses at 700 views a day to protect the free KV write allowance. `stats.html` (noindex, not linked) reads `GET /stats`. Optional: add a Worker secret `STATS_KEY` and the stats page will ask for it. Visit `stats.html?me` once on your own devices to stop counting yourself.
+
+## v8: stats are private (key required)
+
+From v8, `GET /stats` only answers when the Worker has a secret called `STATS_KEY` **and** the request sends the header
+`Authorization: Bearer <STATS_KEY>`. If `STATS_KEY` is missing (or shorter than 12 characters) the stats are locked for everyone.
+The key is never put in a web address, so it does not end up in logs or browser history. Counting (`POST /hit`) is unchanged.
+
+1. Make up a long random key (24+ characters; a password manager is ideal). Do not paste it into any chat or commit it.
+2. Cloudflare > Workers & Pages > the arcade-scores Worker > Settings > Variables and Secrets > Add > type Secret,
+   name `STATS_KEY`, value your key. Save.
+3. Edit code, replace everything with the v8 `scores-worker.js`, and Deploy.
+4. Check: open `https://arcade-scores.benharding75.workers.dev/stats` in a private window. It should say the stats are locked.
+5. Open `stats.html` on the site and type the key when asked. It is kept only for that browser tab.
+6. Bots that need the numbers get the key through their own secret store, never in chat, and read them with
+   `curl -H "Authorization: Bearer $STATS_KEY" "https://arcade-scores.benharding75.workers.dev/stats?days=30"`.

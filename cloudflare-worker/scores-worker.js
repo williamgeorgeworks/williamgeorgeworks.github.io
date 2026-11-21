@@ -6,7 +6,10 @@
    4. POST /board   a message for Reggie's message board. It is checked, encrypted so that only Reggie's private key can
                     read it, and added to board-inbox.json. Reggie reads the post, replies and publishes board.json.
    5. POST /hit     a page view for the private stats counter (no cookies, nothing personal: day, page, referrer site).
-   6. GET  /stats   the counts for the stats page. If you add a secret called STATS_KEY it must be given as ?key=.
+   6. GET  /stats   the counts for the private stats page. Locked: it answers only when the Worker has a secret called
+                    STATS_KEY and the request carries the header  Authorization: Bearer <STATS_KEY>.  With no STATS_KEY set,
+                    it answers 403 to everyone (fail closed). The key never goes in a URL, so it stays out of logs and history.
+   Secret needed for stats: STATS_KEY (any long random string; Ben chooses it and shares it only with his bots).
    Secret needed: GITHUB_TOKEN (fine-grained token, this repo only, Contents: read and write).
    Binding needed for votes: VOTES (a Workers KV namespace). Scores work without it. */
 
@@ -33,7 +36,7 @@ function cors(origin) {
   return {
     "Access-Control-Allow-Origin": ok ? origin : ORIGINS[0],
     "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type",
+    "Access-Control-Allow-Headers": "Content-Type, Authorization",
     "Vary": "Origin"
   };
 }
@@ -272,6 +275,20 @@ async function addHit(env, input, ua) {
   await env.VOTES.put(key, JSON.stringify(day), { expirationTtl: HIT_KEEP_DAYS * 86400 });
   return { ok: true, counted: true };
 }
+/* v8: the stats are private. No STATS_KEY means nobody can read them (fail closed). */
+function sameText(a, b) {
+  a = String(a); b = String(b);
+  let diff = a.length ^ b.length;
+  for (let i = 0; i < Math.max(a.length, b.length); i++) diff |= (a.charCodeAt(i) || 0) ^ (b.charCodeAt(i) || 0);
+  return diff === 0;
+}
+function statsAllowed(request, env) {
+  const key = env.STATS_KEY ? String(env.STATS_KEY) : "";
+  if (key.length < 12) return false;
+  const m = /^Bearer\s+(.+)$/i.exec(request.headers.get("Authorization") || "");
+  return !!m && sameText(m[1].trim(), key);
+}
+function noStore(res) { res.headers.set("Cache-Control", "no-store"); return res; }
 async function readStats(env, days) {
   days = Math.max(1, Math.min(HIT_KEEP_DAYS, days || 30));
   const out = [], now = Date.now();
@@ -306,9 +323,9 @@ export default {
 
     if (request.method === "GET" && path === "/stats") {
       if (!env.VOTES) return reply(503, { ok: false, error: "Not set up yet." }, origin);
-      if (env.STATS_KEY && url.searchParams.get("key") !== env.STATS_KEY) return reply(403, { ok: false, error: "Wrong key." }, origin);
-      try { return reply(200, await readStats(env, parseInt(url.searchParams.get("days") || "30", 10)), origin); }
-      catch (e) { return reply(502, { ok: false, error: "Try again in a minute." }, origin); }
+      if (!statsAllowed(request, env)) return noStore(reply(403, { ok: false, locked: true, error: env.STATS_KEY ? "Wrong or missing key." : "Stats are locked until STATS_KEY is set." }, origin));
+      try { return noStore(reply(200, await readStats(env, parseInt(url.searchParams.get("days") || "30", 10)), origin)); }
+      catch (e) { return noStore(reply(502, { ok: false, error: "Try again in a minute." }, origin)); }
     }
 
     if (request.method !== "POST") return reply(405, { ok: false, error: "POST only." }, origin);
