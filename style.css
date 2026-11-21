@@ -299,6 +299,10 @@ header.site.js-nav nav.main .morelist a[aria-current=page]{border-bottom:3px sol
 .cast figcaption span{display:block;font-size:14px}
 .solo{max-width:280px;margin:0 0 18px}
 .solo img{display:block;width:100%;height:auto;aspect-ratio:1/1;object-fit:cover;border:3px solid var(--ink)}
+/* Ten portraits: four people on the top row, the six cats in two rows of three below */
+.cast.nine.ten{grid-template-columns:repeat(12,minmax(0,1fr));max-width:860px}
+.cast.nine.ten figure{grid-column:span 4}
+.cast.nine.ten figure:nth-child(-n+4){grid-column:span 3}
 @media (max-width:520px){.cast.nine figcaption strong{font-size:17px}.cast.nine figcaption span{font-size:11px}}
 @media (prefers-reduced-motion:reduce){.cast img{transition:none}}
 /* Employee of the Month badge */
