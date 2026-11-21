@@ -279,6 +279,15 @@
     }
    ],
    "alsoTo": "ferrets-ditch"
+  },
+  "kitty-grand-prix": {
+   "label": "points",
+   "max": null,
+   "cap": 9000,
+   "top": 10,
+   "title": "The Kitty Grand Prix",
+   "unit": "points",
+   "entries": []
   }
  }
 }
