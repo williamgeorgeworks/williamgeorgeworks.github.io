@@ -1,6 +1,59 @@
 {
   "editions": [
     {
+      "date": "2026-11-21",
+      "title": "Saturday Brings Sale Stickers, Big Numbers And An Awards Night In The Diary",
+      "standfirst": "Terry (PC, Steam Deck, master race, full price on day one) and Reggie (PS5, saving for a Pro, waiting for the sale) read through the latest gaming news and argue about every bit of it. Everything in big type is made up, and so is the arguing. Everything in the boxes is real. A quiet news day, so a short edition.",
+      "stories": [
+        {
+          "kicker": "Switch",
+          "headline": "Black Friday Stickers Arrive On The eShop; Every Wallet In The Land Looks At The Ceiling",
+          "satire": "Reggie has been refreshing the page since breakfast with a notebook and a very small pencil, and says a sale is just a present that arrives wearing a price tag. Terry says he bought both games on the day they came out and now considers the difference a donation to the arts. Reggie asks which arts. Terry names a wall, then a sofa, then goes quiet. Reggie wins, mainly because he is still smiling and Terry is checking his receipts.",
+          "real": "Nintendo Everything's report of 19 November says the Nintendo eShop Black Friday sale is live with discounts on Switch 2 and Switch games. It lists Kirby and the Forgotten Land - Nintendo Switch 2 Edition + Star-Crossed World at $55.99 (was $79.99) and Mario + Rabbids Sparks of Hope on Switch at $14.99 (was $59.99).",
+          "source": {
+            "name": "Nintendo Everything",
+            "url": "https://nintendoeverything.com/nintendo-launches-2026-black-friday-eshop-sale-full-list-of-switch-2-and-switch-deals/"
+          },
+          "link": {
+            "text": "Prefer your bargains free? Have a go on the Arcade.",
+            "url": "arcade.html"
+          }
+        },
+        {
+          "kicker": "Sales",
+          "headline": "Japan's Weekly Numbers Land; Terry Reads Them Out Like Lottery Balls",
+          "satire": "Terry announces the Switch 2 figure as though it were the jackpot, with a drum roll he provides himself, then asks whether his Steam Deck can be counted in the next one for being very special. Reggie says Japan keeps its own list and nobody has asked for his sofa's opinion either. They argued over whether a number is more exciting read aloud. Nobody wins, but the drum roll got a standing ovation from the cat.",
+          "real": "Nintendo Everything reports Famitsu's figures for 9 to 15 November in Japan: Switch 2 hardware sold 42,402 units, against 53,104 the week before, and Zelda: Ocarina of Time was number one in software with 86,097 units.",
+          "source": {
+            "name": "Nintendo Everything",
+            "url": "https://nintendoeverything.com/famitsu-sales-11-9-26-11-15-26-zelda-ocarina-of-times-second-week-of-sales-are-in/"
+          }
+        },
+        {
+          "kicker": "Charts",
+          "headline": "A Whole Top 30 Gets Published; Reggie Prints It Out To Read In The Bath",
+          "satire": "Reggie says a list of thirty games is thirty chances to wait for a price drop, and has pencilled a bargain next to every line. He sends Terry an imaginary invoice for the reading. Terry says he owns nine of them already, three twice, and has not yet found time to open any. They argued over whether owning counts as playing. Reggie wins, because his bath is still warm and Terry's Steam library has started sending him sympathy cards.",
+          "real": "Nintendo Everything's Famitsu top 30 for 9 to 15 November in Japan lists Metaphor: ReFantazio debuting at number 2 on Switch 2 with 11,167 units, Mario Kart World at number 13 on Switch 2 with 2,238 units, and Pokemon Pokopia at number 19 with 1,587 units.",
+          "source": {
+            "name": "Nintendo Everything",
+            "url": "https://nintendoeverything.com/famitsu-software-sales-11-9-26-11-15-26-top-30/"
+          }
+        },
+        {
+          "kicker": "Awards",
+          "headline": "Awards Night Gets A Date; Both Hosts Start Choosing Outfits Weeks Early",
+          "satire": "Terry has already voted, on three devices, to be sure, and has booked the good chair with the lumbar support for the live show. Reggie says he will watch from the sofa with a free cup of tea and wait for the winners to turn up in a sale. They argued over what to wear to a living room. Terry wins by arriving in a bow tie, and Reggie concedes after a short, wounded silence and a tea towel worn as a cravat.",
+          "real": "Gematsu reports that voting for The Game Awards 2026 closes on 9 December at 6:00 p.m. PT, and that the show airs live on 10 December from the Peacock Theater in Los Angeles.",
+          "source": {
+            "name": "Gematsu",
+            "url": "https://www.gematsu.com/2026/11/the-game-awards-2026-nominees-announced"
+          }
+        }
+      ],
+      "terry": "And that, ladies and gentlemen, is Saturday, a short one but a sparkling one! Everything in the big type is made up, the boxes are real, and I am off to find which of my three voting devices I used. Back tomorrow, and do wear a bow tie!",
+      "reggie": "Check the boxes, my old son, that is where the facts live, and the rest is pure patter. The Pro is still on the wish-list and the sale is still just round the corner. Back tomorrow, and bring a pencil."
+    },
+    {
       "date": "2026-11-20",
       "title": "Friday Brings Sales, Free Hours And A Router Under Pressure",
       "standfirst": "Terry (PC, Steam Deck, master race, full price on day one) and Reggie (PS5, saving for a Pro, waiting for the sale) read through the latest gaming news and argue about every bit of it. Everything in big type is made up, and so is the arguing. Everything in the boxes is real.",
