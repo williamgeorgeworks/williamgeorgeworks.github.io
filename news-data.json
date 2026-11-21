@@ -1,6 +1,75 @@
 {
  "editions": [
   {
+   "date": "2026-11-21",
+   "title": "Frost Then Flood, Trains After Midnight And A Robot With A Shopping List",
+   "standfirst": "Six stories from Terry and Reggie, all drawn from real news of the last few days. Everything in big type is made up. Everything in the boxes is real.",
+   "stories": [
+    {
+     "kicker": "Weather",
+     "headline": "Frost On Saturday, Soaking On Sunday; Weekend Offers Both Ends Of The Coat Rack",
+     "satire": "The weekend forecast has frosty sunshine first and heavy rain later, so the nation must dress for two seasons and carry the evidence of both. Somewhere a person will leave the house in a woolly hat and come home in a wet one. Terry has packed a thermos, an umbrella and a spare umbrella in case the first one is shy. Reggie is selling a coat that is both waterproof and frost-proof, my old son, though it is currently a bin bag with sleeves.",
+     "real": "The Met Office's weekend forecast, dated 20 November, expects frost on Saturday, with rain reaching Cornwall on Saturday afternoon and turning heavier on Sunday. It says around 30 to 50mm is possible on wetter spots such as Dartmoor.",
+     "source": {
+      "name": "Met Office",
+      "url": "https://www.metoffice.gov.uk/blog/2026/weekend-weather-frosty-sunshine-before-heavy-rain-arrives-in-the-southwest"
+     }
+    },
+    {
+     "kicker": "Transport",
+     "headline": "Late Friday Trains Added Across Scotland; Last Orders Now Come With A Platform Number",
+     "satire": "ScotRail is adding after-midnight Friday departures until just before Christmas, so the journey home can now outlast the party that came before it. The 00:07 to Edinburgh via Shotts is a train for people who said one more song an hour ago. Terry plans to be on it, wearing a paper hat from a different event. Reggie has priced a very small hotel at the end of the platform, my old son, bed and one biscuit included.",
+     "real": "Travel Wise Way reports that ScotRail is running late-night Friday services from 20 November to 18 December, including departures from Glasgow Central such as a 00:07 to Edinburgh Waverley via Shotts. It adds that a new timetable starts on 13 December.",
+     "source": {
+      "name": "Travel Wise Way",
+      "url": "https://travelwiseway.com/section-news/news-scotrail-adds-after-midnight-trains-for-christmas-19-11-2026.html"
+     }
+    },
+    {
+     "kicker": "Shops",
+     "headline": "Social Media Sends Shoppers To The High Street; The High Street Politely Pretends It Planned This",
+     "satire": "A new study says social media is behind 1.7 billion high street visits a year, so the shop doorway has become the last stop on a journey that began with a thumb. Somewhere a person has walked into a bakery purely because a video of a bun looked confident. Terry has been to three shops this week on the strength of one blurry clip. Reggie is filming his van from flattering angles, my old son, and expects a stampede by Tuesday.",
+     "real": "Retail Times reports American Express research, carried out with Retail Economics, estimating that social media drives 1.7 billion UK high street visits a year. It says 63% of UK adults visited a shop or hospitality venue in the last year after social media influence, and 82% return after a first visit.",
+     "source": {
+      "name": "Retail Times",
+      "url": "https://retailtimes.co.uk/yo-chi-heads-to-clapham-as-social-media-drives-1-7bn-uk-high-street-visits-amex-research-shows/"
+     }
+    },
+    {
+     "kicker": "Christmas",
+     "headline": "Younger Shoppers Name Their Perfect Christmas Budget; Pound Coin Asks For A Week Off",
+     "satire": "A survey puts the ideal Christmas for under-25s at \u00a3748, which sounds like a lot until you meet a satsuma, a gift receipt and a very long train fare home. Somewhere a person is making a spreadsheet called Friendsmas, with a tab for gravy. Terry has a budget of his own and a second budget for when the first one gets ideas. Reggie will happily wrap anything for a fee, my old son, including the budget.",
+     "real": "Retail Times reports VoucherCodes.co.uk research putting Gen Z's ideal Christmas budget, for ages 18 to 24, at \u00a3748, the lowest of any age group. It also says 39% of Gen Z think it is fine to start celebrating Christmas before December.",
+     "source": {
+      "name": "Retail Times",
+      "url": "https://retailtimes.co.uk/gen-z-christmas-research-no-in-laws-more-friendsmas-and-a-748-budget/"
+     }
+    },
+    {
+     "kicker": "Tech",
+     "headline": "Seventy Per Cent Would Trust Their Card With A Robot Shopper; The Robot Has Not Yet Seen The Sales",
+     "satire": "A new survey finds most people would trust a payment brand to handle purchases made by an AI assistant, though only one in ten wants to hand it their financial details, which is a very British way to say yes but not like that. Somewhere an assistant is being asked to buy bin bags and is already choosing the premium ones. Terry has asked his to buy a surprise and now has a surprise. Reggie offers a human shopper, my old son, with a lifetime guarantee that expires on Thursday.",
+     "real": "Retail Times reports Visa UK research finding that 70% of UK consumers surveyed would trust Visa to handle payments for purchases made by an AI assistant. It says 77% now use generative AI, but only 10% are comfortable sharing financial information with AI assistants.",
+     "source": {
+      "name": "Retail Times",
+      "url": "https://retailtimes.co.uk/visa-uk-research-finds-consumer-trust-is-accelerating-the-path-to-agentic-commerce/"
+     }
+    },
+    {
+     "kicker": "Shops",
+     "headline": "Shop Sales Up Seven-Tenths Of A Per Cent; Nation Gives The Till A Little Round Of Applause",
+     "satire": "Retail sales rose in October after dipping in September, so the nation's shopping basket has gone up, down and up again like a very polite lift. Somewhere a till is being told it has had a good month and is trying not to let it go to its drawer. Terry bought a single item and says he can feel the statistics improving. Reggie has recorded the whole thing as personal turnover, my old son, and sent the figures to himself.",
+     "real": "Retail Times reports that the ONS estimates retail sales volumes rose 0.7% in October 2026, following a 0.6% fall in September. It says food sales rose 0.8% and non-food stores rose 3.1%.",
+     "source": {
+      "name": "Retail Times",
+      "url": "https://retailtimes.co.uk/be-ready-campaign-contributes-to-rise-in-retail-sales-in-october-ons-reports/"
+     }
+    }
+   ],
+   "terry": "And that\u2019s the news, ladies and gentlemen, six stories today and every one rooted in something real! A weekend of two weathers, a train that leaves after the party has, and a robot with a credit limit. The big print is all ours, the boxes underneath are the truth. Join us tomorrow for more!",
+   "reggie": "Six stories, my old son, and I have invoiced you for each of them, payable whenever the 00:07 to Edinburgh turns up. Big type is invention, the boxes are gospel, and my fee is one coat that is half waterproof, a nice little earner. Mind how you go."
+  },
+  {
    "date": "2026-11-20",
    "title": "Whisky Goes Gingerbread; A Hundred Million Visit One Station, Ninety-Four Visit Another",
    "standfirst": "Twelve stories from Terry and Reggie, all drawn from real news of the last few days. Everything in big type is made up. Everything in the boxes is real.",
