@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-18",
+ "updated": "2026-11-21",
  "games": {
   "red-light-green-light": {
    "label": "points",
@@ -287,7 +287,13 @@
    "top": 10,
    "title": "The Kitty Grand Prix",
    "unit": "points",
-   "entries": []
+   "entries": [
+    {
+     "name": "TheFerret",
+     "score": 3497,
+     "date": "2026-11-21"
+    }
+   ]
   }
  }
 }
