@@ -178,7 +178,7 @@
     if(!document.getElementById('shared-score-script')){
       const script=document.createElement('script');
       script.id='shared-score-script';
-      script.src='../../quickscore.js';
+      script.src='../../quickscore.js?v=2e7b60b699dd';
       script.onerror=()=>script.remove();
       document.head.append(script);
     }
