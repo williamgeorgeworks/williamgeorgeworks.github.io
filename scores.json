@@ -294,6 +294,15 @@
      "date": "2026-11-21"
     }
    ]
+  },
+  "slay-the-pier": {
+   "label": "points",
+   "max": null,
+   "cap": 9000,
+   "top": 10,
+   "title": "Slay the Pier",
+   "unit": "points",
+   "entries": []
   }
  }
 }
