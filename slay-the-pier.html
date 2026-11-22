@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Slay the Pier: a magical card game. Pick a Quill, pick a cat, build a deck and fight your way along three piers. A free browser game from William George Works.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="William George Works">
+<meta property="og:title" content="Slay the Pier">
+<meta property="og:description" content="Three piers. Six familiars. One cousin nobody mentioned. A magical card game: pick a Quill, pick a cat, build a deck. Free in your browser.">
+<meta property="og:url" content="https://williamgeorgeworks.co.uk/slay-the-pier.html">
+<link rel="canonical" href="https://williamgeorgeworks.co.uk/slay-the-pier.html">
+<meta property="og:image" content="https://williamgeorgeworks.co.uk/thumb-slay-the-pier.jpg">
+<meta name="twitter:image" content="https://williamgeorgeworks.co.uk/thumb-slay-the-pier.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<title>Slay the Pier</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Permanent+Marker&display=swap">
+<style>
+:root{--navy:#16244a;--navy-deep:#0e1836;--paper:#fffdf7;--ink:#141414;--red:#d1202f;--blue:#2b4fc2;--mist:#c5cfea;--purple:#6a3fb0;--gold:#e9a400;--green:#1d7a3a;
+  --display:'Anton','Arial Narrow','Haettenschweiler',Impact,sans-serif;--marker:'Permanent Marker','Comic Sans MS','Chalkboard SE',cursive;--body:Georgia,'Times New Roman',serif;color-scheme:dark}
+body{margin:0;background:var(--navy);color:#fff;font-family:var(--body);font-size:16px;line-height:1.5}
+[hidden]{display:none!important}
+.topbar{position:relative;z-index:50;display:flex;justify-content:space-between;align-items:center;gap:12px;background:#141414;font:600 14px/1 system-ui,sans-serif;letter-spacing:.3px}
+.topbar a{color:#f6f2e7;padding:9px 14px;text-decoration:none}.topbar a.merch{color:#fff;background:#d1202f;white-space:nowrap}
+.wrap{max-width:1160px;margin:0 auto;padding-block:26px 40px;padding-left:max(14px,env(safe-area-inset-left,0px));padding-right:max(14px,env(safe-area-inset-right,0px));display:grid;gap:22px}
+.mast{display:grid;gap:6px}
+.eyebrow{font-family:var(--display);letter-spacing:.09em;font-size:.82rem;color:var(--mist);text-transform:uppercase;padding-bottom:8px;border-bottom:3px solid var(--red);justify-self:start}
+h1{font-family:var(--display);font-weight:400;font-size:clamp(2.4rem,9vw,4rem);line-height:1;margin:6px 0 0;text-transform:uppercase;text-wrap:balance}
+.tag{margin:0;font-style:italic;color:var(--mist);font-size:1.05rem}
+.cols{display:grid;gap:24px;grid-template-columns:minmax(0,1fr)}
+@media (min-width:1020px){.cols{grid-template-columns:minmax(0,720px) minmax(0,1fr);align-items:start}}
+.stage{position:relative;max-width:720px;width:100%;justify-self:center;background:var(--paper);color:var(--ink);border-radius:4px;box-shadow:0 14px 0 var(--navy-deep);min-height:420px;display:flex;flex-direction:column}
+.hud{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:center;padding:6px 10px;border-bottom:3px solid var(--ink);font-family:var(--display);letter-spacing:.04em;font-size:.86rem;text-transform:uppercase;min-height:22px}
+.hud .hp{color:var(--red)}.hud .gold{color:#9a6a00}.hud .sp{flex:1}
+.chip{font:inherit;background:#fff;color:var(--ink);border:2px solid var(--ink);border-radius:3px;padding:1px 6px;cursor:pointer;text-transform:uppercase;letter-spacing:.04em;font-size:.74rem;line-height:1.5}
+.chip.brew{background:#e2f3da}.chip.rel{background:#fff3c9;cursor:help}.chip:disabled{opacity:.45;cursor:default}.chip.on{background:var(--red);color:#fff}
+canvas#scene{display:block;width:100%;background:var(--paper);touch-action:manipulation;cursor:pointer}
+#view{flex:1;display:flex;flex-direction:column}
+.bar{display:flex;align-items:center;gap:10px;padding:6px 10px;border-top:3px solid var(--ink);flex-wrap:wrap}
+.orb{width:46px;height:46px;border-radius:50%;background:var(--gold);border:3px solid var(--ink);box-shadow:3px 3px 0 var(--ink);display:grid;place-items:center;font-family:var(--marker);font-size:1.3rem;flex:none}
+.piles{font-family:var(--display);font-size:.78rem;letter-spacing:.05em;text-transform:uppercase;color:#444;flex:1;min-width:120px}
+.detail{padding:4px 10px 6px;font-size:.9rem;min-height:2.6em;line-height:1.3}
+.detail b{font-family:var(--display);font-weight:400;text-transform:uppercase;letter-spacing:.04em}
+.hand{display:flex;gap:6px;overflow-x:auto;padding:12px 10px 14px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch}
+.cards{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;padding:6px 0}
+.cd{position:relative;flex:0 0 108px;width:108px;min-height:152px;box-sizing:border-box;display:flex;flex-direction:column;justify-content:flex-start;align-items:stretch;text-align:left;background:#fff;color:var(--ink);border:3px solid var(--ink);border-top-width:9px;border-radius:6px;box-shadow:3px 3px 0 var(--ink);padding:8px 6px 6px;font-family:var(--body);cursor:pointer;scroll-snap-align:start;transition:transform .08s}
+.cd .co{position:absolute;left:-9px;top:-15px;width:27px;height:27px;border-radius:50%;background:var(--ink);color:#fff;font-family:var(--display);font-size:1rem;display:grid;place-items:center;border:2px solid #fff}
+.cd b{display:block;font-family:var(--display);font-weight:400;text-transform:uppercase;font-size:.86rem;line-height:1.08;letter-spacing:.02em;padding-left:14px;min-height:2.1em}
+.cd i{display:block;font-size:.64rem;letter-spacing:.08em;text-transform:uppercase;font-style:normal;color:#666;margin:2px 0 3px;border-bottom:1px solid #ddd}
+.cd .tx{display:block;font-size:.76rem;line-height:1.22}
+.cd.h-r{border-top-color:var(--red)}.cd.h-t{border-top-color:var(--blue)}.cd.h-k{border-top-color:var(--purple)}.cd.h-c{border-top-color:var(--gold)}.cd.h-s{border-top-color:#888;background:#eee}
+.cd.up b{color:var(--green)}.cd.sel{transform:translateY(-9px);background:#ffe9a8;box-shadow:5px 5px 0 var(--red)}.cd.no{opacity:.5}
+.cd:focus-visible,.btn:focus-visible,.chip:focus-visible,.node:focus-visible,.pick:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.cd .pr{display:block;margin-top:5px;font-family:var(--display);font-size:.8rem;color:#9a6a00}
+.panel{padding:14px 12px 20px;display:grid;gap:10px;justify-items:center;text-align:center}
+.panel h2{font-family:var(--marker);font-weight:400;font-size:clamp(1.4rem,5vw,2rem);line-height:1.05;margin:0;text-wrap:balance}
+.panel p{margin:0;max-width:46ch;font-size:.95rem;line-height:1.35}
+.panel .big{font-family:var(--marker);font-size:2.6rem;line-height:1;color:var(--red)}
+button{font:inherit;cursor:pointer}
+.btn{font-family:var(--display);text-transform:uppercase;letter-spacing:.07em;font-size:1.05rem;background:var(--red);color:#fff;border:3px solid var(--ink);border-radius:3px;padding:8px 18px;box-shadow:4px 4px 0 var(--ink);text-decoration:none;display:inline-block}
+.btn:hover{background:var(--blue)}.btn:active{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--ink)}
+.btn.quiet{background:#fff;color:var(--ink);font-size:.86rem;padding:6px 12px}.btn.quiet:hover{background:#ffe9a8}.btn:disabled{opacity:.45;cursor:default}
+.row{display:flex;flex-wrap:wrap;gap:9px;justify-content:center;align-items:center}
+.pick{display:grid;justify-items:center;gap:2px;width:150px;padding:6px 6px 8px;background:#fff;color:var(--ink);border:3px solid var(--ink);border-radius:4px;box-shadow:3px 3px 0 var(--ink);font-family:var(--body);font-size:.78rem;line-height:1.25}
+.pick b{font-family:var(--display);font-weight:400;text-transform:uppercase;font-size:1rem;letter-spacing:.04em}
+.pick canvas{width:84px;height:84px}.pick.on{background:#ffe9a8;box-shadow:4px 4px 0 var(--red)}.pick.sm{width:104px}.pick.sm canvas{width:60px;height:60px}
+.map{display:grid;gap:8px;width:100%;max-width:440px}
+.maprow{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.maprow.boss{grid-template-columns:1fr}
+.node{font-family:var(--display);text-transform:uppercase;letter-spacing:.05em;font-size:.86rem;background:#fff;color:var(--ink);border:2px solid var(--ink);border-radius:4px;padding:7px 4px;line-height:1.15}
+.node small{display:block;font-family:var(--body);text-transform:none;letter-spacing:0;font-size:.68rem;font-style:italic;color:#555}
+.node:disabled{opacity:.38;cursor:default}.node.go{background:#ffe9a8;box-shadow:3px 3px 0 var(--red)}.node.was{background:var(--ink);color:#fff;opacity:1}.node.was small{color:#ccc}
+.node.t-L{border-color:var(--red)}.node.t-B{background:var(--red);color:#fff;font-size:1.1rem}.node.t-B small{color:#fff}
+.list{display:grid;gap:6px;width:100%;max-width:480px;text-align:left}
+.item{display:flex;gap:10px;align-items:center;justify-content:space-between;border:2px solid var(--ink);border-radius:4px;padding:6px 8px;background:#fff;font-size:.86rem;line-height:1.25}
+.item b{font-family:var(--display);font-weight:400;text-transform:uppercase;letter-spacing:.04em}
+.mute{position:absolute;right:8px;bottom:8px;font-family:var(--display);letter-spacing:.06em;text-transform:uppercase;font-size:.74rem;background:#fff;color:var(--ink);border:2px solid var(--ink);border-radius:3px;padding:3px 8px}
+.side{display:grid;gap:18px}
+.side h2{font-family:var(--display);font-weight:400;text-transform:uppercase;font-size:1.6rem;line-height:1.05;margin:0 0 8px}
+.side p{margin:0 0 10px;max-width:50ch}.side ul{margin:0;padding:0;list-style:none;display:grid;gap:7px;max-width:52ch}
+.side li{padding-left:12px;border-left:3px solid var(--red)}.side li b{font-family:var(--display);font-weight:400;letter-spacing:.05em;text-transform:uppercase}.side li span{color:var(--mist);font-size:.9rem}
+.side a{color:#fff}
+.sheet{border:2px solid var(--mist);padding:12px 14px;max-width:46ch}
+.sheet dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:4px 14px}.sheet dt{font-family:var(--display);letter-spacing:.06em;text-transform:uppercase;font-size:.85rem;color:var(--mist)}.sheet dd{margin:0;font-family:var(--marker)}
+.lb{list-style:none;margin:0;padding:0;display:grid;gap:3px}.lb li{display:flex;gap:10px;align-items:baseline;border:0;border-bottom:1px solid color-mix(in srgb,var(--mist) 30%,transparent);padding:1px 0}
+.lb .r{font-family:var(--display);color:var(--mist);min-width:1.6em}.lb .w{font-family:var(--marker);overflow-wrap:anywhere}.lb .p{margin-left:auto;font-family:var(--display)}
+.foot{color:var(--mist);font-size:.85rem;border-top:1px solid color-mix(in srgb,var(--mist) 35%,transparent);padding-top:14px;max-width:72ch}
+@media (max-width:480px){.cd{flex-basis:104px;width:104px}.pick{width:136px}.hud{font-size:.78rem}}
+</style>
+</head>
+<body>
+<div class="topbar"><a href="arcade.html">&larr; Back to the arcade</a><a class="merch" href="shop.html">Merch</a></div>
+<div class="wrap">
+  <header class="mast">
+    <span class="eyebrow">A magical card game of doubtful magic</span>
+    <h1>Slay the Pier</h1>
+    <p class="tag" style="font-size:1.35rem;color:#fff">Three piers. Six familiars. One cousin nobody mentioned.</p>
+    <p class="tag">Pick a Quill, pick a cat, build a deck and see off whatever is lurking between here and the end of the pier.</p>
+  </header>
+  <div class="cols">
+    <div class="stage" id="stage">
+      <div class="hud" id="hud"></div>
+      <canvas id="scene" width="680" height="360" hidden tabindex="0" role="img" aria-label="The battle: your Quill and familiars on the left, the opposition on the right."></canvas>
+      <div id="view"></div>
+    </div>
+    <section class="side">
+      <div>
+        <h2>How it works</h2>
+        <p>Each turn you get <strong>3 Energy</strong> and draw <strong>5 cards</strong>. Tap a card to pick it up, then tap it again (or tap an enemy) to play it. What each enemy means to do next turn is shown above its head, so you can decide whether to hit it or hide.</p>
+        <p>Win a fight and you choose a new card. Between fights you climb the map: shops, rests, events, keepsakes and, at the end of each pier, a boss. Lose all your health and the run is over; your deck is not kept, but your record is. On a keyboard: number keys pick a card, Enter plays it, E ends the turn.</p>
+      </div>
+      <div>
+        <h2>Words on the cards</h2>
+        <ul>
+          <li><b>Block</b><br><span>Soaks up damage until your next turn.</span></li>
+          <li><b>Gusto</b><br><span>Each point adds 1 damage to every hit.</span></li>
+          <li><b>Poise</b><br><span>Each point adds 1 to the Block your cards give.</span></li>
+          <li><b>Soggy</b><br><span>Deals a quarter less damage. Goes down by 1 a turn.</span></li>
+          <li><b>Flustered</b><br><span>Takes half as much damage again. Goes down by 1 a turn.</span></li>
+          <li><b>Invoice</b><br><span>At the start of its turn the enemy pays up: it loses that much health, and the bill drops by 1.</span></li>
+          <li><b>Exhaust / Fleeting</b><br><span>Exhausted cards are gone for the rest of the fight. Fleeting ones vanish if still in your hand at the end of the turn.</span></li>
+        </ul>
+      </div>
+      <div>
+        <h2>The familiars</h2>
+        <ul id="catList"></ul>
+        <p style="margin-top:10px"><a href="cats.html">Meet the real ones, who deny any knowledge of magic &rarr;</a></p>
+      </div>
+      <div class="sheet" id="wall" hidden>
+        <h2 style="font-size:1.2rem">The top ten</h2>
+        <ol class="lb" id="lb"></ol><p id="lbNone" style="margin:0;font-style:italic;color:var(--mist)"></p>
+      </div>
+      <div class="sheet">
+        <h2 style="font-size:1.2rem">Your record</h2>
+        <dl><dt>Runs</dt><dd id="rsRuns">0</dd><dt>Piers slain</dt><dd id="rsWins">0</dd><dt>Best score</dt><dd id="rsBest">0</dd><dt>Encore open</dt><dd id="rsOpen">0</dd></dl>
+      </div>
+    </section>
+  </div>
+  <p class="foot">The tune is a new one, a waltz for the end of the pier. Everything is drawn in code, in the ink of our books. Reggie and Terry appear as themselves. Kenneth appears with a bag on his head, because at the time of writing nobody had told Reggie who he is. Dreamies is a trade mark of its owner, who has nothing to do with this game; nor has anybody connected with any other card game whose name this one resembles. No seagulls were slain. They were seen off, and they will be back.</p>
+</div>
+
+<script>
+(function(){
+'use strict';
+function $(id){return document.getElementById(id);}
+function rnd(a,b){return a+Math.random()*(b-a);}
+function ri(a,b){return Math.floor(a+Math.random()*(b-a+1));}
+function pick(a){return a[(Math.random()*a.length)|0];}
+function shuffle(a){for(var i=a.length-1;i>0;i--){var j=(Math.random()*(i+1))|0,t=a[i];a[i]=a[j];a[j]=t;}return a;}
+function clamp(v,a,b){return v<a?a:v>b?b:v;}
+var ON_SITE=/williamgeorgeworks|^localhost$/.test(location.hostname);
+var COL={ink:'#141414',red:'#d1202f',blue:'#2b4fc2',white:'#ffffff',pink:'#e79aa5',skin:'#f3cdb6',gold:'#e9a400',green:'#1d7a3a',purple:'#6a3fb0',metal:'#c5ccd3',steel:'#9aa3ad'};
+
+/* ================= the cards ================= */
+var CARDS={},POOL={r:[],t:[],k:[]};
+function C(id,h,name,type,cost,rar,tx,n,fn,o){CARDS[id]={id:id,h:h,name:name,type:type,cost:cost,rar:rar,tx:tx,n:n||[],fn:fn,o:o||{}};if(POOL[h]&&rar!=='b'&&rar!=='x')POOL[h].push(id);}
+function vals(d,u){return d.n.map(function(p){return p[u?1:0];});}
+function cardText(ci){var d=CARDS[ci.id],v=vals(d,ci.u);return d.tx.replace(/\$(\d)/g,function(m,i){return v[+i];});}
+var B=null,H=null,RUN=null;
+/* what cards can do */
+function atk(t,n,times){for(var i=0;i<(times||1);i++){if(!t||t.dead)t=rndAlive();if(!t||B.over)return;strike(H,t,n);}}
+function atkAll(n){B.en.slice().forEach(function(e){if(!e.dead&&!B.over)strike(H,e,n);});}
+function atkRand(n,times){for(var i=0;i<times&&!B.over;i++){var e=rndAlive();if(e)strike(H,e,n);}}
+function blk(n){var b=Math.max(0,n+(H.st.poi||0));H.block+=b;fxOn(H,'+'+b+' Block',COL.blue);sfx('block');}
+function app(t,k,n){if(!t||t.dead)t=rndAlive();if(!t)return;t.st[k]=(t.st[k]||0)+n;fxOn(t,NAMES[k]+' '+n,COL.purple);}
+function appAll(k,n){alive().forEach(function(e){app(e,k,n);});}
+function me(k,n){H.st[k]=(H.st[k]||0)+n;if(NAMES[k])fxOn(H,'+'+n+' '+NAMES[k],COL.green);}
+function en(n){B.energy+=n;}
+function gold(n){n=Math.round(n*(has('float')?1.25:1));RUN.gold+=n;fxOn(H,'+'+n+' Dreamies',COL.gold);}
+function addHand(id,zero,tmp){if(B.hand.length>=10)return;B.hand.push({id:id,u:0,z:zero?1:0,tmp:tmp?1:0});}
+function randCard(h){var p=h?POOL[h]:POOL.r.concat(POOL.t,POOL.k);return pick(p);}
+var NAMES={gus:'Gusto',poi:'Poise',sog:'Soggy',flu:'Flustered',inv:'Invoice',claw:'Claws'};
+
+/* Reggie, the Proofreader: invoices, red pens and wounded dignity */
+C('redpen','r','Red Pen','A',1,'b','Deal $0 damage.',[[6,9]],function(t,v){atk(t,v[0]);},{t:1});
+C('cough','r','Polite Cough','S',1,'b','Gain $0 Block.',[[5,8]],function(t,v){blk(v[0]);});
+C('invoice','r','Imaginary Invoice','S',1,'b','Apply $0 Invoice.',[[5,7]],function(t,v){app(t,'inv',v[0]);},{t:1});
+C('tenner','r','Extra Tenner for the Y','S',0,'c','Apply $0 Invoice. Draw 1 card.',[[3,4]],function(t,v){app(t,'inv',v[0]);draw(1);},{t:1});
+C('patter','r','Sales Patter','S',1,'c','Apply $0 Soggy and $0 Flustered.',[[1,2]],function(t,v){app(t,'sog',v[0]);app(t,'flu',v[0]);},{t:1});
+C('earner','r','A Nice Little Earner','S',1,'u','Gain $0 Block and $1 Dreamies. Exhaust.',[[7,10],[8,12]],function(t,v){blk(v[0]);gold(v[1]);},{x:1});
+C('factcheck','r','Fact Check','S',1,'c','Draw $0 cards.',[[2,3]],function(t,v){draw(v[0]);});
+C('lineedit','r','Line Edit','A',1,'c','Deal $0 damage twice.',[[4,6]],function(t,v){atk(t,v[0],2);},{t:1});
+C('itemised','r','Itemised Bill','S',2,'u','Apply $0 Invoice to ALL enemies.',[[4,6]],function(t,v){appAll('inv',v[0]);});
+C('compound','r','Compound Interest','P',2,'r','At the start of your turn, apply $0 Invoice to ALL enemies.',[[2,3]],function(t,v){me('ci',v[0]);});
+C('remit','r','Kindly Remit','A',1,'c','Deal $0 damage. If the enemy has an Invoice, deal $0 more.',[[5,7]],function(t,v){var owes=t.st.inv>0;atk(t,v[0]);if(owes)atk(t,v[0]);},{t:1});
+C('braveface','r','Brave Face','S',2,'c','Gain $0 Block.',[[13,17]],function(t,v){blk(v[0]);});
+C('myoldson','r','My Old Son','P',1,'u','Gain $0 Poise.',[[2,3]],function(t,v){me('poi',v[0]);});
+C('cartel','r','Cartel Pricing','S',1,'r','Double an enemy’s Invoice. Exhaust.',[],function(t){if(t.st.inv)app(t,'inv',t.st.inv);},{t:1,x:1,uc:0});
+C('rounding','r','Rounding Up','A',1,'u','Deal $0 damage. If that sees the enemy off, gain $1 Dreamies.',[[9,12],[10,15]],function(t,v){atk(t,v[0]);if(t.dead)gold(v[1]);},{t:1});
+C('proofread','r','Proofread','S',1,'c','Gain $0 Block. Draw 1 card.',[[6,9]],function(t,v){blk(v[0]);draw(1);});
+C('finaldemand','r','Final Demand','A',2,'u','Deal $0 damage. The enemy pays its Invoice now.',[[8,12]],function(t,v){atk(t,v[0]);if(!t.dead&&t.st.inv)hurt(t,t.st.inv);},{t:1});
+C('dignity','r','Wounded Dignity','P',1,'u','Whenever an attack costs you health, gain $0 Gusto.',[[1,2]],function(t,v){me('dign',v[0]);});
+/* Terry, the Mechanical Editor: ink, outrage and very large lettering */
+C('inkblot','t','Ink Blot','A',1,'b','Deal $0 damage.',[[6,9]],function(t,v){atk(t,v[0]);},{t:1});
+C('sketch','t','Sketchbook','S',1,'b','Gain $0 Block.',[[5,8]],function(t,v){blk(v[0]);});
+C('splatter','t','Splatter','A',1,'b','Deal $0 damage to ALL enemies, twice.',[[3,4]],function(t,v){atkAll(v[0]);atkAll(v[0]);});
+C('crosshatch','t','Cross-Hatch','A',1,'c','Deal 2 damage $0 times.',[[4,5]],function(t,v){atk(t,2,v[0]);},{t:1});
+C('outrage','t','Theatrical Outrage','P',1,'u','Gain $0 Gusto.',[[2,3]],function(t,v){me('gus',v[0]);});
+C('wraparound','t','Wraparound Cover','S',2,'c','Gain $0 Block.',[[12,16]],function(t,v){blk(v[0]);});
+C('bigtitle','t','Big Bold Title','A',2,'c','Deal $0 damage.',[[15,20]],function(t,v){atk(t,v[0]);},{t:1});
+C('fullcolour','t','Full Colour','A',1,'c','Deal $0 damage to ALL enemies.',[[7,10]],function(t,v){atkAll(v[0]);});
+C('roughdraft','t','Rough Draft','S',0,'c','Draw 1 card. Add $0 Scribble to your hand.',[[1,2]],function(t,v){draw(1);for(var i=0;i<v[0];i++)addHand('scribble',0,0);});
+C('framerate','t','Frame Rate','P',3,'r','At the start of your turn, gain $0 Gusto.',[[2,3]],function(t,v){me('fr',v[0]);});
+C('dayone','t','Day One Purchase','S',0,'u','Lose 3 health. Gain $0 Energy.',[[2,3]],function(t,v){H.hp-=3;fxOn(H,'-3',COL.red);if(H.hp<=0)defeat();else en(v[0]);});
+C('inkwash','t','Ink Wash','S',1,'c','Gain $0 Block. Apply 1 Soggy to ALL enemies.',[[7,10]],function(t,v){blk(v[0]);appAll('sog',1);});
+C('quick','t','Quick Sketch','A',0,'c','Deal $0 damage. Draw 1 card.',[[4,6]],function(t,v){atk(t,v[0]);draw(1);},{t:1});
+C('storm','t','Splatter Storm','A',2,'u','Deal $0 damage to a random enemy, 4 times.',[[4,6]],function(t,v){atkRand(v[0],4);});
+C('layout','t','Two-Page Spread','S',1,'u','Gain $0 Block now and $0 Block next turn.',[[5,8]],function(t,v){blk(v[0]);H.st.next=(H.st.next||0)+v[0];});
+C('steady','t','Steady Hand','P',1,'u','Gain $0 Poise.',[[2,3]],function(t,v){me('poi',v[0]);});
+C('refphoto','t','Reference Photo','S',1,'c','Apply $0 Flustered.',[[2,3]],function(t,v){app(t,'flu',v[0]);},{t:1});
+C('masterpiece','t','Masterpiece','A',3,'r','Deal $0 damage.',[[30,40]],function(t,v){atk(t,v[0]);},{t:1});
+C('scribble','t','Scribble','A',0,'x','Deal $0 damage. Exhaust.',[[4,4]],function(t,v){atk(t,v[0]);},{t:1,x:1});
+/* Kenneth, about whom nothing is known */
+C('handshake','k','Firm Handshake','A',1,'b','Deal $0 damage.',[[6,9]],function(t,v){atk(t,v[0]);},{t:1});
+C('nod','k','Vague Nod','S',1,'b','Gain $0 Block.',[[5,8]],function(t,v){blk(v[0]);});
+C('whoinv','k','Who Invited Him?','S',0,'b','Add $0 random card to your hand. It costs 0 and is Fleeting.',[[1,2]],function(t,v){for(var i=0;i<v[0];i++)addHand(randCard(),1,1);});
+C('arrival','k','Unexplained Arrival','A',1,'c','Deal between $0 and $1 damage.',[[3,5],[12,14]],function(t,v){atk(t,ri(v[0],v[1]));},{t:1});
+C('knowsterry','k','Says He Knows Terry','S',1,'c','Add a random Terry card to your hand. It costs 0 and is Fleeting.',[],function(){addHand(randCard('t'),1,1);},{uc:0});
+C('friendreg','k','Friend of Reggie’s','S',1,'c','Add a random Reggie card to your hand. It costs 0 and is Fleeting.',[],function(){addHand(randCard('r'),1,1);},{uc:0});
+C('cousin','k','Cousin Once Removed','S',1,'c','Gain between $0 and $1 Block.',[[4,6],[11,13]],function(t,v){blk(ri(v[0],v[1]));});
+C('nobody','k','Nobody Asked','A',1,'c','Deal $0 damage. Apply 1 Soggy or 1 Flustered.',[[7,10]],function(t,v){atk(t,v[0]);if(!t.dead)app(t,Math.random()<.5?'sog':'flu',1);},{t:1});
+C('parcel','k','Mysterious Parcel','S',1,'u','Gain a random Brew. Exhaust.',[],function(){gainBrew();},{x:1,uc:0});
+C('uninvited','k','Turns Up Uninvited','A',0,'c','Deal $0 damage. Add a copy of this to your discard pile.',[[4,6]],function(t,v,ci){atk(t,v[0]);if(!B.over)B.disc.push({id:'uninvited',u:ci.u});},{t:1});
+C('longstory','k','Long Story','S',1,'u','Draw $0 cards. A random card in your hand costs 0 this turn.',[[2,3]],function(t,v){draw(v[0]);var c=B.hand.filter(function(x){return !CARDS[x.id].o.unp;});if(c.length)pick(c).z=1;});
+C('openinv','k','Open Invitation','P',2,'r','At the start of your turn, add $0 random card to your hand. It costs 0 and is Fleeting.',[[1,2]],function(t,v){me('oi',v[0]);});
+C('plusone','k','Plus One','S',1,'r','The next card you play this turn is played twice. Exhaust.',[],function(){H.st.dbl=(H.st.dbl||0)+1;},{x:1,uc:0});
+C('wronghouse','k','Wrong House','A',2,'u','Deal $0 damage to a random enemy, twice.',[[10,13]],function(t,v){atkRand(v[0],2);});
+C('subject','k','Changes the Subject','S',1,'c','Gain $0 Block. Apply 1 Soggy.',[[6,9]],function(t,v){blk(v[0]);app(t,'sog',1);},{t:1});
+C('cointoss','k','Coin Toss','S',0,'u','Either gain 2 Energy or draw $0 cards. He will not say which.',[[2,3]],function(t,v){if(Math.random()<.5){en(2);fxOn(H,'+2 Energy',COL.gold);}else draw(v[0]);});
+C('goodbye','k','Left Without Saying Goodbye','S',1,'u','Gain $0 Block. Exhaust.',[[14,19]],function(t,v){blk(v[0]);},{x:1});
+C('mystery','k','Air of Mystery','P',1,'r','Enemy attacks have a $0% chance of missing you.',[[25,35]],function(t,v){H.st.mist=Math.max(H.st.mist||0,v[0]);fxOn(H,'Mysterious',COL.purple);});
+/* the familiars' own cards */
+C('ruling','c','Ruling of the Court','S',1,'x','Gain $0 Block. Apply 1 Soggy to ALL enemies.',[[8,11]],function(t,v){blk(v[0]);appAll('sog',1);});
+C('decree','c','Royal Decree','A',1,'x','Deal $0 damage.',[[12,16]],function(t,v){atk(t,v[0]);},{t:1});
+C('ripface','c','Rip Your Face Off','A',2,'x','Deal $0 damage. Apply 2 Flustered.',[[18,24]],function(t,v){atk(t,v[0]);if(!t.dead)app(t,'flu',2);},{t:1});
+C('requisition','c','Requisition','S',1,'x','Gain 1 Energy. Draw $0 cards.',[[2,3]],function(t,v){en(1);draw(v[0]);});
+C('boo','c','Wouldn’t Say Boo','S',1,'x','Gain $0 Block. Draw 1 card.',[[8,11]],function(t,v){blk(v[0]);draw(1);});
+C('whome','c','Who, Me?','S',0,'x','Apply $0 Soggy.',[[2,3]],function(t,v){app(t,'sog',v[0]);},{t:1});
+/* things enemies put in your deck */
+C('junk','s','Form 27B','X',0,'x','Unplayable. Fleeting.',[],null,{unp:1,eth:1});
+C('sock','s','Mislaid Sock','X',0,'x','Unplayable.',[],null,{unp:1});
+C('ticket','s','Parking Ticket','X',0,'x','Unplayable. If this is in your hand at the end of your turn, lose 2 health.',[],null,{unp:1});
+C('wblock','s','Writer’s Block','X',0,'x','Unplayable. Fleeting. When you draw this, lose 1 Energy.',[],null,{unp:1,eth:1});
+var TYPE={A:'Attack',S:'Skill',P:'Power',X:'Clutter'};
+
+var HEROES={
+ r:{id:'r',name:'Reggie',title:'The Proofreader',hp:72,deck:['redpen','redpen','redpen','redpen','cough','cough','cough','cough','invoice'],
+   blurb:'Invoices everything. Enemies pay up a little more each turn.'},
+ t:{id:'t',name:'Terry',title:'The Mechanical Editor',hp:78,deck:['inkblot','inkblot','inkblot','inkblot','sketch','sketch','sketch','sketch','splatter'],
+   blurb:'Ink, outrage and big lettering. Hits everything, often.'},
+ k:{id:'k',name:'Kenneth',title:'Portrait withheld',hp:66,deck:['handshake','handshake','handshake','handshake','nod','nod','nod','nod','whoinv'],
+   blurb:'Turned up at midnight. Nobody has told Reggie who he is, so his magic is anybody’s guess.'}
+};
+var CATS={
+ arthur:{name:'Arthur',card:'ruling',perk:'Diplomatic immunity: start every fight with 8 Block.',body:'#f3e9d8',head:'#f3e9d8',face:'#8a8c99',ear:'#5d6070',eye:'#3f7fd6',fluff:1,hat:'#d1202f'},
+ spyro:{name:'Spyro',card:'decree',perk:'The true king: at the end of your turn, 3 damage to a random enemy.',body:'#ffffff',head:'#ffffff',spot:'#d98a3a',ear:'#ffffff',eye:'#a9b63c',fluff:0,hat:'#e9a400'},
+ tilly:{name:'Tilly',card:'ripface',perk:'Shy and quiet: anything that hits you gets 3 damage back.',body:'#efe6d6',head:'#e4dccf',face:'#b9b2a8',ear:'#9a948c',eye:'#5a9bd8',fluff:1,hat:'#6a3fb0'},
+ trixie:{name:'Trixie',card:'requisition',perk:'A tight operation: 1 extra Energy on the first turn of every fight.',body:'#eadfcd',head:'#6a564b',face:'#3f322c',ear:'#3f322c',eye:'#6aa6ee',fluff:1,whisk:'#ffffff',hat:'#3d9a52'},
+ dexter:{name:'Dexter',card:'boo',perk:'The grey wolf: nervous, so you draw 2 extra cards on the first turn.',body:'#4a4a52',head:'#3c3c44',ear:'#2c2c33',ruff:'#9a9aa3',eye:'#e9a400',fluff:1,whisk:'#ffffff',hat:'#2b4fc2'},
+ daisy:{name:'Daisy',card:'whome',perk:'Butter would not melt: heal 4 after every fight.',body:'#f6e2c4',head:'#f8ecd9',face:'#ffffff',ear:'#e9c08f',eye:'#5a9bd8',fluff:1,hat:'#e8799a'}
+};
+var CATIDS=Object.keys(CATS);
+var RELICS={
+ chips:['Tray of Chips','Raises your maximum health by 8.'],rock:['Stick of Rock','Start every fight with 1 Gusto.'],deckchair:['Deckchair','Start every fight with 1 Poise.'],
+ hat:['Kiss-Me-Quick Hat','Your first Attack in every fight does double damage.'],tide:['Tide Table','Every third turn, 1 extra Energy.'],bell:['Donkey Bell','Rests heal 10 more.'],
+ bulb:['Illuminations Bulb','Draw 1 extra card at the start of every fight.'],float:['Lucky Float','A quarter more Dreamies from everything.'],brolly:['Moulding Museum Brolly','The first time you would lose health in a fight, you do not.'],
+ wetfish:['Wet Fish','Every enemy starts the fight Soggy.'],stove:['Small Stove','Whenever you rest, you also brew something.'],gavel:['Tribunal Gavel','Every tenth card you play deals 8 damage to ALL enemies.'],
+ ghost:['Ghost Story','Flustered enemies take three-quarters more damage, not half.'],bill:['Unpaid Bill','Every enemy starts the fight with 3 Invoice.'],bag:['Bag of Dreamies','60 Dreamies, now.'],
+ vinyl:['Twelve-Inch Single','Every fourth card you play in a turn draws you a card.'],life:['Tenth Life','The first time you would be seen off, get up again on 30% health.'],
+ ticketb:['Tower Ticket','1 extra Energy every turn. Card rewards offer 2 cards, not 3.',1],accord:['The Accord','1 extra Energy every turn. Every fight starts with a Mislaid Sock in your deck.',1],
+ manus:['Finished Manuscript','At the start of every fight, gain 2 Gusto and 2 Poise. Lose 6 maximum health.',1]
+};
+var BREWS={tea:['Cup of Tea','Heal 14.'],vinegar:['Chip Shop Vinegar','15 damage to an enemy.',1],catnip:['Pot of Catnip','2 Energy.'],mac:['Rain Mac','12 Block.'],pop:['Fizzy Pop','Draw 3 cards.'],courage:['Dutch Courage','2 Gusto for this fight.'],flask:['Flask of Something','3 Flustered on an enemy.',1]};
+
+/* ================= the opposition ================= */
+function cyc(e,list){var m=list[e.i%list.length];e.i++;return m;}
+var EN={
+ gull:{n:'Seagull',hp:[26,30],ai:function(e){return cyc(e,[{n:'Peck',a:6},{n:'Swoop',a:9},{n:'Squawk',g:2}]);}},
+ pigeon:{n:'Pigeon',hp:[13,16],sc:.8,ai:function(e){return cyc(e,[{n:'Peck',a:4},{n:'Peck',a:4},{n:'Coo',sog:1,a:2}]);}},
+ deck:{n:'Rogue Deckchair',hp:[34,38],ai:function(e){return cyc(e,[{n:'Fold',a:10},{n:'Pinch',a:5,flu:1},{n:'Set Up',b:8}]);}},
+ fish:{n:'Wet Fish',hp:[18,22],sc:.85,ai:function(e){return cyc(e,[{n:'Flop',a:5,sog:1},{n:'Slap',a:8}]);}},
+ jobs:{n:'Jobsworth',hp:[38,42],ai:function(e){return cyc(e,[{n:'Form 27B',add:['junk',2],b:6},{n:'Fixed Penalty',a:9},{n:'Cordon',b:9,g:1}]);}},
+ warden:{n:'Traffic Warden',hp:[70,74],elite:1,ai:function(e){return cyc(e,[{n:'Ticket',a:10,add:['ticket',1]},{n:'Clamp',a:6,flu:2},{n:'Whistle',g:3,b:6}]);}},
+ king:{n:'King of the Seagulls',hp:[112,118],boss:1,sc:1.5,ai:function(e){return cyc(e,[{n:'Dive Bomb',a:16},{n:'Your Chips',a:7,x:2},{n:'Screech',g:3,sog:2},{n:'Feast',b:14,a:6}]);}},
+ bogg:{n:'Boggart',hp:[46,52],ai:function(e){return cyc(e,[{n:'Mischief',add:['sock',1],a:5},{n:'Pinch',a:11},{n:'Hide',b:10,g:1}]);}},
+ tea:{n:'Stewed Teabag',hp:[15,18],sc:.8,ai:function(e){return cyc(e,[{n:'Stew',a:5},{n:'Stew',a:5},{n:'Steep',g:1,a:3}]);}},
+ drip:{n:'Dripping Ceiling',hp:[42,48],grow:1,ai:function(e){return cyc(e,[{n:'Drip',a:3,x:3},{n:'Damp',a:4,sog:2},{n:'Drip',a:3,x:3}]);}},
+ letter:{n:'Strongly Worded Letter',hp:[36,40],ai:function(e){return cyc(e,[{n:'Paragraph One',a:7},{n:'Furthermore',a:7,flu:1},{n:'Yours Faithfully',a:16}]);}},
+ lady:{n:'The Grey Lady',hp:[94,100],elite:1,ai:function(e){return cyc(e,[{n:'Wail',sog:2,flu:2},{n:'Pass Through',a:15},{n:'Chill',a:8,x:2},{n:'Fade',b:14,g:2}]);}},
+ milk:{n:'Milk First',hp:[76,80],boss:1,pal:1,ai:function(e){return cyc(e,[{n:'Splash',a:9},{n:'Curdle',a:5,sog:2},{n:'Top Up',b:10,g:1}]);}},
+ pot:{n:'Tea First',hp:[82,86],boss:1,pal:1,ai:function(e){return cyc(e,[{n:'Brew',g:3},{n:'Scald',a:12},{n:'Pour',a:6,x:2}]);}},
+ bot:{n:'Review Bot',hp:[56,62],ai:function(e){return cyc(e,[{n:'One Star',a:13},{n:'Flag',a:6,add:['junk',1]},{n:'Recalculate',b:12,g:2}]);}},
+ typo:{n:'Typo',hp:[11,13],sc:.7,ai:function(e){return cyc(e,[{n:'Teh',a:4},{n:'Teh',a:4},{n:'Recieve',a:6}]);}},
+ clock:{n:'The Deadline',hp:[66,72],ai:function(e){return cyc(e,[{n:'Looms',g:3},{n:'Tick',a:8},{n:'Tock',a:18}]);}},
+ printer:{n:'Paper Jam',hp:[60,66],ai:function(e){return cyc(e,[{n:'Jam',add:['junk',2],a:4},{n:'Crunch',a:14},{n:'Warm Up',b:12,g:1}]);}},
+ algo:{n:'The Algorithm',hp:[134,140],elite:1,sc:1.2,ai:function(e){return cyc(e,[{n:'Engagement',a:7,x:3},{n:'Optimise',g:3,b:12},{n:'Suppress',a:10,add:['wblock',1]},{n:'Trending',a:21}]);}},
+ page:{n:'The Blank Page',hp:[224,232],boss:1,sc:1.5,ai:function(e){
+   if(!e.blink&&e.hp<=e.max/2){e.blink=1;return {n:'The Cursor Blinks',g:4,b:20};}
+   return cyc(e,[{n:'Stare',add:['wblock',2],a:6},{n:'Erase',a:21},{n:'White Out',a:8,x:3},{n:'Doubt',sog:2,flu:2,b:10}]);}}
+};
+var ENC={
+ 1:{F:[['gull'],['pigeon','pigeon'],['deck'],['fish','fish'],['jobs'],['gull','fish'],['pigeon','pigeon','fish']],L:[['warden'],['gull','gull','gull']],B:[['king']]},
+ 2:{F:[['bogg'],['tea','tea','tea'],['drip'],['letter'],['letter','tea'],['bogg','tea']],L:[['lady'],['bogg','drip']],B:[['milk','pot']]},
+ 3:{F:[['bot'],['typo','typo','typo','typo'],['clock'],['printer'],['bot','typo','typo'],['printer','typo']],L:[['algo'],['clock','bot']],B:[['page']]}
+};
+var ACTS=['','South Pier','Central Pier','North Pier'];
+
+/* ================= saved things ================= */
+var META={runs:0,wins:0,best:0,open:0,far:0,mw:0,six:0,hw:{},cw:{}};
+try{var mr=JSON.parse(localStorage.getItem('stp-v1')||'null');if(mr){['runs','wins','best','open','far','mw','six'].forEach(function(k){META[k]=+mr[k]||0;});if(mr.hw)META.hw=mr.hw;if(mr.cw)META.cw=mr.cw;}}catch(e){}
+META.open=clamp(META.open|0,0,5);
+function saveMeta(){try{localStorage.setItem('stp-v1',JSON.stringify(META));}catch(e){}}
+function saveRun(){try{if(RUN)localStorage.setItem('stp-run',JSON.stringify(RUN));else localStorage.removeItem('stp-run');}catch(e){}}
+function loadRun(){try{var r=JSON.parse(localStorage.getItem('stp-run')||'null');if(r&&HEROES[r.hero]&&r.map&&r.deck)return r;}catch(e){}return null;}
+
+/* ================= the run ================= */
+var S={scr:'title',hero:'r',lvl:0,rw:null,shop:null,ev:null,mode:null,sel:-1,brewSel:-1,note:''};
+function has(id){return RUN&&RUN.relics.indexOf(id)>=0;}
+function hasCat(id){return RUN&&RUN.cats.indexOf(id)>=0;}
+function genMap(){
+  var rows=[[{t:'F'},{t:'F'},{t:'F'}]];
+  rows.push(shuffle(['F','F','E']).map(function(t){return {t:t};}));
+  rows.push(shuffle(['L','S',pick(['F','T'])]).map(function(t){return {t:t};}));
+  rows.push(shuffle(['F','E',pick(['L','T'])]).map(function(t){return {t:t};}));
+  rows.push([{t:'R'},{t:'R'},{t:'R'}]);rows.push([{t:'B'}]);return rows;
+}
+function newRun(){
+  var h=HEROES[S.hero];
+  RUN={hero:h.id,lvl:S.lvl,max:h.hp,hp:h.hp,gold:60,deck:h.deck.map(function(id){return {id:id,u:0};}),relics:[],cats:[],brews:[],act:1,row:-1,col:1,map:genMap(),score:0,floor:0,seen:[],en:0,first:1};
+  META.runs++;saveMeta();S.scr='cat';S.offer=shuffle(CATIDS.slice()).slice(0,3);saveRun();render();
+}
+function addCat(id){RUN.cats.push(id);RUN.deck.push({id:CATS[id].card,u:0});}
+function addRelic(id){
+  RUN.relics.push(id);
+  if(id==='chips'){RUN.max+=8;RUN.hp+=8;}if(id==='bag')RUN.gold+=60;if(id==='ticketb'||id==='accord')RUN.en++;if(id==='manus'){RUN.max-=6;RUN.hp=Math.min(RUN.hp,RUN.max);}
+}
+function freeRelic(boss){var p=Object.keys(RELICS).filter(function(k){return !has(k)&&!!RELICS[k][2]===!!boss;});return p.length?pick(p):null;}
+function gainBrew(id){if(RUN.brews.length>=3)return false;RUN.brews.push(id||pick(Object.keys(BREWS)));return true;}
+function heal(n){var b=RUN.hp;RUN.hp=Math.min(RUN.max,RUN.hp+n);return RUN.hp-b;}
+function canGo(c){var r=RUN.row+1,row=RUN.map[r];if(!row||!row[c])return false;if(RUN.row<0||row.length===1)return true;return Math.abs(c-RUN.col)<=1;}
+function enterNode(c){
+  if(!canGo(c)||S.scr!=='map')return;
+  RUN.row++;RUN.col=c;RUN.floor++;var n=RUN.map[RUN.row][c];n.was=1;S.note='';
+  if(n.t==='F'||n.t==='L'||n.t==='B')startCombat(n.t);
+  else if(n.t==='R'){S.scr='rest';}
+  else if(n.t==='S'){openShop();}
+  else if(n.t==='T'){var r=freeRelic(0);S.scr='treasure';S.got=r;if(r)addRelic(r);else RUN.gold+=50;}
+  else{openEvent();}
+  render();
+}
+function leaveNode(){
+  var n=RUN.map[RUN.row][RUN.col];S.mode=null;
+  if(n.t==='B'){
+    if(RUN.act>=3){finish(true);return;}
+    RUN.act++;RUN.row=-1;RUN.col=1;RUN.map=genMap();RUN.hp=Math.max(RUN.hp,Math.round(RUN.max*(RUN.lvl>=3?.75:1)));
+  }
+  S.scr='map';saveRun();render();
+}
+function score(){return Math.round(RUN.score*(1+.25*RUN.lvl));}
+function finish(won){
+  if(won){RUN.score+=500+RUN.hp*2;}
+  var pts=score(),newBest=pts>META.best;if(newBest)META.best=pts;
+  if(won){META.wins++;META.hw[RUN.hero]=(META.hw[RUN.hero]||0)+1;RUN.cats.forEach(function(c){META.cw[c]=1;});if(RUN.cats.length>=6)META.six=1;META.mw=Math.max(META.mw,RUN.lvl+1);if(RUN.lvl===META.open&&META.open<5)META.open++;}
+  S.end={won:won,pts:pts,best:newBest,floor:RUN.floor,act:RUN.act,hero:RUN.hero,lvl:RUN.lvl,cats:RUN.cats.length,by:B&&!won?B.en.filter(function(e){return !e.dead;}).map(function(e){return e.name;})[0]:''};
+  saveMeta();if(B)B.over=true;try{localStorage.removeItem('stp-run');}catch(e){}S.mode=null;S.scr='over';sfx(won?'win':'lose');render();loadWall();
+}
+
+/* ================= a fight ================= */
+function alive(){return B.en.filter(function(e){return !e.dead;});}
+function rndAlive(){var a=alive();return a.length?pick(a):null;}
+var FX=[],fxN=0;
+function now(){return (window.performance&&performance.now)?performance.now():Date.now();}
+function fxOn(who,text,col){if(!who)return;FX.push({who:who,text:text,col:col,t:now()+fxN*90,n:fxN%4});fxN++;if(FX.length>40)FX.shift();}
+function startCombat(kind){
+  var tbl=ENC[RUN.act][kind],set=(kind==='F'&&RUN.first)?pick(tbl.slice(0,4)):pick(tbl),hm=1+.1*RUN.lvl;RUN.first=0;
+  H={hero:1,name:HEROES[RUN.hero].name,block:0,st:{}};Object.defineProperty(H,'hp',{get:function(){return RUN.hp;},set:function(v){RUN.hp=v;}});H.max=RUN.max;
+  B={kind:kind,en:[],draw:[],hand:[],disc:[],turn:0,energy:0,over:false,won:false,count:0,tcount:0,hat:has('hat'),brolly:has('brolly'),mult:1};
+  set.forEach(function(k,i){var d=EN[k],hp=Math.round(ri(d.hp[0],d.hp[1])*hm);B.en.push({k:k,name:d.n,hp:hp,max:hp,block:0,st:{},i:set.length>1?i:0,sc:d.sc||1,boss:d.boss,elite:d.elite,slot:i,seed:ri(1,99999)});});
+  B.draw=shuffle(RUN.deck.map(function(c){return {id:c.id,u:c.u};}));
+  if(has('accord'))B.draw.splice(ri(0,B.draw.length),0,{id:'sock',u:0});
+  if(has('rock'))H.st.gus=1;if(has('deckchair'))H.st.poi=1;if(has('manus')){H.st.gus=(H.st.gus||0)+2;H.st.poi=(H.st.poi||0)+2;}
+  if(hasCat('tilly'))H.st.claw=3;if(hasCat('arthur'))H.block=8;
+  B.en.forEach(function(e){if(has('wetfish'))e.st.sog=1;if(has('bill'))e.st.inv=3;e.mv=nextMove(e);});
+  S.scr='combat';S.sel=-1;S.brewSel=-1;FX=[];fxN=0;startTurn(true);
+}
+function nextMove(e){var m=EN[e.k].ai(e),o={},k;for(k in m)o[k]=m[k];if(o.a)o.a=Math.round(o.a*(1+.07*RUN.lvl));return o;}
+function dmgCalc(base,src,dst){var d=base+(src.st.gus||0);if(src===H)d*=B.mult;if(src.st.sog>0)d*=.75;if(dst.st.flu>0)d*=(dst!==H&&has('ghost'))?1.75:1.5;return Math.max(0,Math.floor(d));}
+function strike(src,dst,base){
+  if(dst.dead||B.over)return;
+  var d=dmgCalc(base,src,dst);
+  if(dst===H&&H.st.mist&&Math.random()*100<H.st.mist){fxOn(H,'Missed!',COL.purple);return;}
+  var b=Math.min(dst.block,d);dst.block-=b;d-=b;
+  if(d>0&&dst===H&&B.brolly){B.brolly=false;d=0;fxOn(H,'Brolly!',COL.blue);}
+  if(d>0){dst.hp-=d;dst.hitT=now()+fxN*90;fxOn(dst,'-'+d,COL.red);if(dst===H&&H.st.dign)H.st.gus=(H.st.gus||0)+H.st.dign;sfx(dst===H?'ouch':'hit');}
+  else fxOn(dst,'Blocked',COL.blue);
+  if(dst===H&&src!==H&&H.st.claw&&!src.dead)hurt(src,H.st.claw);
+  if(dst!==H)check(dst);else if(H.hp<=0)defeat();
+}
+function hurt(e,n){if(e.dead||B.over)return;e.hp-=n;e.hitT=now()+fxN*90;fxOn(e,'-'+n,COL.purple);check(e);}
+function check(e){
+  if(e.hp>0||e.dead)return;e.dead=true;e.hp=0;e.deadT=now()+fxN*90;
+  if(EN[e.k].pal)alive().forEach(function(o){o.st.gus=(o.st.gus||0)+4;fxOn(o,'Vindicated!',COL.red);});
+  if(!alive().length)victory();
+}
+function defeat(){
+  if(B.over)return;
+  if(has('life')&&!RUN.lifeUsed){RUN.lifeUsed=1;RUN.hp=Math.round(RUN.max*.3);fxOn(H,'Tenth Life!',COL.green);return;}
+  RUN.hp=0;B.over=true;finish(false);
+}
+function draw(n){
+  for(var i=0;i<n;i++){
+    if(!B.draw.length){if(!B.disc.length)return;B.draw=shuffle(B.disc);B.disc=[];}
+    var c=B.draw.pop();if(B.hand.length>=10){B.disc.push(c);continue;}
+    B.hand.push(c);if(c.id==='wblock'){B.energy=Math.max(0,B.energy-1);fxOn(H,'Writer’s Block',COL.ink);}
+  }
+}
+function startTurn(first){
+  B.turn++;B.tcount=0;if(!first)H.block=0;
+  B.energy=3+RUN.en+(has('tide')&&B.turn%3===0?1:0)+(hasCat('trixie')&&B.turn===1?1:0);
+  if(H.st.next){H.block+=H.st.next;H.st.next=0;}
+  if(H.st.ci)alive().forEach(function(e){e.st.inv=(e.st.inv||0)+H.st.ci;});
+  if(H.st.fr)H.st.gus=(H.st.gus||0)+H.st.fr;
+  draw(5+(B.turn===1?(hasCat('dexter')?2:0)+(has('bulb')?1:0):0));
+  for(var i=0;i<(H.st.oi||0);i++)addHand(randCard(),1,1);
+  fxN=0;
+}
+function cost(ci){var d=CARDS[ci.id];if(ci.z)return 0;return (ci.u&&d.o.uc!=null)?d.o.uc:d.cost;}
+function playable(ci){return !CARDS[ci.id].o.unp&&cost(ci)<=B.energy;}
+function playCard(i,ti){
+  if(S.scr!=='combat'||B.over)return false;
+  var ci=B.hand[i];if(!ci||!playable(ci))return false;
+  var d=CARDS[ci.id],t=null;
+  if(d.o.t){var a=alive();t=(ti!=null&&B.en[ti]&&!B.en[ti].dead)?B.en[ti]:(a.length===1?a[0]:null);if(!t)return false;}
+  fxN=0;B.energy-=cost(ci);B.hand.splice(i,1);S.sel=-1;
+  var times=1;if(H.st.dbl>0&&ci.id!=='plusone'){times=2;H.st.dbl--;}
+  B.mult=1;if(d.type==='A'&&B.hat){B.mult=2;B.hat=false;}
+  sfx('card');
+  for(var k=0;k<times&&!B.over&&S.scr==='combat';k++)d.fn(t,vals(d,ci.u),ci);
+  if(B.over||S.scr!=='combat')return true;
+  B.mult=1;
+  if(!(d.type==='P'||d.o.x||ci.tmp))B.disc.push({id:ci.id,u:ci.u});
+  B.count++;B.tcount++;
+  if(!B.over&&has('gavel')&&B.count%10===0){fxOn(H,'Order!',COL.red);alive().forEach(function(e){hurt(e,8);});}
+  if(!B.over&&has('vinyl')&&B.tcount%4===0)draw(1);
+  return true;
+}
+function useBrew(i,ti){
+  var id=RUN.brews[i];if(!id)return false;var inFight=S.scr==='combat'&&B&&!B.over;
+  if(id==='tea'){heal(14);if(inFight)fxOn(H,'+14',COL.green);}
+  else{if(!inFight)return false;var t=null;
+    if(BREWS[id][2]){var a=alive();t=(ti!=null&&B.en[ti]&&!B.en[ti].dead)?B.en[ti]:(a.length===1?a[0]:null);if(!t)return false;}
+    fxN=0;
+    if(id==='vinegar'){RUN.brews.splice(i,1);hurt(t,15);S.brewSel=-1;sfx('brew');return true;}
+    if(id==='catnip')en(2);else if(id==='mac'){H.block+=12;fxOn(H,'+12 Block',COL.blue);}else if(id==='pop')draw(3);else if(id==='courage')me('gus',2);else if(id==='flask')app(t,'flu',3);
+  }
+  RUN.brews.splice(i,1);S.brewSel=-1;sfx('brew');return true;
+}
+function endTurn(){
+  if(S.scr!=='combat'||B.over)return;
+  fxN=0;S.sel=-1;S.brewSel=-1;
+  var tk=B.hand.filter(function(c){return c.id==='ticket';}).length;
+  if(tk){RUN.hp-=2*tk;fxOn(H,'-'+2*tk+' Ticket',COL.red);if(RUN.hp<=0){defeat();if(S.scr!=='combat')return;}}
+  B.hand.forEach(function(c){if(!(CARDS[c.id].o.eth||c.tmp))B.disc.push({id:c.id,u:c.u});});B.hand=[];
+  if(hasCat('spyro')){var e=rndAlive();if(e)strike(H,e,3-(H.st.gus||0));}
+  if(B.over)return;
+  if(H.st.sog>0)H.st.sog--;if(H.st.dbl)H.st.dbl=0;
+  /* their go */
+  var es=B.en,i,k,m;
+  for(i=0;i<es.length&&!B.over&&S.scr==='combat';i++){
+    e=es[i];if(e.dead)continue;
+    e.block=0;
+    if(e.st.inv>0){fxOn(e,'Pays up',COL.purple);hurt(e,e.st.inv);e.st.inv--;if(e.dead)continue;}
+    m=e.mv;e.actT=now()+fxN*90;
+    if(m.a)for(k=0;k<(m.x||1)&&!B.over&&S.scr==='combat';k++)strike(e,H,m.a);
+    if(S.scr!=='combat'||B.over)return;
+    if(m.b){e.block+=m.b;fxOn(e,'+'+m.b+' Block',COL.blue);}
+    if(m.g){e.st.gus=(e.st.gus||0)+m.g;fxOn(e,'+'+m.g+' Gusto',COL.red);}
+    if(m.sog){H.st.sog=(H.st.sog||0)+m.sog;fxOn(H,'Soggy',COL.purple);}
+    if(m.flu){H.st.flu=(H.st.flu||0)+m.flu;fxOn(H,'Flustered',COL.purple);}
+    if(m.add){for(k=0;k<m.add[1];k++)B.disc.push({id:m.add[0],u:0});fxOn(H,'+'+m.add[1]+' '+CARDS[m.add[0]].name,COL.ink);}
+    if(EN[e.k].grow)e.st.gus=(e.st.gus||0)+EN[e.k].grow;
+    if(e.st.sog>0)e.st.sog--;if(e.st.flu>0)e.st.flu--;
+  }
+  if(S.scr!=='combat'||B.over)return;
+  if(H.st.flu>0)H.st.flu--;
+  alive().forEach(function(x){x.mv=nextMove(x);});
+  startTurn(false);
+}
+function rollCards(){
+  var n=has('ticketb')?2:3,out=[],pool=POOL[RUN.hero],g=0;
+  while(out.length<n&&g++<60){var r=Math.random(),rar=r<.08?'r':r<.42?'u':'c',c=pick(pool.filter(function(id){return CARDS[id].rar===rar;}));if(c&&out.indexOf(c)<0)out.push(c);}
+  return out;
+}
+function victory(){
+  B.over=true;B.won=true;var k=B.kind,g=k==='B'?ri(55,70):k==='L'?ri(28,38):ri(11,19);
+  g=Math.round(g*(has('float')?1.25:1));RUN.gold+=g;RUN.score+=(k==='B'?150:k==='L'?60:20)+RUN.floor*5;
+  var rw={gold:g,cards:rollCards(),took:0,relic:null,brew:null,healed:0,kind:k};
+  if(hasCat('daisy'))rw.healed=heal(4);
+  if(k==='L'){rw.relic=freeRelic(0);if(rw.relic)addRelic(rw.relic);}
+  if(Math.random()<(k==='F'?.35:.6)){var b=pick(Object.keys(BREWS));if(gainBrew(b))rw.brew=b;}
+  if(k==='B'){META.far=Math.max(META.far,RUN.act);saveMeta();var cat=shuffle(CATIDS.filter(function(c){return !hasCat(c);}))[0];rw.boss=[['relic',freeRelic(1)],cat?['cat',cat]:['gold',80],['hp',10]];}
+  S.rw=rw;S.scr='reward';sfx('won');
+}
+
+/* ================= shop, rest, events ================= */
+function price(id){var r=CARDS[id].rar;return r==='r'?ri(125,150):r==='u'?ri(72,88):ri(44,56);}
+function openShop(){
+  var cards=[],g=0;while(cards.length<4&&g++<40){var c=pick(POOL[RUN.hero]);if(cards.indexOf(c)<0)cards.push(c);}
+  var rel=shuffle(Object.keys(RELICS).filter(function(k){return !has(k)&&!RELICS[k][2];})).slice(0,2);
+  S.shop={cards:cards.map(function(id){return {id:id,p:price(id)};}),rel:rel.map(function(id){return {id:id,p:ri(135,165)};}),brews:shuffle(Object.keys(BREWS)).slice(0,2).map(function(id){return {id:id,p:45};}),cut:75,cat:null};
+  var sc=shuffle(CATIDS.filter(function(c){return !hasCat(c);}))[0];if(sc)S.shop.cat={id:sc,p:110};
+  S.scr='shop';
+}
+var EVENTS=[
+ {id:'cat',t:'A cat has decided you live here now',tx:function(){var c=S.ev.cat;return c?CATS[c].name+' is sitting on your spell book and shows no sign of moving. '+CATS[c].perk:'Every cat you know is already here. They have brought you a small pile of Dreamies, or possibly taken them from someone.';},
+  opts:function(){var c=S.ev.cat;return c?[['Make room for '+CATS[c].name,function(){addCat(c);return CATS[c].name+' has joined you, and '+CARDS[CATS[c].card].name+' is in your deck.';}],['Explain that you are busy',function(){RUN.gold+=25;return 'The cat leaves 25 Dreamies behind, pointedly.';}]]:[['Accept the Dreamies',function(){RUN.gold+=60;return '60 Dreamies. Do not ask.';}]];},
+  init:function(){S.ev.cat=shuffle(CATIDS.filter(function(c){return !hasCat(c);}))[0]||null;}},
+ {id:'tribunal',t:'Summon the Tribunal',tx:function(){return 'Arthur will rule on whether the milk goes in first. He requires a side from you before he ignores it.';},
+  opts:function(){return [['Tea first',function(){var c=pick(RUN.deck.filter(function(x){return !x.u&&CARDS[x.id].n.length;}));if(c){c.u=1;return 'Ruled in your favour. '+CARDS[c.id].name+' has been improved.';}return 'Ruled in your favour. Nothing happens, as is traditional.';}],['Milk first',function(){RUN.gold+=45;return 'Fined 45 Dreamies, which Arthur then gives to you by mistake.';}],['Abstain',function(){var h=heal(12);return 'You sit quietly at the back and recover '+h+' health.';}]];}},
+ {id:'chips',t:'The chip shop on the prom',tx:function(){return 'Salt? Vinegar? Both. It is the only correct answer and they know it.';},
+  opts:function(){return [['Large chips (30 Dreamies): heal 22',function(){if(RUN.gold<30)return null;RUN.gold-=30;return 'Recovered '+heal(22)+' health. A seagull watched the whole thing.';}],['A tray to keep (45 Dreamies): +6 maximum health',function(){if(RUN.gold<45)return null;RUN.gold-=45;RUN.max+=6;RUN.hp+=6;return 'Your maximum health goes up by 6.';}],['Scraps, free: heal 6',function(){return 'Recovered '+heal(6)+' health.';}]];}},
+ {id:'invoice',t:'An imaginary invoice',tx:function(){return 'Reggie has sent an invoice for services rendered, with an extra tenner for the Y. It is addressed to you.';},
+  opts:function(){return [['Pay it (40 Dreamies): strike a card from your deck',function(){if(RUN.gold<40)return null;RUN.gold-=40;S.mode='cut';return '';}],['Dispute it: gain 30 Dreamies and a Mislaid Sock',function(){RUN.gold+=30;RUN.deck.push({id:'sock',u:0});return 'You are 30 Dreamies up and one sock down.';}]];}},
+ {id:'dear',t:'Dear Terry',tx:function(){return 'You have written to Terry with a problem. His reply runs to four pages and a diagram.';},
+  opts:function(){return [['Follow the advice: lose 7 health, gain a keepsake',function(){var r=freeRelic(0);RUN.hp=Math.max(1,RUN.hp-7);if(r){addRelic(r);return 'It hurt, but you now own: '+RELICS[r][0]+'. '+RELICS[r][1];}RUN.gold+=50;return 'It hurt. 50 Dreamies by way of apology.';}],['File it carefully',function(){return 'You file it under T.';}]];}},
+ {id:'ferret',t:'The Ferret is fishing',tx:function(){return 'He has been here since six. Not a bite. Great morning, he says, and means it.';},
+  opts:function(){return [['Sit with him a while: heal 15',function(){return 'Nothing is caught. You recover '+heal(15)+' health anyway.';}],['Borrow a brew from his flask',function(){return gainBrew()?'He hands over a '+BREWS[RUN.brews[RUN.brews.length-1]][0]+'.':'Your pockets are full. He shrugs.';}]];}}
+];
+function openEvent(){var p=EVENTS.filter(function(e){return RUN.seen.indexOf(e.id)<0;});if(!p.length){RUN.seen=[];p=EVENTS;}var ev=pick(p);RUN.seen.push(ev.id);S.ev={d:ev,res:''};if(ev.init)ev.init();S.scr='event';}
+
+/* ================= drawing: wobbly ink ================= */
+var cv=$('scene'),ctx=cv.getContext('2d'),W=680,Hh=360,PORT=false,scale=1;
+function rng(seed){var a=seed>>>0;return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+function blob(cx,cy,rx,ry,n,j,r){var p=[];for(var i=0;i<n;i++){var a=i/n*Math.PI*2,k=1+(r()-.5)*j;p.push([cx+Math.cos(a)*rx*k,cy+Math.sin(a)*ry*k]);}return p;}
+function smooth(p){var n=p.length;ctx.beginPath();ctx.moveTo((p[n-1][0]+p[0][0])/2,(p[n-1][1]+p[0][1])/2);for(var i=0;i<n;i++){var a=p[i],b=p[(i+1)%n];ctx.quadraticCurveTo(a[0],a[1],(a[0]+b[0])/2,(a[1]+b[1])/2);}ctx.closePath();}
+function fur(cx,cy,rx,ry,n,depth,r){ctx.beginPath();for(var i=0;i<n;i++){var a=i/n*Math.PI*2-Math.PI/2,k=(i%2?1:1-depth)+(r()-.5)*.07,x=cx+Math.cos(a)*rx*k,y=cy+Math.sin(a)*ry*k;if(i)ctx.lineTo(x,y);else ctx.moveTo(x,y);}ctx.closePath();}
+function ink(fill,lw){ctx.lineJoin='round';ctx.lineCap='round';if(fill){ctx.fillStyle=fill;ctx.fill();}ctx.strokeStyle=COL.ink;ctx.lineWidth=lw||2.4;ctx.stroke();}
+function ell(x,y,rx,ry,rot){ctx.beginPath();ctx.ellipse(x,y,rx,ry,rot||0,0,Math.PI*2);}
+function line(p,lw,col){ctx.beginPath();ctx.moveTo(p[0],p[1]);for(var i=2;i<p.length;i+=2)ctx.lineTo(p[i],p[i+1]);ctx.strokeStyle=col||COL.ink;ctx.lineWidth=lw||2;ctx.lineCap='round';ctx.lineJoin='round';ctx.stroke();}
+function limb(p,col,w){line(p,(w||6)+3.4,COL.ink);line(p,w||6,col);}
+function poly(p,fill,lw){ctx.beginPath();ctx.moveTo(p[0],p[1]);for(var i=2;i<p.length;i+=2)ctx.lineTo(p[i],p[i+1]);ctx.closePath();ink(fill,lw);}
+function rect(x,y,w,h,fill,lw){ctx.beginPath();ctx.rect(x,y,w,h);ink(fill,lw);}
+function eyes(x,y,gap,rr,angry){[-1,1].forEach(function(s){ell(x+s*gap,y,rr,rr*1.1);ctx.fillStyle='#fff';ctx.fill();ctx.strokeStyle=COL.ink;ctx.lineWidth=1.6;ctx.stroke();ell(x+s*gap+1,y+1,rr*.45,rr*.55);ctx.fillStyle=COL.ink;ctx.fill();if(angry)line([x+s*gap-s*rr*1.2,y-rr*1.9,x+s*gap+s*rr*.9,y-rr*1.1],2.2);});}
+function splat(x,y,size,col,alpha,seed){var r=rng(seed);ctx.save();ctx.globalAlpha=alpha;ctx.fillStyle=col;smooth(blob(x,y,size,size*.8,9,.7,r));ctx.fill();for(var i=0;i<8;i++){var a=r()*6.283,d=size*(1.1+r()*1.9),s=size*(.06+r()*.2);ell(x+Math.cos(a)*d,y+Math.sin(a)*d,s,s*.8,a);ctx.fill();}ctx.restore();}
+function star(x,y,q,col){ctx.beginPath();for(var i=0;i<10;i++){var a=-Math.PI/2+i*Math.PI/5,d=i%2?q*.45:q;ctx.lineTo(x+Math.cos(a)*d,y+Math.sin(a)*d);}ctx.closePath();ctx.fillStyle=col;ctx.fill();ctx.strokeStyle=COL.ink;ctx.lineWidth=1.2;ctx.stroke();}
+
+/* the Quills */
+function quill(x,y,rot){ctx.save();ctx.translate(x,y);ctx.rotate(rot);ctx.beginPath();ctx.moveTo(0,0);ctx.quadraticCurveTo(-11,-22,-2,-46);ctx.quadraticCurveTo(11,-24,0,0);ink('#fff',1.8);line([0,8,0,-40],1.3);ctx.restore();}
+function drawQuill(kind,r,t){
+  var bob=Math.sin(t*2.2)*1.5;
+  ctx.fillStyle='rgba(20,20,20,.13)';ell(0,2,34,6);ctx.fill();
+  [-10,10].forEach(function(x){rect(x-5,-36,10,31,COL.steel,2.2);rect(x-8,-6,16,6,COL.ink,2);});
+  ctx.save();ctx.translate(0,bob);
+  limb([-20,-68,-31,-44],COL.steel,5);
+  var hx=36,hy=-58+Math.sin(t*3)*3;limb([20,-68,hx,hy],COL.steel,5);
+  if(kind==='r')quill(hx+2,hy-2,.5);
+  else if(kind==='t'){line([hx,hy+4,hx+10,hy-30],4,COL.ink);line([hx,hy+4,hx+10,hy-30],1.8,'#b98a4e');smooth(blob(hx+12,hy-36,6,7,7,.5,r));ctx.fillStyle=COL.ink;ctx.fill();}
+  else{rect(hx-9,hy-16,20,16,'#c9a36b',2);line([hx+1,hy-16,hx+1,hy],1.4);line([hx-9,hy-8,hx+11,hy-8],1.4);}
+  poly([-22,-76,22,-76,18,-33,-18,-33],kind==='k'?COL.purple:COL.red,2.4);
+  poly([-7,-76,7,-76,0,-52],'#fff',1.8);
+  if(kind==='r')poly([-8,-74,8,-68,8,-74,-8,-68],COL.ink,1.2);else poly([-3,-74,3,-74,4,-58,0,-53,-4,-58],kind==='k'?'#2c2c33':COL.ink,1.2);
+  ctx.fillStyle=COL.gold;[-46,-39].forEach(function(y){ell(0,y,1.9,1.9);ctx.fill();});
+  rect(-4,-84,8,9,COL.steel,2);
+  if(kind==='r'){
+    line([-6,-124,-9,-136],2);line([6,-124,9,-136],2);ell(-9,-138,2.6,2.6);ink(COL.metal,1.6);ell(9,-138,2.6,2.6);ink(COL.metal,1.6);
+    ell(0,-106,15,21);ink(COL.metal,2.4);ell(-15,-104,4,6);ink(COL.steel,1.8);
+    line([-10,-110,-3,-110],2.2);ctx.beginPath();ctx.arc(-6.5,-108,3,0,Math.PI);ctx.strokeStyle=COL.ink;ctx.lineWidth=1.6;ctx.stroke();
+    ell(6,-108,5.5,5.5);ctx.fillStyle='#fff';ctx.fill();ctx.strokeStyle=COL.ink;ctx.lineWidth=2;ctx.stroke();ell(6.5,-107.5,1.8,2);ctx.fillStyle=COL.ink;ctx.fill();
+    line([11,-104,13,-90,9,-82],1,'#8a7a3a');line([1,-116,11,-119],1.8);
+    ctx.beginPath();ctx.arc(0,-97,6,.25,Math.PI-.5);ctx.strokeStyle=COL.ink;ctx.lineWidth=1.8;ctx.stroke();
+  }else if(kind==='t'){
+    line([0,-122,0,-134],2.4);ell(0,-138,4.5,4.5);ink(COL.red,1.8);
+    ctx.beginPath();if(ctx.roundRect)ctx.roundRect(-19,-123,38,34,7);else ctx.rect(-19,-123,38,34);ink(COL.metal,2.4);
+    ell(-21,-106,3.5,5);ink(COL.steel,1.8);ell(21,-106,3.5,5);ink(COL.steel,1.8);
+    eyes(0,-109,8,6.5);ctx.beginPath();ctx.arc(0,-99,8,.15,Math.PI-.15);ctx.strokeStyle=COL.ink;ctx.lineWidth=2;ctx.stroke();
+  }else{
+    line([5,-124,12,-136,20,-134],2);ell(21,-134,2.6,2.6);ink(COL.metal,1.6);
+    poly([-17,-86,17,-86,19,-126,13,-122,8,-127,2,-122,-4,-127,-10,-122,-19,-126],'#c9a36b',2.4);
+    ell(-7,-108,3,4);ctx.fillStyle=COL.ink;ctx.fill();ell(7,-108,3,4);ctx.fill();
+    ctx.fillStyle=COL.ink;ctx.font='16px '+FONT_M;ctx.textAlign='center';ctx.fillText('?',0,-91);
+  }
+  ctx.restore();
+}
+var FONT_M="'Permanent Marker','Comic Sans MS','Chalkboard SE',cursive",FONT_D="'Anton','Arial Narrow',Impact,sans-serif";
+/* the cats, in their hats */
+function catHead(c,r){
+  [-1,1].forEach(function(s){poly([s*7,-12,s*19,-34-r()*2,s*24,-7],c.ear);ctx.beginPath();ctx.moveTo(s*12,-13);ctx.lineTo(s*18.5,-26);ctx.lineTo(s*21,-11);ctx.closePath();ctx.fillStyle=COL.pink;ctx.fill();});
+  if(c.fluff)fur(0,0,26,22,22,.13,r);else smooth(blob(0,0,23,20,10,.05,r));ink(c.head);
+  if(c.face){smooth(blob(3,4,15,13,9,.08,r));ctx.fillStyle=c.face;ctx.fill();}
+  if(c.spot){ell(-9,-10,6,4,-.3);ctx.fillStyle=c.spot;ctx.fill();}
+  [-6,11].forEach(function(ex){ell(ex,-2.5,5.2,4.2);ctx.fillStyle='#fff';ctx.fill();ell(ex+.8,-2.5,3.7,3.6);ctx.fillStyle=c.eye;ctx.fill();ell(ex+1.4,-2.5,1.5,3);ctx.fillStyle=COL.ink;ctx.fill();});
+  poly([0,8,7,8,3.5,12],COL.pink,1.4);var w=c.whisk||COL.ink;
+  ctx.beginPath();ctx.arc(.5,13,3.4,.1,Math.PI);ctx.moveTo(10.4,13);ctx.arc(7,13,3.4,0,Math.PI-.1);ctx.strokeStyle=w;ctx.lineWidth=1.5;ctx.stroke();
+  line([-9,11,-34,7+r()*2],1.2,w);line([-9,14,-34,17+r()*2],1.2,w);line([16,11,38,7+r()*2],1.2,w);line([16,14,38,17+r()*2],1.2,w);
+  /* a wizard's hat */
+  poly([-17,-17,2,-58-r()*2,19,-19],c.hat,2.2);ctx.beginPath();ctx.ellipse(1,-18,25,6,-.05,0,6.283);ink(c.hat,2.2);star(2,-34,5,'#ffe27a');
+}
+function drawCat(id,r,t){var c=CATS[id];ctx.fillStyle='rgba(20,20,20,.13)';ell(0,2,22,4);ctx.fill();
+  ctx.save();ctx.translate(14,-14);ctx.rotate(.5+Math.sin(t*3+id.length)*.2);if(c.fluff)fur(0,-14,6,17,12,.3,r);else ell(0,-14,3.5,16);ink(c.tail||c.ear,1.8);ctx.restore();
+  if(c.fluff)fur(0,-13,16,15,18,.14,r);else smooth(blob(0,-13,14,14,9,.05,r));ink(c.body,2);
+  ctx.save();ctx.translate(-1,-36+Math.sin(t*2.6+id.length)*1.2);ctx.scale(.72,.72);catHead(c,r);ctx.restore();}
+/* the opposition */
+var ART={
+ gull:function(e,r,t,king){var fl=Math.sin(t*9+e.seed)*.8;ctx.translate(0,-46+Math.sin(t*3+e.seed)*5);ctx.scale(-1.5,1.5);
+  poly([4,-2,14,-20-fl*14,34,-12-fl*20,10,2],'#aab1c2',2);ell(0,0,17,9);ink('#fff');ell(-15,-6,8,7);ink('#fff');poly([-21,-7,-34,-3,-21,-2],'#f2b01e',1.6);
+  ctx.fillStyle=COL.ink;ell(-17,-8,1.6,1.6);ctx.fill();line([-21,-12,-14,-10],1.8);poly([-4,-4,-2,-26-fl*12,16,-30-fl*18,8,-2],'#c3c9d6',2);
+  if(king)poly([-22,-13,-23,-23,-18,-17,-15,-25,-12,-17,-8,-23,-8,-13],COL.gold,1.5);},
+ king:function(e,r,t){ART.gull(e,r,t,1);},
+ pigeon:function(e,r,t){ctx.translate(0,Math.abs(Math.sin(t*5+e.seed))*-4);ell(0,-16,17,13);ink('#8d93a3');ell(-13,-30,8,8);ink('#8d93a3');poly([-20,-31,-29,-28,-20,-27],'#f2b01e',1.4);ctx.fillStyle='#c0392b';ell(-14,-32,1.8,1.8);ctx.fill();
+  ell(3,-15,10,7,.3);ink('#b7bdcc',1.6);line([-4,-4,-4,0],2);line([4,-4,4,0],2);poly([14,-18,28,-22,26,-10],'#6f7584',1.6);},
+ deck:function(e,r,t){ctx.scale(1.5,1.5);line([-20,0,12,-52],5,COL.ink);line([-20,0,12,-52],2.4,'#b98a4e');line([20,0,-6,-34],5,COL.ink);line([20,0,-6,-34],2.4,'#b98a4e');
+  ctx.beginPath();ctx.moveTo(10,-50);ctx.lineTo(16,-46);ctx.quadraticCurveTo(-2,-18,-10,-10);ctx.lineTo(-16,-14);ctx.quadraticCurveTo(-6,-24,10,-50);ctx.closePath();ink('#fff',2);
+  for(var k=0;k<4;k++){var u=k/4+.06;line([10-u*26+3,-50+u*38+2,16-u*26-3,-46+u*36-1],4,k%2?COL.blue:COL.red);}eyes(0,-30,4,2.6,1);},
+ fish:function(e,r,t){ctx.translate(0,-30);ctx.rotate(-1.2+Math.sin(t*6+e.seed)*.15);
+  ctx.beginPath();ctx.moveTo(-34,0);ctx.quadraticCurveTo(-8,-20,22,-2);ctx.lineTo(40,-14);ctx.lineTo(36,0);ctx.lineTo(40,12);ctx.lineTo(22,2);ctx.quadraticCurveTo(-8,16,-34,0);ctx.closePath();ink('#9fb6cf',2.4);
+  ell(-22,-3,3.4,3.4);ink('#fff',1.6);ctx.fillStyle=COL.ink;ell(-22,-3,1.3,1.3);ctx.fill();line([-10,-8,-6,0,-10,8],1.6);line([0,-9,4,0,0,9],1.6);line([-30,3,-24,5],1.6);},
+ person:function(e,r,t,coat,hat){var sw=Math.sin(t*4+e.seed)*3;limb([-6,-34,-7,-1],'#33384d',5);limb([6,-34,7,-1],'#33384d',5);smooth(blob(0,-56,20,27,9,.08,r));ink(coat);
+  limb([-14,-68,-28,-52+sw],coat,5);ell(-29,-50+sw,5,5);ink(COL.skin,1.8);smooth(blob(0,-96,15,16,9,.07,r));ink(COL.skin);
+  ctx.fillStyle=COL.ink;ell(-7,-98,1.9,1.9);ctx.fill();ell(3,-98,1.9,1.9);ctx.fill();line([-11,-104,-4,-102],2);line([7,-104,0,-102],2);line([-7,-89,2,-90],2);hat();},
+ jobs:function(e,r,t){ART.person(e,r,t,'#e6d92e',function(){line([-18,-56,18,-56],4,'#c8c8c8');poly([-15,-104,-13,-116,13,-116,15,-104],'#fff',2);rect(-36,-70,16,22,'#b98a4e',2);rect(-34,-68,12,16,'#fff',1.2);});},
+ warden:function(e,r,t){ART.person(e,r,t,'#1d2b5c',function(){poly([-17,-104,-14,-120,14,-120,17,-104],'#1d2b5c',2);line([-20,-104,20,-104],4);rect(-12,-112,24,5,'#f2e64a',1);rect(-38,-66,14,18,'#f2e64a',2);});},
+ bogg:function(e,r,t){var b=Math.sin(t*3+e.seed)*2;limb([-18,-34,-40,-10+b],'#6b4a2e',6);limb([18,-34,40,-10-b],'#6b4a2e',6);fur(0,-36,30,36,26,.2,r);ink('#7a5632');eyes(0,-46,10,7,1);
+  ctx.beginPath();ctx.arc(0,-26,12,.1,Math.PI-.1);ctx.closePath();ink('#2c1a0f',2);poly([-6,-26,-3,-20,0,-26],'#fff',1);poly([2,-26,5,-20,8,-26],'#fff',1);poly([-22,-64,-28,-80,-14,-68],'#7a5632',2);poly([22,-64,28,-80,14,-68],'#7a5632',2);},
+ tea:function(e,r,t){ctx.translate(0,-10+Math.sin(t*4+e.seed)*3);line([0,-44,6,-64],1.6);rect(1,-74,12,10,'#fff',1.6);poly([-18,-44,18,-44,20,0,-20,0],'#c9a36b',2.2);line([-18,-36,18,-36],1.4);eyes(0,-22,7,4,1);line([-6,-9,6,-9],2);
+  ctx.fillStyle='rgba(120,80,30,.5)';ell(-8,6,3,5);ctx.fill();ell(9,9,2.4,4);ctx.fill();},
+ drip:function(e,r,t){ctx.translate(0,-78);smooth(blob(0,0,44,17,11,.25,r));ink('#b9b2a8');ctx.fillStyle='#8f9a7c';ell(-14,2,9,5);ctx.fill();ell(16,-3,7,4);ctx.fill();eyes(0,-2,10,4.5,1);line([-7,9,7,9],2);
+  for(var i=0;i<3;i++){var y=((t*40+i*30+e.seed)%62);ctx.beginPath();ctx.moveTo(-22+i*22,14+y);ctx.quadraticCurveTo(-27+i*22,24+y,-22+i*22,27+y);ctx.quadraticCurveTo(-17+i*22,24+y,-22+i*22,14+y);ink(COL.blue,1.2);}},
+ letter:function(e,r,t){ctx.translate(0,-34+Math.sin(t*3+e.seed)*3);ctx.rotate(Math.sin(t*2+e.seed)*.06);rect(-32,-22,64,44,'#fff',2.4);line([-32,-22,0,4,32,-22],2);eyes(0,-2,9,4.5,1);line([-7,12,7,10],2.2);ell(22,14,6,6);ink(COL.red,1.6);
+  limb([-32,6,-44,18],'#fff',3);limb([32,6,44,-6],'#fff',3);},
+ lady:function(e,r,t){ctx.translate(0,-10+Math.sin(t*2+e.seed)*5);ctx.globalAlpha*=.82;ctx.beginPath();ctx.moveTo(-24,0);ctx.quadraticCurveTo(-30,-70,0,-100);ctx.quadraticCurveTo(30,-70,24,0);
+  ctx.quadraticCurveTo(16,-10,10,0);ctx.quadraticCurveTo(4,-10,-2,0);ctx.quadraticCurveTo(-10,-10,-14,0);ctx.quadraticCurveTo(-20,-8,-24,0);ctx.closePath();ink('#cfd3dc',2.2);
+  ctx.fillStyle=COL.ink;ell(-8,-72,4,6);ctx.fill();ell(8,-72,4,6);ctx.fill();ell(0,-56,4,7);ctx.fill();limb([-22,-52,-38,-64],'#cfd3dc',4);limb([22,-52,38,-66],'#cfd3dc',4);},
+ milk:function(e,r,t){ctx.translate(0,Math.sin(t*4+e.seed)*2);poly([-20,0,-24,-50,-14,-66,18,-66,24,-50,20,0],'#fff',2.4);poly([-24,-50,-34,-60,-14,-66],'#fff',2);
+  ctx.beginPath();ctx.arc(26,-34,12,-1.3,1.3);ctx.strokeStyle=COL.ink;ctx.lineWidth=5;ctx.stroke();ctx.strokeStyle='#fff';ctx.lineWidth=2;ctx.stroke();eyes(0,-38,8,5,1);line([-8,-20,8,-22],2.2);
+  ctx.fillStyle=COL.blue;ctx.font='11px '+FONT_D;ctx.textAlign='center';ctx.fillText('MILK',0,-6);},
+ pot:function(e,r,t){ctx.translate(0,Math.sin(t*4+e.seed+2)*2);ell(0,-30,30,28);ink('#b5442f',2.4);rect(-10,-66,20,8,'#b5442f',2);ell(0,-70,4,4);ink(COL.gold,1.6);
+  ctx.beginPath();ctx.moveTo(-28,-36);ctx.quadraticCurveTo(-50,-40,-50,-60);ctx.strokeStyle=COL.ink;ctx.lineWidth=8;ctx.stroke();ctx.strokeStyle='#b5442f';ctx.lineWidth=4;ctx.stroke();
+  ctx.beginPath();ctx.arc(32,-30,12,-1.3,1.3);ctx.strokeStyle=COL.ink;ctx.lineWidth=5;ctx.stroke();eyes(0,-36,9,5,1);line([-8,-18,8,-18],2.2);
+  ctx.strokeStyle='rgba(20,20,20,.4)';ctx.lineWidth=1.6;ctx.beginPath();ctx.moveTo(-50,-66);ctx.quadraticCurveTo(-56,-76,-48,-84+Math.sin(t*5)*3);ctx.stroke();},
+ bot:function(e,r,t){rect(-8,-14,6,14,COL.steel,2);rect(2,-14,6,14,COL.steel,2);rect(-22,-58,44,44,'#aab1c2',2.4);star(0,-36,9,COL.gold);rect(-16,-88,32,26,'#c5ccd3',2.4);
+  ctx.fillStyle=COL.red;ell(-7,-76,3.5,3.5);ctx.fill();ell(7,-76,3.5,3.5);ctx.fill();line([-8,-68,8,-68],2);line([0,-88,0,-98],2);ell(0,-100,3,3);ink(COL.red,1.4);limb([-22,-50,-34,-36],COL.steel,4);limb([22,-50,34,-40+Math.sin(t*5)*4],COL.steel,4);},
+ typo:function(e,r,t){ctx.translate(0,-22+Math.abs(Math.sin(t*6+e.seed))*-8);ctx.rotate(Math.sin(t*4+e.seed)*.15);rect(-22,-14,44,28,'#fff',2.2);ctx.fillStyle=COL.red;ctx.font='17px '+FONT_M;ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.fillText(['teh','alot','thier','wich'][e.slot%4],0,1);ctx.textBaseline='alphabetic';line([-18,10,18,10],1.4,COL.red);},
+ clock:function(e,r,t){ctx.translate(Math.sin(t*20)*1.2,0);line([-14,-6,-20,0],4);line([14,-6,20,0],4);ell(-20,-74,10,8,-.5);ink(COL.gold,2);ell(20,-74,10,8,.5);ink(COL.gold,2);ell(0,-40,32,32);ink('#fff',2.8);ell(0,-40,26,26);ctx.strokeStyle=COL.ink;ctx.lineWidth=1;ctx.stroke();
+  line([0,-40,0,-60],3);line([0,-40,Math.cos(t*2)*16,-40+Math.sin(t*2)*16],2,COL.red);eyes(0,-46,10,3.6,1);line([-8,-24,8,-24],2);},
+ printer:function(e,r,t){rect(-36,-40,72,40,'#d9dde8',2.4);rect(-26,-56,52,18,'#aab1c2',2.2);poly([-18,-56,-14,-80+Math.sin(t*8)*3,16,-76,18,-56],'#fff',2);line([-10,-68,10,-66],1.2);
+  rect(-24,-14,48,8,COL.ink,1.5);for(var i=0;i<6;i++)poly([-22+i*8,-14,-18+i*8,-8,-14+i*8,-14],'#fff',1);ctx.fillStyle=COL.red;ell(26,-30,3,3);ctx.fill();eyes(-6,-28,8,4,1);},
+ algo:function(e,r,t){ctx.translate(0,-50+Math.sin(t*2)*5);ctx.rotate(Math.sin(t)*.08);poly([0,-40,36,-18,36,22,0,44,-36,22,-36,-18],COL.purple,2.6);line([0,-40,0,2,36,22],1.6);line([0,2,-36,22],1.6);
+  ell(0,-2,15,10);ctx.fillStyle='#fff';ctx.fill();ctx.strokeStyle=COL.ink;ctx.lineWidth=2;ctx.stroke();ell(Math.sin(t*1.5)*5,-2,5,6);ctx.fillStyle=COL.ink;ctx.fill();
+  line([-28,30,-16,20,-6,26,8,12,20,16,30,2],2.4,'#7ed957');},
+ page:function(e,r,t){ctx.translate(0,-4);poly([-36,0,-38,-108,26,-110,38,-98,36,0],'#fff',2.8);poly([26,-110,27,-98,38,-98],'#e8e8e8',1.6);
+  ctx.globalAlpha*=.35;eyes(0,-66,11,5);line([-9,-46,9,-46],2);ctx.globalAlpha/=.35;if(Math.floor(t*2)%2)rect(-26,-94,2.5,13,COL.ink,1);
+  if(e.blink){ctx.strokeStyle=COL.red;ctx.lineWidth=2;ctx.beginPath();for(var i=0;i<5;i++){ctx.moveTo(-24,-30+i*6);ctx.lineTo(24+r()*3,-30+i*6+r()*2);}ctx.stroke();}}
+};
+function paintArt(c,kind,id){
+  var d=Math.min(window.devicePixelRatio||1,2),w=c.clientWidth||84,old=ctx;c.width=c.height=Math.round(w*d);ctx=c.getContext('2d');ctx.setTransform(d,0,0,d,0,0);ctx.clearRect(0,0,w,w);
+  var r=rng(7),s=w/84;ctx.save();
+  if(kind==='hero'){ctx.translate(w/2-4*s,w-4*s);ctx.scale(.56*s,.56*s);drawQuill(id,r,0);}
+  else{ctx.translate(w/2,w-10*s);ctx.scale(1.3*s,1.3*s);drawCat(id,r,0);}
+  ctx.restore();ctx=old;
+}
+
+/* the fight on the canvas */
+var BOX=[],T0=now();
+function fitScene(){
+  PORT=window.innerWidth<620;W=PORT?430:680;Hh=360;
+  var b=cv.getBoundingClientRect(),d=Math.min(window.devicePixelRatio||1,2),w=Math.max(300,Math.round((b.width||W)*d)),h=Math.round(w*Hh/W);
+  if(cv.width!==w||cv.height!==h){cv.width=w;cv.height=h;}scale=cv.width/W;
+}
+function statLines(o){var out=[],k;for(k in NAMES)if(o.st[k]>0)out.push(NAMES[k]+' '+o.st[k]);if(o.st.mist)out.push('Mystery');if(o.st.dbl)out.push('Plus One');if(o.st.ci)out.push('Interest '+o.st.ci);if(o.st.fr)out.push('Frame Rate '+o.st.fr);if(o.st.oi)out.push('Invitation');if(o.st.dign)out.push('Dignity '+o.st.dign);return out;}
+function bars(o,x,y,w,name){
+  var f=clamp(o.hp/o.max,0,1);ctx.fillStyle='#fff';ctx.fillRect(x-w/2,y,w,11);ctx.fillStyle=COL.red;ctx.fillRect(x-w/2,y,w*f,11);ctx.strokeStyle=COL.ink;ctx.lineWidth=2;ctx.strokeRect(x-w/2,y,w,11);
+  ctx.fillStyle=COL.ink;ctx.font='12px '+FONT_D;ctx.textAlign='center';ctx.fillText(Math.max(0,o.hp)+' / '+o.max,x,y+25);
+  if(o.block>0){ctx.beginPath();ctx.moveTo(x-w/2-22,y-6);ctx.lineTo(x-w/2-4,y-6);ctx.lineTo(x-w/2-4,y+8);ctx.quadraticCurveTo(x-w/2-13,y+20,x-w/2-22,y+8);ctx.closePath();ink(COL.blue,2);ctx.fillStyle='#fff';ctx.font='12px '+FONT_D;ctx.fillText(o.block,x-w/2-13,y+9);}
+  var top=y+38;if(name){ctx.fillStyle=COL.ink;ctx.font=(PORT?10:11)+'px '+FONT_D;ctx.fillText(name.toUpperCase(),x,top,PORT?84:124);top+=13;}
+  var s=statLines(o);ctx.font='11px '+FONT_D;for(var i=0;i<s.length;i++){ctx.fillStyle=/Soggy|Flust|Invoice/.test(s[i])?COL.purple:COL.green;ctx.fillText(s[i].toUpperCase(),x,top+i*12);}
+}
+function intent(e,x,y){
+  var m=e.mv,parts=[],i;if(!m)return;
+  if(m.a){var d=dmgCalc(m.a,e,H);parts.push(['a',d+(m.x>1?'×'+m.x:'')]);}
+  if(m.b)parts.push(['b','']);if(m.g)parts.push(['g','']);if(m.sog||m.flu)parts.push(['d','']);if(m.add)parts.push(['c','']);
+  var tw=0;ctx.font='15px '+FONT_D;parts.forEach(function(p){p[2]=18+(p[1]?ctx.measureText(p[1]).width+3:0);tw+=p[2]+4;});
+  var px=x-tw/2;
+  for(i=0;i<parts.length;i++){var p=parts[i],k=p[0],cx=px+8,cy=y;
+    if(k==='a'){line([cx-6,cy+7,cx+6,cy-7],3.4,COL.red);line([cx-7,cy+1,cx-1,cy+7],2.6,COL.ink);ctx.fillStyle=COL.red;ctx.textAlign='left';ctx.fillText(p[1],cx+10,cy+6);}
+    else if(k==='b'){ctx.beginPath();ctx.moveTo(cx-7,cy-7);ctx.lineTo(cx+7,cy-7);ctx.lineTo(cx+7,cy+1);ctx.quadraticCurveTo(cx,cy+11,cx-7,cy+1);ctx.closePath();ink(COL.blue,1.6);}
+    else if(k==='g'){poly([cx,cy-9,cx+8,cy,cx+3,cy,cx+3,cy+8,cx-3,cy+8,cx-3,cy,cx-8,cy],COL.green,1.4);}
+    else if(k==='d'){poly([cx,cy+9,cx+8,cy,cx+3,cy,cx+3,cy-8,cx-3,cy-8,cx-3,cy,cx-8,cy],COL.purple,1.4);}
+    else{rect(cx-8,cy-6,16,12,'#fff',1.6);line([cx-8,cy-6,cx,cy+1,cx+8,cy-6],1.4);}
+    px+=p[2]+4;}
+}
+function drawScene(){
+  if(S.scr!=='combat'||!B)return;
+  fitScene();var t=(now()-T0)/1000,boil=Math.floor(t*6),r=rng(boil*7919+3),i,n=now();
+  ctx.setTransform(scale,0,0,scale,0,0);ctx.fillStyle='#fffdf7';ctx.fillRect(0,0,W,Hh);
+  var gy=Hh-126;
+  splat(W*.16,56,26,COL.blue,.1,11);splat(W*.82,44,22,COL.red,.1,12);splat(W*.5,90,16,RUN.act===2?COL.purple:COL.gold,.1,13);
+  ctx.strokeStyle='rgba(43,79,194,.5)';ctx.lineWidth=2;for(i=0;i<2;i++){ctx.beginPath();for(var x=-40;x<W+40;x+=50){var o=(t*14+i*23)%50;ctx.moveTo(x-o,gy-34+i*8);ctx.quadraticCurveTo(x-o+12,gy-39+i*8,x-o+25,gy-34+i*8);ctx.quadraticCurveTo(x-o+38,gy-29+i*8,x-o+50,gy-34+i*8);}ctx.stroke();}
+  line([0,gy-16,W,gy-16+(r()-.5)],3);for(x=10;x<W;x+=34)line([x,gy-16,x,gy+2],1.6);line([0,gy+2,W,gy+2],2.4);
+  ctx.strokeStyle='rgba(20,20,20,.16)';ctx.lineWidth=1.4;ctx.beginPath();for(x=-20;x<W+60;x+=46){ctx.moveTo(x,gy+4);ctx.lineTo(x-26,Hh);}ctx.stroke();
+  ctx.fillStyle='rgba(20,20,20,.28)';ctx.font='13px '+FONT_D;ctx.textAlign='left';ctx.fillText(ACTS[RUN.act].toUpperCase()+' · TURN '+B.turn,10,18);
+  /* you and yours */
+  var hx=PORT?106:132,hy=gy+34;H.x=hx;H.y=hy-70;
+  RUN.cats.forEach(function(c,j){ctx.save();ctx.translate(hx-58+(j%2?4:-4)+Math.sin(t*1.7+j)*1.5,hy+2-j*27);ctx.scale(.56,.56);drawCat(c,rng(boil*31+j),t);ctx.restore();});
+  ctx.save();var sh=(H.hitT&&n>H.hitT&&n-H.hitT<260)?Math.sin(n*.09)*4:0;ctx.translate(hx+sh,hy);ctx.scale(1.02,1.02);drawQuill(RUN.hero,r,t);ctx.restore();
+  bars({hp:RUN.hp,max:RUN.max,block:H.block,st:H.st},hx,hy+10,84);
+  /* them */
+  BOX.length=0;var cnt=B.en.length,x0=PORT?W*.5:W*.46,x1=W-(PORT?58:66);
+  B.en.forEach(function(e,j){
+    var ex=cnt===1?(x0+x1)/2+10:x0+(x1-x0)*(j/(cnt-1)),ey=gy+34-(j%2)*10,a=1;e.x=ex;e.y=ey-70*e.sc;
+    if(e.dead){a=1-clamp((n-e.deadT)/500,0,1);if(a<=0)return;}
+    var lunge=(e.actT&&n>e.actT&&n-e.actT<240)?-Math.sin((n-e.actT)/240*Math.PI)*16:0,shk=(e.hitT&&n>e.hitT&&n-e.hitT<240)?Math.sin(n*.09)*4:0;
+    ctx.save();ctx.globalAlpha=a;ctx.translate(ex+lunge+shk,ey);ctx.fillStyle='rgba(20,20,20,.13)';ell(0,2,30*e.sc,5);ctx.fill();ctx.scale(e.sc,e.sc);(ART[e.k]||ART.bot)(e,rng(e.seed+boil*31),t);ctx.restore();ctx.globalAlpha=1;
+    if(e.dead)return;
+    var top=ey-112*e.sc-(e.k==='gull'||e.k==='king'?26*e.sc:0);
+    if(S.sel>=0&&B.hand[S.sel]&&CARDS[B.hand[S.sel].id].o.t||S.brewSel>=0){ctx.strokeStyle=COL.red;ctx.lineWidth=2.4;ctx.setLineDash([6,5]);ctx.strokeRect(ex-34*e.sc,top+10,68*e.sc,ey-top-6);ctx.setLineDash([]);}
+    intent(e,ex,Math.max(34,top-4));
+    bars(e,ex,ey+8,PORT?52:64,e.name);
+    BOX.push({i:j,x:ex-40*e.sc,y:top-20,w:80*e.sc,h:ey-top+70});
+  });
+  /* numbers flying off things */
+  for(i=FX.length-1;i>=0;i--){var f=FX[i],age=(n-f.t)/1000;if(age<0)continue;if(age>1.1){FX.splice(i,1);continue;}
+    var who=f.who,fx0=who.x||hx,fy0=(who.y||hy-70)-age*38-f.n*13;ctx.globalAlpha=clamp(1.6-age*1.6,0,1);ctx.font=(f.text.charAt(0)==='-'?24:15)+'px '+FONT_M;ctx.textAlign='center';ctx.lineWidth=4;ctx.strokeStyle='#fff';ctx.lineJoin='round';ctx.strokeText(f.text,fx0,fy0);ctx.fillStyle=f.col;ctx.fillText(f.text,fx0,fy0);ctx.globalAlpha=1;}
+}
+function frame(){drawScene();requestAnimationFrame(frame);}
+
+/* ================= the screens ================= */
+function cardHTML(ci,attr,extra){
+  var d=CARDS[ci.id],c=B&&S.scr==='combat'&&ci.z?0:((ci.u&&d.o.uc!=null)?d.o.uc:d.cost);
+  return '<button type="button" class="cd h-'+d.h+(ci.u?' up':'')+(extra&&extra.cls?' '+extra.cls:'')+'" '+(attr||'')+'>'+(d.o.unp?'':'<span class="co">'+c+'</span>')+'<b>'+d.name+(ci.u?'+':'')+'</b><i>'+TYPE[d.type]+(ci.tmp&&d.type!=='X'?' · fleeting':'')+'</i><span class="tx">'+cardText(ci)+'</span>'+(extra&&extra.pr?'<span class="pr">'+extra.pr+'</span>':'')+'</button>';
+}
+function hudHTML(){
+  var snd='<button type="button" class="chip" data-a="mute" aria-pressed="'+A.muted+'">Sound '+(A.muted?'off':'on')+'</button>';
+  if(!RUN||S.scr==='over'||S.scr==='title')return '<span>Slay the Pier</span><span class="sp"></span><span>Encore '+S.lvl+'</span>'+snd;
+  var h='<span>'+HEROES[RUN.hero].name+'</span><span class="hp">♥ '+RUN.hp+'/'+RUN.max+'</span><span class="gold">'+RUN.gold+' Dreamies</span><span>'+ACTS[RUN.act]+' '+(RUN.row+1)+'/6</span><span class="sp"></span>';
+  RUN.brews.forEach(function(b,i){h+='<button type="button" class="chip brew'+(S.brewSel===i?' on':'')+'" data-a="brew" data-i="'+i+'" title="'+BREWS[b][1]+'">'+BREWS[b][0]+'</button>';});
+  h+='<button type="button" class="chip" data-a="deck">Deck '+RUN.deck.length+'</button>';
+  if(RUN.relics.length)h+='<button type="button" class="chip rel" data-a="relics">Keepsakes '+RUN.relics.length+'</button>';
+  return h+snd;
+}
+var NODE={F:['Fight',''],L:['Elite','tougher, drops a keepsake'],E:['Event','who knows'],S:['Shop','spend Dreamies'],T:['Keepsake','free'],R:['Rest','heal or edit'],B:['Boss','the end of the pier']};
+function render(){
+  var v=$('view'),h='',i;cv.hidden=S.scr!=='combat';$('hud').innerHTML=hudHTML();
+  if(S.mode==='deck'||S.mode==='cut'||S.mode==='edit'||S.mode==='relics'){v.innerHTML=deckHTML();arts();return;}
+  if(S.scr==='title'){
+    var saved=loadRun();
+    h='<div class="panel"><h2>Who is climbing?</h2><div class="row">';
+    ['r','t','k'].forEach(function(k){var x=HEROES[k];h+='<button type="button" class="pick'+(S.hero===k?' on':'')+'" data-a="hero" data-i="'+k+'" aria-pressed="'+(S.hero===k)+'"><canvas data-art="hero" data-id="'+k+'" aria-hidden="true"></canvas><b>'+x.name+'</b><em>'+x.title+'</em><span>'+x.blurb+'</span><span><strong>'+x.hp+' health</strong>'+(META.hw[k]?' · won '+META.hw[k]:'')+'</span></button>';});
+    h+='</div><div class="row">';
+    for(i=0;i<=5;i++)h+='<button type="button" class="chip'+(S.lvl===i?' on':'')+'" data-a="lvl" data-i="'+i+'"'+(i>META.open?' disabled':'')+'>Encore '+i+'</button>';
+    h+='</div><p style="font-size:.85rem;font-style:italic">'+(S.lvl?'Encore '+S.lvl+': everything out there is '+S.lvl*10+'% tougher and hits harder, and the score counts for '+(100+25*S.lvl)+'%.':'Win a run to open the next Encore: tougher piers, bigger scores.')+'</p>';
+    h+='<div class="row"><button type="button" class="btn" data-a="begin">Begin the climb</button>'+(saved?'<button type="button" class="btn quiet" data-a="resume">Carry on as '+HEROES[saved.hero].name+' ('+ACTS[saved.act]+')</button>':'')+'</div></div>';
+  }else if(S.scr==='cat'){
+    h='<div class="panel"><h2>Three cats have noticed you</h2><p>One of them will come along as your familiar. Its trick works in every fight, and its card goes in your deck.</p><div class="row">';
+    S.offer.forEach(function(c){var x=CATS[c];h+='<button type="button" class="pick" data-a="cat" data-i="'+c+'"><canvas data-art="cat" data-id="'+c+'" aria-hidden="true"></canvas><b>'+x.name+'</b><span>'+x.perk+'</span><span><em>Card: '+CARDS[x.card].name+'</em></span></button>';});
+    h+='</div></div>';
+  }else if(S.scr==='map'){
+    h='<div class="panel"><h2>'+ACTS[RUN.act]+'</h2><p>'+(S.note||'Pick your next stop. From each one you can go straight on or one step to either side.')+'</p><div class="map">';
+    for(var r=RUN.map.length-1;r>=0;r--){var row=RUN.map[r];h+='<div class="maprow'+(row.length===1?' boss':'')+'">';
+      row.forEach(function(nd,c){var go=r===RUN.row+1&&canGo(c);h+='<button type="button" class="node t-'+nd.t+(go?' go':'')+(nd.was?' was':'')+'" data-a="node" data-i="'+c+'"'+(go?'':' disabled')+'>'+NODE[nd.t][0]+'<small>'+(nd.was?'been':NODE[nd.t][1]||'&nbsp;')+'</small></button>';});h+='</div>';}
+    h+='</div></div>';
+  }else if(S.scr==='combat'){
+    var selc=S.sel>=0?B.hand[S.sel]:null,det;
+    if(S.brewSel>=0)det='<b>'+BREWS[RUN.brews[S.brewSel]][0]+'.</b> Tap the enemy it is for.';
+    else if(selc){var sd=CARDS[selc.id];det='<b>'+sd.name+(selc.u?'+':'')+'.</b> '+cardText(selc)+' '+(!playable(selc)?'<em>'+(sd.o.unp?'It cannot be played.':'Not enough Energy.')+'</em>':(sd.o.t&&alive().length>1?'<em>Tap an enemy.</em>':'<em>Tap it again to play it.</em>'));}
+    else det=B.en.filter(function(e){return !e.dead;}).map(function(e){return '<b>'+e.name+'</b> means to: '+e.mv.n;}).join(' · ');
+    h='<div class="bar"><div class="orb" title="Energy">'+B.energy+'</div><div class="piles">Draw '+B.draw.length+' · Discard '+B.disc.length+'</div><button type="button" class="btn" data-a="end">End turn</button></div><div class="detail">'+det+'</div><div class="hand" id="hand">';
+    B.hand.forEach(function(c,i){h+=cardHTML(c,'data-a="card" data-i="'+i+'"',{cls:(S.sel===i?'sel ':'')+(playable(c)?'':'no')});});
+    h+='</div>';
+  }else if(S.scr==='reward'){
+    var rw=S.rw;
+    h='<div class="panel"><h2>'+(rw.kind==='B'?'The pier is yours':'Seen off')+'</h2><p>'+rw.gold+' Dreamies.'+(rw.healed?' Daisy has seen to '+rw.healed+' health.':'')+(rw.brew?' Somebody left a '+BREWS[rw.brew][0]+'.':'')+(rw.relic?' A keepsake: <strong>'+RELICS[rw.relic][0]+'</strong>. '+RELICS[rw.relic][1]:'')+'</p>';
+    if(rw.boss&&!rw.bossTook){h+='<p><strong>Choose one for the road:</strong></p><div class="list">';
+      rw.boss.forEach(function(o,i){var tx=o[0]==='relic'?(o[1]?'<b>'+RELICS[o[1]][0]+'</b> '+RELICS[o[1]][1]:'<b>Nothing left</b>'):o[0]==='cat'?'<b>'+CATS[o[1]].name+' joins you</b> '+CATS[o[1]].perk:o[0]==='gold'?'<b>80 Dreamies</b> Every cat is already here.':'<b>A good night’s sleep</b> +10 maximum health.';
+        h+='<div class="item"><span>'+tx+'</span><button type="button" class="btn quiet" data-a="boss" data-i="'+i+'">Take</button></div>';});h+='</div>';}
+    else if(!rw.took){h+='<p><strong>Add a card to your deck:</strong></p><div class="cards">';rw.cards.forEach(function(id,i){h+=cardHTML({id:id,u:0},'data-a="take" data-i="'+i+'"');});h+='</div><button type="button" class="btn quiet" data-a="take" data-i="-1">None of those</button>';}
+    else h+='<button type="button" class="btn" data-a="leave">'+(rw.kind==='B'&&RUN.act>=3?'Take a bow':rw.kind==='B'?'On to '+ACTS[RUN.act+1]:'Onward')+'</button>';
+    h+='</div>';
+  }else if(S.scr==='rest'){
+    var amt=Math.round(RUN.max*(RUN.lvl>=4?.25:.3))+(has('bell')?10:0);
+    h='<div class="panel"><h2>A brew and a sit down</h2><p>The deckchair is free and nobody is looking at you. One or the other:</p><div class="row"><button type="button" class="btn" data-a="rest">Rest: heal '+amt+'</button><button type="button" class="btn quiet" data-a="edit">Edit: improve a card</button></div></div>';
+  }else if(S.scr==='treasure'){
+    h='<div class="panel"><h2>Somebody left this</h2>'+(S.got?'<p><strong>'+RELICS[S.got][0]+'.</strong> '+RELICS[S.got][1]+'</p>':'<p>50 Dreamies in a carrier bag.</p>')+'<button type="button" class="btn" data-a="leave">Onward</button></div>';
+  }else if(S.scr==='shop'){
+    var sh=S.shop;h='<div class="panel"><h2>Reggie’s Emporium</h2><p>Everything priced in Dreamies. '+(S.note||'No refunds, no credit, no haggling, my old son.')+'</p><div class="cards">';
+    sh.cards.forEach(function(c,i){if(!c.sold)h+=cardHTML({id:c.id,u:0},'data-a="buy" data-i="c'+i+'"',{pr:c.p+' Dreamies',cls:RUN.gold<c.p?'no':''});});h+='</div><div class="list">';
+    sh.rel.forEach(function(c,i){if(!c.sold)h+='<div class="item"><span><b>'+RELICS[c.id][0]+'</b> '+RELICS[c.id][1]+'</span><button type="button" class="btn quiet" data-a="buy" data-i="r'+i+'"'+(RUN.gold<c.p?' disabled':'')+'>'+c.p+'</button></div>';});
+    sh.brews.forEach(function(c,i){if(!c.sold)h+='<div class="item"><span><b>'+BREWS[c.id][0]+'</b> '+BREWS[c.id][1]+'</span><button type="button" class="btn quiet" data-a="buy" data-i="b'+i+'"'+(RUN.gold<c.p||RUN.brews.length>=3?' disabled':'')+'>'+c.p+'</button></div>';});
+    if(sh.cat&&!sh.cat.sold)h+='<div class="item"><span><b>Dreamies for '+CATS[sh.cat.id].name+'</b> '+CATS[sh.cat.id].name+' joins you. '+CATS[sh.cat.id].perk+'</span><button type="button" class="btn quiet" data-a="buy" data-i="k"'+(RUN.gold<sh.cat.p?' disabled':'')+'>'+sh.cat.p+'</button></div>';
+    if(sh.cut)h+='<div class="item"><span><b>The red pen</b> Strike one card out of your deck for good.</span><button type="button" class="btn quiet" data-a="buy" data-i="x"'+(RUN.gold<sh.cut?' disabled':'')+'>'+sh.cut+'</button></div>';
+    h+='</div><button type="button" class="btn" data-a="leave">Leave the shop</button></div>';
+  }else if(S.scr==='event'){
+    var ev=S.ev;h='<div class="panel"><h2>'+ev.d.t+'</h2><p>'+(ev.res||ev.d.tx())+'</p><div class="list">';
+    if(ev.res)h+='</div><button type="button" class="btn" data-a="leave">Onward</button>';
+    else{ev.d.opts().forEach(function(o,i){h+='<button type="button" class="btn quiet" style="text-align:left" data-a="opt" data-i="'+i+'">'+o[0]+'</button>';});h+='</div>'+(S.note?'<p><em>'+S.note+'</em></p>':'');}
+    h+='</div>';
+  }else if(S.scr==='over'){
+    var e=S.end;
+    h='<div class="panel"><h2>'+(e.won?'You slew the pier':'Seen off yourself')+'</h2><div class="big">'+e.pts+'</div><p><strong>'+(e.won?HEROES[e.hero].name+' reached the end of North Pier with '+e.cats+(e.cats===1?' familiar':' familiars')+', on Encore '+e.lvl+'.':HEROES[e.hero].name+' got as far as '+ACTS[e.act]+', stop '+e.floor+' of 18'+'.'+(e.by?' The culprit: '+e.by+'.':''))+'</strong></p>'+
+      '<p>'+(e.best?'A new best score.':'Your best: '+META.best+'.')+(e.won&&META.open>e.lvl?' Encore '+META.open+' is now open.':'')+'</p><p id="wallLine"></p>'+
+      '<div class="row"><button type="button" class="btn" data-a="again">Go again</button><button type="button" class="btn quiet" data-a="copy">Copy my result</button></div>'+
+      (ON_SITE&&e.pts>0?'<div class="row" style="flex-direction:column;align-items:center"><a class="btn quiet" id="sendBtn" href="arcade.html?game=slay-the-pier&score='+e.pts+'#send-score" target="_blank" rel="noopener">Send in your score</a></div>':'')+
+      '<p class="share" id="shareText" style="font-size:.85rem;font-style:italic;user-select:all">I scored '+e.pts+' in Slay the Pier as '+HEROES[e.hero].name+(e.won?' and reached the end of the pier.':', and got as far as '+ACTS[e.act]+'.')+' williamgeorgeworks.co.uk</p></div>';
+  }
+  v.innerHTML=h;arts();sheet();
+  if(S.scr==='over')wallLine();
+}
+function deckHTML(){
+  var h='<div class="panel">',i;
+  if(S.mode==='relics'){h+='<h2>Keepsakes and familiars</h2><div class="list">';RUN.relics.forEach(function(r){h+='<div class="item"><span><b>'+RELICS[r][0]+'</b> '+RELICS[r][1]+'</span></div>';});RUN.cats.forEach(function(c){h+='<div class="item"><span><b>'+CATS[c].name+'</b> '+CATS[c].perk+'</span></div>';});h+='</div>';}
+  else{
+    h+='<h2>'+(S.mode==='cut'?'Strike out which card?':S.mode==='edit'?'Improve which card?':'Your deck')+'</h2>'+(S.mode==='deck'&&RUN.cats.length?'<p>Familiars: '+RUN.cats.map(function(c){return CATS[c].name;}).join(', ')+'.</p>':'')+'<div class="cards">';
+    RUN.deck.forEach(function(c,i){var ok=S.mode==='deck'||(S.mode==='cut')||(S.mode==='edit'&&!c.u&&(CARDS[c.id].n.length||CARDS[c.id].o.uc!=null));
+      if(S.mode==='edit'&&ok)h+=cardHTML({id:c.id,u:1},'data-a="dk" data-i="'+i+'"');else h+=cardHTML(c,'data-a="dk" data-i="'+i+'"',{cls:ok?'':'no'});});
+    h+='</div>';
+  }
+  return h+'<button type="button" class="btn quiet" data-a="back">'+(S.mode==='deck'||S.mode==='relics'?'Back':'Never mind')+'</button></div>';
+}
+function arts(){Array.prototype.forEach.call(document.querySelectorAll('canvas[data-art]'),function(c){paintArt(c,c.getAttribute('data-art'),c.getAttribute('data-id'));});}
+function sheet(){$('rsRuns').textContent=META.runs;$('rsWins').textContent=META.wins;$('rsBest').textContent=META.best;$('rsOpen').textContent=META.open;}
+
+/* ================= what the buttons do ================= */
+function act(a,i){
+  audioStart();
+  if(a==='mute'){A.muted=!A.muted;if(A.master)A.master.gain.value=A.muted?0:1;}
+  else if(a==='hero'){S.hero=i;}
+  else if(a==='lvl'){if(+i<=META.open)S.lvl=+i;}
+  else if(a==='begin'){newRun();return;}
+  else if(a==='resume'){RUN=loadRun();if(RUN){S.lvl=RUN.lvl;S.scr=RUN.cats.length?'map':'cat';if(S.scr==='cat')S.offer=shuffle(CATIDS.slice()).slice(0,3);}}
+  else if(a==='cat'){addCat(i);S.scr='map';S.note=CATS[i].name+' has come along. '+CARDS[CATS[i].card].name+' is in your deck.';saveRun();}
+  else if(a==='node'){enterNode(+i);return;}
+  else if(a==='card'){i=+i;if(S.sel===i){if(!playCard(i,null)){var d=CARDS[B.hand[i].id];if(!playable(B.hand[i]))sfx('no');}}else{S.sel=i;S.brewSel=-1;}}
+  else if(a==='enemy'){i=+i;if(S.brewSel>=0)useBrew(S.brewSel,i);else if(S.sel>=0)playCard(S.sel,i);}
+  else if(a==='end'){endTurn();}
+  else if(a==='brew'){i=+i;var id=RUN.brews[i];if(id==='tea'||(S.scr==='combat'&&!BREWS[id][2]))useBrew(i,null);else if(S.scr==='combat'){if(alive().length===1)useBrew(i,null);else{S.brewSel=S.brewSel===i?-1:i;S.sel=-1;}}}
+  else if(a==='deck'){S.mode='deck';}
+  else if(a==='relics'){S.mode='relics';}
+  else if(a==='back'){if(S.mode==='cut'&&S.scr==='event'&&!S.ev.res)RUN.gold+=40;if(S.mode==='cut'&&S.scr==='shop'){RUN.gold+=75;S.shop.cut=75;}S.mode=null;}
+  else if(a==='dk'){i=+i;var c=RUN.deck[i];
+    if(S.mode==='cut'){RUN.deck.splice(i,1);S.mode=null;if(S.scr==='event')S.ev.res=CARDS[c.id].name+' has been struck out. Paid in full.';else S.note=CARDS[c.id].name+' has been struck out.';sfx('card');}
+    else if(S.mode==='edit'&&!c.u&&(CARDS[c.id].n.length||CARDS[c.id].o.uc!=null)){c.u=1;S.mode=null;S.note=CARDS[c.id].name+' has been improved.';sfx('won');leaveNode();return;}}
+  else if(a==='take'){i=+i;if(i>=0)RUN.deck.push({id:S.rw.cards[i],u:0});S.rw.took=1;if(S.rw.kind!=='B'){leaveNode();return;}}
+  else if(a==='boss'){var o=S.rw.boss[+i];if(o[0]==='relic'&&o[1])addRelic(o[1]);else if(o[0]==='cat')addCat(o[1]);else if(o[0]==='gold')RUN.gold+=80;else{RUN.max+=10;RUN.hp+=10;}S.rw.bossTook=1;}
+  else if(a==='leave'){leaveNode();return;}
+  else if(a==='rest'){heal(Math.round(RUN.max*(RUN.lvl>=4?.25:.3))+(has('bell')?10:0));if(has('stove'))gainBrew();sfx('brew');leaveNode();return;}
+  else if(a==='edit'){S.mode='edit';}
+  else if(a==='buy'){var sh=S.shop,k=i.charAt(0),n=+i.slice(1),it;
+    if(k==='x'){if(RUN.gold>=sh.cut){RUN.gold-=sh.cut;sh.cut=0;S.mode='cut';}}
+    else if(k==='k'){if(sh.cat&&!sh.cat.sold&&RUN.gold>=sh.cat.p){RUN.gold-=sh.cat.p;sh.cat.sold=1;addCat(sh.cat.id);S.note=CATS[sh.cat.id].name+' has been bought, in so far as a cat can be.';sfx('coin');}}
+    else{it=(k==='c'?sh.cards:k==='r'?sh.rel:sh.brews)[n];if(it&&!it.sold&&RUN.gold>=it.p&&(k!=='b'||RUN.brews.length<3)){RUN.gold-=it.p;it.sold=1;if(k==='c')RUN.deck.push({id:it.id,u:0});else if(k==='r')addRelic(it.id);else gainBrew(it.id);S.note='A pleasure doing business.';sfx('coin');}}}
+  else if(a==='opt'){var op=S.ev.d.opts()[+i],res=op[1]();if(res===null){S.note='You cannot afford that.';}else{S.note='';if(S.mode!=='cut')S.ev.res=res||'Done.';}}
+  else if(a==='again'){RUN=null;B=null;H=null;S.scr='title';S.end=null;}
+  else if(a==='copy'){var st=$('shareText');try{navigator.clipboard.writeText(st.textContent).then(function(){},function(){});}catch(e){}return;}
+  render();
+}
+$('stage').addEventListener('click',function(ev){var b=ev.target.closest('[data-a]');if(!b||b.disabled)return;if(b.id==='sendBtn')return;act(b.getAttribute('data-a'),b.getAttribute('data-i'));});
+cv.addEventListener('click',function(ev){if(S.scr!=='combat')return;var r=cv.getBoundingClientRect(),x=(ev.clientX-r.left)/r.width*W,y=(ev.clientY-r.top)/r.height*Hh;
+  for(var i=0;i<BOX.length;i++){var b=BOX[i];if(x>=b.x&&x<=b.x+b.w&&y>=b.y&&y<=b.y+b.h){act('enemy',b.i);return;}}if(S.sel>=0||S.brewSel>=0){S.sel=-1;S.brewSel=-1;render();}});
+window.addEventListener('keydown',function(e){
+  if(S.scr!=='combat'||S.mode||(e.target&&/^(INPUT|TEXTAREA)$/.test(e.target.tagName)))return;
+  var k=e.key;if(k>='1'&&k<='9'||k==='0'){var i=k==='0'?9:+k-1;if(B.hand[i]){S.sel=i;S.brewSel=-1;render();}e.preventDefault();}
+  else if(k==='Enter'&&S.sel>=0){act('card',S.sel);e.preventDefault();}
+  else if(k==='e'||k==='E'){act('end');e.preventDefault();}
+});
+
+/* ================= the top ten (on the site only) ================= */
+var WALL=null;
+function wallRows(){return WALL?WALL.slice().sort(function(a,b){return (b.score-a.score)||String(a.date).localeCompare(String(b.date));}).slice(0,10):[];}
+function wallLine(){var p=$('wallLine');if(!p||!WALL||!S.end)return;var rows=wallRows(),pts=S.end.pts;
+  p.textContent=rows.length<10?(pts>0?'There is room on the top ten. Send that in.':''):pts>rows[9].score?'That is good enough for the top ten. Send it in.':'The top ten starts at '+rows[9].score+'.';}
+function loadWall(){
+  if(!ON_SITE||!window.fetch)return;
+  try{fetch('scores.json',{cache:'no-cache'}).then(function(r){return r.json();}).then(function(d){var g=(d.games||{})['slay-the-pier'];if(!g)return;WALL=g.entries||[];var rows=wallRows(),ol=$('lb');$('wall').hidden=false;ol.textContent='';
+    $('lbNone').textContent=rows.length?'':'Nobody yet. The first Quill to the end of the pier goes straight to the top.';
+    rows.forEach(function(r,i){var li=document.createElement('li');[['r',(i+1)+'.'],['w',r.name],['p',r.score]].forEach(function(c){var sp=document.createElement('span');sp.className=c[0];sp.textContent=c[1];li.appendChild(sp);});ol.appendChild(li);});wallLine();}).catch(function(){});}catch(e){}
+}
+
+/* ================= music: a waltz for the end of the pier ================= */
+var A={ac:null,master:null,muted:false,next:0,pos:0,timer:null,noise:null};
+function nf(n){var m=/^([A-G])(#|b)?(\d)$/.exec(n),s={C:0,D:2,E:4,F:5,G:7,A:9,B:11}[m[1]]+(m[2]==='#'?1:m[2]==='b'?-1:0);return 440*Math.pow(2,(s-9+(m[3]-4)*12)/12);}
+var SONG=(function(){
+  /* 3/4, counted in quavers: six to the bar */
+  var MA=['D5:2 F5:2 A5:2','D6:4 A5:2','Bb5:2 A5:2 G5:2','A5:6','F5:2 A5:2 D6:2','Bb5:4 G5:2','A5:2 C#6:2 E6:2','D6:6'],
+      MB=['C6:2 A5:2 F5:2','E5:2 G5:2 C6:2','Bb5:4 D6:2','C#6:6','A5:2 C6:2 F6:2','E6:4 C6:2','D6:2 Bb5:2 E6:2','D6:6'],
+      CA=['Dm','Dm','Bb','A','Dm','Gm','A','Dm'],CB=['F','C','Gm','A','F','C','Gm','Dm'],
+      CH={Dm:['D2','F3','A3'],Bb:['Bb1','F3','Bb3'],A:['A1','E3','C#4'],Gm:['G1','G3','Bb3'],F:['F2','F3','A3'],C:['C2','E3','G3']},by=[],off=0;
+  function add(t,n,d,k){(by[t]=by[t]||[]).push({f:nf(n),d:d,k:k});}
+  function strain(M,Cs){for(var b=0;b<8;b++){var t=off+b*6,c=CH[Cs[b]];M[b].split(' ').forEach(function(tok){var p=tok.split(':');add(t,p[0],+p[1],'m');t+=+p[1];});
+    add(off+b*6,c[0],2,'b');[2,4].forEach(function(s){add(off+b*6+s,c[1],1,'c');add(off+b*6+s,c[2],1,'c');});add(off+b*6,'C2',1,'K');add(off+b*6+2,'C2',1,'h');add(off+b*6+4,'C2',1,'h');}off+=48;}
+  strain(MA,CA);strain(MA,CA);strain(MB,CB);strain(MA,CA);return {by:by,len:off};
+})();
+function tone(f,t,d,k,fight){
+  var ac=A.ac,o,g;
+  if(k==='K'||k==='h'){if(!fight)return;if(k==='K'){o=ac.createOscillator();g=ac.createGain();o.frequency.setValueAtTime(130,t);o.frequency.exponentialRampToValueAtTime(45,t+.1);g.gain.setValueAtTime(.3,t);g.gain.exponentialRampToValueAtTime(.001,t+.16);o.connect(g);g.connect(A.master);o.start(t);o.stop(t+.18);}
+    else{var s=ac.createBufferSource(),hf=ac.createBiquadFilter();g=ac.createGain();s.buffer=A.noise;hf.type='highpass';hf.frequency.value=6500;g.gain.setValueAtTime(.05,t);g.gain.exponentialRampToValueAtTime(.001,t+.05);s.connect(hf);hf.connect(g);g.connect(A.master);s.start(t,Math.random()*.4);s.stop(t+.07);}return;}
+  o=ac.createOscillator();g=ac.createGain();o.type=k==='b'?'triangle':k==='c'?'triangle':'sine';o.frequency.value=f;
+  var vol=k==='m'?.13:k==='b'?.16:.035,len=k==='c'?.14:Math.max(.12,d*(k==='m'?1.5:.9));
+  g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(vol,t+.008);g.gain.exponentialRampToValueAtTime(.0005,t+len);o.connect(g);g.connect(A.master);o.start(t);o.stop(t+len+.03);
+  if(k==='m'){var o2=ac.createOscillator(),g2=ac.createGain();o2.type='triangle';o2.frequency.value=f*2;g2.gain.setValueAtTime(.0001,t);g2.gain.linearRampToValueAtTime(.035,t+.006);g2.gain.exponentialRampToValueAtTime(.0005,t+len*.6);o2.connect(g2);g2.connect(A.master);o2.start(t);o2.stop(t+len);}
+}
+function tick(){
+  if(!A.ac||A.ac.state!=='running')return;
+  var fight=S.scr==='combat',boss=fight&&B&&B.kind==='B',q=60/(fight?(boss?176:160):126)/2;
+  if(A.next<A.ac.currentTime)A.next=A.ac.currentTime+.05;
+  while(A.next<A.ac.currentTime+.25){var ev=SONG.by[A.pos];if(ev)for(var i=0;i<ev.length;i++)tone(ev[i].f*(boss&&ev[i].k==='b'?.5:1),A.next,ev[i].d*q,ev[i].k,fight);A.next+=q;A.pos=(A.pos+1)%SONG.len;}
+}
+function audioStart(){
+  try{if(!A.ac){var AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;A.ac=new AC();A.master=A.ac.createGain();A.master.gain.value=A.muted?0:1;var cmp=A.ac.createDynamicsCompressor();A.master.connect(cmp);cmp.connect(A.ac.destination);
+      var len=A.ac.sampleRate,buf=A.ac.createBuffer(1,len,len),ch=buf.getChannelData(0);for(var i=0;i<len;i++)ch[i]=Math.random()*2-1;A.noise=buf;A.next=A.ac.currentTime+.1;A.timer=setInterval(tick,60);}
+    if(A.ac.state==='suspended')A.ac.resume();}catch(e){}
+}
+var SFX={card:['triangle',[660,880],.04,.07],hit:['square',[200,120],.05,.1],ouch:['sawtooth',[260,150,90],.07,.14],block:['sine',[520,780],.05,.08],won:['triangle',[523,659,784,1047],.08,.13],win:['triangle',[523,659,784,1047,1319,1568],.12,.15],lose:['triangle',[392,330,262,196],.18,.14],coin:['sine',[988,1319],.06,.1],brew:['sine',[440,554,659],.07,.1],no:['square',[140],.1,.07]};
+function sfx(kind){if(!A.ac||A.ac.state!=='running')return;try{var s=SFX[kind],t=A.ac.currentTime,o=A.ac.createOscillator(),g=A.ac.createGain(),n=s[1].length;o.connect(g);g.connect(A.master);o.type=s[0];s[1].forEach(function(f,i){o.frequency.setValueAtTime(f,t+i*s[2]);});g.gain.setValueAtTime(s[3],t);g.gain.exponentialRampToValueAtTime(.001,t+n*s[2]+.08);o.start(t);o.stop(t+n*s[2]+.1);}catch(e){}}
+document.addEventListener('visibilitychange',function(){if(!A.ac)return;try{if(document.hidden)A.ac.suspend();else A.ac.resume();}catch(e){}});
+
+/* ================= go ================= */
+(function(){var ul=$('catList');CATIDS.forEach(function(id){var c=CATS[id],li=document.createElement('li');li.style.borderLeftColor=c.hat;var b=document.createElement('b');b.textContent=c.name;li.appendChild(b);li.appendChild(document.createElement('br'));var s=document.createElement('span');s.textContent=c.perk;li.appendChild(s);ul.appendChild(li);});})();
+S.lvl=0;render();loadWall();requestAnimationFrame(frame);
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){if(S.scr!=='combat')render();});
+if(window.__STP_TEST)window.__STP={S:S,run:function(){return RUN;},B:function(){return B;},H:function(){return H;},act:act,playCard:playCard,endTurn:endTurn,playable:playable,cost:cost,dmgCalc:dmgCalc,alive:alive,CARDS:CARDS,POOL:POOL,META:META,canGo:canGo,A:A,SONG:SONG,tone:tone,render:render};
+})();
+</script>
+<style>.wgw-strip{background:#f6f2e7;color:#141414;border-top:4px solid #141414;padding:28px 16px 40px;position:relative;z-index:5;font-family:Georgia,serif;text-align:left}.wgw-strip>div{max-width:1020px;margin:0 auto}.wgw-strip p{margin:0 0 14px;display:flex;flex-wrap:wrap;gap:12px;max-width:none;width:auto}.wgw-strip{width:100%;box-sizing:border-box;clear:both}.wgw-strip .wgw-h{font-family:"Permanent Marker","Segoe Print",cursive;color:#d1202f;font-size:20px;display:block;margin-bottom:12px}.wgw-strip a{font-family:Anton,"Arial Narrow",Impact,sans-serif;text-transform:uppercase;letter-spacing:.6px;font-size:18px;line-height:1.2;text-decoration:none;padding:10px 18px 9px;border:3px solid #141414;background:#fffdf7;color:#141414;box-shadow:5px 5px 0 #141414;display:inline-block}.wgw-strip a.k{background:#141414;color:#f6f2e7;box-shadow:5px 5px 0 #d1202f}.wgw-strip a.r{background:#d1202f;border-color:#d1202f;color:#fff}</style><div class="wgw-strip"><div><span class="wgw-h">Before you go</span><p><a class="k" href="books.html">See the books</a><a class="r" href="shop.html">Merch</a><a class="a" href="cats.html#dreamies">Buy the cats some Dreamies</a></p><p><a class="a" href="index.html">Home</a><a class="a" href="arcade.html">Play the games</a><a class="a" href="tribunal.html">Summon the tribunal</a><a class="a" href="cats.html">Meet the cats</a><a class="a" href="dear-terry.html">Dear Terry</a><a class="a" href="invoices.html">Invoices</a><a class="a" href="letters.html">Write to the tribunal</a><a class="a" href="log.html">The Ferret&rsquo;s Log</a><a class="a" href="story.html">Our story</a><a class="a" href="accord.html">The Accord</a><a class="a" href="road.html">The road ahead</a></p><p><a class="a" href="kitty-grand-prix.html">The Kitty Grand Prix</a><a class="a" href="grand-theft-kitty.html">Grand Theft Kitty</a><a class="a" href="red-light-green-light.html">Red Light, Green Light</a><a class="a" href="arthurs-tribunal.html">Arthur&rsquo;s Tribunal</a><a class="a" href="moulding-museum.html">The Moulding Museum</a><a class="a" href="unemployable-arcade.html">The Unemployable Arcade</a><a class="a" href="lion-and-albert.html">The Lion and Albert</a><a class="a" href="ferrets-ditch.html">Ferret&rsquo;s Ditch</a></p></div></div>
+<script src="share.js?v=20261114s" defer data-title="Slay the Pier" data-text="Three piers, six cat familiars and one cousin nobody mentioned. Slay the Pier, a free magical card game:"></script>
+<script src="quickscore.js?v=20261122a" defer></script>
+<script src="badges.js?v=20261122b" defer></script>
+<script src="hits.js?v=20261115a" defer></script>
+</body>
+</html>

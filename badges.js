@@ -13,12 +13,13 @@
     gold: ["#ffe27a", "#c98a00", "Gold"], legend: ["#ff9ad1", "#6a1fe0", "Legend"]
   };
   function defs() {
-    var g = load("gtk-v1"), r = load("rlgl-v1"), f = load("fd-v1"), a = num("arthur-best"), s = load("wgw-streak"), k = load("kgp-v1");
+    var g = load("gtk-v1"), r = load("rlgl-v1"), f = load("fd-v1"), a = num("arthur-best"), s = load("wgw-streak"), k = load("kgp-v1"), p = load("stp-v1");
     var kw = k.wc || [], kc = k.cats || {}, kb = k.best || [], kcn = Object.keys(kc).filter(function (c) { return kc[c] > 0; }).length;
     var fb = f.book || {}, fn = Object.keys(fb).filter(function (k) { return fb[k] > 0; }).length;
     var bestRun = 0; Object.keys(s).forEach(function (k) { if (s[k] && s[k].best > bestRun) bestRun = s[k].best; });
     var four = (+g.best > 0 ? 1 : 0) + (+r.best > 0 ? 1 : 0) + (a > 0 ? 1 : 0) + (+f.played > 0 ? 1 : 0);
     var five = four + (+k.races > 0 ? 1 : 0);
+    var phw = p.hw || {}, pcats = Object.keys(p.cw || {}).length;
     var list = [
       { id: "sticky", name: "Sticky Paws", how: "Steal 1,000 Dreamies in one Grand Theft Kitty run", game: "Grand Theft Kitty", tier: "bronze", icon: "paw", got: +g.best >= 1000 },
       { id: "thief", name: "Master Thief", how: "Steal 5,000 Dreamies in one run", game: "Grand Theft Kitty", tier: "silver", icon: "paw", got: +g.best >= 5000 },
@@ -61,6 +62,17 @@
       { id: "peg", name: "Own Peg", how: "Fish Ferret's Ditch 25 times", game: "Ferret's Ditch", tier: "silver", icon: "book", got: +f.played >= 25 },
       { id: "silk", name: "Silk Hands", how: "Land fifty fish with a perfect reel", game: "Ferret's Ditch", tier: "gold", icon: "gavel", got: +f.perfect >= 50 },
       { id: "subscriber", name: "Subscriber", how: "Read a paper twenty-one mornings running", game: "The papers", tier: "legend", icon: "book", got: bestRun >= 21 },
+      /* Slay the Pier */
+      { id: "daytrip", name: "Day Tripper", how: "Start a climb in Slay the Pier", game: "Slay the Pier", tier: "bronze", icon: "flag", got: +p.runs >= 1 },
+      { id: "wrangler", name: "Seagull Wrangler", how: "See off the boss at the end of South Pier", game: "Slay the Pier", tier: "bronze", icon: "star", got: +p.far >= 1 || +p.wins >= 1 },
+      { id: "endpier", name: "End of the Pier", how: "Win a run", game: "Slay the Pier", tier: "silver", icon: "cup", got: +p.wins >= 1 },
+      { id: "hightide", name: "High Tide", how: "Score 1,500 in one run", game: "Slay the Pier", tier: "silver", icon: "bolt", got: +p.best >= 1500 },
+      { id: "quills", name: "Full Set of Quills", how: "Win a run with Reggie, with Terry and with Kenneth", game: "Slay the Pier", tier: "gold", icon: "book", got: phw.r > 0 && phw.t > 0 && phw.k > 0 },
+      { id: "encore", name: "Encore!", how: "Win a run on Encore 2 or higher", game: "Slay the Pier", tier: "gold", icon: "cup", got: +p.mw >= 3 },
+      { id: "familiar", name: "Familiar Faces", how: "Win runs with each of the six cats along", game: "Slay the Pier", tier: "gold", icon: "paw", got: pcats >= 6 },
+      { id: "springtide", name: "Spring Tide", how: "Score 3,000 in one run", game: "Slay the Pier", tier: "gold", icon: "bolt", got: +p.best >= 3000 },
+      { id: "catpile", name: "The Whole Pile", how: "Win a run with all six cats at once", game: "Slay the Pier", tier: "legend", icon: "paw", got: +p.six >= 1 },
+      { id: "ovation", name: "Standing Ovation", how: "Win a run on Encore 5", game: "Slay the Pier", tier: "legend", icon: "crown", got: +p.mw >= 6 },
       { id: "tour", name: "Grand Tour", how: "Play all five scoring games, The Kitty Grand Prix included", game: "The arcade", tier: "legend", icon: "flag", got: five >= 5 }
     ];
     var n = list.filter(function (b) { return b.got; }).length;
@@ -102,7 +114,7 @@
     "@keyframes wgwbshine{0%{left:-40%}55%,100%{left:130%}}@media (prefers-reduced-motion:reduce){.wgwb-md .sh:after{animation:none;display:none}.wgwb-toast{transition:none}}";
   var st = document.createElement("style"); st.textContent = css; document.head.appendChild(st);
 
-  var RANKS = [[0, "Window shopper"], [1, "Newcomer"], [3, "Regular"], [6, "Local hero"], [10, "Hall of famer"], [14, "Absolute legend"], [20, "Promenade royalty"], [27, "Keeper of the cabinet"], [34, "Friend of the tribunal"], [41, "The last of the unemployable"]];
+  var RANKS = [[0, "Window shopper"], [1, "Newcomer"], [3, "Regular"], [6, "Local hero"], [10, "Hall of famer"], [14, "Absolute legend"], [20, "Promenade royalty"], [27, "Keeper of the cabinet"], [34, "Friend of the tribunal"], [41, "Wizard of the promenade"], [51, "The last of the unemployable"]];
   function rankFor(n) { var r = RANKS[0][1]; RANKS.forEach(function (x) { if (n >= x[0]) r = x[1]; }); return r; }
 
   /* the wall */
@@ -115,7 +127,7 @@
     wall.appendChild(el("div", "wgwb-rank", rankFor(got.length)));
     wall.appendChild(el("p", "wgwb-sub", got.length + " of " + list.length + " badges earned. " + (got.length === list.length ? "That is the lot. Frame it." : "Locked ones show how to win them.")));
     var bar = el("div", "wgwb-bar"), fill = el("i"); fill.style.width = Math.round(got.length / list.length * 100) + "%"; bar.appendChild(fill); wall.appendChild(bar);
-    var SHELVES = ["The Kitty Grand Prix", "Grand Theft Kitty", "Red Light, Green Light", "Arthur's Tribunal", "Ferret's Ditch", "The papers", "The arcade"];
+    var SHELVES = ["Slay the Pier", "The Kitty Grand Prix", "Grand Theft Kitty", "Red Light, Green Light", "Arthur's Tribunal", "Ferret's Ditch", "The papers", "The arcade"];
     var TORDER = { bronze: 0, silver: 1, gold: 2, legend: 3 };
     SHELVES.forEach(function (name) {
       var mine = list.filter(function (b) { return b.game === name; });
