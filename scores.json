@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-21",
+ "updated": "2026-11-22",
  "games": {
   "red-light-green-light": {
    "label": "points",
@@ -302,7 +302,13 @@
    "top": 10,
    "title": "Slay the Pier",
    "unit": "points",
-   "entries": []
+   "entries": [
+    {
+     "name": "TheFerret",
+     "score": 25,
+     "date": "2026-11-22"
+    }
+   ]
   }
  }
 }
