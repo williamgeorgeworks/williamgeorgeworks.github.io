@@ -1,0 +1,97 @@
+.office-lede { margin-top: 18px; }
+.office-demo {
+  font-family: var(--hand);
+  color: var(--red);
+  font-size: 20px;
+  margin: 0 0 14px;
+  transform: rotate(-1.5deg);
+}
+.office-stage-wrap {
+  width: 100%;
+  margin: 0 0 28px;
+  text-align: center;
+  overflow: hidden;
+}
+.office-stage {
+  background: #141414;
+  overflow: hidden;
+  line-height: 0;
+  display: inline-block;
+  max-width: 100%;
+}
+.office-stage canvas {
+  display: block;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+.office-board {
+  max-width: 960px;
+  margin: 0 auto 10px;
+}
+.office-board .scrawl { margin-bottom: 8px; }
+.office-feed-note {
+  font-family: var(--hand);
+  color: var(--red);
+  font-size: 20px;
+  margin: 0 0 14px;
+}
+.office-board-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 8px 18px;
+}
+.office-board-list li {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto auto;
+  column-gap: 10px;
+  row-gap: 0;
+  align-items: baseline;
+  padding: 6px 0;
+  border-bottom: 1px dashed var(--line);
+}
+.office-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid var(--ink);
+  background: #c4bfb2;
+  grid-row: 1 / span 2;
+  align-self: center;
+}
+.office-dot.working { background: #2e8b57; }
+.office-dot.celebrating { background: var(--red); }
+.office-who {
+  font-family: var(--display);
+  text-transform: uppercase;
+  letter-spacing: .4px;
+  font-size: 16px;
+}
+.office-who small {
+  display: inline;
+  font-family: var(--body);
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 14px;
+  color: var(--faint);
+  font-style: italic;
+}
+.office-flavour {
+  font-family: var(--hand);
+  font-size: 17px;
+  color: var(--ink);
+  grid-column: 2;
+  line-height: 1.25;
+  overflow-wrap: break-word;
+}
+.office-credit { margin-top: 16px; }
+@media (max-width: 560px) {
+  .office-stage { box-shadow: 5px 5px 0 var(--ink); }
+  .office-board-list { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .office-demo { transform: none; }
+}
