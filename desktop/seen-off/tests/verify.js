@@ -96,7 +96,8 @@ async function run(browser, w, h, tag, port) {
   if (s.scr === 'reward' || s.scr === 'map') {
     await key('Escape', 400); const m = await page.evaluate(() => !document.getElementById('soMenu').hidden);
     ok(`${tag} Esc opens menu`, m); await page.screenshot({ path: `${SHOTS}/${tag}-08-menu.png` });
-    await key('ArrowDown'); await key('ArrowDown'); await key('ArrowDown'); await key('Enter', 400);
+    for (let i = 0; i < 8 && !(await page.evaluate(() => (__SODesktop.focus() || {}).key || '')).startsWith('howto'); i++) await key('ArrowDown');
+    await key('Enter', 400);
     await page.screenshot({ path: `${SHOTS}/${tag}-09-howto.png` });
     await key('Escape'); await key('Escape');
     ok(`${tag} menu closes`, await page.evaluate(() => document.getElementById('soMenu').hidden));
@@ -262,10 +263,75 @@ async function dayOut(browser, port) {
   ok(`${tag} no page errors`, errors.length === 0, errors.slice(0, 3).join(' | '));
   await ctx.close();
 }
+// Milestone 2a: boss bill, NEW! stamp, boss-tile wording, effects setting, and a keyboard
+// walk through the screens M1 only clicked: shop, rest, red-pen edit, event, keepsake, boss rewards.
+async function m2a(browser, port) {
+  const tag = 'm2a', ctx = await browser.newContext({ viewport: { width: 1280, height: 800 }, deviceScaleFactor: 1 });
+  const page = await ctx.newPage(), external = [], errors = [];
+  page.on('request', rq => { const u = rq.url(); if (!/^(http:\/\/127\.0\.0\.1:\d+\/|data:|blob:|about:)/.test(u)) external.push(u); });
+  page.on('pageerror', e => errors.push(e.message)); page.on('console', m => { if (m.type() === 'error') errors.push('console: ' + m.text()); });
+  await page.addInitScript(() => { if (!sessionStorage.getItem('m2a')) { localStorage.clear(); sessionStorage.setItem('m2a', '1'); } });
+  await page.goto(`http://127.0.0.1:${port}/index.html`, { waitUntil: 'networkidle' }); await sleep(700);
+  const ev = (f, a) => page.evaluate(f, a), key = async (k, w = 350) => { await page.keyboard.press(k); await sleep(w); };
+  const fk = () => ev(() => (__SODesktop.focus() || {}).key || ''), scr = () => ev(() => __SO.S.scr);
+  const focusTo = async (pre, keys = ['ArrowDown', 'ArrowRight', 'ArrowDown', 'ArrowLeft']) => { for (let i = 0; i < 24 && !(await fk()).startsWith(pre); i++) await key(keys[i % keys.length], 160); return (await fk()).startsWith(pre); };
+  const force = t => ev(t => { const R = __SO.run(); R.map[R.row + 1].forEach(n => n.t = t); __SO.render(); }, t);
+  const enterNext = async () => { await key('ArrowLeft', 200); await key('Enter', 1400); };
+  await ev(() => { __SO.act('hero', 'r'); __SO.act('begin'); }); await sleep(400); await ev(() => __SO.act('cat', 'arthur')); await sleep(400);
+  await ev(() => document.querySelector('[data-i=prom]').click()); await sleep(1500);
+  ok(`${tag} Prom boss tile says "the end of the line"`, /the end of the line/.test(await ev(() => document.querySelector('.node.t-B').textContent)), await ev(() => document.querySelector('.node.t-B').textContent));
+  // shop by keyboard
+  await force('S'); await enterNext(); ok(`${tag} keyboard: into the shop`, (await scr()) === 'shop');
+  ok(`${tag} keyboard: reach Leave in the shop`, await focusTo('leave'), await fk()); await key('Enter', 900); ok(`${tag} keyboard: out of the shop`, (await scr()) === 'map');
+  // rest, then red-pen edit by keyboard
+  await force('R'); await enterNext(); ok(`${tag} keyboard: rest stop`, (await scr()) === 'rest');
+  ok(`${tag} keyboard: reach Edit`, await focusTo('edit'), await fk()); await key('Enter', 500);
+  ok(`${tag} keyboard: edit opens the deck`, (await ev(() => __SO.S.mode)) === 'edit');
+  const up0 = await ev(() => __SO.run().deck.filter(c => c.u).length); await key('Enter', 900);
+  ok(`${tag} keyboard: a card improved, back on the map`, (await ev(() => __SO.run().deck.filter(c => c.u).length)) === up0 + 1 && (await scr()) === 'map', await scr());
+  // event by keyboard
+  await force('E'); await enterNext(); ok(`${tag} keyboard: event`, (await scr()) === 'event');
+  await key('Enter', 600); ok(`${tag} keyboard: event option chosen`, await ev(() => !!__SO.S.ev.res));
+  await focusTo('leave'); await key('Enter', 900); ok(`${tag} keyboard: event left`, (await scr()) === 'map', await scr());
+  // keepsake
+  await force('T'); await enterNext(); ok(`${tag} keyboard: keepsake stop`, (await scr()) === 'treasure');
+  await focusTo('leave'); await key('Enter', 900); ok(`${tag} keyboard: keepsake left`, (await scr()) === 'map');
+  // boss: the bill, NEW! cards and the boss reward by keyboard
+  await force('B'); await enterNext(); await sleep(300);
+  const bill = await ev(() => { const b = document.querySelector('.so-bill'); return b ? b.textContent : ''; });
+  ok(`${tag} TONIGHT ONLY bill before the boss`, /Tonight only/i.test(bill) && /Last Tram/i.test(bill), bill);
+  await page.screenshot({ path: `${SHOTS}/m2-01-boss-bill.png` });
+  await ev(() => { const B = __SO.B(); B.energy = 99; B.en.forEach(e => { e.hp = 1; e.block = 0; }); const i = B.hand.findIndex(c => __SO.playable(c) && __SO.CARDS[c.id].type === 'A'); __SO.act('card', i); if (__SO.CARDS[B.hand[i].id].o.t) __SO.act('enemy', 0); else __SO.act('card', i); });
+  for (let i = 0; i < 60 && !(await ev(() => __SO.S.scr === 'reward' && !__SO.beating())); i++) await sleep(100);
+  await sleep(1200);
+  ok(`${tag} boss reward heading names the place`, /The Prom is yours/.test(await ev(() => document.querySelector('.panel h2').textContent)));
+  await key('ArrowLeft', 200); ok(`${tag} keyboard: boss reward focused first`, (await fk()).startsWith('boss'), await fk()); await key('Enter', 500);
+  ok(`${tag} keyboard: boss reward taken`, await ev(() => !!__SO.S.rw.bossTook)); await sleep(900);
+  const nw = await ev(() => document.querySelectorAll('.so-newst').length);
+  ok(`${tag} NEW! stamp on never-seen reward cards`, nw >= 1, 'new=' + nw);
+  await page.screenshot({ path: `${SHOTS}/m2-02-new-stamp.png` });
+  await focusTo('take'); await key('Enter', 700); ok(`${tag} keyboard: card taken`, await ev(() => !!__SO.S.rw.took));
+  await focusTo('leave'); await key('Enter', 900); ok(`${tag} keyboard: card taken, on to the afternoon`, (await scr()) === 'stage', await scr());
+  // effects setting from the menu
+  await key('Escape', 400); ok(`${tag} menu opens`, await ev(() => !document.getElementById('soMenu').hidden));
+  ok(`${tag} keyboard: reach Effects`, await focusTo('fx', ['ArrowDown']), await fk());
+  await key('Enter', 300); ok(`${tag} effects: full -> calm`, (await ev(() => __SO.fxl())) === 1 && !(await ev(() => __SO.rm())) && /calm/.test(await ev(() => document.getElementById('soFx').textContent)));
+  await key('Enter', 300); ok(`${tag} effects: calm -> off (reduced motion)`, (await ev(() => __SO.fxl())) === 0 && await ev(() => __SO.rm()), await ev(() => __SO.fxl() + ' rm=' + __SO.rm()));
+  await key('Enter', 300); await key('Enter', 300); ok(`${tag} effects: back round to calm`, (await ev(() => __SO.fxl())) === 1);
+  await page.reload({ waitUntil: 'networkidle' }); await sleep(500); ok(`${tag} effects setting saved`, (await ev(() => __SO.fxl())) === 1);
+  await ev(() => __SO.setFx(2));
+  ok(`${tag} zero external requests`, external.length === 0, external.slice(0, 5).join(' '));
+  ok(`${tag} no page errors`, errors.length === 0, errors.slice(0, 3).join(' | '));
+  await ctx.close();
+}
+const M2 = { m2a };
 (async () => {
   await new Promise(r => srv.listen(0, '127.0.0.1', r)); const port = srv.address().port;
   const browser = await chromium.launch({ executablePath: EXE, headless: true });
-  try { await run(browser, 1280, 800, '1280x800', port); await run(browser, 1920, 1080, '1920x1080', port); await dayOut(browser, port); }
+  const ONLY = (process.env.ONLY || '').split(',').filter(Boolean), want = n => !ONLY.length || ONLY.includes(n);
+  try { if (want('base')) { await run(browser, 1280, 800, '1280x800', port); await run(browser, 1920, 1080, '1920x1080', port); }
+    if (want('m1')) await dayOut(browser, port);
+    for (const [n, f] of Object.entries(M2)) if (want(n)) await f(browser, port); }
   catch (e) { console.error(e); results.push({ name: 'exception', pass: false, extra: String(e) }); }
   await browser.close(); srv.close();
   fs.writeFileSync(path.join(SHOTS, 'verify-results.json'), JSON.stringify(results, null, 2));

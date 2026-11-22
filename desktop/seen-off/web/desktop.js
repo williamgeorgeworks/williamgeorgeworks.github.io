@@ -33,6 +33,7 @@ function pageHTML(){
     '<button type="button" class="btn go" data-m="resume">Carry on</button>'+
     '<button type="button" class="btn quiet" data-m="full" id="soFull">Full screen</button>'+
     '<button type="button" class="btn quiet" data-m="sound" id="soSound">Sound</button>'+
+    '<button type="button" class="btn quiet" data-m="fx" id="soFx">Effects</button>'+
     '<button type="button" class="btn quiet" data-m="howto">How to play</button>'+
     '<button type="button" class="btn quiet" data-m="ach">Achievements</button>'+
     '<button type="button" class="btn quiet" data-m="credits">Credits</button>'+
@@ -51,6 +52,7 @@ function showPage(p){
 }
 function menuLabels(){
   var s=$('soSound');if(s)s.textContent='Sound: '+(SO.A.muted?'off':'on');
+  var x=$('soFx');if(x)x.textContent='Effects: '+['off','calm','full'][SO.fxl()]+(SO.fxl()&&SO.rm()?' (reduced motion is on)':'');
   var f=$('soFull');if(f)isFull().then(function(v){f.textContent='Full screen: '+(v?'on':'off');});
 }
 function openMenu(){if(!menu.hidden)return;menu.hidden=false;showPage('main');}
@@ -62,6 +64,7 @@ menu.addEventListener('click',function(ev){
   if(m==='resume')closeMenu();
   else if(m==='full')toggleFull();
   else if(m==='sound'){SO.act('mute');menuLabels();}
+  else if(m==='fx'){SO.setFx((SO.fxl()+2)%3);menuLabels();}
   else if(m==='quit'){var w=tWin();if(w)w.close();}
   else showPage(m);
 });
@@ -159,7 +162,8 @@ function confirm(){
   if(SO.trav&&SO.trav())return;
   ensure();if(!FOC)return;
   if(FOC.enemy!=null){SO.act('enemy',FOC.enemy);afterAct();return;}
-  var el=FOC.el,wasSel=S.sel;el.click();
+  var el=FOC.el,wasSel=S.sel,stay=menuOpen()&&/^(fx|sound|full)$/.test(el.getAttribute('data-m')||'');el.click();
+  if(stay){SIG=sig();setFocus(FOC);return;}   /* menu toggles keep the focus where it is */
   /* picked up a card that needs a target: hop to the first enemy */
   if(S.scr==='combat'&&S.sel>=0&&S.sel!==wasSel){var B=SO.B(),c=B&&B.hand[S.sel],d=c&&SO.CARDS[c.id];
     if(d&&d.o&&d.o.t&&SO.alive().length>1&&SO.playable(c)){var list=items(),en=list.filter(function(x){return x.enemy!=null;});if(en.length){setFocus(en[0]);return;}}}
