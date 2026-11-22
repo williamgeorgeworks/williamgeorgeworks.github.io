@@ -1,5 +1,6 @@
 /* The William George Works trailer: an original spy-thriller title sequence that turns into a tour of the
    whole site, drawn on a canvas and cut to the beat. A minute and a half, sixty-eight bars at 174 a minute.
+   22 November 2026: recut for nine games, with the two new ones featured, and cinema bars on the opening.
    Pictures: Terrance Quill. Animation and tune: Reginald Quill. No film was harmed or copied.
    The music is promo-theme.mp3, built by tools/make-trailer-music.js. Its bar numbers are the B(n) used here. */
 (function () {
@@ -22,7 +23,7 @@
     c1: "cover-great-british-disagreement.jpg", c2: "cover-last-of-the-unemployable.jpg", c3: "cover-man-who-wanted-to-sue-god.jpg",
     c4: "cover-lancashire-ghost-stories.jpg", c5: "cover-haunted-lancashire.jpg", c6: "cover-small-stove-cookbook.jpg",
     g1: "thumb-grand-theft-kitty.jpg", g2: "thumb-red-light-green-light.jpg", g3: "thumb-arthurs-tribunal.jpg", g4: "thumb-ferrets-ditch.jpg",
-    g5: "thumb-moulding-museum.jpg", g6: "thumb-unemployable-arcade.jpg", g7: "thumb-lion-and-albert.jpg"
+    g5: "thumb-moulding-museum.jpg", g6: "thumb-unemployable-arcade.jpg", g7: "thumb-lion-and-albert.jpg", g8: "thumb-kitty-grand-prix.jpg", g9: "thumb-slay-the-pier.jpg"
   };
   var CAST = ["ferret", "jo", "terry", "reggie", "arthur", "spyro", "tilly", "trixie", "dexter", "daisy"];   // the order they stand in the collage
   CAST.forEach(function (n) { FILES["p_" + n] = "portraits/" + n + ".jpg"; });
@@ -102,7 +103,7 @@
     g.save(); g.translate(cx, cy); g.rotate(rot || 0);
     if (sh) { g.fillStyle = o.shadow || INK; g.fillRect(-w / 2 + sh, -h / 2 + sh, w, h); }
     g.fillStyle = CARD; g.fillRect(-w / 2, -h / 2, w, h);
-    if (im) { g.save(); g.beginPath(); g.rect(-w / 2, -h / 2, w, h); g.clip(); if (o.src) g.drawImage(im, o.src[0], o.src[1], o.src[2], o.src[3], -w / 2, -h / 2, w, h); else cover(im, [-w / 2, -h / 2, w, h]); g.restore(); }
+    if (im) { g.save(); g.beginPath(); g.rect(-w / 2, -h / 2, w, h); g.clip(); if (o.zoom) g.scale(o.zoom, o.zoom); if (o.src) g.drawImage(im, o.src[0], o.src[1], o.src[2], o.src[3], -w / 2, -h / 2, w, h); else cover(im, [-w / 2, -h / 2, w, h]); g.restore(); }
     g.strokeStyle = o.line || INK; g.lineWidth = o.lw || 5; g.strokeRect(-w / 2, -h / 2, w, h); g.restore();
   }
   function stamp(str, x, y, t, at, col, size, rot, backing) {
@@ -179,8 +180,8 @@
       var gl = g.createRadialGradient(640, 400, 40, 640, 400, 430); gl.addColorStop(0, "rgba(246,242,231,0.95)"); gl.addColorStop(1, "rgba(246,242,231,0)");
       g.fillStyle = gl; g.fillRect(0, 0, W, H); g.drawImage(pics.arthur, 640 - aw / 2, 392 - ah / 2, aw, ah); g.restore();
     }
-    if (t < B(5)) { typed("SOMEWHERE IN LANCASHIRE", 70, 628, 32, PAPER, t, 0.4, 22); typed("NIGHT. PROBABLY A TUESDAY.", 70, 676, 32, PAPER, t, B(3), 24); }
-    else { g.fillStyle = "rgba(20,20,20,0.8)"; g.fillRect(0, 580, W, 140); typed("A CAT IS ASLEEP ON THE EVIDENCE.", 70, 636, 34, PAPER, t, B(5) + 0.7, 26); typed("HE WILL NOT BE RUSHED.", 70, 686, 34, YEL, t, B(7), 24); }
+    if (t < B(5)) { typed("SOMEWHERE IN LANCASHIRE", 70, 580, 32, PAPER, t, 0.4, 22); typed("NIGHT. PROBABLY A TUESDAY.", 70, 628, 32, PAPER, t, B(3), 24); }
+    else { g.fillStyle = "rgba(20,20,20,0.8)"; g.fillRect(0, 532, W, 188); typed("A CAT IS ASLEEP ON THE EVIDENCE.", 70, 588, 34, PAPER, t, B(5) + 0.7, 26); typed("HE WILL NOT BE RUSHED.", 70, 638, 34, YEL, t, B(7), 24); }
     var p = span(t, B(9) - 0.1, B(9)); if (p > 0) { g.fillStyle = "rgba(246,242,231," + p + ")"; g.fillRect(0, 0, W, H); }
   }
   function cards(lt, dur, t) {                                 // 2. one human, two machines, six cats
@@ -260,14 +261,72 @@
     ["g4", "FERRET’S DITCH", "not a bite. Great morning."], ["g5", "THE MOULDING MUSEUM ADVENTURE", "no money, no cathedral"], ["g6", "THE UNEMPLOYABLE ARCADE", "a fruit machine nobody will discuss"], ["g7", "THE LION AND ALBERT ADVENTURE", "Mother will remember your choices"]];
   function nightSky(lt) { var v = g.createLinearGradient(0, 0, W, H); v.addColorStop(0, NIGHT); v.addColorStop(0.62, "#2a0f6b"); v.addColorStop(1, PURPLE); g.fillStyle = v; g.fillRect(0, 0, W, H); dots(0, 0, W, H, LIME, 0.06); }
   function glow(str, x, y, size, t, at, maxW) { slam(str, x + 6, y + 6, size, PINK, t, at, 0, maxW); slam(str, x, y, size, LIME, t, at, 0, maxW); }
-  function arcade(lt) {                                         // 4. the arcade
-    nightSky(lt); rays(640, 360, PURPLE, 0.35, lt * 0.5, 14);
-    glow("THE ARCADE", 640, 380, 250, lt, 0, 1100); var p = span(lt, 0.1, 0.22); if (p > 0) { g.globalAlpha = p; text("SEVEN GAMES. FREE. NO SIGN-UP.", 640, 476, 46, "#e9e4ff", DISP, "center", 3, 1000); g.globalAlpha = 1; }
+  function gridFloor(t) {                                       // a neon floor, rushing at you in time with the drums
+    var hz = 452, i, ph = calm ? 0 : (t / BEAT) % 1;
+    g.save(); g.strokeStyle = PINK; g.lineWidth = 2; g.globalAlpha = 0.3; g.beginPath();
+    for (i = -14; i <= 14; i++) { g.moveTo(640 + i * 26, hz); g.lineTo(640 + i * 210, H); }
+    for (i = 0; i < 9; i++) { var q = (i + ph) / 9, y = hz + (H - hz) * q * q; g.moveTo(0, y); g.lineTo(W, y); }
+    g.stroke(); g.globalAlpha = 0.5; g.fillStyle = PINK; g.fillRect(0, hz - 1, W, 2); g.restore(); g.globalAlpha = 1;
   }
-  function game(i) { return function (lt) {
+  function newBurst(x, y, lt, at) {                             // NEW!, in a star, like a soap powder
+    var p = back((lt - at) / 0.14); if (p <= 0) return; var i, spin = calm ? 0 : lt * 0.5, k = p * (1 + (calm ? 0 : 0.06 * Math.sin(lt * 18)));
+    g.save(); g.translate(x, y); g.scale(k, k); g.save(); g.rotate(spin); g.fillStyle = YEL; g.strokeStyle = INK; g.lineWidth = 6; g.lineJoin = "round"; g.beginPath();
+    for (i = 0; i < 24; i++) { var a = i / 24 * 6.283, r = i % 2 ? 78 : 104; g.lineTo(Math.cos(a) * r, Math.sin(a) * r); }
+    g.closePath(); g.fill(); g.stroke(); g.restore(); g.rotate(-0.14); text("NEW", 0, 26, 72, RED, DISP, "center", 0, 150); g.restore();
+  }
+  function arcadeHead(n) { text("THE ARCADE", 60, 66, 40, LIME, DISP, "left"); text("GAME " + n + " OF 9", W - 60, 66, 40, PINK, DISP, "right", 0, 400); }
+  function arcade(lt) {                                         // 4. the arcade: nine screens light up, then the sign
+    nightSky(lt); var i, order = [4, 0, 7, 2, 8, 5, 1, 6, 3], tilt = [-0.02, 0.015, -0.01, 0.02, -0.015, 0.012, -0.012, 0.018, -0.02];
+    for (i = 0; i < 9; i++) { var q = back((lt - 0.02 - order[i] * 0.03) / 0.14); if (q > 0) card("g" + (i + 1), 216 + (i % 3) * 424, 124 + Math.floor(i / 3) * 236, 400 * q, 222 * q, tilt[i], { shadow: PINK, line: LIME, lw: 4, sh: 8 }); }
+    g.fillStyle = "rgba(19,10,53,.6)"; g.fillRect(0, 0, W, H); rays(640, 360, PURPLE, 0.22, lt * 0.5, 14);
+    glow("THE ARCADE", 640, 380, 250, lt, 0, 1100); var p = span(lt, 0.1, 0.22); if (p > 0) { g.globalAlpha = p; text("NINE GAMES. FREE. NO SIGN-UP.", 640, 476, 46, "#e9e4ff", DISP, "center", 3, 1000); g.globalAlpha = 1; }
+  }
+  var KARTS = [[RED, "#f3e9d8", "#8a8c99"], ["#e9a400", "#ffffff", "#d98a3a"], ["#8a5aa8", "#e4dccf", "#b9b2a8"], ["#3d9a52", "#6a564b", "#3f322c"], [BLUE, "#3c3c44", "#9a9aa3"], ["#e8799a", "#f8ecd9", "#ffffff"]];   // kart, fur, face
+  function kart(x, y, K, t) {                                   // a cat in a kart, from the side, in a hurry
+    var wob = calm ? 0 : Math.sin(t * 40 + x * 0.01) * 2, spin = calm ? 0.6 : t * 30, i;
+    g.save(); g.translate(x, y + wob); g.scale(1.3, 1.3); g.lineJoin = "round"; g.lineCap = "round";
+    g.strokeStyle = "rgba(233,228,255,.75)"; g.lineWidth = 4; g.beginPath(); for (i = 0; i < 3; i++) { g.moveTo(-78 - i * 12, -40 + i * 16); g.lineTo(-150 - i * 30, -40 + i * 16); } g.stroke();
+    g.strokeStyle = INK; g.lineWidth = 3;
+    g.fillStyle = K[0]; g.beginPath(); g.moveTo(-8, -52); g.lineTo(-60, -68 + wob * 2); g.lineTo(-56, -52 + wob * 2); g.lineTo(-8, -42); g.closePath(); g.fill(); g.stroke();   // the scarf
+    g.beginPath(); g.moveTo(-56, -30); g.lineTo(34, -30); g.lineTo(62, -14); g.lineTo(62, -6); g.lineTo(-56, -6); g.closePath(); g.fill(); g.stroke();                          // the kart
+    g.fillStyle = PAPER; g.fillRect(-64, -44, 10, 30); g.strokeRect(-64, -44, 10, 30); g.fillRect(-74, -50, 28, 8); g.strokeRect(-74, -50, 28, 8);
+    g.fillStyle = K[1]; g.beginPath(); g.moveTo(-13, -70); g.lineTo(-9, -94); g.lineTo(3, -78); g.closePath(); g.fill(); g.stroke(); g.beginPath(); g.moveTo(8, -78); g.lineTo(19, -94); g.lineTo(23, -70); g.closePath(); g.fill(); g.stroke();
+    g.beginPath(); g.arc(5, -58, 22, 0, 6.3); g.fill(); g.stroke();                                                                                                                 // the driver
+    g.fillStyle = K[2]; g.beginPath(); g.arc(14, -50, 9, 0, 6.3); g.fill();
+    g.fillStyle = K[0]; g.fillRect(-17, -69, 44, 9); g.strokeRect(-17, -69, 44, 9);                                                                                                 // goggles
+    g.fillStyle = PAPER; g.beginPath(); g.arc(16, -63, 8, 0, 6.3); g.fill(); g.stroke(); g.fillStyle = INK; g.beginPath(); g.arc(18, -63, 3, 0, 6.3); g.fill();
+    [-36, 38].forEach(function (wx) { g.fillStyle = "#2c2c33"; g.strokeStyle = INK; g.lineWidth = 3; g.beginPath(); g.arc(wx, -4, 15, 0, 6.3); g.fill(); g.stroke(); g.strokeStyle = PAPER; g.lineWidth = 2.5; g.beginPath(); g.moveTo(wx + Math.cos(spin) * 9, -4 + Math.sin(spin) * 9); g.lineTo(wx - Math.cos(spin) * 9, -4 - Math.sin(spin) * 9); g.stroke(); });
+    g.restore();
+  }
+  function featKart(lt, dur, t) {                               // new: The Kitty Grand Prix, with the field going past
+    var p = glide(lt / 0.16), i, off = (lt * 900) % 96;
+    nightSky(lt); gridFloor(t); arcadeHead(1);
+    card("g8", 640 - (1 - p) * 900, 292, 640, 400, 0.016 * p, { shadow: PINK, line: LIME, lw: 6, sh: 12, zoom: 1 + 0.07 * lt / dur });
+    for (i = -2; i < 30; i++) { g.fillStyle = i % 2 ? PAPER : INK; g.fillRect(i * 48 - off, 566, 48, 12); }
+    for (i = 0; i < 6; i++) { var x = -140 + (lt - 0.08) * 1750 - i * 220; if (x > -260 && x < W + 300) kart(x, 564, KARTS[i], t); }
+    newBurst(1016, 178, lt, 0.1);
+    label("THE KITTY GRAND PRIX", 640, 634, 56, LIME, NIGHT, -0.015, span(lt, 0.08, 0.22), 1000); hand("six cats, six karts, nobody has read the rules", 640, 698, 36, CYAN, span(lt, 0.2, 0.36), -0.012, 1100);
+  }
+  var DEALT = [[RED, "1", "RED PEN"], ["#e9a400", "2", "RIP YOUR", "FACE OFF"], [BLUE, "1", "SPLATTER"], ["#e9a400", "1", "ROYAL", "DECREE"], [PURPLE, "0", "WHO INVITED", "HIM?"]];
+  function playingCard(c) {                                     // one card from the deck, 104 by 142
+    g.fillStyle = INK; g.fillRect(-46, -65, 104, 142); g.fillStyle = CARD; g.fillRect(-52, -71, 104, 142); g.fillStyle = c[0]; g.fillRect(-52, -71, 104, 18);
+    g.strokeStyle = INK; g.lineWidth = 4; g.strokeRect(-52, -71, 104, 142);
+    g.fillStyle = INK; g.beginPath(); g.arc(-44, -63, 17, 0, 6.3); g.fill(); g.strokeStyle = PAPER; g.lineWidth = 2.5; g.stroke(); text(c[1], -44, -53, 26, PAPER, DISP, "center", 0, 30);
+    text(c[2], 4, c[3] ? -26 : -16, 19, INK, DISP, "center", 0, 84); if (c[3]) text(c[3], 4, -5, 19, INK, DISP, "center", 0, 84);
+    blot(0, 36, 15, 400 + c[2].length, c[0], 1);
+  }
+  function featPier(lt, dur, t) {                               // new: Slay the Pier, with a hand dealt
+    var p = glide(lt / 0.16), i;
+    nightSky(lt); gridFloor(t); arcadeHead(2);
+    card("g9", 640 + (1 - p) * 900, 292, 640, 400, -0.016 * p, { shadow: PINK, line: LIME, lw: 6, sh: 12, zoom: 1 + 0.07 * lt / dur });
+    for (i = 0; i < 5; i++) { var q = back((lt - 0.12 - i * 0.05) / 0.2); if (q <= 0) continue; g.save(); g.translate(640, 1400); g.rotate((i - 2) * 0.13 * q + (calm ? 0 : Math.sin(t * 6 + i) * 0.006)); g.translate(0, -901 + (1 - q) * 320); playingCard(DEALT[i]); g.restore(); }
+    newBurst(264, 178, lt, 0.1);
+    label("SLAY THE PIER", 640, 634, 56, LIME, NIGHT, -0.015, span(lt, 0.08, 0.22), 1000); hand("a magical card game. The cats wear hats", 640, 698, 36, CYAN, span(lt, 0.2, 0.36), -0.012, 1100);
+  }
+  function game(i) { return function (lt, dur, t) {             // the other seven, two beats each
     var G = GAMES[i], p = glide(lt / 0.16), dir = i % 2 ? 1 : -1;
-    nightSky(lt); text("THE ARCADE", 60, 66, 40, LIME, DISP, "left"); text("GAME " + (i + 1) + " OF 7", W - 60, 66, 40, PINK, DISP, "right", 0, 400);
-    card(G[0], 640 + dir * (1 - p) * 900, 338, 784, 490, dir * -0.018 * p, { shadow: PINK, line: LIME, lw: 6, sh: 12 });
+    nightSky(lt); gridFloor(t); arcadeHead(i + 3);
+    card(G[0], 640 + dir * (1 - p) * 900, 338, 784, 490, dir * -0.018 * p, { shadow: PINK, line: LIME, lw: 6, sh: 12, zoom: 1 + 0.06 * lt / dur });
     label(G[1], 640, 606, 56, LIME, NIGHT, -0.015, span(lt, 0.08, 0.22), 1000); hand(G[2], 640, 682, 38, CYAN, span(lt, 0.18, 0.32), -0.012, 1100);
   }; }
   function dailyRow(lt, dur, t) {                              // 5. the papers
@@ -280,28 +339,28 @@
     text("ALL THE NEWS THAT’S FIT TO EXAGGERATE.", 0, -14, 40, RED, DISP, "center", 1, 860);
     for (i = 0; i < 3; i++) { var x0 = -440 + i * 300; g.fillStyle = INK; g.fillRect(x0, 20, 280, 26); g.fillStyle = "rgba(20,20,20,.3)"; for (var j = 0; j < 6; j++) g.fillRect(x0, 62 + j * 20, 180 + R() * 100, 9); }
     g.strokeStyle = BLUE; g.lineWidth = 4; g.strokeRect(-440, 252, 880, 46); text("WHAT ACTUALLY HAPPENED: SEE THE BOX UNDER EVERY STORY", 0, 283, 20, BLUE, MONO, "center", 0, 840);
-    hand("Reggie is perfectly capable of a balls-up", 0, 226, 40, BLUE, span(t, B(42, 2.5), B(42, 2.5) + 0.2), -0.012, 840);
-    stamp("NO EDITOR", 250, 110, t, B(42), RED, 84, -0.2); g.restore();
+    hand("Reggie is perfectly capable of a balls-up", 0, 226, 40, BLUE, span(t, B(44, 2.5), B(44, 2.5) + 0.2), -0.012, 840);
+    stamp("NO EDITOR", 250, 110, t, B(44), RED, 84, -0.2); g.restore();
   }
   function gamingRow(lt, dur, t) {
     nightSky(lt); var p = glide(lt / 0.2), jig = calm ? 0 : Math.sin(t * 34) * 5, turn = Math.floor(lt / (BEAT * 2)) % 2;
     card("p_terry", 300 - (1 - p) * 700 + (turn ? 0 : jig), 400, 400, 400, -0.05, { shadow: PINK, line: LIME, lw: 6 }); card("p_reggie", 980 + (1 - p) * 700 + (turn ? jig : 0), 400, 400, 400, 0.05, { shadow: PINK, line: LIME, lw: 6 });
     glow("THE DAILY GAMING ROW", 640, 118, 96, lt, 0, 1100);
     slam("V", 640 + 5, 470 + 5, 240, PINK, lt, 0.15, 0.1); slam("V", 640, 470, 240, YEL, lt, 0.15, 0.1);
-    label("TERRY SAYS PC.", 300, 650, 50, LIME, NIGHT, -0.03, span(t, B(43, 2), B(43, 2) + 0.14), 420); label("REGGIE SAYS PS5.", 980, 650, 50, PINK, NIGHT, 0.03, span(t, B(43, 3), B(43, 3) + 0.14), 420);
-    hand("all the news that’s fit to button-mash", 640, 704, 30, CYAN, span(t, B(44), B(44) + 0.2), -0.01, 560);
+    label("TERRY SAYS PC.", 300, 650, 50, LIME, NIGHT, -0.03, span(t, B(45, 1.75), B(45, 1.75) + 0.14), 420); label("REGGIE SAYS PS5.", 980, 650, 50, PINK, NIGHT, 0.03, span(t, B(45, 2.5), B(45, 2.5) + 0.14), 420);
+    hand("all the news that’s fit to button-mash", 640, 704, 30, CYAN, span(t, B(45, 3), B(45, 3) + 0.2), -0.01, 560);
   }
   var RAIN = (function () { var R = rng(31), a = [], i; for (i = 0; i < 110; i++) a.push([R() * 1700, R() * 900, 26 + R() * 40, 0.7 + R() * 0.6]); return a; })();
   function weather(lt, dur, t) {
-    fill(BLUE); var i, bolt = span(t, B(46), B(46) + 0.3), fl = bolt > 0 && bolt < 1 && !calm ? (1 - bolt) * 0.35 : 0;
+    fill(BLUE); var i, bolt = span(t, B(46, 3), B(46, 3) + 0.3), fl = bolt > 0 && bolt < 1 && !calm ? (1 - bolt) * 0.35 : 0;
     g.strokeStyle = "rgba(246,242,231,.5)"; g.lineWidth = 3; g.beginPath();
     for (i = 0; i < RAIN.length; i++) { var r = RAIN[i], y = (r[1] + lt * 900 * r[3]) % 900 - 90, x = r[0] - y * 0.35; g.moveTo(x, y); g.lineTo(x - r[2] * 0.35, y + r[2]); }
     g.stroke();
     g.fillStyle = PAPER; [[990, 105, 80], [1085, 90, 98], [1170, 120, 72], [915, 130, 54], [1045, 150, 88]].forEach(function (c) { g.beginPath(); g.arc(c[0], c[1], c[2], 0, 6.3); g.fill(); });
     if (bolt > 0) { g.fillStyle = YEL; g.strokeStyle = INK; g.lineWidth = 5; g.beginPath(); g.moveTo(1075, 236); g.lineTo(1010, 386); g.lineTo(1062, 386); g.lineTo(1005, 520); g.lineTo(1135, 346); g.lineTo(1078, 346); g.lineTo(1125, 236); g.closePath(); g.fill(); g.stroke(); }
     slam("THE WEATHER ROW", 500, 380, 150, PAPER, lt, 0, -0.02, 860); typed("LIVE FROM THE SKY.", 80, 446, 34, PAPER, lt, 0.2, 40);
-    slam("DISPUTED BY THE COUSINS.", 500, 556, 88, YEL, t, B(46), -0.02, 860);
-    hand("the worse the weather, the more they argue", 640, 664, 36, PAPER, span(t, B(46, 2.5), B(46, 2.5) + 0.2), -0.012, 1100);
+    slam("DISPUTED BY THE COUSINS.", 500, 556, 88, YEL, t, B(46, 2), -0.02, 860);
+    hand("the worse the weather, the more they argue", 640, 664, 36, PAPER, span(t, B(46, 2.5), B(46, 2.5) + 0.16), -0.012, 1100);
     if (fl) { g.fillStyle = "rgba(255,255,255," + fl + ")"; g.fillRect(0, 0, W, H); }
   }
   function tribunal(lt, dur, t) {
@@ -357,7 +416,7 @@
     g.fillStyle = INK; g.fillRect(-170 + 12, -220 + 12, 340, 440); g.fillStyle = CARD; g.fillRect(-170, -220, 340, 440); g.strokeStyle = INK; g.lineWidth = 5; g.strokeRect(-170, -220, 340, 440); g.fillStyle = RED; g.fillRect(-170, -220, 46, 440);
     text("THE LOG", 20, -130, 60, INK, DISP, "center", 1, 240); g.fillStyle = "rgba(20,20,20,.3)"; for (var i = 0; i < 10; i++) g.fillRect(-100, -80 + i * 28, 200 + (i * 37) % 50, 8);
   }
-  var FLASH = [["c1", "BOOKS!", 0], ["g1", "GAMES!", 1], ["p_spyro", "CATS!", 0], ["judge", "ROWS!", 1], ["c4", "GHOSTS!", 0], ["p_reggie", "INVOICES!", 1], ["p_ferret", "CARP!", 0], ["p_daisy", "DREAMIES!", 1]];
+  var FLASH = [["c1", "BOOKS!", 0], ["g8", "GAMES!", 1], ["p_spyro", "CATS!", 0], ["judge", "ROWS!", 1], ["c4", "GHOSTS!", 0], ["p_reggie", "INVOICES!", 1], ["p_ferret", "CARP!", 0], ["p_daisy", "DREAMIES!", 1]];
   function flash(i) { return function (lt) {                    // one thing a beat
     var F = FLASH[i], p = back(lt / 0.1), wide = F[0].charAt(0) === "g" || F[0] === "judge", tall = F[0].charAt(0) === "c";
     fill(PAPER); rays(640, 300, i % 2 ? BLUE : RED, 0.12, i * 0.4 + lt, 14);
@@ -402,8 +461,9 @@
   for (i = 0; i < 6; i++) cut(21 + i, 1, book(i), i ? 1 : 2);
   cut(27, 1, shelf, 1); cut(29, 1, accord, 2);
   cut(33, 1, word("HONESTY.", PAPER, INK, 1), 2); cut(34, 1, word("INTEGRITY.", INK, PAPER, 2), 2); cut(35, 1, word("KINDNESS.", BLUE, PAPER, 3), 2); cut(36, 1, word("NONSENSE.", RED, PAPER, 4, true), 2);
-  cut(37, 1, arcade, 2); for (i = 0; i < 7; i++) cut(37 + Math.floor((i + 1) / 2), (i + 1) % 2 ? 3 : 1, game(i), 1);
-  cut(41, 1, dailyRow, 2); cut(43, 1, gamingRow, 1); cut(45, 1, weather, 2); cut(47, 1, tribunal, 1);
+  cut(37, 1, arcade, 2); cut(37, 3, featKart, 1); cut(38, 3, featPier, 1);                    // nine games in six bars: the sign, the two new ones, then seven at two beats each
+  for (i = 0; i < 7; i++) cut(39 + Math.floor((2 + 2 * i) / 4), (2 + 2 * i) % 4 + 1, game(i), 1);
+  cut(43, 1, dailyRow, 1); cut(45, 1, gamingRow, 2); cut(46, 1, weather, 1); cut(47, 1, tribunal, 1);
   cut(49, 1, person({ key: "p_terry", acc: BLUE, head: ["DEAR TERRY"], hs: 160, hc: [RED], sub: "YOUR PROBLEMS, SOLVED", quip: ["with total confidence. He has", "never had one in his life"], stamp: "AGONY UNCLE" }), 1);
   cut(50, 1, person({ prop: invoice, flip: 1, bg: INK, acc: YEL, fg: PAPER, head: ["INVOICES"], hs: 170, sub: "TERMS: STRICTLY IMAGINARY.", quip: ["payable in compliments"], qc: YEL, stamp: "PLUS A TENNER FOR THE Y", sc: YEL }), 1);
   cut(51, 1, person({ prop: rosette, bg: RED, acc: INK, fg: PAPER, head: ["EMPLOYEE", "OF THE MONTH"], hs: 120, hy: 250, gap: 128, sub: "STAFF RECOGNITION. MANDATORY.", quip: ["nobody is paid"], qc: YEL, stamp: "DRAWN AT RANDOM", sc: PAPER }), 1);
@@ -427,6 +487,7 @@
     g.save(); g.translate(W / 2 + sx, H / 2 + sy); g.scale(zoom, zoom); g.translate(-W / 2, -H / 2);
     c.fn(lt, dur, t); g.restore(); g.globalAlpha = 1;
     grain();
+    if (t < B(9) + 0.3) { var lb = 56 * (1 - ease(span(t, B(9) - 0.04, B(9) + 0.26))); if (lb > 0.5) { g.fillStyle = "#000"; g.fillRect(0, 0, W, lb); g.fillRect(0, H - lb, W, lb); } }
     if (white > 0) { g.fillStyle = "rgba(255,253,247," + white + ")"; g.fillRect(0, 0, W, H); }
   }
 
