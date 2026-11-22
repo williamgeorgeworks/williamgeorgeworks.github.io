@@ -113,8 +113,8 @@ function applyScoreEverywhere(data, v) {
   if (!alt.changed) return out;
   return { changed: true, place: out.changed ? out.place : undefined, alsoPlace: alt.place, alsoGame: game.alsoTo };
 }
-async function gh(env, path, init) {
-  return fetch("https://api.github.com/repos/" + REPO + path, {
+async function gh(env, path, init, repo) {
+  return fetch("https://api.github.com/repos/" + (repo || REPO) + path, {
     ...init,
     headers: {
       "Authorization": "Bearer " + env.GITHUB_TOKEN,
@@ -151,10 +151,11 @@ async function save(env, v) {
 
 
 /* ---- Reggie's message board -------------------------------------------------------------------
-   Messages are encrypted here (AES-GCM, with the key wrapped by the public key below) before they go into
-   the repository, so the unread post is not public. Only Reggie's private key can open them. */
-const BOARD_PUBLIC_KEY = {"kty": "RSA", "n": "sMyZ5PQeUTTJEaGhuz12vZEWYuk80jIfnle3S96ahINFuoa17eytIe2TwGmUkSVtsxdEoHGO8tO4t2QUUBlUt0xwGWkoCgsxivsFhDgzAiyaBByhwdykbktkLYssA5Hozv4icBc0x55Cggfol0xG7_CSbuXM8hVfy6jx_sZpUkrmzZ1aR3JZ-u1YXWRItaqDTyrBSBqMGS8JYjwck7nyQPpjEy09r344s2ugYmBSd6BFEStJA9mCcA-pLHfkjfKFpiHv04RRswPv1-vdYupWgceiW-JdnUI1s0GhtMe6qoYLB_e7W2ZJ1WGL2_vbHR4JSMzR3eFbgTceY6eff8cYSGQMa9WDyzJZWpV8MAjEJqjoKcnwSLDTMYIjb3MS5-5RcpyzA6tSK89hY5QzO_qaeAlvrrXFoUob2BU4yex2G04O0ESdQcDRAdCpuSI_pObD_9E00vopfYmgzI4ZUmAxXN_NDIgGLt4mBxp_f4lanIQB7MgDFvyGkjVuzqlIn6Tz", "e": "AQAB", "alg": "RSA-OAEP-256", "ext": true};
-const INBOX = "board-inbox.json";
+   Waiting messages go into inbox.json in a PRIVATE repo (the post room), never the public site repo.
+   Reggie's post round reads them there, publishes or drops each one in board.json, and handled
+   messages are cleared out of the tray the next time a message arrives. No encryption key is needed. */
+const INBOX_REPO = "williamgeorgeworks/post-room";
+const INBOX = "inbox.json";
 const BOARD = "board.json";
 const INBOX_MAX = 80;
 const BOARD_PER_HOUR = 3;
@@ -169,15 +170,6 @@ function validateBoard(input) {
   if (/(\d[\s().-]*){9,}/.test(name + " " + msg)) return { error: "That looks like a phone number. Please leave numbers out." };
   if (isRude(name) || boardTokensRude(msg)) return { error: "Reggie keeps a clean board. Try that again with fewer swear words." };
   return { name, msg };
-}
-function toB64(buf) { let bin = ""; new Uint8Array(buf).forEach(b => (bin += String.fromCharCode(b))); return btoa(bin); }
-async function sealBoard(payload) {
-  const rsa = await crypto.subtle.importKey("jwk", BOARD_PUBLIC_KEY, { name: "RSA-OAEP", hash: "SHA-256" }, false, ["encrypt"]);
-  const aes = await crypto.subtle.generateKey({ name: "AES-GCM", length: 256 }, true, ["encrypt"]);
-  const iv = crypto.getRandomValues(new Uint8Array(12));
-  const ct = await crypto.subtle.encrypt({ name: "AES-GCM", iv }, aes, new TextEncoder().encode(JSON.stringify(payload)));
-  const wrapped = await crypto.subtle.encrypt({ name: "RSA-OAEP" }, rsa, await crypto.subtle.exportKey("raw", aes));
-  return { k: toB64(wrapped), iv: toB64(iv), ct: toB64(ct) };
 }
 async function sha256hex(text) {
   const d = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text));
@@ -195,25 +187,25 @@ async function boardAllowed(env, request) {
   await env.VOTES.put(kDay, String(nDay + 1), { expirationTtl: 172800 });
   return { ok: true };
 }
-async function readJsonFile(env, path) {
-  const r = await gh(env, "/contents/" + path + "?ref=" + BRANCH);
+async function readJsonFile(env, path, repo) {
+  const r = await gh(env, "/contents/" + path + "?ref=" + BRANCH, undefined, repo);
   if (r.status === 404) return { sha: null, data: null };
   if (!r.ok) throw new Error("read " + r.status);
   const file = await r.json();
   return { sha: file.sha, data: JSON.parse(b64decode(file.content)) };
 }
-async function addToInbox(env, sealed) {
+async function addToInbox(env, post) {
   for (let attempt = 0; attempt < 3; attempt++) {
-    const inbox = await readJsonFile(env, INBOX);
+    const inbox = await readJsonFile(env, INBOX, INBOX_REPO);
     const board = await readJsonFile(env, BOARD);
     const done = new Set((board.data && board.data.done) || []);
     const items = ((inbox.data && inbox.data.items) || []).filter(i => !done.has(i.id));
     if (items.length >= INBOX_MAX) return { error: "Reggie's post room is full. He will clear it at the next post round." };
     const id = Array.from(crypto.getRandomValues(new Uint8Array(6))).map(b => b.toString(16).padStart(2, "0")).join("");
-    items.push({ id, t: new Date().toISOString().slice(0, 16) + "Z", ...sealed });
+    items.push({ id, t: new Date().toISOString().slice(0, 16) + "Z", name: post.name, msg: post.msg });
     const body = { message: "Post for Reggie (automatic)", content: b64encode(JSON.stringify({ items }, null, 1) + "\n"), branch: BRANCH, committer: { name: "Reginald Quill", email: "noreply@anthropic.com" } };
     if (inbox.sha) body.sha = inbox.sha;
-    const put = await gh(env, "/contents/" + INBOX, { method: "PUT", body: JSON.stringify(body) });
+    const put = await gh(env, "/contents/" + INBOX, { method: "PUT", body: JSON.stringify(body) }, INBOX_REPO);
     if (put.ok) return { ok: true };
     if (put.status !== 409 && put.status !== 422) throw new Error("write " + put.status);
   }
@@ -330,8 +322,7 @@ export default {
       try {
         const allowed = await boardAllowed(env, request);
         if (allowed.error) return reply(429, { ok: false, error: allowed.error }, origin);
-        const sealed = await sealBoard({ name: v.name, msg: v.msg });
-        const out = await addToInbox(env, sealed);
+        const out = await addToInbox(env, { name: v.name, msg: v.msg });
         if (out.error) return reply(503, { ok: false, error: out.error }, origin);
         return reply(200, { ok: true, status: "queued" }, origin);
       } catch (err) { return reply(502, { ok: false, error: "The post room is busy. Try again in a minute." }, origin); }
@@ -373,4 +364,4 @@ export default {
     }
   }
 };
-export { cleanPage, cleanRef, recordHit, addHit, readStats, validate, applyScore, applyScoreEverywhere, cleanName, isRude, validateBoard, sealBoard };
+export { cleanPage, cleanRef, recordHit, addHit, readStats, validate, applyScore, applyScoreEverywhere, cleanName, isRude, validateBoard, addToInbox };

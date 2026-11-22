@@ -54,3 +54,13 @@ A game in scores.json can carry `"alsoTo": "<main game slug>"`. A score posted t
 ## v7: private page counter
 
 `hits.js` (on every page) posts the page name, and the referring site once per visit, to `POST /hit`. The Worker keeps one KV key per day (`h:YYYY-MM-DD`, kept 60 days) holding view counts per page, visits and referrers. No cookies, no IDs, bots and Do Not Track skipped, counting pauses at 700 views a day to protect the free KV write allowance. `stats.html` (noindex, not linked) reads `GET /stats`. Optional: add a Worker secret `STATS_KEY` and the stats page will ask for it. Visit `stats.html?me` once on your own devices to stop counting yourself.
+
+## v8: the private post room (23 November 2026)
+
+Reggie's message board no longer keeps waiting messages in this public repo. The Worker writes them, as plain JSON, to
+`inbox.json` in the private repo `williamgeorgeworks/post-room`, and the post round reads them from a clone of that repo.
+The old encryption key is retired, so no scheduled task needs to carry one.
+
+One-time setup: create the private repo `post-room` (with a README), add it to the `arcade scores worker` token
+(Repository access, Contents: Read and write), then re-paste `scores-worker.js` and Deploy. Until the token can see the
+repo, a new board post fails with "The post room is busy" and nothing is stored.
