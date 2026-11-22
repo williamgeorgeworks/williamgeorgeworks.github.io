@@ -54,4 +54,20 @@ a.tile:nth-child(even):hover,a.tile:nth-child(even):focus-visible{transform:rota
 @keyframes inkin{from{opacity:.2;transform:translateX(-18px)}to{opacity:1;transform:none}}
 @media (max-width:900px){.hero.fresh .hero-grid{grid-template-columns:1fr;gap:34px}.hero-desk{max-width:560px}}
 @media (max-width:520px){.desk-book{grid-template-columns:84px minmax(0,1fr);gap:12px}.desk-title{font-size:21px}.desk-card{transform:none}.ink-pop{display:none}.hero.fresh .btns .btn.big{font-size:21px;padding:12px 20px 11px}}
-@media (prefers-reduced-motion:reduce){.hero.fresh .splat,.ink-pop,.scrawl.wobble,.hero-desk .desk-card,.live i,.hero h1 em.inked::after,main section.band h2{animation:none!important}a.tile,.desk-cover{transition:none}a.tile:hover,a.tile:focus-visible,.desk-cover:hover{transform:none!important}}
+@media (prefers-reduced-motion:reduce){.hero.fresh .splat,.ink-pop,.scrawl.wobble,.hero-desk .desk-card,.live i,.hero h1 em.inked::after,main section.band h2{animation:none!important}a.tile,.desk-cover{transition:none}a.tile:hover,a.tile:focus-visible,.desk-cover:hover{transform:none!important}.tip-cat:hover img,.tip-cat:focus-visible img{outline:none}}
+
+/* Tip jar: a photo of each cat above their existing Dreamies link */
+#tip-jar{scroll-margin-top:90px}
+.tip-cats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin:18px 0 8px}
+.tip-cat{display:flex;flex-direction:column;align-items:stretch;min-width:0;text-decoration:none;color:inherit}
+.tip-cat img{display:block;width:100%;height:auto;aspect-ratio:1/1;object-fit:cover;border:3px solid var(--ink);background:var(--ink)}
+.tip-cat-arthur img{object-position:50% 38%}
+.tip-cat-spyro img{object-position:50% 22%}
+.tip-cat-tilly img{object-position:50% 18%}
+.tip-cat-trixie img{object-position:50% 18%}
+.tip-cat-dexter img{object-position:50% 12%}
+.tip-cat-daisy img{object-position:50% 18%}
+.tip-cat-name{display:block;font-family:var(--display);font-weight:400;text-transform:uppercase;letter-spacing:.4px;font-size:18px;text-align:center;margin:8px 0 6px}
+.tip-cat .btn{text-align:center;box-sizing:border-box;width:100%}
+.tip-cat:hover img,.tip-cat:focus-visible img{outline:3px solid var(--red);outline-offset:0}
+@media (max-width:720px){.tip-cats{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.tip-cat-name{font-size:16px}.tip-cat .btn.small{font-size:14px;padding:8px 10px 7px}}
