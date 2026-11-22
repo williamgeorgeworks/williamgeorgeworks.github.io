@@ -91,7 +91,7 @@ async function run(browser, w, h, tag, port) {
   await sleep(1500);
   s = await st();
   await page.screenshot({ path: `${SHOTS}/${tag}-07-after-fight-${s.scr}.png` });
-  ok(`${tag} first fight resolved`, s.scr === 'reward' || s.scr === 'over' || (s.scr==='combat' && s.over), s.scr);
+  ok(`${tag} first fight resolved`, s.scr === 'reward' || s.scr === 'over' || s.scr === 'report' || (s.scr==='combat' && s.over), s.scr);
   // Escape opens the menu (when there is nothing to back out of)
   if (s.scr === 'reward' || s.scr === 'map') {
     await key('Escape', 400); const m = await page.evaluate(() => !document.getElementById('soMenu').hidden);
@@ -243,7 +243,8 @@ async function dayOut(browser, port) {
   ok(`${tag} new place wears a New! tag`, await ev(() => !!document.querySelector('[data-i=beach] .tag.new')));
   await fits('second-day picker'); await page.screenshot({ path: `${SHOTS}/m1-01-stage-picker.png` });
   await ev(() => document.querySelector('[data-i=beach]').click()); await sleep(900);
-  ok(`${tag} coming-soon place says so and borrows Prom enemies`, /Coming soon/.test(await ev(() => document.querySelector('#view .panel').textContent)) && (await ev(() => __SO.run().stage)) === 'beach');
+  ok(`${tag} the Beach (milestone 2: its own crowd) is entered`, (await ev(() => __SO.run().stage)) === 'beach' && (await ev(() => __SO.ENC[__SO.STAGES.beach.enc].F[0][0])) === 'castle');
+  ok(`${tag} places not built yet still say Coming soon`, await ev(() => Object.keys(__SO.STAGES).filter(k => !__SO.STAGES[k].ready).every(k => /Coming soon/.test(__SO.STAGES[k].soon || ''))));
   await page.reload({ waitUntil: 'networkidle' }); await sleep(600);
   ok(`${tag} resume shows the place`, /The Beach/.test(await ev(() => (document.querySelector('[data-a=resume]') || {}).textContent || '')));
   await ev(() => document.querySelector('[data-a=resume]').click()); await sleep(600);
@@ -324,7 +325,147 @@ async function m2a(browser, port) {
   ok(`${tag} no page errors`, errors.length === 0, errors.slice(0, 3).join(' | '));
   await ctx.close();
 }
-const M2 = { m2a };
+// Milestone 2c: the six new places (crowds, mechanics, events, scenery)
+async function m2c(browser, port) {
+  const tag = 'm2c', ctx = await browser.newContext({ viewport: { width: 1280, height: 800 }, deviceScaleFactor: 1 });
+  const page = await ctx.newPage(), external = [], errors = [];
+  page.on('request', rq => { const u = rq.url(); if (!/^(http:\/\/127\.0\.0\.1:\d+\/|data:|blob:|about:)/.test(u)) external.push(u); });
+  page.on('pageerror', e => errors.push(e.message)); page.on('console', m => { if (m.type() === 'error') errors.push('console: ' + m.text()); });
+  await page.addInitScript(() => { if (!sessionStorage.getItem('m2c')) { localStorage.clear(); sessionStorage.setItem('m2c', '1'); } });
+  await page.goto(`http://127.0.0.1:${port}/index.html`, { waitUntil: 'networkidle' }); await sleep(700);
+  const ev = (f, a) => page.evaluate(f, a);
+  const PL = ['beach', 'rock', 'park', 'tower', 'chippy', 'lights'];
+  ok(`${tag} six places are ready with their own crowds`, await ev(PL => PL.every(id => __SO.STAGES[id].ready && __SO.STAGES[id].enc === id && __SO.ENC[id] && !__SO.STAGES[id].soon), PL));
+  ok(`${tag} every enemy in the new tables exists`, await ev(PL => PL.every(id => ['F', 'L', 'B'].every(k => __SO.ENC[id][k].every(s => s.every(x => __SO.EN[x])))), PL));
+  await ev(() => { __SO.act('hero', 'r'); __SO.act('begin'); }); await sleep(300); await ev(() => { __SO.act('cat', 'arthur'); __SO.DAY.done1 = 1; __SO.DAY.sticks = 14; __SO.META.wins = 1; }); await sleep(300);
+  const go = async st => { const s = await ev(st => { const R = __SO.run(); R.part = __SO.PARTS.findIndex(P => P.stages.includes(st)); R.hp = R.max; __SO.enterStage(st); return R.stage; }, st); if (s !== st) ok(`${tag} entered ${st}`, false, s); };
+  const fight = (set, k) => ev(a => __SO.fightWith(a[0], a[1]), [set, k || 'F']);
+  for (const id of PL) {
+    await go(id); await sleep(900);
+    const sets = await ev(id => { const e = __SO.ENC[id]; return [].concat(e.F.map(s => [s, 'F']), e.L.map(s => [s, 'L']), e.B.map(s => [s, 'B'])); }, id);
+    let good = 0;
+    for (const [s, k] of sets) { await fight(s, k); await sleep(250); if (await ev(s => { const B = __SO.B(); return __SO.S.scr === 'combat' && B.en.map(e => e.k).join() === s.join() && B.en.every(e => e.mv && e.mv.n); }, s)) good++; }
+    ok(`${tag} ${id}: all ${sets.length} fights start with real moves`, good === sets.length, good + '/' + sets.length);
+    await fight((await ev(id => __SO.ENC[id].F[0], id))); await sleep(2400);
+    await page.screenshot({ path: `${SHOTS}/m2-03-${id}.png` });
+    ok(`${tag} ${id}: own event comes up`, await ev(id => { __SO.S.scr = 'map'; __SO.B().over = true; __SO.openEvent(); __SO.render(); return __SO.S.ev.d.st === id; }, id));
+    const res = await ev(() => { const o = __SO.S.ev.d.opts(); return o.map(x => x[0]).join(' | ') + ' => ' + o[o.length - 1][1](); });
+    ok(`${tag} ${id}: event options work`, / => \S/.test(res), res.slice(0, 160));
+  }
+  // mechanics
+  await go('tower'); await sleep(600); await fight(['organ'], 'B'); await sleep(400);
+  ok(`${tag} the Mighty Organ starts half sunk and takes half damage`, await ev(() => { const B = __SO.B(), e = B.en[0], h = e.hp; e.block = 0; __SO.strike(__SO.H(), e, 10); return e.sunk === 2 && h - e.hp === 5; }));
+  await go('rock'); await sleep(600); await fight(['bigrock'], 'B'); await sleep(400);
+  ok(`${tag} the BLACKPOOL stick snaps in two at half health`, await ev(() => { const B = __SO.B(), e = B.en[0]; e.block = 0; e.hp = Math.floor(e.max / 2) + 5; __SO.strike(__SO.H(), e, 10); return B.en.length === 2 && B.en[1].k === 'halfrock' && B.en[1].hp > 0 && B.en[1].mv; }));
+  await sleep(600); await page.screenshot({ path: `${SHOTS}/m2-04-rock-split.png` });
+  await go('chippy'); await sleep(600); await fight(['counter'], 'B'); await sleep(1500);
+  ok(`${tag} counter asks "Salt?" and a Skill answers it`, await ev(() => { const B = __SO.B(), e = B.en[0]; if (e.mv.ask !== 'S') return 'ask=' + e.mv.ask; B.energy = 9; B.hand.push({ id: 'cough', u: 0 }); const i = B.hand.length - 1; __SO.act('card', i); if (B.hand.length > i) __SO.act('card', i); return e.ans === 1 && e.st.flu >= 2; }));
+  await sleep(2600); await page.screenshot({ path: `${SHOTS}/m2-05-counter.png` });
+  await fight(['counter'], 'B'); await sleep(1200);
+  ok(`${tag} ignoring the counter gives her 3 Gusto`, await ev(async () => { const B = __SO.B(), e = B.en[0]; __SO.H().block = 99; __SO.endTurn(); await new Promise(r => setTimeout(r, 2500)); return (e.st.gus || 0) >= 3; }));
+  await go('park'); await sleep(600); await fight(['tall'], 'F'); await sleep(1200);
+  ok(`${tag} "You Must Be This Tall" hits 12 when you hold more than 5 cards`, await ev(async () => { const B = __SO.B(), H = __SO.H(); while (B.hand.length < 7) B.hand.push({ id: 'cough', u: 0 }); H.block = 0; H.hp = 60; __SO.endTurn(); await new Promise(r => setTimeout(r, 2500)); return 60 - H.hp >= 12 || ('lost ' + (60 - H.hp)); }));
+  await go('beach'); await sleep(600); await fight(['windbreak', 'jelly'], 'F'); await sleep(1200);
+  ok(`${tag} the Windbreak shelters everyone`, await ev(async () => { const B = __SO.B(); __SO.H().block = 99; __SO.endTurn(); await new Promise(r => setTimeout(r, 2500)); return B.en.every(e => e.block >= 6) || B.en.map(e => e.block).join(); }));
+  await fight(['croc'], 'B'); await sleep(800);
+  ok(`${tag} "Behind You!" hides the croc's number`, await ev(async () => { const e = __SO.B().en[0]; e.mv = { n: 'Behind You!', a: 17, hid: 1 }; __SO.render(); await new Promise(r => setTimeout(r, 300)); const d = [...document.querySelectorAll('b')].find(b => /Crocodile/.test(b.textContent)); const tx = d ? d.parentElement.textContent : ''; return (/Look behind you/.test(tx) && !/Behind You!/.test(tx)) || tx; }));
+  await go('chippy'); await sleep(600); await fight(['queue'], 'F'); await sleep(800);
+  ok(`${tag} the Queue gains 1 Block when hit`, await ev(() => { const e = __SO.B().en[0]; e.block = 0; __SO.strike(__SO.H(), e, 5); return e.block === 1; }));
+  ok(`${tag} Bag of Scraps heals 8 and gives Gusto`, await ev(() => { const R = __SO.run(), H = __SO.H(); R.brews = ['scraps']; const h = R.hp = R.max - 20; H.st.gus = 0; __SO.useBrew(0, null); return R.hp - h === 8 && H.st.gus === 1; }));
+  await ev(() => __SO.addRelic('ridephoto')); await fight(['counter'], 'B'); await sleep(1500);
+  ok(`${tag} Ride Photo draws 1 more on a boss's first turn`, (await ev(() => __SO.B().hand.length)) === 6, await ev(() => __SO.B().hand.length));
+  ok(`${tag} trade-mark check: no banned names in the page or game data`, !(await ev(() => /Pleasure Beach|Illuminations|Blackpool Tower|Big One|Valhalla|Merlin|Grok/i.test(document.documentElement.outerHTML + JSON.stringify(Object.values(__SO.EN).map(e => e.n))))));
+  ok(`${tag} zero external requests`, external.length === 0, external.slice(0, 5).join(' '));
+  ok(`${tag} no page errors`, errors.length === 0, errors.slice(0, 3).join(' | '));
+  await ctx.close();
+}
+// Milestone 2d: the recorded unlocks (Quill cards, Arthur's wig, souvenir line two, the Daily Run) and the cat card art
+async function m2d(browser, port) {
+  const tag = 'm2d', ctx = await browser.newContext({ viewport: { width: 1280, height: 800 }, deviceScaleFactor: 1 });
+  const page = await ctx.newPage(), external = [], errors = [];
+  page.on('request', rq => { const u = rq.url(); if (!/^(http:\/\/127\.0\.0\.1:\d+\/|data:|blob:|about:)/.test(u)) external.push(u); });
+  page.on('pageerror', e => errors.push(e.message)); page.on('console', m => { if (m.type() === 'error') errors.push('console: ' + m.text()); });
+  await page.addInitScript(() => { if (!sessionStorage.getItem('m2d')) { localStorage.clear(); sessionStorage.setItem('m2d', '1'); } });
+  await page.goto(`http://127.0.0.1:${port}/index.html`, { waitUntil: 'networkidle' }); await sleep(700);
+  const ev = (f, a) => page.evaluate(f, a);
+  const pools = n => ev(n => { __SO.DAY.sticks = n; __SO.poolFix(); const P = __SO.POOL, Q = __SO.QNEW; return ['r', 't', 'k'].map(h => Q[h].filter(id => P[h].includes(id)).length).join(','); }, n);
+  ok(`${tag} new Quill cards stay out of the pools before their sticks`, (await pools(0)) === '0,0,0', await pools(0));
+  ok(`${tag} stick #4 adds Reggie's cards`, (await pools(4)) === '4,0,0', await pools(4));
+  ok(`${tag} stick #8 adds Terry's cards`, (await pools(8)) === '4,4,0', await pools(8));
+  ok(`${tag} stick #12 adds Kenneth's cards`, (await pools(12)) === '4,4,4', await pools(12));
+  // every new card plays
+  const play = (hero, id, set, prep) => ev(async a => {
+    __SO.S.hero = a.hero; __SO.act('begin'); await new Promise(r => setTimeout(r, 200)); __SO.act('cat', 'arthur'); __SO.DAY.done1 = 1;
+    __SO.fightWith(a.set, 'F'); await new Promise(r => setTimeout(r, 300));
+    const B = __SO.B(), H = __SO.H(); B.energy = 99; B.en.forEach(e => { e.block = 0; e.hp = e.max = 200; });
+    const P = a.prep || {}; if (P.inv) B.en[0].st.inv = P.inv; if (P.flt) B.flt = P.flt; if (P.disc) B.disc.push({ id: P.disc, u: 0 });
+    B.hand.push({ id: a.id, u: 0 }); const i = B.hand.length - 1, e0 = B.en[0], hp0 = B.en.map(e => e.hp), g0 = __SO.run().gold;
+    const okp = __SO.playCard(i, 0);
+    return { okp, dmg: B.en.map((e, j) => hp0[j] - e.hp), inv: B.en.map(e => e.st.inv || 0), flu: B.en.map(e => e.st.flu || 0), gold: __SO.run().gold - g0, gus: H.st.gus || 0, block: H.block, hand: B.hand.length, disc: B.disc.length, st: H.st };
+  }, { hero, id, set, prep });
+  let r = await play('r', 'cashhand', ['breeze']); ok(`${tag} Cash in Hand: 6 damage and 5 Scrumplings`, r.okp && r.dmg[0] === 6 && r.gold === 5, JSON.stringify(r));
+  r = await play('r', 'vat', ['breeze'], { inv: 2 }); ok(`${tag} VAT Inclusive: Invoice, and Flustered if they owed`, r.inv[0] === 6 && r.flu[0] === 1, JSON.stringify(r));
+  r = await play('r', 'latepay', ['breeze', 'breeze'], { inv: 2 }); ok(`${tag} Late Payment Charge raises only existing Invoices`, r.inv[0] === 5 && r.inv[1] === 0, JSON.stringify(r));
+  r = await play('r', 'bailiffs', ['breeze'], { inv: 5 }); ok(`${tag} The Bailiffs: the Invoice, 3 times`, r.dmg[0] >= 15, JSON.stringify(r));
+  r = await play('t', 'bleed', ['breeze', 'breeze']); ok(`${tag} Bleed Edge hits all and gives 1 Gusto`, r.dmg.every(d => d >= 3) && r.gus === 1, JSON.stringify(r));
+  ok(`${tag} Bleed Edge's Gusto goes at the end of the turn`, await ev(async () => { __SO.H().block = 999; __SO.endTurn(); await new Promise(r => setTimeout(r, 2500)); return (__SO.H().st.gus || 0) === 0; }));
+  r = await play('t', 'spot', ['breeze']); ok(`${tag} Spot Colour: twice, plus Flustered`, r.dmg[0] >= 10 && r.flu[0] === 1, JSON.stringify(r));
+  r = await play('t', 'letters', ['breeze']); ok(`${tag} Letters to the Editor is a power`, r.st.ltr === 2, JSON.stringify(r.st));
+  ok(`${tag} Letters to the Editor: Block when a card hits ALL`, await ev(() => { const B = __SO.B(), H = __SO.H(); H.block = 0; B.hand.push({ id: 'fullcolour', u: 0 }); __SO.playCard(B.hand.length - 1); return H.block >= 2; }));
+  r = await play('t', 'spread', ['breeze', 'breeze']); ok(`${tag} Centre Spread: 14 to ALL`, r.dmg.every(d => d === 14), JSON.stringify(r));
+  r = await play('k', 'minutes', ['breeze']); ok(`${tag} Minutes of the Meeting: draw 2, discard 1`, r.okp && r.hand === 6, JSON.stringify(r));
+  r = await play('k', 'replyall', ['breeze'], { flt: 2 }); ok(`${tag} Reply All: ALL, plus a hit per Fleeting card`, r.dmg[0] === 18, JSON.stringify(r));
+  r = await play('k', 'delegated', ['breeze'], { disc: 'nod' }); ok(`${tag} Delegated brings a card back at 0`, r.okp && (await ev(() => __SO.B().hand.some(c => c.id === 'nod' && c.z))), JSON.stringify(r));
+  r = await play('k', 'nominute', ['breeze']); ok(`${tag} Nobody Minuted It: first Fleeting card twice`, r.st.nm === 1 && await ev(() => { const B = __SO.B(), e = B.en[0], h = e.hp; B.hand.push({ id: 'handshake', u: 0, tmp: 1, z: 1 }); __SO.playCard(B.hand.length - 1, 0); return h - e.hp === 12; }), JSON.stringify(r.st));
+  ok(`${tag} rewards and shops can offer the new cards once unlocked`, await ev(() => { __SO.DAY.sticks = 12; __SO.poolFix(); return __SO.QNEW.r.every(id => __SO.POOL.r.includes(id)); }));
+  // souvenir line two
+  const souv = n => ev(async n => { __SO.DAY.sticks = n; __SO.S.scr = 'souvenir'; __SO.render(); await new Promise(r => setTimeout(r, 200)); return document.querySelectorAll('.sv').length; }, n);
+  const s5 = await souv(5), s6 = await souv(6); ok(`${tag} Souvenir Shop line two opens at stick #6`, s6 > s5, s5 + ' -> ' + s6);
+  // Arthur's wig
+  ok(`${tag} wig locked before stick #2, on after`, await ev(() => { __SO.DAY.sticks = 1; const a = __SO.wigOn(); __SO.DAY.sticks = 2; return !a && __SO.wigOn(); }));
+  const catPix = () => ev(async () => { __SO.S.scr = 'cat'; __SO.S.offer = ['arthur', 'spyro', 'dexter']; __SO.S.mode = null; __SO.render(); await new Promise(r => setTimeout(r, 900)); const c = document.querySelector('canvas[data-id=arthur]'); return c ? c.toDataURL() : ''; });
+  const w1 = await catPix(); await page.screenshot({ path: `${SHOTS}/m2-06-wig.png` });
+  await ev(async () => { __SO.act('album'); await new Promise(r => setTimeout(r, 300)); });
+  ok(`${tag} album has the wig toggle`, await ev(() => /Arthur.s wig: on/.test(document.body.textContent)));
+  await ev(async () => { document.querySelector('[data-a=wig]').click(); await new Promise(r => setTimeout(r, 200)); });
+  ok(`${tag} wig toggled off and saved`, await ev(() => !__SO.wigOn() && JSON.parse(localStorage.getItem('so-day-v1')).wig === 0));
+  await ev(() => { __SO.S.mode = null; }); const w0 = await catPix();
+  ok(`${tag} the wig is drawn on Arthur (canvas differs on/off)`, w1 && w0 && w1 !== w0);
+  await ev(() => { __SO.DAY.wig = 1; __SO.saveDay(); });
+  // the Daily Run
+  ok(`${tag} Daily Run locked at stick #9 with no wins, open at #10`, await ev(() => { __SO.DAY.sticks = 9; __SO.META.wins = 0; const a = __SO.dailyOpen(); __SO.DAY.sticks = 10; return !a && __SO.dailyOpen(); }));
+  await ev(async () => { __SO.S.scr = 'title'; __SO.S.mode = null; __SO.render(); await new Promise(r => setTimeout(r, 400)); });
+  ok(`${tag} Daily Run button on the title`, await ev(() => !!document.querySelector('[data-a=daily]')));
+  ok(`${tag} title still fits 1280x800`, await ev(() => document.documentElement.scrollHeight <= innerHeight && document.documentElement.scrollWidth <= innerWidth));
+  await page.screenshot({ path: `${SHOTS}/m2-07-daily-title.png` });
+  const daily = () => ev(async () => { document.querySelector('[data-a=daily]').click(); await new Promise(r => setTimeout(r, 400)); const R = __SO.run(), off = __SO.S.offer.join(); __SO.act('cat', __SO.S.offer[0]); await new Promise(r => setTimeout(r, 300));
+    document.querySelector('[data-i=prom]').click(); await new Promise(r => setTimeout(r, 900)); const R2 = __SO.run(); const map = R2.map.map(row => row.map(n => n ? n.t : '-').join('')).join('/');
+    R2.map[0].forEach(n => n.t = 'F'); __SO.act('node', 1); await new Promise(r => setTimeout(r, 400)); const set = __SO.B().en.map(e => e.k).join(); const hand = __SO.B().hand.map(c => c.id).join();
+    return { daily: R2.daily, hero: R2.hero, off, map, set, hand }; });
+  const d1 = await daily(); await ev(async () => { __SO.S.scr = 'title'; __SO.S.mode = null; __SO.render(); await new Promise(r => setTimeout(r, 300)); }); const d2 = await daily();
+  ok(`${tag} Daily Run: same Quill, cats, map, first fight and hand both times`, d1.daily === await ev(() => __SO.today()) && JSON.stringify(d1) === JSON.stringify(d2), JSON.stringify(d1).slice(0, 200) + ' | ' + JSON.stringify(d2).slice(0, 200));
+  ok(`${tag} a normal run is not seeded`, await ev(async () => { const maps = []; for (let i = 0; i < 2; i++) { __SO.S.scr = 'title'; __SO.render(); __SO.act('begin'); __SO.act('cat', __SO.S.offer[0]); __SO.DAY.done1 = 1; await new Promise(r => setTimeout(r, 100)); __SO.enterStage('prom'); maps.push(JSON.stringify(__SO.run().map.map(r => r.map(n => n ? n.t : '-'))) + __SO.run().daily); } return maps[0] !== maps[1] && !/true|\d{4}-/.test(maps[0]); }));
+  const st0 = await ev(() => { __SO.DAY.streak = { last: '', n: 0, best: 0 }; __SO.finish(false); return __SO.DAY.streak.n; });
+  ok(`${tag} a normal day out does not tick the Day Tripper streak`, st0 === 0, st0);
+  await ev(async () => { __SO.S.scr = 'title'; __SO.S.mode = null; __SO.render(); await new Promise(r => setTimeout(r, 300)); });
+  await daily(); await ev(() => { __SO.run().score = 321; __SO.finish(false); }); await sleep(2500);
+  ok(`${tag} the Daily ticks the streak and saves today's best`, await ev(() => __SO.DAY.streak.n === 1 && __SO.DAY.daily[__SO.today()] > 0), await ev(() => JSON.stringify([__SO.DAY.streak, __SO.DAY.daily])));
+  ok(`${tag} the report names the Daily`, /Daily Run, \d{4}-\d\d-\d\d/.test(await ev(() => document.body.textContent)));
+  await page.screenshot({ path: `${SHOTS}/m2-08-daily-report.png` });
+  // the cats' card art
+  await ev(async () => { __SO.S.scr = 'title'; __SO.render(); __SO.S.hero = 'r'; __SO.act('begin'); __SO.act('cat', 'tilly'); __SO.DAY.done1 = 1; await new Promise(r => setTimeout(r, 200)); __SO.fightWith(['breeze'], 'F'); await new Promise(r => setTimeout(r, 600));
+    const B = __SO.B(); B.hand = ['ruling', 'decree', 'ripface', 'requisition', 'boo', 'whome'].map(id => ({ id, u: 0 })); __SO.render(); await new Promise(r => setTimeout(r, 1800)); });
+  const art = await ev(() => ['ruling', 'decree', 'ripface', 'requisition', 'boo', 'whome'].map(id => { const a = document.querySelector('#hand .c-' + id + ' .art') || document.querySelector('.c-' + id + ' .art'); return a ? getComputedStyle(a).backgroundImage : 'none'; }));
+  ok(`${tag} all six cat cards show their painted art`, art.every((b, i) => new RegExp('cats/(arthur|spyro|tilly|trixie|dexter|daisy)\\.jpg').test(b)), art.join(' '));
+  const loaded = await ev(async () => { const r = []; for (const c of ['arthur', 'spyro', 'tilly', 'trixie', 'dexter', 'daisy']) { const im = new Image(); im.src = 'cats/' + c + '.jpg'; await im.decode().catch(() => 0); r.push(im.naturalWidth); } return r; });
+  ok(`${tag} cat art files load`, loaded.every(w => w >= 300), loaded.join(','));
+  ok(`${tag} hand with cat cards fits, nothing clips`, await ev(() => document.documentElement.scrollHeight <= innerHeight));
+  await page.screenshot({ path: `${SHOTS}/m2-09-cat-cards.png` });
+  ok(`${tag} zero external requests`, external.length === 0, external.slice(0, 5).join(' '));
+  ok(`${tag} no page errors`, errors.length === 0, errors.slice(0, 3).join(' | '));
+  await ctx.close();
+}
+const M2 = { m2a, m2c };
 (async () => {
   await new Promise(r => srv.listen(0, '127.0.0.1', r)); const port = srv.address().port;
   const browser = await chromium.launch({ executablePath: EXE, headless: true });
