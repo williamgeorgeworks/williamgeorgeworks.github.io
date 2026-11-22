@@ -1,0 +1,16 @@
+# Seen Off: third-party notices
+
+Everything in the game (art, music, sound, text) is drawn or generated in code by William George Works,
+except these bundled fonts:
+
+| Font | Files | Licence | Copyright |
+|---|---|---|---|
+| Anton | `web/fonts/anton-latin.woff2`, `web/fonts/anton-latin-ext.woff2` | SIL Open Font License 1.1 (`OFL-Anton.txt`) | Copyright 2020 The Anton Project Authors (https://github.com/googlefonts/AntonFont) |
+| Permanent Marker | `web/fonts/permanent-marker-latin.woff2` | Apache License 2.0 (`LICENSE-PermanentMarker-Apache-2.0.txt`) | Font Diner |
+
+The woff2 files are the unmodified subsets served by Google Fonts (Anton v27, Permanent Marker v16).
+Both licences allow bundling in a commercial game; the licence texts ship in the `licences/` folder of every build.
+
+The desktop wrapper uses Tauri 2 (MIT/Apache-2.0) and its Rust dependencies; on Windows it uses Microsoft Edge WebView2,
+on Linux WebKitGTK (LGPL-2.1, dynamically linked / bundled in the AppImage). A full Rust dependency licence list can be
+produced before release with `cargo about` or `cargo license` in `src-tauri/`.
