@@ -65,6 +65,15 @@ drawing had a white tail and a large off-centre patch, the website file itself i
 "placeholder"), the new place icons (simple ink icons), the Last Tram's health (120, not the plan's 150, until playtested), and the
 unlocks that only show as a name for now (Arthur's wig, new Quill cards, Daily Run, the later sticks: they are recorded but do nothing yet).
 
+**Later milestone, not wired in yet:** the six cat signature-card mockups drawn from the real photos are in
+`../mockups/` (`card-requisition-trixie`, `card-ruling-of-the-court` (Arthur), `card-wouldnt-say-boo-dexter`, `card-rip-your-face-off-tilly`,
+`card-who-me-daisy`, `card-royal-decree-spyro`). They would replace the art panel of each cat's signature card (`CARDS[...]` drawn by the card
+renderer, the card the cat adds to your deck) and the cat-pick portraits, once the card renderer takes an image.
+
+**WebKitGTK note:** `app.security.dangerousDisableAssetCspModification` is `["style-src"]`. Without it Tauri adds hashes to `style-src`,
+which switches off `'unsafe-inline'` and silently drops every inline `style="--var:…"` the game sets (place colours, the rock meter fill,
+animation delays). Scripts keep Tauri's CSP handling; the policy still allows only `'self'`.
+
 ## What the desktop bundle changes
 
 * **Removed (all network + site chrome):** Google Fonts link, `hits.js`, `share.js`, `badges.js`, `quickscore.js`,
