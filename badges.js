@@ -73,7 +73,7 @@
       { id: "springtide", name: "Spring Tide", how: "Score 3,000 in one run", game: "Slay the Pier", tier: "gold", icon: "bolt", got: +p.best >= 3000 },
       { id: "catpile", name: "The Whole Pile", how: "Win a run with all six cats at once", game: "Slay the Pier", tier: "legend", icon: "paw", got: +p.six >= 1 },
       { id: "ovation", name: "Standing Ovation", how: "Win a run on Encore 5", game: "Slay the Pier", tier: "legend", icon: "crown", got: +p.mw >= 6 },
-      { id: "tour", name: "Grand Tour", how: "Play all five scoring games, The Kitty Grand Prix included", game: "The arcade", tier: "legend", icon: "flag", got: five >= 5 }
+      { id: "tour", name: "Grand Tour", how: "Play Grand Theft Kitty, Red Light Green Light, Arthur's Tribunal, Ferret's Ditch and The Kitty Grand Prix", game: "The arcade", tier: "legend", icon: "flag", got: five >= 5 }
     ];
     var n = list.filter(function (b) { return b.got; }).length;
     list.push({ id: "pothunter", name: "Pot Hunter", how: "Win 25 of the other badges", game: "The arcade", tier: "gold", icon: "cup", got: n >= 25 });
