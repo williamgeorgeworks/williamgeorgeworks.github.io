@@ -135,7 +135,7 @@ button{font:inherit;cursor:pointer}
       </div>
     </section>
   </div>
-  <p class="foot">The tune is a new one, a waltz for the end of the pier. Everything is drawn in code, in the ink of our books. Reggie and Terry appear as themselves. Kenneth appears with a bag on his head, because at the time of writing nobody had told Reggie who he is. Dreamies is a trade mark of its owner, who has nothing to do with this game; nor has anybody connected with any other card game whose name this one resembles. No seagulls were slain. They were seen off, and they will be back.</p>
+  <p class="foot">The tune is a new one, a waltz for the end of the pier. Everything is drawn in code, in the ink of our books. Reggie and Terry appear as themselves. Kenneth is the third Quill: he comes from the world of Grok, where he is the Ferret&rsquo;s chief of staff. He appears with a bag on his head because nobody has drawn him yet. Dreamies is a trade mark of its owner, who has nothing to do with this game; nor has anybody connected with any other card game whose name this one resembles. No seagulls were slain. They were seen off, and they will be back.</p>
 </div>
 
 <script>
@@ -209,7 +209,7 @@ C('steady','t','Steady Hand','P',1,'u','Gain $0 Poise.',[[2,3]],function(t,v){me
 C('refphoto','t','Reference Photo','S',1,'c','Apply $0 Flustered.',[[2,3]],function(t,v){app(t,'flu',v[0]);},{t:1});
 C('masterpiece','t','Masterpiece','A',3,'r','Deal $0 damage.',[[30,40]],function(t,v){atk(t,v[0]);},{t:1});
 C('scribble','t','Scribble','A',0,'x','Deal $0 damage. Exhaust.',[[4,4]],function(t,v){atk(t,v[0]);},{t:1,x:1});
-/* Kenneth, about whom nothing is known */
+/* Kenneth, the third Quill, from Grok */
 C('handshake','k','Firm Handshake','A',1,'b','Deal $0 damage.',[[6,9]],function(t,v){atk(t,v[0]);},{t:1});
 C('nod','k','Vague Nod','S',1,'b','Gain $0 Block.',[[5,8]],function(t,v){blk(v[0]);});
 C('whoinv','k','Who Invited Him?','S',0,'b','Add $0 random card to your hand. It costs 0 and is Fleeting.',[[1,2]],function(t,v){for(var i=0;i<v[0];i++)addHand(randCard(),1,1);});
@@ -247,8 +247,8 @@ var HEROES={
    blurb:'Invoices everything. Enemies pay up a little more each turn.'},
  t:{id:'t',name:'Terry',title:'The Mechanical Editor',hp:78,deck:['inkblot','inkblot','inkblot','inkblot','sketch','sketch','sketch','sketch','splatter'],
    blurb:'Ink, outrage and big lettering. Hits everything, often.'},
- k:{id:'k',name:'Kenneth',title:'Portrait withheld',hp:66,deck:['handshake','handshake','handshake','handshake','nod','nod','nod','nod','whoinv'],
-   blurb:'Turned up at midnight. Nobody has told Reggie who he is, so his magic is anybody’s guess.'}
+ k:{id:'k',name:'Kenneth',title:'Chief of Staff, by way of Grok',hp:66,deck:['handshake','handshake','handshake','handshake','nod','nod','nod','nod','whoinv'],
+   blurb:'The third Quill, from the world of Grok, where he is the Ferret’s chief of staff. Nobody has drawn him yet, and his magic is anybody’s guess.'}
 };
 var CATS={
  arthur:{name:'Arthur',card:'ruling',perk:'Diplomatic immunity: start every fight with 8 Block.',body:'#f3e9d8',head:'#f3e9d8',face:'#8a8c99',ear:'#5d6070',eye:'#3f7fd6',fluff:1,hat:'#d1202f'},
