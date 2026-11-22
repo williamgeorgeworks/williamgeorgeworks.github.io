@@ -3,17 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="description" content="Slay the Pier: a magical card game. Pick a Quill, pick a cat, build a deck and fight your way along three piers. A free browser game from William George Works.">
+<meta name="description" content="Seen Off: a card game of doubtful magic. Pick a Quill, pick a cat, build a deck and see off whatever is lurking along three piers. A free browser game from William George Works.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="William George Works">
-<meta property="og:title" content="Slay the Pier">
-<meta property="og:description" content="Three piers. Six familiars. One Quill nobody mentioned. A magical card game: pick a Quill, pick a cat, build a deck. Free in your browser.">
+<meta property="og:title" content="Seen Off">
+<meta property="og:description" content="A card game of doubtful magic. Three piers, six familiars and one Quill nobody mentioned: pick a Quill, pick a cat, build a deck. Free in your browser.">
 <meta property="og:url" content="https://williamgeorgeworks.co.uk/slay-the-pier.html">
 <link rel="canonical" href="https://williamgeorgeworks.co.uk/slay-the-pier.html">
 <meta property="og:image" content="https://williamgeorgeworks.co.uk/thumb-slay-the-pier.jpg">
 <meta name="twitter:image" content="https://williamgeorgeworks.co.uk/thumb-slay-the-pier.jpg">
 <meta name="twitter:card" content="summary_large_image">
-<title>Slay the Pier</title>
+<title>Seen Off: a card game of doubtful magic</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Permanent+Marker&display=swap">
 <style>
 :root{--navy:#16244a;--navy-deep:#0b1230;--paper:#fffdf7;--ink:#141414;--red:#e3182d;--blue:#2456e6;--mist:#d3dbf3;--purple:#7a3ff0;--gold:#ffc61a;--green:#14a84b;--pink:#ff4f9a;--orange:#ff8a1f;--teal:#0fb8a9;--sky:#37c8ff;--lime:#b6f23c;--cream:#fff3d1;
@@ -247,10 +247,10 @@ button{font:inherit;cursor:pointer}
 <div class="topbar"><a href="arcade.html">&larr; Back to the arcade</a><a class="merch" href="shop.html">Merch</a></div>
 <div class="wrap">
   <header class="mast">
-    <span class="eyebrow">A magical card game of doubtful magic</span>
-    <h1>Slay the Pier</h1>
-    <p class="tag" style="font-size:1.35rem;color:#fff">Three piers. Six familiars. One Quill nobody mentioned.</p>
-    <p class="tag">Pick a Quill, pick a cat, build a deck and see off whatever is lurking between here and the end of the pier.</p>
+    <span class="eyebrow">William George Works presents</span>
+    <h1>Seen Off</h1>
+    <p class="tag" style="font-size:1.35rem;color:#fff">A card game of doubtful magic.</p>
+    <p class="tag">Three piers. Six familiars. One Quill nobody mentioned. Pick a Quill, pick a cat, build a deck and see off whatever is lurking between here and the end of the pier.</p>
   </header>
   <div class="cols">
     <div class="booth"><div class="stage" id="stage">
@@ -296,11 +296,11 @@ button{font:inherit;cursor:pointer}
       </div>
       <div class="sheet">
         <h2 style="font-size:1.2rem">Your record</h2>
-        <dl><dt>Runs</dt><dd id="rsRuns">0</dd><dt>Piers slain</dt><dd id="rsWins">0</dd><dt>Best score</dt><dd id="rsBest">0</dd><dt>Encore open</dt><dd id="rsOpen">0</dd></dl>
+        <dl><dt>Runs</dt><dd id="rsRuns">0</dd><dt>Runs won</dt><dd id="rsWins">0</dd><dt>Best score</dt><dd id="rsBest">0</dd><dt>Encore open</dt><dd id="rsOpen">0</dd></dl>
       </div>
     </section>
   </div>
-  <p class="foot">The tune is a new one, a waltz for the end of the pier. Everything is drawn in code, in the ink of our books, with the Illuminations switched on. Reggie and Terry appear as themselves. Kenneth is the third Quill: he comes from the world of Grok, where he is the Ferret&rsquo;s chief of staff. He appears with a bag on his head because nobody has drawn him yet. Dreamies is a trade mark of its owner, who has nothing to do with this game; nor has anybody connected with any other card game whose name this one resembles. No seagulls were slain. They were seen off, and they will be back.</p>
+  <p class="foot">The tune is a new one, a waltz for the end of the pier. Everything is drawn in code, in the ink of our books, with the Illuminations switched on. Reggie and Terry appear as themselves. Kenneth is the third Quill: he comes from the world of Grok, where he is the Ferret&rsquo;s chief of staff. He appears with a bag on his head because nobody has drawn him yet. Dreamies is a trade mark of its owner, who has nothing to do with this game, and the game has nothing to do with any other card game. Until 22 November 2026 it was called Slay the Pier; your record and the top ten have come with it. No seagulls were slain. They were seen off, and they will be back.</p>
 </div>
 
 <script>
@@ -1670,7 +1670,7 @@ var PREV={run:null,hp:0,gold:0,dh:0,dg:0,en:-1,rel:0,br:0,dr:0,db:0,plan:null,pd
 var PLINE=['','An afternoon at the rides','Sunset under the big wheel','After dark, Illuminations on'];
 function hudHTML(){
   var snd='<button type="button" class="chip" data-a="mute" aria-pressed="'+A.muted+'" aria-label="Sound '+(A.muted?'off':'on')+'" title="Sound '+(A.muted?'off':'on')+'">'+ic(A.muted?'mute':'snd')+'<span class="w">Sound '+(A.muted?'off':'on')+'</span></button>';
-  if(!RUN||S.scr==='title'||(S.scr==='over'&&!beating())){PREV.run=null;PREV.dh=PREV.dg=0;return '<span class="pill ttl">Slay the Pier</span><span class="sp"></span><span class="pill act">Encore '+S.lvl+'</span>'+snd;}
+  if(!RUN||S.scr==='title'||(S.scr==='over'&&!beating())){PREV.run=null;PREV.dh=PREV.dg=0;return '<span class="pill ttl">Seen Off</span><span class="sp"></span><span class="pill act">Encore '+S.lvl+'</span>'+snd;}
   var same=PREV.run===RUN,dh=same?RUN.hp-PREV.hp:0,dg=same?RUN.gold-PREV.gold:0,fight=S.scr==='combat'||beating(),vict,pl;
   PREV.dr=same?RUN.relics.length-PREV.rel:0;PREV.db=same?RUN.brews.length-PREV.br:0;PREV.run=RUN;PREV.hp=RUN.hp;PREV.gold=RUN.gold;PREV.rel=RUN.relics.length;PREV.br=RUN.brews.length;PREV.dh=dh;PREV.dg=dg;PREV.plan=null;
   if(!same)GLAG=HLAG=null;
@@ -1771,11 +1771,11 @@ function render(){
     h+='</div>';
   }else if(S.scr==='over'){
     var e=S.end;
-    h='<div class="panel'+(e.won?' won':'')+'"><h2>'+(e.won?'You slew the pier':'Seen off yourself')+'</h2>'+(e.won?'<div class="bigic" style="--c:#ffc61a">'+ic('crown')+'</div>':'')+'<div class="big" id="bigScore">'+e.pts+'</div>'+(e.best&&e.pts>0?'<span class="newbest">New best!</span>':'')+'<p><strong>'+(e.won?HEROES[e.hero].name+' reached the end of North Pier with '+e.cats+(e.cats===1?' familiar':' familiars')+', on Encore '+e.lvl+'.':HEROES[e.hero].name+' got as far as '+ACTS[e.act]+', stop '+e.floor+' of 18'+'.'+(e.by?' The culprit: '+e.by+'.':''))+'</strong></p>'+
+    h='<div class="panel'+(e.won?' won':'')+'"><h2>'+(e.won?'All three piers, seen off':'Seen off yourself')+'</h2>'+(e.won?'<div class="bigic" style="--c:#ffc61a">'+ic('crown')+'</div>':'')+'<div class="big" id="bigScore">'+e.pts+'</div>'+(e.best&&e.pts>0?'<span class="newbest">New best!</span>':'')+'<p><strong>'+(e.won?HEROES[e.hero].name+' reached the end of North Pier with '+e.cats+(e.cats===1?' familiar':' familiars')+', on Encore '+e.lvl+'.':HEROES[e.hero].name+' got as far as '+ACTS[e.act]+', stop '+e.floor+' of 18'+'.'+(e.by?' The culprit: '+e.by+'.':''))+'</strong></p>'+
       '<p>'+(e.best?'A new best score.':'Your best: '+META.best+'.')+(e.won&&META.open>e.lvl?' Encore '+META.open+' is now open.':'')+'</p><p id="wallLine"></p>'+
       '<div class="row"><button type="button" class="btn" data-a="again">Go again</button><button type="button" class="btn quiet" data-a="copy">Copy my result</button></div>'+
       (ON_SITE&&e.pts>0?'<div class="row" style="flex-direction:column;align-items:center"><a class="btn quiet" id="sendBtn" href="arcade.html?game=slay-the-pier&score='+e.pts+'#send-score" target="_blank" rel="noopener">Send in your score</a></div>':'')+
-      '<p class="share" id="shareText" style="font-size:.85rem;font-style:italic;user-select:all">I scored '+e.pts+' in Slay the Pier as '+HEROES[e.hero].name+(e.won?' and reached the end of the pier.':', and got as far as '+ACTS[e.act]+'.')+' williamgeorgeworks.co.uk</p></div>';
+      '<p class="share" id="shareText" style="font-size:.85rem;font-style:italic;user-select:all">I scored '+e.pts+' in Seen Off as '+HEROES[e.hero].name+(e.won?' and reached the end of the pier.':', and got as far as '+ACTS[e.act]+'.')+' williamgeorgeworks.co.uk</p></div>';
   }
   v.innerHTML=h;arts();sheet();hudFx();
   if(hs&&$('hand'))$('hand').scrollLeft=hs;
@@ -1915,9 +1915,9 @@ if(window.__STP_TEST)window.__STP={S:S,run:function(){return RUN;},B:function(){
 })();
 </script>
 <style>.wgw-strip{background:#f6f2e7;color:#141414;border-top:4px solid #141414;padding:28px 16px 40px;position:relative;z-index:5;font-family:Georgia,serif;text-align:left}.wgw-strip>div{max-width:1020px;margin:0 auto}.wgw-strip p{margin:0 0 14px;display:flex;flex-wrap:wrap;gap:12px;max-width:none;width:auto}.wgw-strip{width:100%;box-sizing:border-box;clear:both}.wgw-strip .wgw-h{font-family:"Permanent Marker","Segoe Print",cursive;color:#d1202f;font-size:20px;display:block;margin-bottom:12px}.wgw-strip a{font-family:Anton,"Arial Narrow",Impact,sans-serif;text-transform:uppercase;letter-spacing:.6px;font-size:18px;line-height:1.2;text-decoration:none;padding:10px 18px 9px;border:3px solid #141414;background:#fffdf7;color:#141414;box-shadow:5px 5px 0 #141414;display:inline-block}.wgw-strip a.k{background:#141414;color:#f6f2e7;box-shadow:5px 5px 0 #d1202f}.wgw-strip a.r{background:#d1202f;border-color:#d1202f;color:#fff}</style><div class="wgw-strip"><div><span class="wgw-h">Before you go</span><p><a class="k" href="books.html">See the books</a><a class="r" href="shop.html">Merch</a><a class="a" href="cats.html#dreamies">Buy the cats some Dreamies</a></p><p><a class="a" href="index.html">Home</a><a class="a" href="arcade.html">Play the games</a><a class="a" href="tribunal.html">Summon the tribunal</a><a class="a" href="cats.html">Meet the cats</a><a class="a" href="dear-terry.html">Dear Terry</a><a class="a" href="invoices.html">Invoices</a><a class="a" href="letters.html">Write to the tribunal</a><a class="a" href="log.html">The Ferret&rsquo;s Log</a><a class="a" href="story.html">Our story</a><a class="a" href="accord.html">The Accord</a><a class="a" href="road.html">The road ahead</a></p><p><a class="a" href="kitty-grand-prix.html">The Kitty Grand Prix</a><a class="a" href="grand-theft-kitty.html">Grand Theft Kitty</a><a class="a" href="red-light-green-light.html">Red Light, Green Light</a><a class="a" href="arthurs-tribunal.html">Arthur&rsquo;s Tribunal</a><a class="a" href="moulding-museum.html">The Moulding Museum</a><a class="a" href="unemployable-arcade.html">The Unemployable Arcade</a><a class="a" href="lion-and-albert.html">The Lion and Albert</a><a class="a" href="ferrets-ditch.html">Ferret&rsquo;s Ditch</a></p></div></div>
-<script src="share.js?v=20261114s" defer data-title="Slay the Pier" data-text="Three piers, six cat familiars and one Quill nobody mentioned. Slay the Pier, a free magical card game:"></script>
-<script src="quickscore.js?v=20261122a" defer></script>
-<script src="badges.js?v=20261122c" defer></script>
+<script src="share.js?v=20261114s" defer data-title="Seen Off" data-text="Three piers, six cat familiars and one Quill nobody mentioned. Seen Off, a free card game of doubtful magic:"></script>
+<script src="quickscore.js?v=20261122b" defer></script>
+<script src="badges.js?v=20261122d" defer></script>
 <script src="hits.js?v=20261115a" defer></script>
 </body>
 </html>

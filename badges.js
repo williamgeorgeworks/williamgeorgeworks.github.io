@@ -62,17 +62,17 @@
       { id: "peg", name: "Own Peg", how: "Fish Ferret's Ditch 25 times", game: "Ferret's Ditch", tier: "silver", icon: "book", got: +f.played >= 25 },
       { id: "silk", name: "Silk Hands", how: "Land fifty fish with a perfect reel", game: "Ferret's Ditch", tier: "gold", icon: "gavel", got: +f.perfect >= 50 },
       { id: "subscriber", name: "Subscriber", how: "Read a paper twenty-one mornings running", game: "The papers", tier: "legend", icon: "book", got: bestRun >= 21 },
-      /* Slay the Pier */
-      { id: "daytrip", name: "Day Tripper", how: "Start a climb in Slay the Pier", game: "Slay the Pier", tier: "bronze", icon: "flag", got: +p.runs >= 1 },
-      { id: "wrangler", name: "Seagull Wrangler", how: "See off the boss at the end of South Pier", game: "Slay the Pier", tier: "bronze", icon: "star", got: +p.far >= 1 || +p.wins >= 1 },
-      { id: "endpier", name: "End of the Pier", how: "Win a run", game: "Slay the Pier", tier: "silver", icon: "cup", got: +p.wins >= 1 },
-      { id: "hightide", name: "High Tide", how: "Score 1,500 in one run", game: "Slay the Pier", tier: "silver", icon: "bolt", got: +p.best >= 1500 },
-      { id: "quills", name: "Full Set of Quills", how: "Win a run with Reggie, with Terry and with Kenneth", game: "Slay the Pier", tier: "gold", icon: "book", got: phw.r > 0 && phw.t > 0 && phw.k > 0 },
-      { id: "encore", name: "Encore!", how: "Win a run on Encore 2 or higher", game: "Slay the Pier", tier: "gold", icon: "cup", got: +p.mw >= 3 },
-      { id: "familiar", name: "Familiar Faces", how: "Win runs with each of the six cats along", game: "Slay the Pier", tier: "gold", icon: "paw", got: pcats >= 6 },
-      { id: "springtide", name: "Spring Tide", how: "Score 3,000 in one run", game: "Slay the Pier", tier: "gold", icon: "bolt", got: +p.best >= 3000 },
-      { id: "catpile", name: "The Whole Pile", how: "Win a run with all six cats at once", game: "Slay the Pier", tier: "legend", icon: "paw", got: +p.six >= 1 },
-      { id: "ovation", name: "Standing Ovation", how: "Win a run on Encore 5", game: "Slay the Pier", tier: "legend", icon: "crown", got: +p.mw >= 6 },
+      /* Seen Off */
+      { id: "daytrip", name: "Day Tripper", how: "Start a climb in Seen Off", game: "Seen Off", tier: "bronze", icon: "flag", got: +p.runs >= 1 },
+      { id: "wrangler", name: "Seagull Wrangler", how: "See off the boss at the end of South Pier", game: "Seen Off", tier: "bronze", icon: "star", got: +p.far >= 1 || +p.wins >= 1 },
+      { id: "endpier", name: "End of the Pier", how: "Win a run", game: "Seen Off", tier: "silver", icon: "cup", got: +p.wins >= 1 },
+      { id: "hightide", name: "High Tide", how: "Score 1,500 in one run", game: "Seen Off", tier: "silver", icon: "bolt", got: +p.best >= 1500 },
+      { id: "quills", name: "Full Set of Quills", how: "Win a run with Reggie, with Terry and with Kenneth", game: "Seen Off", tier: "gold", icon: "book", got: phw.r > 0 && phw.t > 0 && phw.k > 0 },
+      { id: "encore", name: "Encore!", how: "Win a run on Encore 2 or higher", game: "Seen Off", tier: "gold", icon: "cup", got: +p.mw >= 3 },
+      { id: "familiar", name: "Familiar Faces", how: "Win runs with each of the six cats along", game: "Seen Off", tier: "gold", icon: "paw", got: pcats >= 6 },
+      { id: "springtide", name: "Spring Tide", how: "Score 3,000 in one run", game: "Seen Off", tier: "gold", icon: "bolt", got: +p.best >= 3000 },
+      { id: "catpile", name: "The Whole Pile", how: "Win a run with all six cats at once", game: "Seen Off", tier: "legend", icon: "paw", got: +p.six >= 1 },
+      { id: "ovation", name: "Standing Ovation", how: "Win a run on Encore 5", game: "Seen Off", tier: "legend", icon: "crown", got: +p.mw >= 6 },
       { id: "tour", name: "Grand Tour", how: "Play Grand Theft Kitty, Red Light Green Light, Arthur's Tribunal, Ferret's Ditch and The Kitty Grand Prix", game: "The arcade", tier: "legend", icon: "flag", got: five >= 5 }
     ];
     var n = list.filter(function (b) { return b.got; }).length;
@@ -127,7 +127,7 @@
     wall.appendChild(el("div", "wgwb-rank", rankFor(got.length)));
     wall.appendChild(el("p", "wgwb-sub", got.length + " of " + list.length + " badges earned. " + (got.length === list.length ? "That is the lot. Frame it." : "Locked ones show how to win them.")));
     var bar = el("div", "wgwb-bar"), fill = el("i"); fill.style.width = Math.round(got.length / list.length * 100) + "%"; bar.appendChild(fill); wall.appendChild(bar);
-    var SHELVES = ["Slay the Pier", "The Kitty Grand Prix", "Grand Theft Kitty", "Red Light, Green Light", "Arthur's Tribunal", "Ferret's Ditch", "The papers", "The arcade"];
+    var SHELVES = ["Seen Off", "The Kitty Grand Prix", "Grand Theft Kitty", "Red Light, Green Light", "Arthur's Tribunal", "Ferret's Ditch", "The papers", "The arcade"];
     var TORDER = { bronze: 0, silver: 1, gold: 2, legend: 3 };
     SHELVES.forEach(function (name) {
       var mine = list.filter(function (b) { return b.game === name; });

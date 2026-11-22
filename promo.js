@@ -319,13 +319,13 @@
     text(c[2], 8, c[3] ? -53 : -45, 15, "#fff", DISP, "center", 0, 74); if (c[3]) text(c[3], 8, -39, 15, "#fff", DISP, "center", 0, 74);
     g.beginPath(); g.arc(-44, -63, 16, 0, 6.3); g.fillStyle = "#ffc61a"; g.fill(); g.strokeStyle = INK; g.lineWidth = 3.5; g.stroke(); text(c[1], -44, -54, 24, INK, DISP, "center", 0, 28);
   }
-  function featPier(lt, dur, t) {                               // new: Slay the Pier, with a hand dealt
+  function featPier(lt, dur, t) {                               // new: Seen Off, with a hand dealt
     var p = glide(lt / 0.16), i;
     nightSky(lt); gridFloor(t); arcadeHead(2);
     card("g9", 640 + (1 - p) * 900, 292, 640, 400, -0.016 * p, { shadow: PINK, line: LIME, lw: 6, sh: 12, zoom: 1 + 0.07 * lt / dur });
     for (i = 0; i < 5; i++) { var q = back((lt - 0.12 - i * 0.05) / 0.2); if (q <= 0) continue; g.save(); g.translate(640, 1400); g.rotate((i - 2) * 0.13 * q + (calm ? 0 : Math.sin(t * 6 + i) * 0.006)); g.translate(0, -901 + (1 - q) * 320); playingCard(DEALT[i]); g.restore(); }
     newBurst(264, 178, lt, 0.1);
-    label("SLAY THE PIER", 640, 634, 56, LIME, NIGHT, -0.015, span(lt, 0.08, 0.22), 1000); hand("a magical card game. The cats wear hats", 640, 698, 36, CYAN, span(lt, 0.2, 0.36), -0.012, 1100);
+    label("SEEN OFF", 640, 634, 56, LIME, NIGHT, -0.015, span(lt, 0.08, 0.22), 1000); hand("a card game of doubtful magic. The cats wear hats", 640, 698, 36, CYAN, span(lt, 0.2, 0.36), -0.012, 1100);
   }
   function game(i) { return function (lt, dur, t) {             // the other seven, two beats each
     var G = GAMES[i], p = glide(lt / 0.16), dir = i % 2 ? 1 : -1;
