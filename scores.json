@@ -334,6 +334,15 @@
      "date": "2026-11-22"
     }
    ]
+  },
+  "dead-air-fm": {
+   "label": "points",
+   "max": null,
+   "cap": 800000,
+   "top": 10,
+   "title": "Dead Air FM",
+   "unit": "points",
+   "entries": []
   }
  }
 }

@@ -20,6 +20,11 @@
   const icon=key=>'<svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7">'+(shapes[key]||'')+'</svg>';
   document.querySelectorAll('[data-icon]').forEach(node=>node.replaceWith(document.createRange().createContextualFragment(icon(node.dataset.icon))));
   const RUN='wgw.dead-air-fm.run.1', RECORD='wgw.dead-air-fm.records.1';
+  const GAME='dead-air-fm', ARCADE='https://williamgeorgeworks.co.uk/arcade.html';
+  const standalone=!!window.DeadAirAssets||!['http:','https:'].includes(location.protocol);
+  const arcadeLink='<a class="btn secondary" href="'+ARCADE+'">Back to arcade</a>';
+  const boardUrl=ARCADE+'#dead-air-fm-scores';
+  let scorePanel,scoreRun;
   function load(key){try{return JSON.parse(localStorage.getItem(key));}catch{return null;}}
   function store(key,value){try{localStorage.setItem(key,JSON.stringify(value));return true;}catch{return false;}}
   function okSave(save){
@@ -140,6 +145,64 @@
     const rows=[['Personal best',scoreText(record.highScore)],['Completed runs',record.runs],['Full broadcasts',record.wins],['Best hit chain',record.bestChain],['Crew mods collected',(Array.isArray(record.gear)?record.gear.length:0)+' / '+Object.keys(R.kits).length],['Today’s best · '+R.difficulties[difficulty],scoreText(record.daily?.[R.dailySeed()+'/'+difficulty]||0)]];
     return '<ul class="record-list">'+rows.map(([k,v])=>'<li><span>'+esc(k)+'</span><b>'+esc(v)+'</b></li>').join('')+'</ul>';
   }
+  function mountScorePanel(run,host){
+    if(scoreRun===run&&scorePanel){host.append(scorePanel);return;}
+    scoreRun=run;
+    scorePanel=document.createElement('div');
+    scorePanel.className='score-panel';
+    host.append(scorePanel);
+    const receipt=run.scoreReceipt;
+    if(receipt){
+      const text=receipt.status==='added'?'Score logged for '+receipt.name+'.'
+        :receipt.status==='duplicate'?'This score is already on the board.'
+        :'Score checked. It fell outside the top ten.';
+      scorePanel.textContent=text;
+      return;
+    }
+    if(!Number.isSafeInteger(run.score)||run.score<1||run.score>999999){
+      scorePanel.textContent=run.score===0?'Score a point on your next run to enter the top ten.':'This score falls outside the arcade’s submission range.';
+      return;
+    }
+    const link=document.createElement('a');
+    link.className='score-entry';
+    link.href=ARCADE+'?game='+GAME+'&score='+run.score+'#send-score';
+    link.textContent=standalone?'Send in your score at the arcade':'Send in your score';
+    scorePanel.append(link);
+    if(standalone)return;
+    link.addEventListener('wgw-score-result',e=>{
+      const result=e.detail;
+      if(result?.game!==GAME||Number(result.score)!==run.score||!['added','duplicate','not-top'].includes(result.status))return;
+      run.scoreReceipt={status:result.status,name:result.name};
+      if(run===s)checkpoint();
+    });
+    if(!document.getElementById('shared-score-script')){
+      const script=document.createElement('script');
+      script.id='shared-score-script';
+      script.src='../../quickscore.js';
+      script.onerror=()=>script.remove();
+      document.head.append(script);
+    }
+  }
+  async function loadTopTen(box){
+    try{
+      const response=await fetch(standalone?new URL('scores.json',ARCADE):'../../scores.json',{cache:'no-cache'});
+      if(!response.ok)throw new Error('Arcade unavailable');
+      const board=(await response.json()).games?.[GAME];
+      if(!Array.isArray(board?.entries))throw new Error('Board unavailable');
+      const entries=board.entries.slice().sort((a,b)=>b.score-a.score||String(a.date).localeCompare(String(b.date))).slice(0,10);
+      if(!box.isConnected)return;
+      if(!entries.length){box.textContent='No scores on air yet. Finish a run and send yours in.';return;}
+      const fmt=new Intl.DateTimeFormat('en-GB',{day:'numeric',month:'short',year:'numeric',timeZone:'UTC'});
+      const rows=entries.map((entry,i)=>{
+        const date=new Date(entry.date);
+        const when=Number.isFinite(date.getTime())?fmt.format(date):'';
+        return '<li><span class="board-rank">'+pad(i+1)+'</span><span class="board-handle">'+esc(entry.name)+'</span><strong>'+esc(Number(entry.score).toLocaleString('en-GB'))+'</strong><small>'+esc(when)+'</small></li>';
+      });
+      box.innerHTML='<ol class="top-ten-list" aria-label="Scores ranked highest first">'+rows.join('')+'</ol>';
+    }catch{
+      if(box.isConnected)box.textContent='The score board is off air. Check your connection and try again.';
+    }
+  }
   function show(name){
     if(!dialog){lastFocus=document.activeElement;release();}
     dialog=name;
@@ -147,12 +210,17 @@
     let title='',tag='',html='';
     if(name==='menu'){
       tag='Broadcast desk';title='Off the air';html='<p>'+esc(R.stages[s.stage-1].name)+' · '+esc(R.difficulties[s.difficulty])+' · '+scoreText(s.score)+' points</p><p class="fine">'+esc(s.seed)+' · '+(saveOK?'Run saved on this browser.':'Local saves are unavailable in this browser.')+'</p><div class="modal-actions">'+button('resume','Resume','btn-amber')+button('new','New run')+button('records','Records')+button('help','Controls')+'</div>';
+      html+='<div class="score-nav">'+button('leaderboard','Public top ten')+arcadeLink+'</div>';
     }else if(name==='gear'){
       const next=s.offerReason==='station';tag=next?'Transmission complete':'Crew workshop';title=next?'Rebuild the rig':'Fit a crew mod';
       html='<p>'+esc(next?R.stages[s.stage-1].name+' is on air. Take one part to '+R.stages[s.stage].name+'.':'The ball is held. Choose one part to change how the machine plays.')+'</p><div class="offers">'+s.offers.map((id,i)=>{const k=R.kits[id];return '<button class="offer" data-action="install" data-i="'+i+'"><img src="'+crewImg(k)+'" alt=""><span class="offer-copy"><small>'+esc(k.owner)+'</small><strong>'+esc(k.name)+'</strong><span class="description">'+esc(k.text)+'</span></span></button>';}).join('')+'</div>';
     }else if(name==='finish'){
       tag=s.phase==='won'?'Final transmission':'End of transmission';title=s.phase==='won'?'The Moonshot is live':'The station went quiet';
-      html='<p class="end-score">'+scoreText(s.score)+' points</p>'+stationRecap()+'<p>'+esc(s.phase==='won'?'Arthur would like his royalties in biscuits.':'The last ball drained at '+R.stages[s.stage-1].name+'.')+'</p><div class="modal-actions">'+button('new','New run','btn-amber')+button('retry','Replay this seed')+button('records','Cabinet records')+'</div>';
+      html='<p class="end-score">'+scoreText(s.score)+' points</p>'+stationRecap()+'<p>'+esc(s.phase==='won'?'Arthur would like his royalties in biscuits.':'The last ball drained at '+R.stages[s.stage-1].name+'.')+'</p><div id="finishScore"></div><div class="modal-actions">'+button('new','New run','btn-amber')+button('retry','Replay this seed')+button('records','Cabinet records')+'</div>';
+      html+='<div class="score-nav">'+button('leaderboard','Public top ten')+arcadeLink+'</div>';
+    }else if(name==='leaderboard'){
+      tag='Arcade hall of fame';title='Dead Air FM top ten';
+      html='<div id="topTen" role="status" aria-live="polite">Tuning in to the arcade…</div><div class="modal-actions">'+button('resume','Back to the rig','btn-teal')+'<a class="btn secondary" href="'+boardUrl+'">View at the arcade</a></div>';
     }else if(name==='help'){
       tag='Operator’s manual';title='Work the machine';
       html='<p>Send three pirate broadcasts from the Lancashire mill to orbit. Keep the silver ball alive with the flippers.</p><h3>Tune and transmit</h3><p>Hit LOW, MID and HIGH. Other switches fill Signal and light missed bands. Once all three glow, hit the receiver or fill Signal once more. The rooftop and lunar rigs need extra transmissions.</p><h3>Work the beat</h3><p>Switches charge Bass. Drop it as the beat lamp flashes to kick the ball upwards and tune a band. Chain five quick scoring hits for multiball.</p><h3>Controls</h3><p><b>Keyboard</b> · Arrows or A/D flip. Space launches or drops bass. N nudges the table. P pauses.</p><p><b>Touch or mouse</b> · Press the left or right half of the table, or use the flipper buttons. Two fingers can work both flippers.</p><p class="fine">William George &amp; Terrance Quill (AI collaborator). Original station art, playfield illustrations and synthesised score. Crew portraits adapted from the William George Works universe.</p><div class="modal-actions">'+button('resume','Back to the rig','btn-amber')+'</div>';
@@ -166,6 +234,8 @@
     }
     $('overlay').hidden=false;$('cabinet').inert=true;
     $('overlay').innerHTML='<section class="modal" role="dialog" aria-modal="true" aria-labelledby="dlgTitle"><div class="modal-top"><div><div class="eyebrow">'+esc(tag)+'</div><h2 id="dlgTitle">'+esc(title)+'</h2></div>'+(terminal?'':'<button class="round" data-action="resume" aria-label="Close panel">'+icon('close')+'</button>')+'</div>'+html+'</section>';
+    if(name==='finish')mountScorePanel(s,$('finishScore'));
+    if(name==='leaderboard')loadTopTen($('topTen'));
     $('overlay').querySelector('button')?.focus({preventScroll:true});syncMode();dirty=true;hud();
   }
   function close(force=false){
@@ -192,7 +262,7 @@
     if(name==='mute'){A.toggleMute();show('sound');return;}
     if(name==='random'||name==='daily'||name==='retry'){reset(name==='daily'?R.dailySeed():name==='retry'?s.seed:undefined,name==='retry'?s.difficulty:difficulty);return;}
     if(name==='new')difficulty=s.difficulty;
-    if(['new','menu','help','records','sound'].includes(name)){checkpoint();show(name);}
+    if(['new','menu','help','records','leaderboard','sound'].includes(name)){checkpoint();show(name);}
   }
   document.addEventListener('click',e=>{const b=e.target.closest('[data-action]');if(b&&!b.disabled)action(b.dataset.action,Number(b.dataset.i));else if(e.target===$('overlay'))close();});
   document.addEventListener('input',e=>{if(e.target.id==='level'){A.setVolume(Number(e.target.value)/100);crest('volumeValue',e.target.value+'%');}if(e.target.id==='difficulty')difficulty=Number(e.target.value);});
@@ -209,7 +279,7 @@
     if(dialog){
       if(e.code==='Escape'||e.code==='KeyP'){if(!e.repeat){e.preventDefault();close();}}
       if(e.code==='Tab'){
-        const items=[...$('overlay').querySelectorAll('button,input,select')],first=items[0],last=items.at(-1);
+        const items=[...$('overlay').querySelectorAll('a[href],button:not(:disabled),input:not(:disabled),select:not(:disabled)')].filter(el=>el.getClientRects().length),first=items[0],last=items.at(-1);
         if(e.shiftKey&&document.activeElement===first){e.preventDefault();last?.focus();}
         else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first?.focus();}
       }return;

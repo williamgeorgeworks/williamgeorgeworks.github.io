@@ -13,7 +13,7 @@
    '.wgw-qs button:disabled{opacity:.6;cursor:default}.wgw-qs small{display:block;margin-top:6px;color:#555}'+
    '.wgw-qs .msg{margin-top:8px;font-weight:700}.wgw-qs .msg.bad{color:#a3141f}';
   document.head.appendChild(css);
-  var TITLES={'red-light-green-light':['Reggie\'s Red Light, Green Light','points','#d1202f','red-light-green-light.html'],'grand-theft-kitty':['Grand Theft Kitty','Dreamies stolen','#5b2bff','grand-theft-kitty.html'],'grand-theft-kitty-daily':['Grand Theft Kitty: Daily Challenge','Dreamies stolen','#5b2bff','grand-theft-kitty.html'],'arthurs-tribunal':['Arthur\'s Tribunal','points','#1d7a3a','arthurs-tribunal.html'],'moulding-museum':['The Moulding Museum Adventure','drips caught','#0f4a4a','moulding-museum.html'],'unemployable-arcade':['The Unemployable Arcade','stars','#b06a00','unemployable-arcade.html'],'ferrets-ditch':['Ferret\'s Ditch','points','#1d6a73','ferrets-ditch.html'],'ferrets-ditch-daily':['Ferret\'s Ditch: Daily Challenge','points','#1d6a73','ferrets-ditch.html'],'kitty-grand-prix':['The Kitty Grand Prix','points','#d1202f','kitty-grand-prix.html'],'slay-the-pier':['Seen Off','points','#6a3fb0','slay-the-pier.html']};
+  var TITLES={'red-light-green-light':['Reggie\'s Red Light, Green Light','points','#d1202f','red-light-green-light.html'],'grand-theft-kitty':['Grand Theft Kitty','Dreamies stolen','#5b2bff','grand-theft-kitty.html'],'grand-theft-kitty-daily':['Grand Theft Kitty: Daily Challenge','Dreamies stolen','#5b2bff','grand-theft-kitty.html'],'arthurs-tribunal':['Arthur\'s Tribunal','points','#1d7a3a','arthurs-tribunal.html'],'moulding-museum':['The Moulding Museum Adventure','drips caught','#0f4a4a','moulding-museum.html'],'unemployable-arcade':['The Unemployable Arcade','stars','#b06a00','unemployable-arcade.html'],'ferrets-ditch':['Ferret\'s Ditch','points','#1d6a73','ferrets-ditch.html'],'ferrets-ditch-daily':['Ferret\'s Ditch: Daily Challenge','points','#1d6a73','ferrets-ditch.html'],'kitty-grand-prix':['The Kitty Grand Prix','points','#d1202f','kitty-grand-prix.html'],'slay-the-pier':['Seen Off','points','#6a3fb0','slay-the-pier.html'],'dead-air-fm':['Dead Air FM','points','#217e68','games/dead-air-fm/index.html']};
   function wrapText(c,text,x,y,maxw,lh){var words=text.split(' '),line='';for(var i=0;i<words.length;i++){var t=line?line+' '+words[i]:words[i];if(c.measureText(t).width>maxw&&line){c.fillText(line,x,y);line=words[i];y+=lh;}else line=t;}c.fillText(line,x,y);return y;}
   function drawCard(game,score,name){
     var T=TITLES[game]||[game,'points','#d1202f',''],cv=document.createElement('canvas');cv.width=1080;cv.height=1080;var c=cv.getContext('2d');
@@ -69,7 +69,7 @@
     f.innerHTML='<b></b><div class="row"><input type="text" maxlength="24" autocomplete="nickname" placeholder="Your name or handle" aria-label="Your name or handle"><button type="submit">Put me on the wall</button></div><div class="sharerow"><button type="button" class="share">Share my score</button></div><small>Your name and score are published on the arcade page if they make the board.</small><div class="msg" role="status" aria-live="polite"></div>';
     var input=f.querySelector('input'),btn=f.querySelector('button'),msg=f.querySelector('.msg');
     var nudge=document.createElement('p');nudge.className='nudge';nudge.hidden=true;nudge.style.cssText='margin:8px 0 0;font-size:15px';
-    nudge.innerHTML='Enjoying this? <a href="index.html#join-list">Get the odd email</a> when a new game or book lands.';f.appendChild(nudge);
+    nudge.innerHTML='Enjoying this? <a href="/index.html#join-list">Get the odd email</a> when a new game or book lands.';f.appendChild(nudge);
     function nudgeOn(){nudge.hidden=false;}
     try{input.value=localStorage.getItem('wgw-name')||'';}catch(e){}
     ['keydown','keyup','keypress'].forEach(function(t){f.addEventListener(t,function(e){e.stopPropagation();});});
@@ -88,6 +88,9 @@
           else if(j&&j.ok&&j.status==='duplicate'){nudgeOn();msg.textContent='That one is already on the wall.';btn.textContent='Done';}
           else if(j&&j.ok&&j.status==='not-top'){msg.textContent='Not quite enough for the board yet. Have another go.';btn.textContent='Done';}
           else{msg.className='msg bad';msg.textContent=(j&&j.error)||'The court is busy. Try again in a minute.';btn.disabled=false;btn.textContent='Put me on the wall';}
+          if(j&&j.ok&&['added','duplicate','not-top'].indexOf(j.status)!==-1){
+            a.dispatchEvent(new CustomEvent('wgw-score-result',{bubbles:true,detail:{game:info.game,score:info.score,name:name,status:j.status,place:j.place}}));
+          }
         })
         .catch(function(){msg.className='msg bad';msg.textContent='Could not reach the court. Try again in a minute.';btn.disabled=false;btn.textContent='Put me on the wall';});
     });

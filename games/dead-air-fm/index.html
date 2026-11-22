@@ -13,7 +13,7 @@
   <main id="cabinet">
     <header class="mast">
       <div class="identity"><div class="ident-icon" aria-hidden="true"><i data-icon="wave"></i></div><div><div class="maker">William George Works<span> / </span>Arcade</div><h1>Dead Air <em>FM</em></h1></div></div>
-      <nav class="global-controls" aria-label="Game controls"><span class="genre">Pirate radio pinball</span><button class="round" data-action="sound" aria-label="Sound settings" title="Sound desk"><i data-icon="sound"></i></button><button class="round" data-action="help" aria-label="How to play" title="How to play"><i data-icon="help"></i></button><button class="round" data-action="menu" aria-label="Pause and game menu" title="Pause and game menu"><i data-icon="pause"></i></button></nav>
+      <nav class="global-controls" aria-label="Game controls"><span class="genre">Pirate radio pinball</span><a class="arcade-home" href="https://williamgeorgeworks.co.uk/arcade.html" aria-label="Back to the arcade">← Arcade</a><button class="round" data-action="sound" aria-label="Sound settings" title="Sound desk"><i data-icon="sound"></i></button><button class="round" data-action="help" aria-label="How to play" title="How to play"><i data-icon="help"></i></button><button class="round" data-action="menu" aria-label="Pause and game menu" title="Pause and game menu"><i data-icon="pause"></i></button></nav>
     </header>
     <div class="mobile-hud"><div><span class="micro">Score</span> <b id="mobileScore">000000</b></div><div id="mobileObjective"></div><div id="mobileBalls"></div></div>
     <div class="machine-grid">
@@ -38,7 +38,7 @@
         <section class="module score-module"><div class="module-label"><span><i class="lamp amber"></i> Score counter</span><i data-icon="meter"></i></div><div class="score-face"><span class="counter" id="score">000000</span><div class="score-sub"><span>Personal best</span><b id="highScore">000000</b></div></div><div class="ball-row"><span class="micro">Balls in play &amp; reserve</span><div id="balls"></div></div></section>
         <section class="module tuner-module"><div class="module-label"><span><i data-icon="radio"></i> Signal desk</span><span id="signalNumber">0%</span></div><div class="module-body"><div class="meter-track" id="signalMeter" role="meter" aria-label="Signal meter" aria-valuemin="0" aria-valuemax="100"></div><div id="bands" class="band-row"></div><p id="objective"></p></div></section>
         <section class="module bass-module"><div class="module-label"><span><i data-icon="wave"></i> Bass drop</span><span id="bpm">172 BPM</span></div><div class="module-body"><div class="pulse-row"><div class="beat-mark" id="beatMark"><i></i></div><span id="bassStatus">Charging</span><span id="bassCharge"></span></div><button class="btn btn-teal" data-action="bass" id="bassBtn">Drop bass <kbd>Space</kbd></button><button class="nudge" data-action="nudge" id="nudgeBtn">Nudge table <kbd>N</kbd></button></div></section>
-        <button class="cabinet-records" data-action="records"><i data-icon="record"></i> Cabinet records</button>
+        <div class="score-links"><button class="cabinet-records" data-action="leaderboard"><i data-icon="radio"></i> Public top ten</button><button class="cabinet-records" data-action="records"><i data-icon="record"></i> Cabinet records</button></div>
       </aside>
     </div>
     <footer><span class="status-line"><i class="lamp" id="statusLamp"></i><span id="ticker">Studio standing by.</span></span><button data-action="help">Controls &amp; credits</button></footer>
