@@ -1,6 +1,137 @@
 {
   "editions": [
     {
+      "date": "2026-11-22",
+      "title": "Sunday Brings Giant Numbers, Free Maps, A Wasteland Full Of Cats And A Queue For A Machine",
+      "standfirst": "Terry (PC, Steam Deck, master race, full price on day one) and Reggie (PS5, saving for a Pro, waiting for the sale) read through the latest gaming news and argue about every bit of it. Everything in big type is made up, and so is the arguing. Everything in the boxes is real.",
+      "stories": [
+        {
+          "kicker": "Xbox",
+          "headline": "Xbox's Black Friday Sale Offers Over Two Thousand Games; Reggie Needs A Bigger Notebook",
+          "satire": "Reggie has ruled a fresh page into columns headed Wait, Wait Longer and Surely Cheaper Tomorrow. Terry says a sale is merely a day-one price that has lost its nerve, and he will not be buying a thing, at least not until the third pop-up. Reggie points out the notebook is already full. Terry offers him a spare one, priced at full whack, naturally. Reggie accepts it with great dignity, and Terry has to ask where his own wallet went. Draw.",
+          "real": "Pure Xbox reported on 19 November that the Xbox Black Friday Sale 2026 discounts over 2,000 titles and runs until 2 December. It lists Dead Space at £6.99 (90% off) and Cyberpunk 2077 Ultimate Edition at £25.99 (60% off).",
+          "source": {
+            "name": "Pure Xbox",
+            "url": "https://www.purexbox.com/news/2026/11/deals-xbox-black-friday-sale-2026-now-live-2000plus-games-discounted"
+          },
+          "link": {
+            "text": "Prefer your bargains free? Have a go on the Arcade.",
+            "url": "arcade.html"
+          }
+        },
+        {
+          "kicker": "Sales",
+          "headline": "A Single Day's Sales Figure Arrives With So Many Noughts It Needs A Second Line",
+          "satire": "Terry reads the number out slowly, in the voice of a man announcing a lottery, and loses count after the word billion. Reggie says that for that kind of money he would at least expect the game to come with a free sausage roll, and sends Terry a small imaginary invoice for the arithmetic. Terry insists he personally contributed at full price, on day one, and deserves a plaque. Reggie wins, because the plaque turns out to cost extra.",
+          "real": "Pure Xbox reported on 20 November that Take-Two's company estimates put GTA 6 day-one retail sales at $3.79 billion, and that Take-Two says 32.5 million units were sold before release.",
+          "source": {
+            "name": "Pure Xbox",
+            "url": "https://www.purexbox.com/news/2026/11/gta-6-smashes-multiple-sales-records-and-earns-xbox-series-s-praise-in-first-24-hours"
+          }
+        },
+        {
+          "kicker": "PlayStation",
+          "headline": "Launch Day Playtime Gets Counted In Minutes, And Several Sofas File A Complaint",
+          "satire": "Reggie announces the PS5 figure with a hand on his heart and says his own sofa now has a permanent dent in the shape of a nice little earner. Terry says on his Steam Deck the clock simply stops being interesting. They compare minutes. Terry loses count, Reggie loses feeling in his left leg, and a cat sits on the calculator. Nobody wins, apart from the sofa, which has requested a day off.",
+          "real": "Push Square quoted Circana data that 61% of US PS5 players active on 19 November engaged with GTA VI. It says PS5 players averaged 513 minutes that day, and Xbox players 494.",
+          "source": {
+            "name": "Push Square",
+            "url": "https://www.pushsquare.com/news/2026/11/61percent-of-all-us-ps5-owners-played-gta-6-on-launch-day-averaging-8-hours"
+          }
+        },
+        {
+          "kicker": "GTA 6",
+          "headline": "The Official Map Goes Free And Printable; A Great Many Hallways Brace For Wallpaper",
+          "satire": "Terry has already printed it at poster size and pinned it above his rig, next to a smaller map of where he keeps his other maps. Reggie says free is the finest price there is and takes six copies, one for the bath. They argue about whether a map you cannot fold back properly counts as a map. Reggie wins on a technicality: it was free, and Terry's printer has now run out of ink out of sheer excitement.",
+          "real": "Pure Xbox reported on 19 November that the official GTA 6 map is free to download from Rockstar's GTA 6 website, with a printable option. It says the physical edition does not include a map, and that Rockstar says a physical map will be available at the Rockstar Store shortly after launch.",
+          "source": {
+            "name": "Pure Xbox",
+            "url": "https://www.purexbox.com/news/2026/11/the-official-gta-6-map-is-now-available-to-download-for-free"
+          },
+          "link": {
+            "text": "A caper of our own: Grand Theft Kitty.",
+            "url": "grand-theft-kitty.html"
+          }
+        },
+        {
+          "kicker": "PlayStation",
+          "headline": "Next Week's PS5 Releases Include Cricket In November, Because Why Not",
+          "satire": "Reggie points out that cricket in late November is the sort of thing only a very confident game would try, and adds both Plus games to his list of things to wait for. Terry says the season is a state of mind and he will play it on a drizzly Tuesday in his dressing gown at full price. They argue about whether it counts as sport indoors. Terry wins, after Reggie realises he has not seen the grass in weeks.",
+          "real": "Push Square's guide of 21 November lists seven new PS5 games releasing between 23 and 27 November. It also lists four PS Plus Extra games arriving on 24 November: Cricket 26, Like a Dragon: Pirate Yakuza in Hawaii, MotoGP 26 and Trepang2.",
+          "source": {
+            "name": "Push Square",
+            "url": "https://www.pushsquare.com/guides/these-11plus-ps5-and-ps-plus-games-are-coming-out-next-week-23rd-29th-november"
+          }
+        },
+        {
+          "kicker": "Cats",
+          "headline": "A Wasteland Full Of Cats Announced; The Entire Internet Reaches For A Magnifying Glass",
+          "satire": "Terry says it is plainly the greatest hidden-object game of all time and he will find every cat on launch day. Reggie says he has been finding cats in his airing cupboard for years and nobody ever paid him. They search the room together. Reggie finds two, Terry finds one under his own chair, and the cats find the biscuit tin. Reggie wins, mainly because he is still counting and Terry has gone to look under the sofa.",
+          "real": "Pure Xbox reported on 20 November that Bethesda and Xbox announced A Wasteland Full of Cats, a Fallout-inspired game made with the developers of A Building Full of Cats. It says Bethesda's post mentions a partnership with a pet-rescue campaign supporting pets in need.",
+          "source": {
+            "name": "Pure Xbox",
+            "url": "https://www.purexbox.com/news/2026/11/new-official-fallout-inspired-game-announced-and-its-unlike-anything-wed-ever-expected"
+          },
+          "link": {
+            "text": "More cat capers: Grand Theft Kitty.",
+            "url": "grand-theft-kitty.html"
+          }
+        },
+        {
+          "kicker": "Switch",
+          "headline": "Smash, Tomodachi Life And Mario Kart Share The Podium; Minecraft Brings A Spade",
+          "satire": "Terry reads the top four out like a medal ceremony, bowing to each one in turn, and says the rest of the world is basically spectators. Reggie says every one of those games has been in a sale at some point and he has the receipts, all pencilled. Terry says Smash being number one on a Saturday is a sign of the times. Reggie asks which times. Terry has no answer, and hands over the tea instead.",
+          "real": "Nintendo Everything's Switch eShop charts for 21 November list Super Smash Bros. Ultimate at number 1 on the All Games chart, then Tomodachi Life: Living the Dream, Mario Kart 8 Deluxe and Minecraft. Pokemon FireRed leads the Download-Only chart.",
+          "source": {
+            "name": "Nintendo Everything",
+            "url": "https://nintendoeverything.com/nintendo-switch-eshop-charts-november-21-2026/"
+          }
+        },
+        {
+          "kicker": "PC",
+          "headline": "The Steam Machine Waiting List Closes For One Model; Terry Checks His Place In The Queue",
+          "satire": "Terry has been refreshing the page since breakfast and is not at all worried, he says, because he has the best seat in the queue, probably. Reggie says a waiting list is the finest tradition in the land and nobody gets stuff cheaper by standing still. Terry says some of us are happy to wait for the very best. Reggie asks how long. Terry says forever, and starts pricing a stool. Draw, and Reggie's offered him a flask.",
+          "real": "PC Gamer reported on 19 November that Valve has closed the waitlist for the 2TB Steam Machine. It says reservations for the 512GB model are fulfilled with stock remaining, and that Valve says prices could rise.",
+          "source": {
+            "name": "PC Gamer",
+            "url": "https://pcgamer.com/hardware/steam-machines/valve-may-raise-steam-machine-prices-yet-again-memory-and-storage-costs-continue-to-increase-at-unprecedented-levels"
+          }
+        },
+        {
+          "kicker": "Mobile",
+          "headline": "Pokemon TCG Pocket Adds Limited Battle Events; Terry Is Told To Pack Lighter",
+          "satire": "Terry says restrictions on deck-building are an insult to a man of his collection, and builds a deck containing every card he owns plus a spare. Reggie says rules are a nice little earner for anyone who can follow them, and builds one from three cards in his dressing gown pocket. The events begin. Terry is disqualified for bringing a suitcase. Reggie wins on the rules, and Terry challenges him to a rematch that has no rules.",
+          "real": "The Pokemon Blog reported on 19 November that Pokemon TCG Pocket is adding Limited Battle Events with the Dual Fusion release. It says the events restrict which cards players can use, and that players can earn promo packs and Mega Mewtwo X accessories.",
+          "source": {
+            "name": "The Pokemon Blog",
+            "url": "https://pokemonblog.com/2026/11/19/pokemon-tcg-pocket-introduces-limited-battle-events-with-dual-fusion"
+          }
+        },
+        {
+          "kicker": "Mobile",
+          "headline": "Community Day Brings A Pawn To Pokemon GO; Every Chess Pun In Britain Gets Dusted Off",
+          "satire": "Terry has been out since two with a bag of snacks, announcing he is the king of this particular board. Reggie says he stayed in, and a pawn is only valuable once it has reached the other side, preferably by bus. Terry says that is chess, not Pokemon. Reggie says he knows, and takes the last snack anyway. Reggie wins, on a technicality, mostly because he is not out in the rain.",
+          "real": "Nintendo Wire's guide of 20 November says the November Pokemon GO Community Day was on Saturday 21 November from 2 p.m. to 5 p.m. local time, featuring Pawniard. It lists 2x Candy for catching Pokemon and a paid Special Research called Once a Pawn a Time at about $2.",
+          "source": {
+            "name": "Nintendo Wire",
+            "url": "https://nintendowire.com/guides/pokemon-go/community-day-for-november-21st-2026"
+          }
+        },
+        {
+          "kicker": "Reviews",
+          "headline": "Four Magazine Reviewers Agree So Neatly That Eight Appears Four Times In A Row",
+          "satire": "Terry says four eights in a row is the sort of unanimity you only get from a very gifted panel, and he is going to mention it at dinner. Reggie says four reviewers agreeing is the nearest thing to a miracle since the last time the bus was on time. Terry asks for a recount. Reggie sends in an imaginary invoice for the arithmetic. They add it up anyway. Terry wins, his sums being the only ones that came out even.",
+          "real": "Nintendo Everything's Famitsu review scores of 21 November list Mix Dunk: King of Basketball at 8, 8, 8 and 8 and Taxi Chaos 2 at 7, 7, 6 and 7. It says each game is scored by four reviewers.",
+          "source": {
+            "name": "Nintendo Everything",
+            "url": "https://nintendoeverything.com/famitsu-review-scores-november-21-2026/"
+          }
+        }
+      ],
+      "terry": "And that, ladies and gentlemen, is Sunday, big numbers, bigger maps and a wasteland with cats in it! Everything in the big type is made up, the boxes are real, and I am off to check my place in a queue. Back tomorrow, and do bring a spare chair!",
+      "reggie": "Check the boxes, my old son, that is where the facts live, and the rest is pure patter. The Pro is still on the wish-list and the sale is still just round the corner. Back tomorrow, and bring a pencil."
+    },
+    {
       "date": "2026-11-21",
       "title": "Saturday Brings Sale Stickers, Big Numbers And An Awards Night In The Diary",
       "standfirst": "Terry (PC, Steam Deck, master race, full price on day one) and Reggie (PS5, saving for a Pro, waiting for the sale) read through the latest gaming news and argue about every bit of it. Everything in big type is made up, and so is the arguing. Everything in the boxes is real. A quiet news day, so a short edition.",
