@@ -472,7 +472,7 @@ var EN={
  stag:{n:'The Stag Do',hp:[18,22],sc:.85,pal:1,ai:function(e){return cyc(e,[{n:'Lads Lads Lads',a:5,x:2},{n:'Another Round',g:2}]);}},
  bride:{n:'The Bride',hp:[52,56],elite:1,pal:1,ai:function(e){return cyc(e,[{n:'Sash',b:8,g:1},{n:'Inflatable Thing',a:14},{n:'Prosecco',g:3}]);}},
  maid:{n:'Bridesmaid',hp:[12,14],sc:.7,ai:function(e){return cyc(e,[{n:'Woo!',a:4},{n:'Selfie',flu:1,a:2}]);}},
- tram:{n:'The Last Tram',hp:[118,124],boss:1,sc:1.4,ai:function(e){return cyc(e,[{n:'Ding Ding: 3',a:5,b:8},{n:'Ding Ding: 2',a:5,b:8},{n:'Mind the Gap',a:9},{n:'Ding Ding: 1',b:12},{n:'Terminus',a:26}]);}},
+ tram:{n:'The Last Tram',hp:[132,138],boss:1,sc:1.4,ai:function(e){return cyc(e,[{n:'Ding Ding: 3',a:5,b:8},{n:'Ding Ding: 2',a:5,b:8},{n:'Mind the Gap',a:9},{n:'Ding Ding: 1',b:12},{n:'Terminus',a:26}]);}},
  /* ---- milestone 2: six places get their own crowds (art: placeholder stand-ups, see ART.standee) ---- */
  /* the Beach & the Donkeys */
  castle:{n:'Sandcastle',hp:[28,32],ph:'#f2d27a',ai:function(e){return cyc(e,[{n:'Moat',b:12},{n:'Turret',a:8}]);}},
@@ -598,7 +598,8 @@ function rockAdd(n){
   saveDay();poolFix();if(got.length){S.pops=(S.pops||[]).concat(got);try{window.dispatchEvent(new CustomEvent('seenoff:stick',{detail:{sticks:got.slice()}}));}catch(e){}}
   return got;
 }
-var ROCK_RATE=.5; /* rock per point of score. Tuning knob: about half a run's score fills sticks 1-4 on a first day out, as in the plan's first-hours table */
+var ROCK_RATE=.3; /* rock per point of score. Tuned in milestone 2 by the playtest bot (tools/playtest.js): a winning first day scores ~2,300,
+   which with the bonuses gives ~1,050 rock = sticks 1-4, as in the plan's first-hours table (it was .5, which gave 5-6 sticks) */
 function bank(){if(!RUN)return [];var d=(RUN.score-(RUN.banked||0))*ROCK_RATE;RUN.banked=RUN.score;return rockAdd(d);}
 function isOpen(id){var s=STAGES[id];if(s.un==='start')return true;if(s.un==='win')return META.wins>0;return DAY.sticks>=s.un;}
 function canPick(id){if(!DAY.done1)return STAGES[id].un==='start';return isOpen(id);}
@@ -877,7 +878,7 @@ function draw(n){
   for(var i=0;i<n;i++){
     if(!B.draw.length){if(!B.disc.length)return;B.draw=shuffle(B.disc);B.disc=[];B.shufT=now();}
     var c=B.draw.pop();if(B.hand.length>=10){B.disc.push(c);continue;}
-    B.hand.push(c);if(c.id==='wblock'){B.energy=Math.max(0,B.energy-1);fxOn(H,'Writer’s Block',COL.ink);}
+    B.hand.push(c);if(c.id==='wblock'||c.id==='catchp'){B.energy=Math.max(0,B.energy-1);fxOn(H,CARDS[c.id].name,COL.ink);}
   }
 }
 function startTurn(first){
@@ -2336,7 +2337,7 @@ document.addEventListener('visibilitychange',function(){if(!A.ac)return;try{if(d
 (function(){var ul=$('catList');CATIDS.forEach(function(id){var c=CATS[id],li=document.createElement('li');li.style.borderLeftColor=c.hat;var b=document.createElement('b');b.textContent=c.name;li.appendChild(b);li.appendChild(document.createElement('br'));var s=document.createElement('span');s.textContent=c.perk;li.appendChild(s);ul.appendChild(li);});})();
 S.lvl=0;render();loadWall();requestAnimationFrame(frame);
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){if(S.scr!=='combat')render();});
-window.__SO={S:S,act:act,render:render,run:function(){return RUN;},B:function(){return B;},H:function(){return H;},BOX:function(){return BOX;},cvPos:cvPos,beating:beating,trav:function(){return TRAV;},beat:function(){return BEAT;},META:META,CARDS:CARDS,alive:alive,playable:playable,A:A,DAY:DAY,STAGES:STAGES,PARTS:PARTS,STICKS:STICKS,enterStage:enterStage,saveDay:saveDay,saveRun:saveRun,finish:finish,fx:function(){return PO.length;},fightWith:function(set,kind){var e=ENC[stEnc()],k=kind||'F',o=e[k];e[k]=[set];RUN.first=0;S.scr='map';startCombat(k);e[k]=o;render();},EN:EN,ENC:ENC,setFx:setFx,fxl:function(){return FXL;},rm:function(){return RM;},POOL:POOL,QNEW:QNEW,poolFix:poolFix,wigOn:wigOn,dailyOpen:dailyOpen,startDaily:startDaily,today:today,playCard:playCard,strike:strike,endTurn:endTurn,openEvent:openEvent,useBrew:useBrew,addRelic:addRelic,RELICS:RELICS,BREWS:BREWS,EVENTS:EVENTS};
+window.__SO={S:S,act:act,render:render,run:function(){return RUN;},B:function(){return B;},H:function(){return H;},BOX:function(){return BOX;},cvPos:cvPos,beating:beating,trav:function(){return TRAV;},beat:function(){return BEAT;},META:META,CARDS:CARDS,alive:alive,playable:playable,A:A,DAY:DAY,STAGES:STAGES,PARTS:PARTS,STICKS:STICKS,enterStage:enterStage,saveDay:saveDay,saveRun:saveRun,finish:finish,fx:function(){return PO.length;},fightWith:function(set,kind){var e=ENC[stEnc()],k=kind||'F',o=e[k];e[k]=[set];RUN.first=0;S.scr='map';startCombat(k);e[k]=o;render();},EN:EN,ENC:ENC,setFx:setFx,fxl:function(){return FXL;},rm:function(){return RM;},POOL:POOL,QNEW:QNEW,poolFix:poolFix,wigOn:wigOn,dailyOpen:dailyOpen,startDaily:startDaily,today:today,playCard:playCard,strike:strike,drawN:draw,endTurn:endTurn,openEvent:openEvent,useBrew:useBrew,addRelic:addRelic,RELICS:RELICS,BREWS:BREWS,EVENTS:EVENTS};
 if(window.__STP_TEST)window.__STP={S:S,run:function(){return RUN;},B:function(){return B;},H:function(){return H;},act:act,playCard:playCard,endTurn:endTurn,playable:playable,cost:cost,dmgCalc:dmgCalc,alive:alive,CARDS:CARDS,POOL:POOL,META:META,canGo:canGo,A:A,SONG:SONG,tone:tone,render:render,an:function(){return {AN:AN,SW:SW,FL:FL,ZP:ZP,GLAG:GLAG,HLAG:HLAG,TRAV:TRAV};},fx:function(){return {FX:FX,PT:PT,PO:PO,WB:WB,BEAT:BEAT};},endBeat:endBeat,beating:beating,sparkAt:sparkAt,confetti:confetti,ic:ic,IC:IC};
 })();
 </script>

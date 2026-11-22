@@ -372,6 +372,7 @@ async function m2c(browser, port) {
   await go('chippy'); await sleep(600); await fight(['queue'], 'F'); await sleep(800);
   ok(`${tag} the Queue gains 1 Block when hit`, await ev(() => { const e = __SO.B().en[0]; e.block = 0; __SO.strike(__SO.H(), e, 5); return e.block === 1; }));
   ok(`${tag} Bag of Scraps heals 8 and gives Gusto`, await ev(() => { const R = __SO.run(), H = __SO.H(); R.brews = ['scraps']; const h = R.hp = R.max - 20; H.st.gus = 0; __SO.useBrew(0, null); return R.hp - h === 8 && H.st.gus === 1; }));
+  ok(`${tag} drawing a Catchphrase costs 1 Energy`, await ev(() => { const B = __SO.B(); B.energy = 3; B.hand = []; B.draw.push({ id: 'catchp', u: 0 }); __SO.drawN(1); return B.energy === 2; }));
   await ev(() => __SO.addRelic('ridephoto')); await fight(['counter'], 'B'); await sleep(1500);
   ok(`${tag} Ride Photo draws 1 more on a boss's first turn`, (await ev(() => __SO.B().hand.length)) === 6, await ev(() => __SO.B().hand.length));
   ok(`${tag} trade-mark check: no banned names in the page or game data`, !(await ev(() => /Pleasure Beach|Illuminations|Blackpool Tower|Big One|Valhalla|Merlin|Grok/i.test(document.documentElement.outerHTML + JSON.stringify(Object.values(__SO.EN).map(e => e.n))))));

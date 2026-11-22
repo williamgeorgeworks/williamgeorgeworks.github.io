@@ -61,14 +61,59 @@ Saves: `so-day-v1` (rock, album, shelf, streak), alongside the game's `stp-v1` /
 by way of the Cloud"; **Spyro now matches his photos** (pure white, ginger ringed tail, a tiny ginger smudge on the forehead: the website's
 drawing had a white tail and a large off-centre patch, the website file itself is untouched).
 
-**Placeholder (to replace in later milestones):** the Prom enemies' art (borrowed drawings), the postcard art (CSS cards marked
-"placeholder"), the new place icons (simple ink icons), the Last Tram's health (120, not the plan's 150, until playtested), and the
-unlocks that only show as a name for now (Arthur's wig, new Quill cards, Daily Run, the later sticks: they are recorded but do nothing yet).
+**Placeholder (M1 items, status after M2):** the Prom enemies now have real drawings (M2); the postcard art is still CSS cards marked
+"placeholder"; the place icons are still simple ink icons; the Last Tram was retuned in M2 (see below); Arthur's wig, the new Quill cards
+and the Daily Run now work (M2). The cat signature-card mockups are wired in (M2, see below).
 
-**Later milestone, not wired in yet:** the six cat signature-card mockups drawn from the real photos are in
-`../mockups/` (`card-requisition-trixie`, `card-ruling-of-the-court` (Arthur), `card-wouldnt-say-boo-dexter`, `card-rip-your-face-off-tilly`,
-`card-who-me-daisy`, `card-royal-decree-spyro`). They would replace the art panel of each cat's signature card (`CARDS[...]` drawn by the card
-renderer, the card the cat adds to your deck) and the cat-pick portraits, once the card renderer takes an image.
+## A Blackpool Day Out: Milestone 2 (six places, unlocks, polish)
+
+Branch `archie/seen-off-dayout`, commits (each pushed after its tests passed):
+`2c53d8c` step 1 (boss bill, NEW! stamp, effects setting, keyboard pass, Prom art), `9e642b5` step 2 (six places),
+`69008db` step 3 (unlocks, cat card art), then step 4 (playtest tuning, this README, the playtest bot; see `git log`).
+
+| Area | What M2 did |
+|---|---|
+| Six places | **The Beach, the Rock Shop, the Pleasure Park, the Tower, the Chippy, the Lights** have their own crowds (4-5 enemies, an elite, a boss), their own event and scenery props. Mechanics: the Windbreak shelters everyone; the Ringmaster's *Roll Up*; the Sugar Dummy heals; *You Must Be This Tall* hits 12 if you held more than 5 cards; the Woman Behind the Counter asks *Salt? / Vinegar? / Open or wrapped?* (answer with a Skill / Attack / Power, or she gains 3 Gusto); the Mighty Organ starts half sunk in the organ pit (half damage) and rises; Faulty Bulbs flicker (25% miss); the Queue gains Block when hit; the Stick That Says BLACKPOOL snaps into two at half health; the Crocodile's *Behind You!* hides its number. New: clutter *Unflattering Photo* and *Catchphrase*, keepsake *Ride Photo*, brew *Bag of Scraps*. |
+| Prom art | Real ink drawings for the Sea Breeze, Lamppost Gull, Ticket Inspector, Stag Do, Bride, Bridesmaid and the Last Tram (destination blind, bell countdown). |
+| Unlocks | Stick #2 **Arthur's wig** (drawn under his red hat; on/off in the album). Sticks #4/#8/#12: **4 new cards** each for Reggie/Terry/Kenneth (the plan's table has 4 each; the plan's stick text said 5, so the stick now says four). Stick #6 souvenir line two (tested). Stick #10 or the first win: **the Daily Run** (date-seeded: same Quill, cats, maps, fights, rewards and shops for everyone that day; best score per date on the report; the Day Tripper streak now only ticks on the Daily). |
+| Polish | *TONIGHT ONLY* title card before bosses; **NEW!** stamp on never-seen reward cards; **Effects: full / calm / off** in the menu (off = reduced motion); keyboard/pad walk of shop, rest, edit, event, keepsake and rewards; the Prom's boss tile says "the end of the line" (piers keep "the end of the pier"). |
+| Cat card art | The six cats' signature cards (Ruling of the Court, Royal Decree, Rip Your Face Off, Requisition, Wouldn't Say Boo, Who, Me?) show art cropped from the mockups in `../mockups/` (`web/cats/*.jpg`, 360 px). `old-card-royal-decree-reggie.jpg` was skipped as asked. |
+| Tuning | `tools/playtest.js` (headless bot, no cheats; `tools/playtest-summary.py` summarises). Before: `ROCK_RATE` .5 gave a winning first day 5-6 sticks; now **.3** gives ~4 (the plan's sticks 1-4). The Last Tram went from 118-124 to **132-138** health: the bot still wins it 17/18 times, losing ~31 health (it was ~28). The Crocodile (Beach boss) is the hardest new boss (bot ends on 7-47 health); the later bosses (Counter, the Man Off the Telly) are on the easy side. |
+
+**Placeholder art in M2 (marked "PLACEHOLDER" on screen):** every enemy at the six new places is a painted cardboard stand-up
+with its name on it (`ART.standee`), and the place scenery is a few simple ink props over the matching pier's backdrop.
+
+**Art needed (no AI images were generated for this milestone):**
+1. 35 enemy drawings for the six places, in the game's ink style: Beach (Sandcastle, Jellyfish, Windbreak, Shore Crab, the Donkey Who Has
+   Had Enough, the Crocodile with the Sausages); Rock Shop (Stick of Rock, Chattering Teeth, Fudge Tray, Sugar Dummy, the Rock Boiler,
+   the Stick That Says BLACKPOOL, Half a Stick); Pleasure Park (You Must Be This Tall sign, Dodgem, Ghost Train Skeleton, Log Flume,
+   the Ride Photo Kiosk, Old Rattler the wooden coaster); Tower (Ballroom Couple, Lift Attendant, Circus Clown, the Ringmaster,
+   the Mighty Organ; the Tower Pigeon reuses the pigeon); Chippy (Battered Sausage, Mushy Peas, Curry Sauce, the Queue, Pickled Onion,
+   the Fryer, the Woman Behind the Counter); the Lights (Faulty Bulb, Lit-up Tableau, Coach Party, Moth, the Lit-up Tram, A Man Off the Telly:
+   a made-up presenter, not anyone real).
+2. Six place backdrops (or overlays for the existing pier backdrops) to replace the prop sketches.
+3. Card art for the 12 new Quill cards, and card-art crops for the other cards if the mockup style becomes the standard.
+4. The postcard fronts (still CSS placeholders from M1) and the place icons.
+
+**Art credit / disclosure:** `web/cats/*.jpg` are crops of the card mockups supplied in `../mockups/`. If those mockups were made with
+AI image tools, they must be declared in Steam's Content Survey (see the Content Survey notes in `content-plan.md`). Nothing else in M2 is an image file.
+
+**Cat colours check:** the in-game cats were compared with the photos in `/workspace/cats/` (from williamgeorgeworks.co.uk). Spyro was fixed
+in M1. Dexter is drawn dark grey with a grey ruff and amber eyes; the photos show a *smoky black* cat with a grey chest ruff, so his body
+could be a shade darker (not changed; the live website file is untouched either way).
+
+**Not done / untested in M2:** Daily Rules (the plan's one rule per day) and Steam leaderboards (no Steamworks); Rainy Day tokens; the
+legendary cards; Arcades & Bingo, the Winter Gardens, the B&B and the Old Pier still borrow pier crowds ("Coming soon"); the Daily's seed
+covers generation (maps, fights, rewards, shops, events), not mid-fight draws after turn 1. Steam Deck hardware and Windows were not run
+on real machines (the Windows installer is built and the Linux AppImage smoke-tested under Xvfb).
+
+### Where to pick up next time
+
+1. Branch `archie/seen-off-dayout` is complete for M2; the working copy is `/workspace/seen-off-steam/desktop` (local git mirrors the pushed
+   commits). Builds: `/workspace/seen-off-steam/dist/m2/`. Screenshots: `/workspace/seen-off-steam/shots/m2-*.png`.
+2. Run the tests: `node tests/verify.js` (about 13 min; `ONLY=m2c` etc. for one section). Playtest: `RUNS=6 node tools/playtest.js out.json`.
+3. Next milestone (M3, proposed, not started): real drawings for the 35 new enemies; the remaining four places (Arcades & Bingo,
+   the Winter Gardens, the B&B, the Old Pier); Daily Rules; legendary cards; a boss-health pass for the later parts of the day.
 
 **WebKitGTK note:** `app.security.dangerousDisableAssetCspModification` is `["style-src"]`. Without it Tauri adds hashes to `style-src`,
 which switches off `'unsafe-inline'` and silently drops every inline `style="--var:…"` the game sets (place colours, the rock meter fill,
