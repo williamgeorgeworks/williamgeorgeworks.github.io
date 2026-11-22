@@ -2,7 +2,7 @@
 
 This is a small, read-only Worker for the virtual office page (`office.html`).
 It looks at open Issues in the private `williamgeorgeworks/quill-family-hq` repo
-and returns only whether each of the eleven office bots is `working` or `idle`.
+and returns only whether each office bot is `working` or `idle`.
 It never returns titles, issue numbers, bodies, comments, usernames or links.
 
 Kenneth deploys this after Ben approves the page. Do not put a token in the
@@ -13,14 +13,13 @@ The Worker is not deployed as part of this pull request.
 ## What you get back
 
 ```json
-{"updated":"2026-11-22T22:00:00.000Z","bots":{"kenneth":"idle","george":"working"}}
+{"updated":"2026-11-22T22:00:00.000Z","bots":{"kenneth":"idle","terry":"working","george":"idle"}}
 ```
 
 A bot is `working` if any open issue (not a pull request) carries its label
-(`for-kenneth`, `for-george`, `for-percy`, `for-boris`, `for-tweety`,
-`for-archie`, `for-brian`, `for-clive`, `for-frank`, `for-filament`,
-`for-oddly`). Labels for Terry and Reggie are ignored. The response is cached
-for 60 seconds.
+(`for-kenneth`, `for-terry`, `for-reggie`, `for-george`, `for-percy`,
+`for-boris`, `for-tweety`, `for-archie`, `for-brian`, `for-clive`,
+`for-frank`, `for-filament`, `for-oddly`). The response is cached for 60 seconds.
 
 ## Deploy steps (Kenneth)
 
@@ -58,7 +57,7 @@ curl -sS https://wgw-office-feed.YOUR-ACCOUNT.workers.dev
 ```
 
 You should get a JSON object with `updated` and a `bots` map of `working` or
-`idle` for the eleven names, and nothing else. If the secret is missing you
+`idle` for each office bot, and nothing else. If the secret is missing you
 will get a short "office feed offline" error instead.
 
 ### 4. Point the page at it

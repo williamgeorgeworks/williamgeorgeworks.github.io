@@ -1,5 +1,5 @@
-/* Virtual office — pixel room for the eleven specialists.
-   To add or remove someone (including Kenneth), edit STAFF only. */
+/* Virtual office — three private offices and ten desks on the open floor.
+   To add or remove someone (including Kenneth, Terrance or Reginald), edit STAFF only. */
 
 /* Paste the Worker address here after Kenneth deploys it, then open a follow-up PR
    (or tell George the address). Leave it empty to stay in friendly offline mode. */
@@ -10,8 +10,15 @@ const POLL_MS = 60000;
 /* Single list of everyone with a desk. Remove or comment out an entry to take
    that person off this page — the layout, board and feed mapping all follow. */
 const STAFF = [
-  { id: "kenneth", name: "Kenneth Quill", tag: "Ken", role: "Chair of the office", prop: "clipboard",
+  { id: "kenneth", name: "Kenneth Quill", tag: "Ken", role: "Chief of Staff", prop: "clipboard", office: true,
+    plate: ["KENNETH QUILL", "CHIEF OF STAFF"],
     body: "#6b5344", skin: "#f0c9a0", hair: "#2a2420", accent: "#c4a574" },
+  { id: "terry", name: "Terrance Quill", tag: "Terry", role: "The Machine", prop: "quill", office: true, kind: "terry",
+    plate: ["TERRANCE QUILL"],
+    body: "#b81c24", skin: "#d8d4c8", hair: "#b0aaa0", accent: "#d1202f" },
+  { id: "reggie", name: "Reginald Quill", tag: "Reggie", role: "The Cousin", prop: "quill", office: true, kind: "reggie",
+    plate: ["REGINALD QUILL"],
+    body: "#b81c24", skin: "#ccc8bc", hair: "#9a968c", accent: "#d1202f" },
   { id: "boris", name: "Boris Mailer", tag: "Boris", role: "Email", prop: "envelope",
     body: "#1e3a5f", skin: "#e0b894", hair: "#3b2a1a", accent: "#f4f0e4" },
   { id: "tweety", name: "Tweety McPost", tag: "Tweet", role: "X", prop: "bird",
@@ -65,7 +72,7 @@ const CELE_FLAVOUR = [
   "Off to the kettle in triumph"
 ];
 
-const W = 640, H = 360, WALL = 46;
+const W = 640, H = 430, FLOOR_Y = 122;
 let viewScale = 1;
 const REDUCE = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const params = new URLSearchParams(location.search);
@@ -78,6 +85,7 @@ const feedNote = document.getElementById("office-feed-note");
 const demoNote = document.getElementById("office-demo-note");
 
 const desks = [];
+const rooms = [];
 const people = [];
 const cats = [];
 const hotspots = [];
@@ -111,17 +119,56 @@ function fitCanvas() {
   }
 }
 
+function layoutOffices() {
+  rooms.length = 0;
+  const holders = STAFF.filter(s => s.office);
+  const margin = 4, gap = 4, rh = 118;
+  const n = holders.length;
+  const rw = Math.floor((W - margin * 2 - gap * (n - 1)) / n);
+  holders.forEach((staff, i) => {
+    const x = margin + i * (rw + gap);
+    const y = 2;
+    const cx = x + Math.round(rw / 2);
+    rooms.push({
+      id: staff.id,
+      staff: staff,
+      x: x,
+      y: y,
+      w: rw,
+      h: rh,
+      cx: cx,
+      doorX: cx,
+      doorY: y + rh + 6,
+      doorW: 24
+    });
+    const deskY = y + 36;
+    desks.push({
+      id: staff.id,
+      x: cx - 29,
+      y: deskY,
+      w: 58,
+      h: 28,
+      cx: cx,
+      chairX: cx,
+      chairY: deskY + 40,
+      staff: staff,
+      private: true
+    });
+  });
+}
+
 function layoutDesks() {
   desks.length = 0;
-  const n = STAFF.length;
+  layoutOffices();
+  const floorStaff = STAFF.filter(s => !s.office);
+  const n = floorStaff.length;
   const topN = Math.ceil(n / 2);
   const botN = n - topN;
-  function row(start, count, y) {
-    const slot = 58, gap = 18;
-    const total = count * slot + (count - 1) * gap;
+  function row(list, y) {
+    const slot = 58, gap = 22;
+    const total = list.length * slot + (list.length - 1) * gap;
     const x0 = Math.round((W - total) / 2);
-    for (let i = 0; i < count; i++) {
-      const staff = STAFF[start + i];
+    list.forEach((staff, i) => {
       const x = x0 + i * (slot + gap);
       desks.push({
         id: staff.id,
@@ -134,27 +181,44 @@ function layoutDesks() {
         chairY: y + 46,
         staff: staff
       });
-    }
+    });
   }
-  row(0, topN, 96);
-  if (botN) row(topN, botN, 236);
+  row(floorStaff.slice(0, topN), FLOOR_Y + 50);
+  if (botN) row(floorStaff.slice(topN), FLOOR_Y + 178);
 }
 
 function setupHotspots() {
   hotspots.length = 0;
-  const spots = [
-    { x: 54, y: 92, kind: "kettle" },
-    { x: 586, y: 92, kind: "printer" },
-    { x: 320, y: 92, kind: "plant" },
-    { x: 160, y: 176 },
-    { x: 320, y: 176 },
-    { x: 480, y: 176 },
-    { x: 90, y: 330 },
-    { x: 250, y: 330 },
-    { x: 400, y: 330 },
-    { x: 550, y: 330 }
-  ];
-  spots.forEach(s => hotspots.push(s));
+  [
+    { x: 54, y: FLOOR_Y + 28, kind: "kettle" },
+    { x: 586, y: FLOOR_Y + 28, kind: "printer" },
+    { x: 320, y: FLOOR_Y + 30, kind: "plant" },
+    { x: 160, y: FLOOR_Y + 118 },
+    { x: 320, y: FLOOR_Y + 118 },
+    { x: 480, y: FLOOR_Y + 118 },
+    { x: 90, y: H - 28 },
+    { x: 250, y: H - 28 },
+    { x: 400, y: H - 28 },
+    { x: 550, y: H - 28 }
+  ].forEach(s => hotspots.push(s));
+  rooms.forEach(r => {
+    hotspots.push({ x: r.cx - 24, y: r.y + 90, room: r.id });
+    hotspots.push({ x: r.doorX, y: r.doorY, room: r.id });
+  });
+}
+
+function roomAt(x, y) {
+  return rooms.find(r => x >= r.x + 2 && x <= r.x + r.w - 2 && y >= r.y + 2 && y <= r.y + r.h) || null;
+}
+
+function setRoute(who, dest) {
+  who.waypoints = [];
+  const from = roomAt(who.x, who.y);
+  const to = roomAt(dest.x, dest.y);
+  if (from && (!to || from.id !== to.id)) who.waypoints.push({ x: from.doorX, y: from.doorY });
+  if (to && (!from || from.id !== to.id)) who.waypoints.push({ x: to.doorX, y: to.doorY });
+  who.waypoints.push({ x: dest.x, y: dest.y });
+  who.target = who.waypoints.shift();
 }
 
 function flavourFor(id, mode, salt) {
@@ -165,16 +229,20 @@ function flavourFor(id, mode, salt) {
 
 function makePerson(staff, index) {
   const desk = desks.find(d => d.id === staff.id);
-  const spot = hotspots[index % hotspots.length];
+  const floorSpots = hotspots.filter(s => !s.room);
+  const start = staff.office
+    ? { x: desk.chairX + (index % 2 ? -16 : 16), y: desk.chairY + 8 }
+    : floorSpots[index % floorSpots.length];
   return {
     id: staff.id,
     staff: staff,
     desk: desk,
-    x: REDUCE ? desk.chairX : spot.x + (index % 3) * 4,
-    y: REDUCE ? desk.chairY + 18 : spot.y,
+    x: REDUCE ? desk.chairX : start.x + (index % 3) * 4,
+    y: REDUCE ? desk.chairY : start.y,
     want: "idle",
     phase: "idle",
     target: null,
+    waypoints: [],
     wait: 0.4 * index,
     walkT: index * 0.3,
     celeT: 0,
@@ -228,7 +296,7 @@ function setWant(person, want) {
   if (want === "working") {
     person.flavour = flavourFor(person.id, "working", Date.now() / 1000 | 0);
     person.phase = REDUCE ? "working" : "to-desk";
-    person.target = { x: person.desk.chairX, y: person.desk.chairY };
+    setRoute(person, { x: person.desk.chairX, y: person.desk.chairY });
     person.wait = 0;
     if (REDUCE) {
       person.x = person.desk.chairX;
@@ -268,6 +336,10 @@ function stepMove(who, dt, speed) {
   if (d < 1.6) {
     who.x = who.target.x;
     who.y = who.target.y;
+    if (who.waypoints && who.waypoints.length) {
+      who.target = who.waypoints.shift();
+      return false;
+    }
     who.target = null;
     return true;
   }
@@ -280,9 +352,17 @@ function stepMove(who, dt, speed) {
 }
 
 function idleTarget(person) {
-  const spots = hotspots.filter(s => Math.hypot(s.x - person.x, s.y - person.y) > 28);
-  const pool = spots.length ? spots : hotspots;
-  return pool[Math.floor(Math.random() * pool.length)];
+  let pool;
+  if (person.staff.office) {
+    pool = Math.random() < 0.45
+      ? hotspots.filter(s => s.room === person.id)
+      : hotspots.filter(s => !s.room);
+  } else {
+    pool = hotspots.filter(s => !s.room);
+  }
+  const far = pool.filter(s => Math.hypot(s.x - person.x, s.y - person.y) > 28);
+  const use = far.length ? far : (pool.length ? pool : hotspots.filter(s => !s.room));
+  return use[Math.floor(Math.random() * use.length)];
 }
 
 function tickPerson(p, dt) {
@@ -312,15 +392,22 @@ function tickPerson(p, dt) {
       p.phase = "idle";
       p.flavour = flavourFor(p.id, "idle", Date.now() / 1000 | 0);
       p.wait = 0.2;
-      p.target = REDUCE ? null : { x: hotspots[0].x, y: hotspots[0].y };
+      if (!REDUCE) setRoute(p, { x: hotspots[0].x, y: hotspots[0].y });
+      else p.target = null;
       paintBoard();
     }
     return;
   }
   if (REDUCE) {
-    const stand = hotspots[STAFF.findIndex(s => s.id === p.id) % hotspots.length];
-    p.x = stand.x;
-    p.y = stand.y;
+    if (p.staff.office) {
+      p.x = p.desk.chairX;
+      p.y = p.desk.chairY + 12;
+    } else {
+      const floor = hotspots.filter(s => !s.room);
+      const stand = floor[STAFF.filter(s => !s.office).findIndex(s => s.id === p.id) % floor.length];
+      p.x = stand.x;
+      p.y = stand.y;
+    }
     return;
   }
   if (p.wait > 0) {
@@ -330,7 +417,7 @@ function tickPerson(p, dt) {
   const arrived = stepMove(p, dt, 38);
   if (arrived) {
     p.wait = 1.2 + Math.random() * 2.8;
-    p.target = idleTarget(p);
+    setRoute(p, idleTarget(p));
   }
 }
 
@@ -347,8 +434,10 @@ function tickCat(c, dt) {
   const arrived = stepMove(c, dt, 28);
   if (arrived) {
     c.wait = 0.8 + Math.random() * 3;
-    const spots = hotspots.filter(s => Math.hypot(s.x - c.x, s.y - c.y) > 20);
-    const t = (spots.length ? spots : hotspots)[Math.floor(Math.random() * (spots.length || hotspots.length) || 0)];
+    const floor = hotspots.filter(s => !s.room);
+    const spots = floor.filter(s => Math.hypot(s.x - c.x, s.y - c.y) > 20);
+    const use = spots.length ? spots : floor;
+    const t = use[Math.floor(Math.random() * use.length)];
     c.target = { x: t.x + (Math.random() * 16 - 8), y: t.y + (Math.random() * 10 - 5) };
   }
 }
@@ -359,67 +448,102 @@ function p(x, y, w, h, c) {
 }
 
 function drawRoom() {
-  p(0, 0, W, WALL, "#efe6d4");
-  p(0, WALL - 5, W, 5, "#d9cbb3");
-  p(0, WALL, W, 2, "#3d2a1c");
+  /* Open-floor boards */
   for (let x = 0; x < W; x += 16) {
-    p(x, WALL + 2, 15, H - WALL - 2, (x / 16) % 2 ? "#c4a06a" : "#d0ad78");
-    p(x + 15, WALL + 2, 1, H - WALL - 2, "#a88850");
+    p(x, FLOOR_Y, 15, H - FLOOR_Y, (x / 16) % 2 ? "#c4a06a" : "#d0ad78");
+    p(x + 15, FLOOR_Y, 1, H - FLOOR_Y, "#a88850");
   }
   /* rug */
-  p(210, 160, 220, 36, "#8a2a2a");
-  p(214, 164, 212, 28, "#7a2424");
-  p(218, 168, 204, 20, "#6b3d12");
-  /* window */
-  p(40, 8, 70, 30, "#3d2a1c");
-  p(43, 11, 30, 24, "#8ec8e6");
-  p(76, 11, 31, 24, "#7eb8d8");
-  p(48, 14, 8, 8, "#f2e6a0");
-  /* clock */
-  p(300, 10, 22, 22, "#3d2a1c");
-  p(302, 12, 18, 18, "#f4f0e4");
-  p(310, 14, 2, 7, "#141414");
-  p(310, 20, 6, 2, "#141414");
-  /* framed motto */
-  p(430, 10, 50, 22, "#3d2a1c");
-  p(432, 12, 46, 18, "#f4f0e4");
-  p(436, 16, 8, 3, "#d1202f");
-  p(446, 16, 8, 3, "#22409a");
-  p(456, 16, 16, 3, "#141414");
-  p(440, 22, 30, 3, "#141414");
-  /* kettle table */
-  p(28, 62, 36, 6, "#6b4a2a");
-  p(30, 68, 6, 12, "#5a3c22");
-  p(56, 68, 6, 12, "#5a3c22");
-  p(38, 48, 16, 14, "#c4bfb2");
-  p(41, 44, 10, 8, "#d1202f");
-  p(49, 40, 3, 6, "#3d2a1c");
+  p(210, FLOOR_Y + 108, 220, 36, "#8a2a2a");
+  p(214, FLOOR_Y + 112, 212, 28, "#7a2424");
+  p(218, FLOOR_Y + 116, 204, 20, "#6b3d12");
+  /* kettle */
+  p(28, FLOOR_Y + 16, 36, 6, "#6b4a2a");
+  p(30, FLOOR_Y + 22, 6, 12, "#5a3c22");
+  p(56, FLOOR_Y + 22, 6, 12, "#5a3c22");
+  p(38, FLOOR_Y + 2, 16, 14, "#c4bfb2");
+  p(41, FLOOR_Y - 2, 10, 8, "#d1202f");
+  p(49, FLOOR_Y - 6, 3, 6, "#3d2a1c");
   const steam = (t0 * 2) % 1;
   if (!REDUCE) {
-    p(44, 34 - steam * 6, 2, 3, "#ffffff");
-    p(48, 32 - steam * 8, 2, 3, "#ffffffaa");
+    p(44, FLOOR_Y - 12 - steam * 6, 2, 3, "#ffffff");
+    p(48, FLOOR_Y - 14 - steam * 8, 2, 3, "#ffffffaa");
   }
   /* plant */
-  p(312, 62, 16, 8, "#6b4a2a");
-  p(316, 50, 8, 12, "#0f4a4a");
-  p(310, 44, 8, 10, "#1a6b4a");
-  p(322, 46, 8, 10, "#0f4a4a");
+  p(312, FLOOR_Y + 16, 16, 8, "#6b4a2a");
+  p(316, FLOOR_Y + 4, 8, 12, "#0f4a4a");
+  p(310, FLOOR_Y - 2, 8, 10, "#1a6b4a");
+  p(322, FLOOR_Y, 8, 10, "#0f4a4a");
   /* printer */
-  p(560, 52, 36, 22, "#d8d2c6");
-  p(564, 46, 28, 8, "#c4bfb2");
-  p(568, 56, 20, 6, "#22409a");
-  p(590, 58, 4, 3, (t0 % 1 < 0.5) ? "#2e8b57" : "#e6c200");
-  p(566, 74, 24, 4, "#f4f0e4");
-  /* ink splat on floor */
-  p(18, 300, 10, 6, "#14141422");
-  p(22, 304, 6, 6, "#14141422");
-  p(600, 310, 12, 8, "#d1202f22");
-  /* inner frame, so the CSS box does not need a border that steals width */
+  p(560, FLOOR_Y + 6, 36, 22, "#d8d2c6");
+  p(564, FLOOR_Y, 28, 8, "#c4bfb2");
+  p(568, FLOOR_Y + 10, 20, 6, "#22409a");
+  p(590, FLOOR_Y + 12, 4, 3, (t0 % 1 < 0.5) ? "#2e8b57" : "#e6c200");
+  p(566, FLOOR_Y + 28, 24, 4, "#f4f0e4");
+  /* clock on the office front wall, between doors */
+  p(308, FLOOR_Y + 4, 22, 22, "#3d2a1c");
+  p(310, FLOOR_Y + 6, 18, 18, "#f4f0e4");
+  p(318, FLOOR_Y + 8, 2, 7, "#141414");
+  p(318, FLOOR_Y + 14, 6, 2, "#141414");
+  /* ink splat */
+  p(18, H - 36, 10, 6, "#14141422");
+  p(22, H - 32, 6, 6, "#14141422");
+  p(600, H - 30, 12, 8, "#d1202f22");
+  drawPrivateOffices();
+  /* inner frame */
   p(0, 0, W, 2, "#141414");
   p(0, H - 2, W, 2, "#141414");
   p(0, 0, 2, H, "#141414");
   p(W - 2, 0, 2, H, "#141414");
 }
+
+function drawPrivateOffices() {
+  const carpets = { kenneth: "#c4a87a", terry: "#e8dcc0", reggie: "#d4b6a4" };
+  rooms.forEach(r => {
+    p(r.x, r.y, r.w, r.h, carpets[r.id] || "#e4d4b8");
+    /* back wall */
+    p(r.x, r.y, r.w, 16, "#efe6d4");
+    /* little window */
+    p(r.cx - 22, r.y + 3, 44, 12, "#3d2a1c");
+    p(r.cx - 20, r.y + 4, 20, 10, "#8ec8e6");
+    p(r.cx + 1, r.y + 4, 19, 10, "#7eb8d8");
+    /* bookshelf for Terry and Reggie, as in their portraits */
+    if (r.id === "terry" || r.id === "reggie") {
+      p(r.x + 6, r.y + 20, 16, 28, "#6b4a2a");
+      p(r.x + 8, r.y + 22, 5, 8, "#7a1f2b");
+      p(r.x + 14, r.y + 22, 5, 8, "#22409a");
+      p(r.x + 8, r.y + 32, 5, 7, "#0f4a4a");
+      p(r.x + 14, r.y + 32, 5, 7, "#6b3d12");
+    }
+    /* glass partitions: ink posts and pale glass */
+    p(r.x, r.y, 2, r.h, "#141414");
+    p(r.x + r.w - 2, r.y, 2, r.h, "#141414");
+    p(r.x, r.y, r.w, 2, "#141414");
+    /* front wall with a door gap */
+    const doorL = r.doorX - Math.floor(r.doorW / 2);
+    const doorR = doorL + r.doorW;
+    p(r.x, r.y + r.h - 3, doorL - r.x, 3, "#141414");
+    p(doorR, r.y + r.h - 3, r.x + r.w - doorR, 3, "#141414");
+    /* pale glass on the front wall either side of the door */
+    p(r.x + 2, r.y + r.h - 14, Math.max(0, doorL - r.x - 3), 8, "#c5d8e4");
+    p(doorR + 1, r.y + r.h - 14, Math.max(0, r.x + r.w - 2 - doorR - 1), 8, "#c5d8e4");
+    /* threshold */
+    p(doorL, r.y + r.h - 1, r.doorW, 4, "#6b4a2a");
+    /* nameplates are crisp at 1x/2x; on a small phone the board carries the names */
+    if (viewScale >= 1) {
+      const lines = r.staff.plate || [r.staff.name.toUpperCase()];
+      const plateW = Math.max.apply(null, lines.map(s => s.length * 4 + 6));
+      const plateH = lines.length * 7 + 4;
+      const px = r.cx - Math.round(plateW / 2);
+      const py = r.y + 17;
+      p(px, py, plateW, plateH, "#f4f0e4");
+      p(px, py, plateW, 1, "#3d2a1c");
+      p(px, py + plateH - 1, plateW, 1, "#3d2a1c");
+      lines.forEach((line, i) => drawLabel(r.cx, py + 2 + i * 7, line, "#141414"));
+    }
+  });
+}
+
 
 
 const GLYPHS = {
@@ -438,6 +562,7 @@ const GLYPHS = {
   N:[0b110,0b101,0b101,0b101,0b101],
   O:[0b111,0b101,0b101,0b101,0b111],
   P:[0b110,0b101,0b110,0b100,0b100],
+  Q:[0b010,0b101,0b101,0b111,0b001],
   R:[0b110,0b101,0b110,0b101,0b101],
   S:[0b011,0b100,0b010,0b001,0b110],
   T:[0b111,0b010,0b010,0b010,0b010],
@@ -503,12 +628,126 @@ function drawProp(px, py, kind, facing) {
     p(px, py + 2, 7, 5, "#f2c14e");
     p(px + 5, py, 4, 4, "#f2c14e");
     p(px + 8, py + 2, 3, 2, "#e07a2f");
+  } else if (kind === "quill") {
+    p(px + 3, py, 3, 4, "#f4f0e4");
+    p(px + 2, py + 3, 2, 8, "#e8e0d0");
+    p(px + 2, py + 10, 1, 3, "#3d2a1c");
   }
   return flip;
 }
 
+function drawRobot(pr) {
+  const s = pr.staff;
+  const terry = s.kind === "terry";
+  const cele = pr.phase === "celebrating";
+  const walk = pr.phase === "idle" || pr.phase === "to-desk";
+  const work = pr.phase === "working";
+  const moving = !REDUCE && walk && pr.target;
+  const bob = moving ? ((pr.walkT * 8 | 0) % 2) : 0;
+  const jump = (!REDUCE && cele) ? Math.round(Math.abs(Math.sin(pr.celeT * 10)) * 8) : 0;
+  const x = Math.round(pr.x);
+  const y = Math.round(pr.y - jump + bob);
+  p(x - 7, Math.round(pr.y) + 2, 14, 3, "#14141433");
+  const metal = terry ? "#d8d4c8" : "#ccc8bc";
+  const vest = "#b81c24";
+  const shirt = "#f4f0e4";
+
+  if (work) {
+    p(x - 7, y - 12, 14, 12, vest);
+    p(x - 4, y - 12, 8, 3, shirt);
+    if (terry) {
+      p(x - 1, y - 12, 2, 6, "#141414"); /* tie */
+      p(x - 6, y - 24, 12, 12, metal);
+      p(x - 2, y - 28, 2, 4, metal);
+      p(x - 3, y - 31, 4, 3, "#d1202f");
+      p(x - 5, y - 21, 3, 3, "#fff");
+      p(x + 2, y - 21, 3, 3, "#fff");
+      p(x - 4, y - 20, 2, 2, "#141414");
+      p(x + 3, y - 20, 2, 2, "#141414");
+    } else {
+      p(x - 5, y - 26, 10, 14, metal);
+      p(x - 1, y - 29, 2, 4, metal);
+      p(x - 4, y - 22, 3, 2, "#fff");
+      p(x + 2, y - 22, 3, 2, "#fff");
+      p(x - 3, y - 22, 2, 1, "#141414");
+      p(x + 3, y - 22, 2, 1, "#141414");
+      p(x + 1, y - 23, 5, 5, "#14141400");
+      p(x + 1, y - 24, 5, 1, "#141414");
+      p(x + 1, y - 24, 1, 5, "#141414");
+      p(x + 5, y - 24, 1, 5, "#141414");
+      p(x + 1, y - 20, 5, 1, "#141414");
+      p(x - 4, y - 12, 3, 2, "#141414");
+      p(x + 1, y - 12, 3, 2, "#141414");
+    }
+    const tap = (!REDUCE && ((pr.typeT * 6 | 0) % 2)) ? 1 : 0;
+    p(x - 10, y - 8, 6, 3, metal);
+    p(x + 4, y - 8 + tap, 6, 3, metal);
+    return;
+  }
+
+  /* legs */
+  p(x - 5, y - 8, 4, 10, metal);
+  p(x + 1, y - 8, 4, 10, metal);
+  if (bob) p(x + (pr.facing === "l" ? -5 : 1), y - 6, 4, 10, metal);
+  /* body: white shirt, red waistcoat */
+  p(x - 6, y - 20, 12, 13, shirt);
+  p(x - 6, y - 18, 12, 10, vest);
+  if (terry) p(x - 1, y - 20, 2, 7, "#141414");
+  else {
+    p(x - 4, y - 20, 3, 2, "#141414");
+    p(x + 1, y - 20, 3, 2, "#141414");
+  }
+  /* head — from the portraits: Terry is a cheerful box, Reggie is taller with a monocle */
+  if (terry) {
+    p(x - 6, y - 32, 12, 12, metal);
+    p(x - 7, y - 28, 2, 5, "#b0aaa0");
+    p(x + 5, y - 28, 2, 5, "#b0aaa0");
+    p(x - 1, y - 36, 2, 4, metal);
+    p(x - 2, y - 39, 4, 3, "#d1202f");
+    p(x - 5, y - 29, 4, 4, "#fff");
+    p(x + 1, y - 29, 4, 4, "#fff");
+    p(x - 4, y - 28, 2, 2, "#141414");
+    p(x + 2, y - 28, 2, 2, "#141414");
+    p(x - 3, y - 24, 6, 1, "#141414");
+    p(x - 2, y - 23, 4, 1, "#141414");
+  } else {
+    p(x - 5, y - 34, 10, 14, metal);
+    p(x - 6, y - 30, 2, 5, "#9a968c");
+    p(x + 4, y - 30, 2, 5, "#9a968c");
+    p(x - 1, y - 38, 2, 4, metal);
+    p(x - 4, y - 30, 3, 3, "#fff");
+    p(x + 2, y - 30, 3, 3, "#fff");
+    p(x - 3, y - 30, 2, 1, "#141414");
+    p(x + 3, y - 29, 2, 2, "#141414");
+    /* monocle */
+    p(x + 1, y - 32, 6, 1, "#141414");
+    p(x + 1, y - 32, 1, 6, "#141414");
+    p(x + 6, y - 32, 1, 6, "#141414");
+    p(x + 1, y - 27, 6, 1, "#141414");
+    p(x + 7, y - 26, 1, 8, "#141414");
+    p(x - 2, y - 24, 4, 1, "#3d2a1c");
+  }
+  if (["quill"].includes(s.prop)) {
+    const left = pr.facing === "l";
+    drawProp(left ? x - 14 : x + 7, y - 22, "quill", pr.facing);
+  }
+  p(x + (pr.facing === "l" ? -9 : 6), y - 18, 4, 8, metal);
+  if (cele) {
+    p(x - 10, y - 32 - Math.min(jump, 4), 4, 8, metal);
+    p(x + 6, y - 34 - Math.min(jump, 4), 4, 8, metal);
+    p(x - 12, y - 36 - jump, 3, 3, "#e6c200");
+    p(x + 10, y - 38 - jump, 3, 3, "#d1202f");
+    p(x - 2, y - 44 - jump, 3, 3, "#22409a");
+  }
+}
+
 function drawPerson(pr) {
   const s = pr.staff;
+  if (s.kind === "terry" || s.kind === "reggie") {
+    drawRobot(pr);
+    return;
+  }
+
   const cele = pr.phase === "celebrating";
   const walk = pr.phase === "idle" || pr.phase === "to-desk";
   const work = pr.phase === "working";
@@ -583,7 +822,7 @@ function drawPerson(pr) {
   /* eyes */
   p(x - 3, y - 26, 2, 2, "#141414");
   p(x + 1, y - 26, 2, 2, "#141414");
-  const held = ["clipboard", "envelope", "book", "joystick", "basket", "spool", "duck"];
+  const held = ["clipboard", "envelope", "book", "joystick", "basket", "spool", "duck", "quill"];
   if (held.includes(s.prop)) {
     drawProp(left ? x - 14 : x + 7, y - 18, s.prop, pr.facing);
   }
@@ -658,6 +897,7 @@ function drawFrame() {
   sprites.forEach(s => s.draw());
   if (viewScale >= 1) {
     desks.forEach(d => {
+      if (d.private) return;
       const w = String(d.staff.tag).length * 4 + 3;
       p(d.cx - w / 2, d.chairY + 6, w, 7, "#f4f0e4");
       p(d.cx - w / 2, d.chairY + 6, w, 1, "#3d2a1c");
@@ -750,8 +990,8 @@ function boot() {
   layoutDesks();
   setupHotspots();
   STAFF.forEach((s, i) => people.push(makePerson(s, i)));
-  cats.push(makeCat("arthur", 300, 184));
-  cats.push(makeCat("dexter", 360, 328));
+  cats.push(makeCat("arthur", 320, FLOOR_Y + 126));
+  cats.push(makeCat("dexter", 360, H - 30));
   if (DEMO) {
     demoNote.hidden = false;
     feedOffline = false;

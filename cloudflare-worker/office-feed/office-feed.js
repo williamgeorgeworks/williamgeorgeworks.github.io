@@ -6,15 +6,18 @@
 
 const REPO = "williamgeorgeworks/quill-family-hq";
 
-/* The eleven who have a desk on the office page. Terry and Reggie labels are
-   recognised so they do not break the Worker, but they are not in the output. */
+/* Everyone on the office page. Kenneth, Terrance and Reginald have private
+   offices; the other ten have desks on the open floor. */
 export const OFFICE_BOTS = [
-  "kenneth", "boris", "tweety", "percy", "george",
+  "kenneth", "terry", "reggie",
+  "boris", "tweety", "percy", "george",
   "archie", "brian", "clive", "frank", "filament", "oddly"
 ];
 
 export const LABEL_TO_BOT = {
   "for-kenneth": "kenneth",
+  "for-terry": "terry",
+  "for-reggie": "reggie",
   "for-boris": "boris",
   "for-tweety": "tweety",
   "for-percy": "percy",

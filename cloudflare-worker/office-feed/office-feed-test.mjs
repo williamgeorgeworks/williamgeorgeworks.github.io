@@ -73,7 +73,7 @@ function check(cond, msg) {
 
 check(out.updated === FIXED, "updated is the supplied timestamp");
 check(Object.keys(out).length === 2 && "updated" in out && "bots" in out, "top-level keys are only updated and bots");
-check(Object.keys(out.bots).sort().join(",") === OFFICE_BOTS.slice().sort().join(","), "bots are exactly the eleven desks");
+check(Object.keys(out.bots).sort().join(",") === OFFICE_BOTS.slice().sort().join(","), "bots are exactly the office roster");
 for (const [id, state] of Object.entries(out.bots)) {
   check(state === "working" || state === "idle", id + " is working or idle");
 }
@@ -82,7 +82,8 @@ check(out.bots.percy === "working", "open for-percy issue marks percy working");
 check(out.bots.boris === "working", "open for-boris issue marks boris working");
 check(out.bots.archie === "idle", "pull requests are ignored");
 check(out.bots.kenneth === "idle", "bots with no open issue are idle");
-check(!("terry" in out.bots) && !("reggie" in out.bots), "terry and reggie are not in the output");
+check(out.bots.terry === "working", "open for-terry issue marks terry working");
+check(out.bots.reggie === "working", "open for-reggie issue marks reggie working");
 
 const banned = [SECRET, TITLE, "hunter2", "quill-family-hq", "benharding75", "html_url", "password", "issues/99", "secret body", "comments", "closed_at", "for-george", "Terry", "Reggie"];
 for (const s of banned) {
