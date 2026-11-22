@@ -42,6 +42,6 @@ Silly beats clever. Affectionate beats cruel. Do not reuse the same punchline sh
 
 ## Format
 Edit gaming-data.json: add a new edition at the front of "editions" (newest first), keep the newest 30. Fields: date, title, standfirst, terry, reggie, stories[{kicker, headline, satire (max 700 chars), real (max 450 chars), source{name,url}, optional link{text,url}}].
-`link` points to one of our own pages (a plain filename ending .html). Use it when a story connects: Grand Theft Kitty for cat, tricycle or crime-caper stories, ferrets-ditch.html for fishing, angling, ponds, wildlife or bank-holiday-weather stories, arcade.html for stories about big games, boxes, downloads or prices.
+`link` points to one of our own pages (a plain filename ending .html). Use it when a story connects: Grand Theft Kitty for cat, tricycle or crime-caper stories, ferrets-ditch.html for fishing, angling, ponds, wildlife or bank-holiday-weather stories, kitty-grand-prix.html for racing, karting, driving or motorsport stories, arcade.html for stories about big games, boxes, downloads or prices.
 Run `node tools/check-news.js gaming-data.json` before committing. It must print OK. Read every WARN.
 Do NOT edit news-data.json or any page. Only gaming-data.json changes in the daily commit.
