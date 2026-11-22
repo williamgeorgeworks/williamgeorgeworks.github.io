@@ -14,6 +14,7 @@
     meter:'<path d="M3 18a9 9 0 1 1 18 0zM12 14l4-6"/>',
     radio:'<circle cx="12" cy="9" r="1.5"/><path d="M8 6a5 5 0 0 0 0 6m8-6a5 5 0 0 1 0 6M5 3a9 9 0 0 0 0 12m14-12a9 9 0 0 1 0 12m-7-4-4 10m4-10 4 10m-7-3h6"/>',
     record:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2"/><path d="M6 11a6 6 0 0 1 5-5m7 7a6 6 0 0 1-5 5"/>',
+    trophy:'<path d="M7 4h10v5a5 5 0 0 1-10 0zM7 6H4v2a4 4 0 0 0 4 4m9-6h3v2a4 4 0 0 1-4 4m-4 2v5m-4 1h8"/>',
     left:'<path d="m14 5-7 7 7 7"/>',right:'<path d="m10 5 7 7-7 7"/>',
     close:'<path d="m5 5 14 14M19 5 5 19"/>',bolt:'<path d="m14 2-9 12h7l-2 8 10-14h-8z"/>'
   };
@@ -24,6 +25,9 @@
   const standalone=!!window.DeadAirAssets||!['http:','https:'].includes(location.protocol);
   const arcadeLink='<a class="btn secondary" href="'+ARCADE+'">Back to arcade</a>';
   const boardUrl=ARCADE+'#dead-air-fm-scores';
+  const trophies=window.WGWDeadAirTrophies;
+  const trophyShelf=ARCADE+'#dead-air-fm-trophies';
+  let trophyOrigin='';
   let scorePanel,scoreRun;
   function load(key){try{return JSON.parse(localStorage.getItem(key));}catch{return null;}}
   function store(key,value){try{localStorage.setItem(key,JSON.stringify(value));return true;}catch{return false;}}
@@ -90,6 +94,11 @@
     checkpoint();show('finish');
   }
   function handleEffects(events){
+    // Only these events can change a trophy. The first hit also covers slings.
+    if(events.some(e=>e.type==='installed'||e.type==='broadcast'||e.type==='multiball'||
+        (e.type==='pulse'&&e.perfect)||(e.type==='score'&&s.stats.hits===1))){
+      trophies?.update(s,record);
+    }
     for(const e of events){
       switch(e.type){
         case 'multiball': if(P.multiball(world))caption('MULTIBALL'); break;
@@ -144,6 +153,20 @@
   function recordMarkup(){
     const rows=[['Personal best',scoreText(record.highScore)],['Completed runs',record.runs],['Full broadcasts',record.wins],['Best hit chain',record.bestChain],['Crew mods collected',(Array.isArray(record.gear)?record.gear.length:0)+' / '+Object.keys(R.kits).length],['Today’s best · '+R.difficulties[difficulty],scoreText(record.daily?.[R.dailySeed()+'/'+difficulty]||0)]];
     return '<ul class="record-list">'+rows.map(([k,v])=>'<li><span>'+esc(k)+'</span><b>'+esc(v)+'</b></li>').join('')+'</ul>';
+  }
+  function trophyMarkup(){
+    if(!trophies)return '<p>The cabinet could not load the trophies. Reload the game to try again.</p>';
+    const entries=trophies.list();
+    const earned=entries.filter(b=>b.got).length;
+    const rows=entries.map(b=>{
+      const status=b.got?'Earned':'Locked';
+      return '<li class="trophy-item '+(b.got?'earned':'locked')+'">'+trophies.medal(b,48)+
+        '<div><span class="trophy-tier">'+esc(b.tier)+' · '+status+'</span><h3>'+esc(b.name)+'</h3>'+
+        '<p>'+esc(b.how)+'</p></div></li>';
+    });
+    const where=!saveOK?'Progress lasts for this session.':standalone?'Saved in this copy of the game.':'Saved in this browser’s arcade cabinet.';
+    return '<p class="trophy-progress"><strong>'+earned+' of '+entries.length+' earned</strong> '+where+'</p>'+
+      '<ul class="trophy-list" aria-label="Dead Air FM trophies">'+rows.join('')+'</ul>';
   }
   function mountScorePanel(run,host){
     if(scoreRun===run&&scorePanel){host.append(scorePanel);return;}
@@ -205,19 +228,25 @@
   }
   function show(name){
     if(!dialog){lastFocus=document.activeElement;release();}
+    if(name==='trophies'&&dialog!==name)trophyOrigin=dialog;
     dialog=name;
     const terminal=name==='gear'||name==='finish';
     let title='',tag='',html='';
     if(name==='menu'){
       tag='Broadcast desk';title='Off the air';html='<p>'+esc(R.stages[s.stage-1].name)+' · '+esc(R.difficulties[s.difficulty])+' · '+scoreText(s.score)+' points</p><p class="fine">'+esc(s.seed)+' · '+(saveOK?'Run saved on this browser.':'Local saves are unavailable in this browser.')+'</p><div class="modal-actions">'+button('resume','Resume','btn-amber')+button('new','New run')+button('records','Records')+button('help','Controls')+'</div>';
-      html+='<div class="score-nav">'+button('leaderboard','Public top ten')+arcadeLink+'</div>';
+      html+='<div class="score-nav">'+button('leaderboard','Public top ten')+button('trophies','Trophies')+arcadeLink+'</div>';
     }else if(name==='gear'){
       const next=s.offerReason==='station';tag=next?'Transmission complete':'Crew workshop';title=next?'Rebuild the rig':'Fit a crew mod';
       html='<p>'+esc(next?R.stages[s.stage-1].name+' is on air. Take one part to '+R.stages[s.stage].name+'.':'The ball is held. Choose one part to change how the machine plays.')+'</p><div class="offers">'+s.offers.map((id,i)=>{const k=R.kits[id];return '<button class="offer" data-action="install" data-i="'+i+'"><img src="'+crewImg(k)+'" alt=""><span class="offer-copy"><small>'+esc(k.owner)+'</small><strong>'+esc(k.name)+'</strong><span class="description">'+esc(k.text)+'</span></span></button>';}).join('')+'</div>';
     }else if(name==='finish'){
       tag=s.phase==='won'?'Final transmission':'End of transmission';title=s.phase==='won'?'The Moonshot is live':'The station went quiet';
       html='<p class="end-score">'+scoreText(s.score)+' points</p>'+stationRecap()+'<p>'+esc(s.phase==='won'?'Arthur would like his royalties in biscuits.':'The last ball drained at '+R.stages[s.stage-1].name+'.')+'</p><div id="finishScore"></div><div class="modal-actions">'+button('new','New run','btn-amber')+button('retry','Replay this seed')+button('records','Cabinet records')+'</div>';
-      html+='<div class="score-nav">'+button('leaderboard','Public top ten')+arcadeLink+'</div>';
+      html+='<div class="score-nav">'+button('leaderboard','Public top ten')+button('trophies','Trophies')+arcadeLink+'</div>';
+    }else if(name==='trophies'){
+      tag='Dead Air FM';title='Trophy cabinet';
+      const back=trophyOrigin==='finish'?'Back to your score':trophyOrigin==='menu'?'Back to menu':'Back to the rig';
+      html=trophyMarkup()+'<div class="modal-actions">'+button('resume',back,'btn-teal')+
+        '<a class="btn secondary" href="'+trophyShelf+'">Arcade trophy cabinet</a></div>';
     }else if(name==='leaderboard'){
       tag='Arcade hall of fame';title='Dead Air FM top ten';
       html='<div id="topTen" role="status" aria-live="polite">Tuning in to the arcade…</div><div class="modal-actions">'+button('resume','Back to the rig','btn-teal')+'<a class="btn secondary" href="'+boardUrl+'">View at the arcade</a></div>';
@@ -239,6 +268,9 @@
     $('overlay').querySelector('button')?.focus({preventScroll:true});syncMode();dirty=true;hud();
   }
   function close(force=false){
+    if(!force&&dialog==='trophies'&&(trophyOrigin==='menu'||trophyOrigin==='finish')){
+      show(trophyOrigin);$('overlay').querySelector('[data-action="trophies"]').focus({preventScroll:true});return;
+    }
     if(!force&&s.phase==='upgrade'){show('gear');return;}
     if(!force&&['won','lost'].includes(s.phase)){show('finish');return;}
     dialog='';$('overlay').hidden=true;$('overlay').innerHTML='';$('cabinet').inert=false;
@@ -262,7 +294,7 @@
     if(name==='mute'){A.toggleMute();show('sound');return;}
     if(name==='random'||name==='daily'||name==='retry'){reset(name==='daily'?R.dailySeed():name==='retry'?s.seed:undefined,name==='retry'?s.difficulty:difficulty);return;}
     if(name==='new')difficulty=s.difficulty;
-    if(['new','menu','help','records','leaderboard','sound'].includes(name)){checkpoint();show(name);}
+    if(['new','menu','help','records','leaderboard','trophies','sound'].includes(name)){checkpoint();show(name);}
   }
   document.addEventListener('click',e=>{const b=e.target.closest('[data-action]');if(b&&!b.disabled)action(b.dataset.action,Number(b.dataset.i));else if(e.target===$('overlay'))close();});
   document.addEventListener('input',e=>{if(e.target.id==='level'){A.setVolume(Number(e.target.value)/100);crest('volumeValue',e.target.value+'%');}if(e.target.id==='difficulty')difficulty=Number(e.target.value);});
@@ -295,6 +327,7 @@
   function suspend(){release();if(s.phase==='live'&&!dialog)show('menu');checkpoint();}
   window.addEventListener('blur',suspend);window.addEventListener('pagehide',checkpoint);
   document.addEventListener('visibilitychange',()=>{if(document.hidden)suspend();else lastFrame=performance.now();});
+  trophies?.update(s,record);
   Object.assign(world,R.tuning(s));paintStation();hud();syncMode();
   if(s.phase==='upgrade')show('gear');else if(s.phase==='lost'||s.phase==='won')completeRun();else if(restored&&s.phase==='live')show('menu');
   checkpoint();requestAnimationFrame(tick);
