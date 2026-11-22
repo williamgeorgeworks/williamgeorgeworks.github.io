@@ -307,13 +307,17 @@
     newBurst(1016, 178, lt, 0.1);
     label("THE KITTY GRAND PRIX", 640, 634, 56, LIME, NIGHT, -0.015, span(lt, 0.08, 0.22), 1000); hand("six cats, six karts, nobody has read the rules", 640, 698, 36, CYAN, span(lt, 0.2, 0.36), -0.012, 1100);
   }
-  var DEALT = [[RED, "1", "RED PEN"], ["#e9a400", "2", "RIP YOUR", "FACE OFF"], [BLUE, "1", "SPLATTER"], ["#e9a400", "1", "ROYAL", "DECREE"], [PURPLE, "0", "WHO INVITED", "HIM?"]];
-  function playingCard(c) {                                     // one card from the deck, 104 by 142
-    g.fillStyle = INK; g.fillRect(-46, -65, 104, 142); g.fillStyle = CARD; g.fillRect(-52, -71, 104, 142); g.fillStyle = c[0]; g.fillRect(-52, -71, 104, 18);
+  var DEALT = [["#e3182d", "1", "RED PEN", "", "#ffb53d"], ["#2456e6", "1", "POLITE", "COUGH", "#5fd9e6"], ["#7a3ff0", "1", "THEATRICAL", "OUTRAGE", "#ff7ab8"], ["#e3182d", "1", "ROYAL", "DECREE", "#ffb53d"], ["#2456e6", "0", "WHO INVITED", "HIM?", "#5fd9e6"]];
+  function playingCard(c) {                                     // one card from the deck, 104 by 142: a coloured band for its kind, a picture, a gold coin for its cost
+    var i, a, d;
+    g.fillStyle = INK; g.fillRect(-46, -65, 104, 142); g.fillStyle = CARD; g.fillRect(-52, -71, 104, 142);
+    g.fillStyle = c[0]; g.fillRect(-52, -71, 104, 38); g.fillStyle = c[4]; g.fillRect(-52, -33, 104, 34);
+    g.fillStyle = INK; g.fillRect(-52, -35, 104, 3); g.fillRect(-52, 0, 104, 3);
+    g.beginPath(); for (i = 0; i < 16; i++) { a = -1.5708 + i * 0.3927; d = i % 2 ? 6.5 : 14; g.lineTo(Math.cos(a) * d, -16 + Math.sin(a) * d); } g.closePath(); g.fillStyle = "#fff"; g.fill(); g.strokeStyle = INK; g.lineWidth = 2.5; g.stroke();
+    g.fillStyle = "rgba(20,20,20,.28)"; g.fillRect(-40, 16, 80, 5); g.fillRect(-40, 28, 80, 5); g.fillRect(-40, 40, 52, 5);
     g.strokeStyle = INK; g.lineWidth = 4; g.strokeRect(-52, -71, 104, 142);
-    g.fillStyle = INK; g.beginPath(); g.arc(-44, -63, 17, 0, 6.3); g.fill(); g.strokeStyle = PAPER; g.lineWidth = 2.5; g.stroke(); text(c[1], -44, -53, 26, PAPER, DISP, "center", 0, 30);
-    text(c[2], 4, c[3] ? -26 : -16, 19, INK, DISP, "center", 0, 84); if (c[3]) text(c[3], 4, -5, 19, INK, DISP, "center", 0, 84);
-    blot(0, 36, 15, 400 + c[2].length, c[0], 1);
+    text(c[2], 8, c[3] ? -53 : -45, 15, "#fff", DISP, "center", 0, 74); if (c[3]) text(c[3], 8, -39, 15, "#fff", DISP, "center", 0, 74);
+    g.beginPath(); g.arc(-44, -63, 16, 0, 6.3); g.fillStyle = "#ffc61a"; g.fill(); g.strokeStyle = INK; g.lineWidth = 3.5; g.stroke(); text(c[1], -44, -54, 24, INK, DISP, "center", 0, 28);
   }
   function featPier(lt, dur, t) {                               // new: Slay the Pier, with a hand dealt
     var p = glide(lt / 0.16), i;
