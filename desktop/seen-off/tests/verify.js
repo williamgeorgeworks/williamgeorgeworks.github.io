@@ -184,7 +184,7 @@ async function dayOut(browser, port) {
   for (let n = 0; n < 7; n++) { await ev(() => { __SO.B().energy = 99; }); await playOne(); await sleep(420); tiers.push(await ev(() => (document.querySelector('#soCombo span') || {}).textContent || '')); }
   ok(`${tag} combo counter: Nice. at 3, Proper job! at 5, Ey up! at 7`, tiers[2] === 'Nice.' && tiers[4] === 'Proper job!' && tiers[6] === 'Ey up!', tiers.join(' | '));
   ok(`${tag} combo shown in the 1280x800 stage`, await ev(() => { const c = document.getElementById('soCombo'), r = c.getBoundingClientRect(); return c.classList.contains('on') && r.right <= innerWidth && r.top >= 0; }));
-  await ev(() => { const B = __SO.B(); B.energy = 99; B.en.forEach(e => { e.hp = 1; e.block = 0; }); }); await playOne();
+  await ev(() => { const B = __SO.B(), h = __SO.run().hero; B.energy = 99; B.en.forEach(e => { e.hp = 1; e.block = 0; }); B.hand.unshift({ id: Object.values(__SO.CARDS).find(d => d.h === h && d.rar === 'b' && d.type === 'A' && /ALL/.test(d.tx)) ? Object.values(__SO.CARDS).find(d => d.h === h && d.rar === 'b' && d.type === 'A' && /ALL/.test(d.tx)).id : 'splatter', u: 0 }); __SO.render(); }); await playOne();
   let stamped = false; for (let i = 0; i < 12 && !stamped; i++) { await sleep(120); stamped = await ev(() => document.querySelectorAll('.so-stamp').length > 0); }
   ok(`${tag} SEEN OFF! stamp lands on the fallen`, stamped && await ev(() => /SEEN OFF!/.test(document.querySelector('.so-stamp').textContent)));
   await sleep(250); await page.screenshot({ path: `${SHOTS}/m1-02-seen-off-stamp-combo.png` });
@@ -465,7 +465,7 @@ async function m2d(browser, port) {
   ok(`${tag} no page errors`, errors.length === 0, errors.slice(0, 3).join(' | '));
   await ctx.close();
 }
-const M2 = { m2a, m2c };
+const M2 = { m2a, m2c, m2d };
 (async () => {
   await new Promise(r => srv.listen(0, '127.0.0.1', r)); const port = srv.address().port;
   const browser = await chromium.launch({ executablePath: EXE, headless: true });

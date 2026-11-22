@@ -117,3 +117,16 @@
   border:3px solid var(--ink);border-radius:6px;padding:0 8px;transform:rotate(12deg);box-shadow:2px 3px 0 var(--ink);animation:sonew .4s .5s cubic-bezier(.2,.9,.3,1.3) backwards}
 @keyframes sonew{0%{opacity:0;transform:rotate(12deg) scale(2.4)}100%{opacity:1;transform:rotate(12deg) scale(1)}}
 @media (prefers-reduced-motion:reduce){.so-newst{animation:none}}
+
+/* milestone 2: the cats' signature cards carry their painted art (cropped from the card mockups in /mockups) */
+.cd.c-ruling .art,.cd.c-decree .art,.cd.c-ripface .art,.cd.c-requisition .art,.cd.c-boo .art,.cd.c-whome .art{height:52px;background-color:#e9e2d4;background-size:cover;background-repeat:no-repeat}
+.cd.c-ruling .art>*,.cd.c-decree .art>*,.cd.c-ripface .art>*,.cd.c-requisition .art>*,.cd.c-boo .art>*,.cd.c-whome .art>*{display:none}
+.cd.c-ruling .art::before,.cd.c-decree .art::before,.cd.c-ripface .art::before,.cd.c-requisition .art::before,.cd.c-boo .art::before,.cd.c-whome .art::before{display:none}
+.cd.c-ruling .art{background-image:url(cats/arthur.jpg);background-position:30% 22%}
+.cd.c-decree .art{background-image:url(cats/spyro.jpg);background-position:58% 40%}
+.cd.c-ripface .art{background-image:url(cats/tilly.jpg);background-position:62% 30%}
+.cd.c-requisition .art{background-image:url(cats/trixie.jpg);background-position:30% 40%}
+.cd.c-boo .art{background-image:url(cats/dexter.jpg);background-position:50% 45%}
+.cd.c-whome .art{background-image:url(cats/daisy.jpg);background-position:55% 35%}
+/* milestone 2: the Daily Run line on the report */
+.so-daily{margin:.4em 0 0;font-size:.85rem;font-style:italic;color:var(--red,#e3182d)}

@@ -380,6 +380,20 @@ C('subject','k','Changes the Subject','S',1,'c','Gain $0 Block. Apply 1 Soggy.',
 C('cointoss','k','Coin Toss','S',0,'u','Either gain 2 Energy or draw $0 cards. He will not say which.',[[2,3]],function(t,v){if(Math.random()<.5){en(2);fxOn(H,'+2 Energy',COL.gold);}else draw(v[0]);});
 C('goodbye','k','Left Without Saying Goodbye','S',1,'u','Gain $0 Block. Exhaust.',[[14,19]],function(t,v){blk(v[0]);},{x:1});
 C('mystery','k','Air of Mystery','P',1,'r','Enemy attacks have a $0% chance of missing you.',[[25,35]],function(t,v){H.st.mist=Math.max(H.st.mist||0,v[0]);fxOn(H,'Mysterious',COL.purple);});
+/* milestone 2: new Quill cards from the content plan. They join the pools through the Rock Meter (see poolFix) */
+C('cashhand','r','Cash in Hand','A',1,'c','Deal $0 damage. Gain 5 Scrumplings.',[[6,9]],function(t,v){atk(t,v[0]);gold(5);},{t:1});
+C('vat','r','VAT Inclusive','S',1,'c','Apply $0 Invoice. If the enemy already had an Invoice, apply 1 Flustered too.',[[4,6]],function(t,v){var had=t.st.inv>0;app(t,'inv',v[0]);if(had)app(t,'flu',1);},{t:1});
+C('latepay','r','Late Payment Charge','S',1,'u','Every enemy with an Invoice has it raised by $0.',[[3,5]],function(t,v){alive().forEach(function(e){if(e.st.inv>0)app(e,'inv',v[0]);});});
+C('bailiffs','r','The Bailiffs','A',2,'r','Deal damage equal to the enemy’s Invoice, 3 times. Exhaust.',[],function(t){atk(t,t.st.inv||0,3);},{t:1,x:1});
+C('bleed','t','Bleed Edge','A',1,'c','Deal $0 damage to ALL enemies. Gain 1 Gusto this turn.',[[3,4]],function(t,v){atkAll(v[0]);H.st.gus=(H.st.gus||0)+1;B.tg=(B.tg||0)+1;fxOn(H,'+1 Gusto',COL.green);});
+C('spot','t','Spot Colour','A',1,'c','Deal $0 damage to a random enemy, twice. Apply 1 Flustered.',[[5,7]],function(t,v){atkRand(v[0],2);if(!B.over)app(null,'flu',1);});
+C('letters','t','Letters to the Editor','P',1,'u','Whenever you play a card that hits ALL enemies, gain $0 Block.',[[2,3]],function(t,v){me('ltr',v[0]);});
+C('spread','t','Centre Spread','A',3,'r','Deal $0 damage to ALL enemies.',[[14,18]],function(t,v){atkAll(v[0]);});
+C('minutes','k','Minutes of the Meeting','S',1,'c','Draw $0 cards, then discard a random card.',[[2,3]],function(t,v){draw(v[0]);if(B.hand.length){var j=(Math.random()*B.hand.length)|0,c=B.hand.splice(j,1)[0];if(!c.tmp)B.disc.push({id:c.id,u:c.u});fxOn(H,'Minuted: '+CARDS[c.id].name,COL.ink);}});
+C('replyall','k','Reply All','A',2,'u','Deal $0 damage to ALL enemies. Hit a random enemy once more for every Fleeting card you’ve played this turn.',[[6,8]],function(t,v){atkAll(v[0]);if(B.flt)atkRand(v[0],B.flt);});
+C('delegated','k','Delegated','S',0,'u','Put a random card from your discard pile into your hand. It costs 0 this turn. Exhaust (not when upgraded).',[],function(){if(!B.disc.length||B.hand.length>=10)return;var j=(Math.random()*B.disc.length)|0,c=B.disc.splice(j,1)[0];c.z=1;B.hand.push(c);},{x:1,xn:1});
+C('nominute','k','Nobody Minuted It','P',1,'r','The first Fleeting card you play each turn is played twice.',[],function(){me('nm',1);});
+var QNEW={r:['cashhand','vat','latepay','bailiffs'],t:['bleed','spot','letters','spread'],k:['minutes','replyall','delegated','nominute']};
 /* the familiars' own cards */
 C('ruling','c','Ruling of the Court','S',1,'x','Gain $0 Block. Apply 1 Soggy to ALL enemies.',[[8,11]],function(t,v){blk(v[0]);appAll('sog',1);});
 C('decree','c','Royal Decree','A',1,'x','Deal $0 damage.',[[12,16]],function(t,v){atk(t,v[0]);},{t:1});
@@ -561,22 +575,27 @@ function signFor(d){var s=STGD();return s?s.sign:d;}
 /* the stick of rock: every point of score goes in; each full stick is one unlock */
 var STICKS=[
  [150,'place','beach','KISS ME QUICK'],[200,'hat','wig','SEEN OFF','Arthur’s tribunal wig (a cat hat)'],[250,'place','park','TEA FIRST'],
- [300,'cards','r','NEVER HEARD OF HIM','Five new cards for Reggie'],[300,'place','chippy','GREAT MORNING'],[350,'shop2','','WISH YOU WERE HERE','Souvenir Shop line two'],
- [400,'place','lights','MIND THE GAP'],[400,'cards','t','NO REFUNDS','Five new cards for Terry'],[450,'place','rock','BLACKPOOL'],
- [500,'daily','','DAY TRIPPER','The Daily Run'],[500,'place','tower','GOING UP'],[550,'cards','k','BY WAY OF THE CLOUD','Five new cards for Kenneth'],
+ [300,'cards','r','NEVER HEARD OF HIM','Four new cards for Reggie'],[300,'place','chippy','GREAT MORNING'],[350,'shop2','','WISH YOU WERE HERE','Souvenir Shop line two'],
+ [400,'place','lights','MIND THE GAP'],[400,'cards','t','NO REFUNDS','Four new cards for Terry'],[450,'place','rock','BLACKPOOL'],
+ [500,'daily','','DAY TRIPPER','The Daily Run'],[500,'place','tower','GOING UP'],[550,'cards','k','BY WAY OF THE CLOUD','Four new cards for Kenneth'],
  [600,'place','arcades','EYES DOWN'],[650,'place','winter','ONE HUNDRED AND EIGHTY']
 ];
 (function(){var ph=['DO NOT ASK','LEAVE IT OUT','PAID IN FULL','EY UP','PROPER JOB','SCENES','HOLD YOUR NERVE','MILK FIRST','RULED AGAINST','STAND TO ATTENTION','WHO ME','QUIETLY DANGEROUS','THE TRUE KING','TIMID WOLF','THEY WILL BE BACK','LAST ORDERS'];
   for(var i=0;i<16;i++)STICKS.push([700+Math.round(i*800/15),'later','',ph[i],'A surprise (more to come)']);})();
+function stickGot(kind,arg){for(var i=0;i<STICKS.length;i++)if(STICKS[i][1]===kind&&(arg==null||STICKS[i][2]===arg))return i<DAY.sticks;return false;}
+function poolFix(){['r','t','k'].forEach(function(h){var on=stickGot('cards',h);QNEW[h].forEach(function(id){var i=POOL[h].indexOf(id);if(on&&i<0)POOL[h].push(id);if(!on&&i>=0)POOL[h].splice(i,1);});});}
+function wigOn(){return stickGot('hat','wig')&&DAY.wig!==0;}
+function dailyOpen(){return stickGot('daily')||META.wins>0;}
 function stickName(k){var s=STICKS[k];if(!s)return '';if(s[1]==='place')return STAGES[s[2]].n+' opens for the '+PARTS.filter(function(p){return p.stages.indexOf(s[2])>=0;})[0].n.toLowerCase();return s[4];}
 function stickNeed(k){var t=0;for(var i=0;i<=k&&i<STICKS.length;i++)t+=STICKS[i][0];return t;}   /* rock needed to finish stick k (0-based) */
-var DAY={cards:{},rock:0,sticks:0,album:{},unseen:{},shelf:{},done1:0,combos:{},streak:{last:'',n:0,best:0},best:{combo:0}};
+var DAY={wig:1,daily:{},cards:{},rock:0,sticks:0,album:{},unseen:{},shelf:{},done1:0,combos:{},streak:{last:'',n:0,best:0},best:{combo:0}};
 try{var dr=JSON.parse(localStorage.getItem('so-day-v1')||'null');if(dr)for(var dk in DAY)if(dr[dk]!=null)DAY[dk]=dr[dk];}catch(e){}
+poolFix();
 function saveDay(){try{localStorage.setItem('so-day-v1',JSON.stringify(DAY));}catch(e){}}
 function rockAdd(n){
   var got=[];n=Math.max(0,Math.round(n||0));DAY.rock+=n;
   while(DAY.sticks<STICKS.length&&DAY.rock>=stickNeed(DAY.sticks)){var s=STICKS[DAY.sticks];got.push(DAY.sticks);if(s[1]==='place')DAY.unseen[s[2]]=1;DAY.sticks++;}
-  saveDay();if(got.length){S.pops=(S.pops||[]).concat(got);try{window.dispatchEvent(new CustomEvent('seenoff:stick',{detail:{sticks:got.slice()}}));}catch(e){}}
+  saveDay();poolFix();if(got.length){S.pops=(S.pops||[]).concat(got);try{window.dispatchEvent(new CustomEvent('seenoff:stick',{detail:{sticks:got.slice()}}));}catch(e){}}
   return got;
 }
 var ROCK_RATE=.5; /* rock per point of score. Tuning knob: about half a run's score fills sticks 1-4 on a first day out, as in the plan's first-hours table */
@@ -586,7 +605,7 @@ function canPick(id){if(!DAY.done1)return STAGES[id].un==='start';return isOpen(
 function lastOpen(){return META.wins>0;}
 function enterStage(id){
   if(!RUN||!STAGES[id]||!canPick(id))return;var s=STAGES[id];
-  RUN.stage=id;RUN.day.push(id);RUN.act=s.look;RUN.row=-1;RUN.col=1;RUN.map=genMap();S.note='';S.pops=[];
+  RUN.stage=id;RUN.day.push(id);RUN.act=s.look;RUN.row=-1;RUN.col=1;RUN.map=seeded('map:'+id,genMap);S.note='';S.pops=[];
   var a=DAY.album[id]||(DAY.album[id]={});a.v=1;delete DAY.unseen[id];saveDay();
   S.scr='map';saveRun();render();
 }
@@ -635,6 +654,13 @@ function coinShower(n){
   if(!n)return;var st=$('stage'),w=st.clientWidth;emit(PO,'coin',w/2,-14,clamp(Math.round(n*1.2),14,60),{v:90,g:560,life:1.7,s:6.5,jx:w*.86,a:1.5708,spread:.7,stag:.018});
   for(var i=0;i<Math.min(9,Math.ceil(n/6));i++)chime(i,.15+i*.075);
 }
+/* the Daily Run: the same Quill, cats, places, fights, rewards and shops for everyone on a given date.
+   While a daily is on, each piece of generation runs with Math.random swapped for a PRNG seeded from the date and the spot. */
+var DRNG=null,MRND=Math.random;Math.random=function(){return DRNG?DRNG():MRND();};
+function hashStr(s){var h=2166136261;for(var i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619);}return h>>>0;}
+function mulberry(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+function seeded(tag,fn){if(!RUN||!RUN.daily||DRNG)return fn();DRNG=mulberry(hashStr(RUN.daily+'|'+tag));try{return fn();}finally{DRNG=null;}}
+function startDaily(){var d=today();DRNG=mulberry(hashStr(d+'|hero'));try{S.hero=pick(['r','t','k']);}finally{DRNG=null;}S.lvl=0;S.dailyNext=d;newRun();}
 function today(){var d=new Date();return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2);}
 function streakTick(){ /* cosmetic only: a missed day halves it, never resets it */
   var s=DAY.streak,t=today();if(s.last===t)return;var gap=s.last?Math.round((new Date(t)-new Date(s.last))/864e5):1;
@@ -646,13 +672,13 @@ function dayReport(won,pts){
   var ck=RUN.hero+':'+(RUN.cats[0]||'');if(RUN.cats[0]&&!DAY.combos[ck]){DAY.combos[ck]=1;bonus+=50;why.push('a new Quill and cat');}
   var s0=DAY.sticks,got=bank().concat(rockAdd(bonus));
   if(RUN.stats.combo>DAY.best.combo)DAY.best.combo=RUN.stats.combo;
-  var first=!DAY.done1;DAY.done1=1;streakTick();saveDay();
+  var first=!DAY.done1;DAY.done1=1;var dly=null;if(RUN.daily){streakTick();var ds=Math.round(pts||0);DAY.daily=DAY.daily||{};var pb=DAY.daily[RUN.daily]||0;dly={date:RUN.daily,score:ds,best:Math.max(pb,ds),nb:ds>pb};DAY.daily[RUN.daily]=dly.best;}saveDay();
   var c=RUN.cats[0]?CATS[RUN.cats[0]].name:'Nobody',pl=RUN.stage?STAGES[RUN.stage].n:'the Prom',by=B&&!won?(B.en.filter(function(e){return !e.dead;}).map(function(e){return e.name;})[0]||'Something'):'';
   var note={r:won?'Weather fair. Invoiced '+RUN.stats.kills+' of them. '+c+' ruled against the milk. Wish you were here, but not on my account.':'Got as far as '+pl+'. '+by+' saw me off, and will be hearing from me. '+c+' has kept the receipts.',
     t:won?'Hit everything. Most of it deserved it. '+c+' said nothing all day, which I respect. Back next week.':'Got as far as '+pl+'. '+by+' had the better of it. '+c+' looked away. I will be back. They always say that.',
     k:won?'Day out logged. '+RUN.stats.kills+' incidents, all resolved. '+c+' has been added to the org chart. The bag is staying on.':'Day out paused at '+pl+'. '+by+' has been escalated. '+c+' is drafting the minutes.'}[RUN.hero];
   return {won:won,firstWin:firstWin,first:first,note:note,places:RUN.day.slice(),kills:RUN.stats.kills,combo:RUN.stats.combo,spent:RUN.stats.spent,cards:RUN.stats.cards,fights:RUN.stats.fights,
-    left:RUN.gold,newp:RUN.stats.newp,rock0:before,rock1:DAY.rock,s0:s0,got:got,bonus:bonus,why:why,whole:RUN.part>=5};
+    left:RUN.gold,newp:RUN.stats.newp,daily:dly,rock0:before,rock1:DAY.rock,s0:s0,got:got,bonus:bonus,why:why,whole:RUN.part>=5};
 }
 /* souvenirs: cosmetic tat for the Souvenir Shelf, bought with whatever is left */
 var SOUV=[['magnet','Fridge Magnet','A tram, roughly.',10],['pc','Postcard of a Donkey','The donkey is called Brian.',10],['rocknm','Stick of Rock with Your Cat’s Name','Spelled nearly right.',15],
@@ -671,7 +697,7 @@ function rockHTML(cls,r){
 }
 function popsHTML(list){
   if(!list||!list.length)return '';var more=list.length>3?list.length-3:0;list=list.slice(0,3);
-  return '<div class="pops">'+list.map(function(k,j){return '<span class="pop" style="--i:'+j+'">'+ic('rock')+'<b>#'+(k+1)+' '+STICKS[k][3]+'</b> '+stickName(k)+(STICKS[k][1]==='place'||STICKS[k][1]==='shop2'?'':' <small>(milestone 2)</small>')+'</span>';}).join('')+(more?'<span class="pop">+'+more+' more in the Rock collection</span>':'')+'</div>';
+  return '<div class="pops">'+list.map(function(k,j){return '<span class="pop" style="--i:'+j+'">'+ic('rock')+'<b>#'+(k+1)+' '+STICKS[k][3]+'</b> '+stickName(k)+(STICKS[k][1]==='later'?' <small>(later)</small>':'')+'</span>';}).join('')+(more?'<span class="pop">+'+more+' more in the Rock collection</span>':'')+'</div>';
 }
 function stageHTML(){
   var P=PARTS[RUN.part],h='<div class="panel day"><h2><span class="crest">'+ic(P.ic)+'</span>'+P.n+', '+P.time+'</h2><p>'+(S.note||P.ask)+(!DAY.done1?' <em>Your first day out sticks to the classic route.</em>':'')+'</p>'+popsHTML(S.pops)+'<div class="places">';
@@ -693,6 +719,7 @@ var SHELFX={fudge:['Bag of Fudge','Whatever you had left.']};
 function albumHTML(){
   var t=S.tab||'cards',h='<div class="panel album"><h2>The Postcard Album</h2><div class="row tabs">';
   [['cards','Postcards'],['rock','Rock collection'],['shelf','Souvenir shelf']].forEach(function(x){h+='<button type="button" class="chip'+(t===x[0]?' on':'')+'" data-a="tab" data-i="'+x[0]+'">'+x[1]+'</button>';});
+  if(stickGot('hat','wig'))h+='<button type="button" class="chip" data-a="wig" aria-pressed="'+wigOn()+'">Arthur’s wig: '+(wigOn()?'on':'off')+'</button>';
   h+='</div>';
   if(t==='cards'){var n=0;Object.keys(DAY.album).forEach(function(k){var a=DAY.album[k];n+=(a.v?1:0)+(a.s?1:0)+(a.g?1:0);});
     h+='<p>'+n+' of 42 stamps. <small class="ph">Postcard art is placeholder.</small></p><div class="pgrid">';
@@ -706,7 +733,7 @@ function albumHTML(){
 function reportHTML(){
   var e=S.end,r=e.rep,P=r.places.map(function(id){return STAGES[id]?STAGES[id].n:id;});
   var h='<div class="panel report'+(e.won?' won':'')+'"><h2>'+(r.whole?'Seen off, the whole day':e.won?'A day out, seen off':'Seen off yourself')+'</h2>'+
-    '<div class="pc-back"><div class="pc-msg"><span class="pc-head">The Day Out Report</span><p class="hand">'+r.note+'</p><p class="sig">'+HEROES[e.hero].name+(e.lvl?' · Encore '+e.lvl:'')+'</p></div>'+
+    '<div class="pc-back"><div class="pc-msg"><span class="pc-head">The Day Out Report</span><p class="hand">'+r.note+'</p><p class="sig">'+HEROES[e.hero].name+(e.lvl?' · Encore '+e.lvl:'')+'</p>'+(r.daily?'<p class="so-daily">Daily Run, '+r.daily.date+': '+r.daily.score+' points'+(r.daily.nb?' (your best today)':' (best today '+r.daily.best+')')+' · Day Tripper streak '+DAY.streak.n+'</p>':'')+'</div>'+
     '<div class="pc-addr"><span class="pc-stamp">'+ic(r.places.length?STAGES[r.places[r.places.length-1]].ic:'tram')+'</span><dl>'+
     '<dt>Went to</dt><dd class="pl">'+(P.join(' → ')||'Nowhere, in the end')+'</dd>'+
     '<dt>Seen off</dt><dd data-n="'+r.kills+'">0</dd><dt>Best combo</dt><dd data-n="'+r.combo+'">0</dd><dt>Cards played</dt><dd data-n="'+r.cards+'">0</dd><dt>Scrumplings spent</dt><dd data-n="'+r.spent+'">0</dd></dl></div></div>'+
@@ -746,8 +773,8 @@ function genMap(){
 }
 function newRun(){
   var h=HEROES[S.hero];
-  RUN={hero:h.id,lvl:S.lvl,max:h.hp,hp:h.hp,gold:60,deck:h.deck.map(function(id){return {id:id,u:0};}),relics:[],cats:[],brews:[],act:1,row:-1,col:1,map:[],part:0,stage:null,day:[],stats:{kills:0,cards:0,spent:0,combo:0,fights:0,newp:0},banked:0,score:0,floor:0,seen:[],en:0,first:1};
-  markSeen(h.deck);META.runs++;saveMeta();S.scr='cat';S.offer=shuffle(CATIDS.slice()).slice(0,3);saveRun();render();
+  RUN={daily:S.dailyNext||'',hero:h.id,lvl:S.lvl,max:h.hp,hp:h.hp,gold:60,deck:h.deck.map(function(id){return {id:id,u:0};}),relics:[],cats:[],brews:[],act:1,row:-1,col:1,map:[],part:0,stage:null,day:[],stats:{kills:0,cards:0,spent:0,combo:0,fights:0,newp:0},banked:0,score:0,floor:0,seen:[],en:0,first:1};
+  S.dailyNext='';markSeen(h.deck);META.runs++;saveMeta();S.scr='cat';S.offer=seeded('cats',function(){return shuffle(CATIDS.slice()).slice(0,3);});saveRun();render();
 }
 function addCat(id){RUN.cats.push(id);RUN.deck.push({id:CATS[id].card,u:0});}
 function addRelic(id){
@@ -759,6 +786,7 @@ function gainBrew(id){if(RUN.brews.length>=3)return false;RUN.brews.push(id||pic
 function heal(n){var b=RUN.hp;RUN.hp=Math.min(RUN.max,RUN.hp+n);return RUN.hp-b;}
 function canGo(c){var r=RUN.row+1,row=RUN.map[r];if(!row||!row[c])return false;if(RUN.row<0||row.length===1)return true;return Math.abs(c-RUN.col)<=1;}
 function enterNode(c){
+  if(RUN&&RUN.daily&&!DRNG)return seeded('node:'+RUN.stage+':'+(RUN.row+1)+':'+c,function(){return enterNode(c);});
   if(!canGo(c)||S.scr!=='map')return;
   RUN.row++;RUN.col=c;RUN.floor++;var n=RUN.map[RUN.row][c];n.was=1;S.note='';
   if(n.t==='F'||n.t==='L'||n.t==='B')startCombat(n.t);
@@ -853,7 +881,7 @@ function draw(n){
   }
 }
 function startTurn(first){
-  B.turn++;B.tcount=0;B.combo=0;comboFx(0);if(!first)H.block=0;
+  B.turn++;B.tcount=0;B.combo=0;B.flt=0;B.nmUsed=0;comboFx(0);if(!first)H.block=0;
   B.energy=3+RUN.en+(has('tide')&&B.turn%3===0?1:0)+(hasCat('trixie')&&B.turn===1?1:0);
   if(H.st.next){H.block+=H.st.next;H.st.next=0;}
   if(H.st.ci)alive().forEach(function(e){e.st.inv=(e.st.inv||0)+H.st.ci;});
@@ -871,13 +899,15 @@ function playCard(i,ti){
   if(d.o.t){var a=alive();t=(ti!=null&&B.en[ti]&&!B.en[ti].dead)?B.en[ti]:(a.length===1?a[0]:null);if(!t)return false;}
   fxReset(RM?0:150);B.energy-=cost(ci);B.hand.splice(i,1);S.sel=-1;
   var times=1;if(H.st.dbl>0&&ci.id!=='plusone'){times=2;H.st.dbl--;}
+  if(ci.tmp){B.flt=(B.flt||0)+1;if(H.st.nm&&!B.nmUsed){B.nmUsed=1;times++;fxOn(H,'Nobody minuted it',COL.purple);}}
   B.mult=1;if(d.type==='A'&&B.hat){B.mult=2;B.hat=false;}
   sfx('card');comboUp();
   for(var k=0;k<times&&!B.over&&S.scr==='combat';k++)d.fn(t,vals(d,ci.u),ci);
   if(B.over||S.scr!=='combat')return true;
   alive().forEach(function(x){if(x.mv&&x.mv.ask===d.type&&!x.ans){x.ans=1;x.st.flu=(x.st.flu||0)+2;fxOn(x,'Answered!',COL.purple);}});
   B.mult=1;
-  if(!(d.type==='P'||d.o.x||ci.tmp))B.disc.push({id:ci.id,u:ci.u});
+  if(!(d.type==='P'||(d.o.x&&!(d.o.xn&&ci.u))||ci.tmp))B.disc.push({id:ci.id,u:ci.u});
+  if(H.st.ltr&&d.ltr==null)d.ltr=/to ALL enemies/.test(d.tx);if(H.st.ltr&&d.ltr)blk(H.st.ltr);
   B.count++;B.tcount++;
   if(!B.over&&has('gavel')&&B.count%10===0){fxOn(H,'Order!',COL.red);alive().forEach(function(e){hurt(e,8);});}
   if(!B.over&&has('vinyl')&&B.tcount%4===0)draw(1);
@@ -900,7 +930,7 @@ function endTurn(){
   fxReset(RM?0:160);S.sel=-1;S.brewSel=-1;
   var tk=B.hand.filter(function(c){return c.id==='ticket';}).length;
   if(tk){RUN.hp-=2*tk;fxOn(H,'-'+2*tk+' Ticket',COL.red);if(RUN.hp<=0){defeat();if(S.scr!=='combat')return;}}
-  B.handEnd=B.hand.length;B.hand.forEach(function(c){if(!(CARDS[c.id].o.eth||c.tmp))B.disc.push({id:c.id,u:c.u});});B.hand=[];
+  if(B.tg){H.st.gus=Math.max(0,(H.st.gus||0)-B.tg);B.tg=0;}B.handEnd=B.hand.length;B.hand.forEach(function(c){if(!(CARDS[c.id].o.eth||c.tmp))B.disc.push({id:c.id,u:c.u});});B.hand=[];
   if(hasCat('spyro')){var e=rndAlive();if(e){B.by='spyro';strike(H,e,3-(H.st.gus||0));B.by=null;}}
   if(B.over)return;
   if(H.st.sog>0)H.st.sog--;if(H.st.dbl)H.st.dbl=0;
@@ -941,7 +971,7 @@ function victory(){
   B.over=true;B.won=true;var k=B.kind,g=k==='B'?ri(55,70):k==='L'?ri(28,38):ri(11,19);
   g=Math.round(g*(has('float')?1.25:1));RUN.gold+=g;RUN.score+=(k==='B'?150:k==='L'?60:20)+RUN.floor*5;
   var cb=comboBonus(B.cmax);if(cb){RUN.gold+=cb.g;g+=cb.g;}RUN.stats.fights++;
-  var rc=rollCards(),neu=rc.filter(function(id){return !DAY.cards[id];});markSeen(rc);
+  var rc=seeded('cards:'+RUN.stage+':'+RUN.row+':'+RUN.col,rollCards),neu=rc.filter(function(id){return !DAY.cards[id];});markSeen(rc);
   var rw={neu:neu,gold:g,cards:rc,took:0,relic:null,brew:null,healed:0,kind:k,combo:cb};
   if(hasCat('daisy'))rw.healed=heal(4);
   if(k==='L'){rw.relic=freeRelic(0);if(rw.relic)addRelic(rw.relic);}
@@ -1069,6 +1099,9 @@ function catHead(c,r){
   poly([0,8,7,8,3.5,12],COL.pink,1.4);var w=c.whisk||COL.ink;
   ctx.beginPath();ctx.arc(.5,13,3.4,.1,Math.PI);ctx.moveTo(10.4,13);ctx.arc(7,13,3.4,0,Math.PI-.1);ctx.strokeStyle=w;ctx.lineWidth=1.5;ctx.stroke();
   line([-9,11,-34,7+r()*2],1.2,w);line([-9,14,-34,17+r()*2],1.2,w);line([16,11,38,7+r()*2],1.2,w);line([16,14,38,17+r()*2],1.2,w);
+  if(c===CATS.arthur&&wigOn()){ /* the tribunal wig (stick #2): white rolled curls under the red hat */
+    ctx.beginPath();ctx.ellipse(1,-16,23,8,0,0,6.283);ink('#fbf8ef',1.6);
+    [-1,1].forEach(function(s){for(var i=0;i<4;i++){ell(s*(21+(i%2)*2.5),-12+i*7.5,5.6,4.6);ink('#fbf8ef',1.5);}});}
   /* a wizard's hat */
   poly([-17,-17,2,-58-r()*2,19,-19],c.hat,2.2);ctx.beginPath();ctx.ellipse(1,-18,25,6,-.05,0,6.283);ink(c.hat,2.2);star(2,-34,5,'#ffe27a');
 }
@@ -2103,7 +2136,7 @@ function render(){
     h+='</div><div class="row">';
     for(i=0;i<=5;i++)h+='<button type="button" class="chip'+(S.lvl===i?' on':'')+'" data-a="lvl" data-i="'+i+'"'+(i>META.open?' disabled':'')+'>Encore '+i+'</button>';
     h+='</div><p style="font-size:.85rem;font-style:italic">'+(S.lvl?'Encore '+S.lvl+': everything out there is '+S.lvl*10+'% tougher and hits harder, and the score counts for '+(100+25*S.lvl)+'%.':'Win a run to open the next Encore: tougher piers, bigger scores.')+'</p>';
-    h+='<div class="row"><button type="button" class="btn big2" data-a="begin">Start the day</button><button type="button" class="btn quiet" data-a="album">Postcard album</button>'+(saved?'<button type="button" class="btn quiet" data-a="resume">Carry on as '+HEROES[saved.hero].name+' ('+(saved.stage&&STAGES[saved.stage]?STAGES[saved.stage].n:PARTS[saved.part||0].n)+')</button>':'')+'</div></div>';
+    h+='<div class="row"><button type="button" class="btn big2" data-a="begin">Start the day</button>'+(dailyOpen()?'<button type="button" class="btn quiet so-dailyb" data-a="daily">Daily Run'+(DAY.daily&&DAY.daily[today()]?' (best '+DAY.daily[today()]+')':'')+'</button>':'')+'<button type="button" class="btn quiet" data-a="album">Postcard album</button>'+(saved?'<button type="button" class="btn quiet" data-a="resume">Carry on as '+HEROES[saved.hero].name+' ('+(saved.stage&&STAGES[saved.stage]?STAGES[saved.stage].n:PARTS[saved.part||0].n)+')</button>':'')+'</div></div>';
   }else if(S.scr==='cat'){
     h='<div class="panel"><h2>Three cats have noticed you</h2><p>One of them will come along as your familiar. Its trick works in every fight, and its card goes in your deck.</p><div class="row">';
     S.offer.forEach(function(c){var x=CATS[c];h+='<button type="button" class="pick" style="--c:'+x.hat+';--tint:'+tint(x.hat)+'" data-a="cat" data-i="'+c+'"><canvas data-art="cat" data-id="'+c+'" aria-hidden="true"></canvas><b>'+x.name+'</b><span>'+x.perk+'</span><span><em>Card: '+CARDS[x.card].name+'</em></span></button>';});
@@ -2201,7 +2234,9 @@ function act(a,i,el){
   if(a==='mute'){A.muted=!A.muted;if(A.master)A.master.gain.value=A.muted?0:1;}
   else if(a==='hero'){S.hero=i;}
   else if(a==='lvl'){if(+i<=META.open)S.lvl=+i;}
-  else if(a==='begin'){newRun();return;}
+  else if(a==='begin'){S.dailyNext='';newRun();return;}
+  else if(a==='daily'){if(dailyOpen())startDaily();return;}
+  else if(a==='wig'){DAY.wig=DAY.wig===0?1:0;saveDay();}
   else if(a==='resume'){RUN=loadRun();if(RUN){S.lvl=RUN.lvl;S.scr=RUN.cats.length?(RUN.stage?'map':'stage'):'cat';if(S.scr==='cat')S.offer=shuffle(CATIDS.slice()).slice(0,3);}}
   else if(a==='cat'){addCat(i);S.scr='stage';S.note=CATS[i].name+' has come along. '+CARDS[CATS[i].card].name+' is in your deck.';saveRun();}
   else if(a==='node'){enterNode(+i);return;}
@@ -2301,7 +2336,7 @@ document.addEventListener('visibilitychange',function(){if(!A.ac)return;try{if(d
 (function(){var ul=$('catList');CATIDS.forEach(function(id){var c=CATS[id],li=document.createElement('li');li.style.borderLeftColor=c.hat;var b=document.createElement('b');b.textContent=c.name;li.appendChild(b);li.appendChild(document.createElement('br'));var s=document.createElement('span');s.textContent=c.perk;li.appendChild(s);ul.appendChild(li);});})();
 S.lvl=0;render();loadWall();requestAnimationFrame(frame);
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){if(S.scr!=='combat')render();});
-window.__SO={S:S,act:act,render:render,run:function(){return RUN;},B:function(){return B;},H:function(){return H;},BOX:function(){return BOX;},cvPos:cvPos,beating:beating,trav:function(){return TRAV;},beat:function(){return BEAT;},META:META,CARDS:CARDS,alive:alive,playable:playable,A:A,DAY:DAY,STAGES:STAGES,PARTS:PARTS,STICKS:STICKS,enterStage:enterStage,saveDay:saveDay,saveRun:saveRun,finish:finish,fx:function(){return PO.length;},fightWith:function(set,kind){var e=ENC[stEnc()],k=kind||'F',o=e[k];e[k]=[set];RUN.first=0;S.scr='map';startCombat(k);e[k]=o;render();},EN:EN,ENC:ENC,setFx:setFx,fxl:function(){return FXL;},rm:function(){return RM;},strike:strike,endTurn:endTurn,openEvent:openEvent,useBrew:useBrew,addRelic:addRelic,RELICS:RELICS,BREWS:BREWS,EVENTS:EVENTS};
+window.__SO={S:S,act:act,render:render,run:function(){return RUN;},B:function(){return B;},H:function(){return H;},BOX:function(){return BOX;},cvPos:cvPos,beating:beating,trav:function(){return TRAV;},beat:function(){return BEAT;},META:META,CARDS:CARDS,alive:alive,playable:playable,A:A,DAY:DAY,STAGES:STAGES,PARTS:PARTS,STICKS:STICKS,enterStage:enterStage,saveDay:saveDay,saveRun:saveRun,finish:finish,fx:function(){return PO.length;},fightWith:function(set,kind){var e=ENC[stEnc()],k=kind||'F',o=e[k];e[k]=[set];RUN.first=0;S.scr='map';startCombat(k);e[k]=o;render();},EN:EN,ENC:ENC,setFx:setFx,fxl:function(){return FXL;},rm:function(){return RM;},POOL:POOL,QNEW:QNEW,poolFix:poolFix,wigOn:wigOn,dailyOpen:dailyOpen,startDaily:startDaily,today:today,playCard:playCard,strike:strike,endTurn:endTurn,openEvent:openEvent,useBrew:useBrew,addRelic:addRelic,RELICS:RELICS,BREWS:BREWS,EVENTS:EVENTS};
 if(window.__STP_TEST)window.__STP={S:S,run:function(){return RUN;},B:function(){return B;},H:function(){return H;},act:act,playCard:playCard,endTurn:endTurn,playable:playable,cost:cost,dmgCalc:dmgCalc,alive:alive,CARDS:CARDS,POOL:POOL,META:META,canGo:canGo,A:A,SONG:SONG,tone:tone,render:render,an:function(){return {AN:AN,SW:SW,FL:FL,ZP:ZP,GLAG:GLAG,HLAG:HLAG,TRAV:TRAV};},fx:function(){return {FX:FX,PT:PT,PO:PO,WB:WB,BEAT:BEAT};},endBeat:endBeat,beating:beating,sparkAt:sparkAt,confetti:confetti,ic:ic,IC:IC};
 })();
 </script>
