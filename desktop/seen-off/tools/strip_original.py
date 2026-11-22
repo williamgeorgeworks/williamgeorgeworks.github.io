@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build the offline desktop bundle of Seen Off.
+"""Re-create the stripped offline baseline of Seen Off (pre-fork).
 
 Input : slay-the-pier.original.html  (pinned copy of slay-the-pier.html from
         williamgeorgeworks/williamgeorgeworks.github.io main @ 676b8e2)
@@ -12,9 +12,11 @@ shipping something half-stripped.  The website file itself is never touched.
 """
 import pathlib, re, sys
 
-HERE = pathlib.Path(__file__).resolve().parent
+HERE = pathlib.Path(__file__).resolve().parent.parent
 SRC = HERE / "slay-the-pier.original.html"
-OUT = HERE / "web" / "index.html"
+# Since milestone 1 (Day Out) web/index.html is a hand-maintained fork; this script now only
+# re-creates the stripped baseline it was forked from, for diffing against the website version.
+OUT = HERE / "tools" / "stripped-baseline.html"
 
 html = SRC.read_text(encoding="utf-8")
 
@@ -22,14 +24,14 @@ def once(old, new, label):
     global html
     n = html.count(old)
     if n != 1:
-        sys.exit(f"build_bundle: expected 1 match for [{label}], found {n}")
+        sys.exit(f"strip_original: expected 1 match for [{label}], found {n}")
     html = html.replace(old, new)
 
 def regex_once(pat, new, label, flags=re.S):
     global html
     found = re.findall(pat, html, flags)
     if len(found) != 1:
-        sys.exit(f"build_bundle: expected 1 regex match for [{label}], found {len(found)}")
+        sys.exit(f"strip_original: expected 1 regex match for [{label}], found {len(found)}")
     html = re.sub(pat, lambda m: new, html, count=1, flags=flags)
 
 CSP = ("default-src 'self'; script-src 'self' 'unsafe-inline'; "
@@ -93,10 +95,10 @@ regex_once(r'<script src="share\.js[^>]*></script>\n<script src="quickscore\.js[
 leftover = [u for u in re.findall(r'https?://[^\s"\'<>)]+', html) if not u.startswith("http://www.w3.org/")]
 bad = [u for u in leftover if not u.startswith("http://ipc.localhost")]
 if bad:
-    sys.exit("build_bundle: external URLs left: " + ", ".join(sorted(set(bad))))
+    sys.exit("strip_original: external URLs left: " + ", ".join(sorted(set(bad))))
 for needle in ("fetch(", "XMLHttpRequest", "sendBeacon", "arcade.html", "shop.html", "cats.html", "hits.js", "quickscore", "badges.js", "share.js", "scores.json", "wgw-strip"):
     if needle in html:
-        sys.exit(f"build_bundle: '{needle}' still present")
+        sys.exit(f"strip_original: '{needle}' still present")
 
 OUT.write_text(html, encoding="utf-8")
 print(f"wrote {OUT} ({OUT.stat().st_size} bytes)")

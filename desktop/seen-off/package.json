@@ -4,9 +4,9 @@
   "private": true,
   "description": "Seen Off desktop build (Tauri 2) - offline bundle of slay-the-pier.html",
   "scripts": {
-    "bundle": "python3 build_bundle.py",
+    "baseline": "python3 tools/strip_original.py",
     "tauri": "tauri",
-    "build:linux": "python3 build_bundle.py && tauri build",
+    "build": "./build-all.sh",
     "verify": "node tests/verify.js"
   },
   "devDependencies": {

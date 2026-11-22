@@ -3,6 +3,7 @@
 // Usage: node tests/verify.js  (serves ./web on 127.0.0.1, writes ../shots/*.png)
 const path = require('path'), http = require('http'), fs = require('fs');
 const { chromium } = require('playwright-core');
+const D = require('./dayout-driver.js');
 const WEB = path.join(__dirname, '..', 'web'), SHOTS = path.join(__dirname, '..', '..', 'shots');
 const EXE = process.env.CHROME || path.join(process.env.HOME, '.cache/ms-playwright/chromium-1255/chrome-linux64/chrome');
 fs.mkdirSync(SHOTS, { recursive: true });
@@ -47,14 +48,19 @@ async function run(browser, w, h, tag, port) {
   let s = await st(); ok(`${tag} keyboard: pick a Quill`, s.hero === 'k', JSON.stringify(s));
   await page.screenshot({ path: `${SHOTS}/${tag}-02-title-kenneth-focused.png` });
   // down to "Begin the climb"
-  for (let i = 0; i < 4 && !(s.focus || '').startsWith('begin'); i++) { await key('ArrowDown'); s = await st(); }
+  for (let i = 0; i < 6 && !(s.focus || '').startsWith('begin'); i++) { await key((s.focus || '').startsWith('album') ? 'ArrowLeft' : 'ArrowDown'); s = await st(); }
   ok(`${tag} keyboard: reach Begin`, (s.focus || '').startsWith('begin'), s.focus);
   await key('Enter', 900);
   s = await st(); ok(`${tag} keyboard: cat screen`, s.scr === 'cat', s.scr);
   await key('ArrowRight');
   await page.screenshot({ path: `${SHOTS}/${tag}-03-cat-pick.png` });
   await key('Enter', 900);
-  s = await st(); ok(`${tag} keyboard: cat chosen, on map`, s.scr === 'map' && s.cats.length === 1, JSON.stringify(s.cats));
+  s = await st(); ok(`${tag} keyboard: cat chosen, on the stage picker`, s.scr === 'stage' && s.cats.length === 1, JSON.stringify(s.cats));
+  const fitS = await page.evaluate(D.fits); ok(`${tag} stage picker fits, nothing scrolls`, fitS.ok, JSON.stringify(fitS));
+  ok(`${tag} first day out: only the Prom is open for the morning`, (await page.evaluate(() => [...document.querySelectorAll('[data-a=place]')].map(b => b.dataset.i + (b.disabled ? '-' : '+')).join(' '))) === 'prom+ beach- rock-');
+  await page.screenshot({ path: `${SHOTS}/${tag}-03b-stage-picker.png` });
+  await key('Enter', 900);
+  s = await st(); ok(`${tag} keyboard: Enter goes to the Prom`, s.scr === 'map' && (await page.evaluate(() => __SO.run().stage)) === 'prom', s.scr);
   await sleep(1800); // pier arrival card fades on its own
   await page.screenshot({ path: `${SHOTS}/${tag}-04-map.png` });
   await key('Enter', 2600); // first stop (bottom row is all fights)
@@ -111,9 +117,10 @@ async function run(browser, w, h, tag, port) {
     await page.evaluate(() => { localStorage.clear(); }); await page.reload({ waitUntil: 'networkidle' }); await sleep(500);
     await page.evaluate(() => { window.__pad.on = true; }); await sleep(200);
     const fk = () => page.evaluate(() => (__SODesktop.focus() || {}).key || '');
-    const padTo = async (pre, btn = 13) => { for (let i = 0; i < 8 && !(await fk()).startsWith(pre); i++) await tap(btn); return (await fk()).startsWith(pre); };
+    const padTo = async (pre, btn = 13) => { for (let i = 0; i < 8 && !(await fk()).startsWith(pre); i++) await tap((await fk()).startsWith('album') ? 14 : btn); return (await fk()).startsWith(pre); };
     ok(`${tag} pad: reach Begin`, await padTo('begin')); await tap(0); await sleep(700);
-    s = await st(); ok(`${tag} pad: cat screen`, s.scr === 'cat'); await tap(0); await sleep(2400);
+    s = await st(); ok(`${tag} pad: cat screen`, s.scr === 'cat'); await tap(0); await sleep(700);
+    s = await st(); ok(`${tag} pad: stage picker`, s.scr === 'stage'); await tap(0); await sleep(2400);
     s = await st(); ok(`${tag} pad: map`, s.scr === 'map'); await page.screenshot({ path: `${SHOTS}/${tag}-11-pad-map.png` });
     await tap(0); await sleep(2600); s = await st(); ok(`${tag} pad: fight`, s.scr === 'combat');
     await tap(3); await sleep(500); s = await st(); ok(`${tag} pad: Y opens deck`, s.mode === 'deck');
@@ -144,10 +151,121 @@ async function run(browser, w, h, tag, port) {
   ok(`${tag} no page errors`, errors.length === 0, errors.slice(0, 3).join(' | '));
   await ctx.close();
 }
+// "A Blackpool Day Out" (milestone 1): stage picker, unlocks, stamp, combo, coin shower,
+// postcard album, Day Out Report, souvenir shop, saving, Last Orders. 1280x800 (Steam Deck).
+async function dayOut(browser, port) {
+  const tag = 'm1', ctx = await browser.newContext({ viewport: { width: 1280, height: 800 }, deviceScaleFactor: 1 });
+  const page = await ctx.newPage(), external = [], errors = [];
+  page.on('request', rq => { const u = rq.url(); if (!/^(http:\/\/127\.0\.0\.1:\d+\/|data:|blob:|about:)/.test(u)) external.push(u); });
+  page.on('pageerror', e => errors.push(e.message)); page.on('console', m => { if (m.type() === 'error') errors.push('console: ' + m.text()); });
+  await page.addInitScript(() => { if (!sessionStorage.getItem('m1')) { localStorage.clear(); sessionStorage.setItem('m1', '1'); } });
+  await page.goto(`http://127.0.0.1:${port}/index.html`, { waitUntil: 'networkidle' }); await sleep(700);
+  const ev = (f, a) => page.evaluate(f, a), key = async (k, w = 350) => { await page.keyboard.press(k); await sleep(w); };
+  const fk = () => ev(() => (__SODesktop.focus() || {}).key || ''), scr = () => ev(() => __SO.S.scr);
+  const fits = async name => { const f = await ev(D.fits); ok(`${tag} ${name} fits 1280x800, nothing scrolls or clips`, f.ok, JSON.stringify(f)); };
+  const places = () => ev(() => [...document.querySelectorAll('[data-a=place]')].map(b => b.dataset.i + (b.disabled ? '-' : '+')).join(' '));
+  const auto = async (until, opt, max = 900) => { for (let k = 0; k < max; k++) { const s = await scr(); if (until(s)) return true; const r = await ev(D.step, opt); if (r === 'stop') return until(await scr()); await sleep(r === 'play' || r === 'end' ? 650 : 320); } return false; };
+
+  // --- first day out: keyboard into the Prom
+  await ev(() => { __SO.act('hero', 't'); __SO.act('begin'); }); await sleep(400); await ev(() => __SO.act('cat', 'spyro')); await sleep(500);
+  ok(`${tag} first run: stage picker locked to the classic route`, (await places()) === 'prom+ beach- rock-');
+  await page.screenshot({ path: `${SHOTS}/m1-01a-stage-picker-first-run.png` });
+  await key('ArrowLeft');
+  ok(`${tag} keyboard: focus starts on the Prom`, (await fk()).startsWith('place|prom'), await fk());
+  await key('Enter', 900); ok(`${tag} Prom map, five stops`, (await scr()) === 'map' && (await ev(() => __SO.run().map.length)) === 5);
+  await sleep(1500); await ev(() => document.querySelector('#view .node.go').click()); await sleep(2600);
+  ok(`${tag} first Prom fight uses Prom enemies`, (await ev(() => __SO.B().en.map(e => e.k).every(k => ['breeze', 'lamppost', 'inspector', 'stag', 'pigeon'].includes(k)))), await ev(() => __SO.B().en.map(e => e.k).join(',')));
+
+  // --- combo: 7 cards in one turn, then the last card sees everything off
+  await ev(() => { const B = __SO.B(); B.energy = 99; B.en.forEach(e => { e.hp = e.max = 999; }); while (B.hand.length < 9 && B.draw.length) B.hand.push(B.draw.pop()); while (B.hand.length < 9) B.hand.push({ id: B.hand[0].id, u: 0 }); __SO.render(); });
+  const tiers = [];
+  const playOne = () => ev(() => { const B = __SO.B(), S = __SO.S, i = B.hand.findIndex(c => __SO.playable(c)); if (i < 0) return false; __SO.act('card', i); const d = __SO.CARDS[B.hand[i].id]; if (d.o && d.o.t) __SO.act('enemy', B.en.findIndex(e => !e.dead)); else __SO.act('card', i); return true; });
+  for (let n = 0; n < 7; n++) { await ev(() => { __SO.B().energy = 99; }); await playOne(); await sleep(420); tiers.push(await ev(() => (document.querySelector('#soCombo span') || {}).textContent || '')); }
+  ok(`${tag} combo counter: Nice. at 3, Proper job! at 5, Ey up! at 7`, tiers[2] === 'Nice.' && tiers[4] === 'Proper job!' && tiers[6] === 'Ey up!', tiers.join(' | '));
+  ok(`${tag} combo shown in the 1280x800 stage`, await ev(() => { const c = document.getElementById('soCombo'), r = c.getBoundingClientRect(); return c.classList.contains('on') && r.right <= innerWidth && r.top >= 0; }));
+  await ev(() => { const B = __SO.B(); B.energy = 99; B.en.forEach(e => { e.hp = 1; e.block = 0; }); }); await playOne();
+  let stamped = false; for (let i = 0; i < 12 && !stamped; i++) { await sleep(120); stamped = await ev(() => document.querySelectorAll('.so-stamp').length > 0); }
+  ok(`${tag} SEEN OFF! stamp lands on the fallen`, stamped && await ev(() => /SEEN OFF!/.test(document.querySelector('.so-stamp').textContent)));
+  await sleep(250); await page.screenshot({ path: `${SHOTS}/m1-02-seen-off-stamp-combo.png` });
+  ok(`${tag} combo of 8 recorded`, (await ev(() => __SO.B().cmax)) >= 8, String(await ev(() => __SO.B().cmax)));
+  let rw = false; for (let i = 0; i < 60 && !rw; i++) { await sleep(100); rw = await ev(() => __SO.S.scr === 'reward' && !__SO.beating()); }
+  await sleep(250);
+  const coins = await ev(() => __SO.fx());
+  ok(`${tag} coin shower on the reward screen`, rw && coins > 10, 'particles=' + coins);
+  ok(`${tag} combo bonus in the loot (Ey up! +10)`, await ev(() => !!(__SO.S.rw.combo && __SO.S.rw.combo.g === 10 && document.querySelector('.lt.combo'))));
+  await sleep(900); await page.screenshot({ path: `${SHOTS}/m1-02b-reward-coins.png` });
+
+  // --- the rest of the day, through the game's own buttons (fights shortened)
+  ok(`${tag} Prom done, afternoon picker`, await auto(s => s === 'stage', { cheat: true }));
+  ok(`${tag} afternoon locked to South Pier on the first run`, (await places()) === 'south+ park- tower-', await places());
+  ok(`${tag} Prom postcard: visited + seen off`, await ev(() => !!(__SO.DAY.album.prom.v && __SO.DAY.album.prom.s)));
+  ok(`${tag} rock banked after the stage`, (await ev(() => __SO.DAY.rock)) > 0, String(await ev(() => __SO.DAY.rock)));
+  await fits('afternoon picker');
+  ok(`${tag} played through to the Day Out Report`, await auto(s => s === 'report', { cheat: true }));
+  await sleep(3200);
+  const rep = await ev(() => __SO.S.end.rep);
+  ok(`${tag} report: a won day, four places`, rep.won && rep.places.join(',') === 'prom,south,central,north', rep.places.join(','));
+  ok(`${tag} report counts up its stats`, await ev(() => [...document.querySelectorAll('.report dd[data-n]')].every(d => d.textContent === d.dataset.n)));
+  ok(`${tag} report: Quill-voice postcard note`, /Hit everything/.test(rep.note), rep.note);
+  ok(`${tag} first win opens Last Orders`, rep.firstWin && /Last Orders is now open/.test(await ev(() => document.querySelector('.report').textContent)));
+  ok(`${tag} sticks of rock pulled`, (await ev(() => __SO.DAY.sticks)) >= 1, 'sticks=' + await ev(() => __SO.DAY.sticks) + ' rock=' + await ev(() => __SO.DAY.rock));
+  await fits('Day Out Report');
+  await page.screenshot({ path: `${SHOTS}/m1-04-day-out-report.png` });
+  ok(`${tag} keyboard: report focus on the way home`, (await fk()).startsWith('home'), await fk());
+
+  // --- album by keyboard
+  for (let i = 0; i < 4 && !(await fk()).startsWith('album'); i++) await key('ArrowRight');
+  await key('Enter', 500);
+  ok(`${tag} postcard album opens`, (await ev(() => __SO.S.mode)) === 'album');
+  ok(`${tag} album: 4 postcards visited, 10 still blank`, (await ev(() => document.querySelectorAll('.pcard:not(.blank)').length)) === 4 && (await ev(() => document.querySelectorAll('.pcard.blank').length)) === 10);
+  await fits('postcard album'); await page.screenshot({ path: `${SHOTS}/m1-03-postcard-album.png` });
+  await key('ArrowRight'); await key('Enter', 400);
+  ok(`${tag} album: rock collection tab by keyboard`, (await ev(() => __SO.S.tab)) === 'rock', await ev(() => __SO.S.tab));
+  await fits('rock collection'); await page.screenshot({ path: `${SHOTS}/m1-03b-rock-collection.png` });
+  await key('Escape', 400); ok(`${tag} Esc closes the album`, (await ev(() => __SO.S.mode)) === null && (await scr()) === 'report');
+
+  // --- souvenir shop
+  for (let i = 0; i < 4 && !(await fk()).startsWith('home'); i++) await key('ArrowLeft');
+  await key('Enter', 500); ok(`${tag} souvenir shop`, (await scr()) === 'souvenir');
+  await fits('souvenir shop');
+  const g0 = await ev(() => __SO.run().gold); await key('Enter', 400); const g1 = await ev(() => __SO.run().gold);
+  ok(`${tag} keyboard: buy a souvenir with leftover Scrumplings`, g1 < g0 && Object.keys(await ev(() => __SO.DAY.shelf)).length >= 1, g0 + ' -> ' + g1);
+  await page.screenshot({ path: `${SHOTS}/m1-05-souvenir-shop.png` });
+  await ev(() => document.querySelector('[data-a=gohome]').click()); await sleep(500);
+  ok(`${tag} home to the title`, (await scr()) === 'title' && !(await ev(() => __SO.run())));
+
+  // --- saved between sessions; second day out has new places
+  await page.reload({ waitUntil: 'networkidle' }); await sleep(600);
+  ok(`${tag} album and rock survive a restart`, (await ev(() => Object.keys(__SO.DAY.album).length)) === 4 && (await ev(() => __SO.META.wins)) === 1);
+  await ev(() => { __SO.act('hero', 'k'); __SO.act('begin'); }); await sleep(400); await ev(() => __SO.act('cat', 'dexter')); await sleep(500);
+  ok(`${tag} second day: the Beach has opened`, /beach\+/.test(await places()), await places());
+  ok(`${tag} new place wears a New! tag`, await ev(() => !!document.querySelector('[data-i=beach] .tag.new')));
+  await fits('second-day picker'); await page.screenshot({ path: `${SHOTS}/m1-01-stage-picker.png` });
+  await ev(() => document.querySelector('[data-i=beach]').click()); await sleep(900);
+  ok(`${tag} coming-soon place says so and borrows Prom enemies`, /Coming soon/.test(await ev(() => document.querySelector('#view .panel').textContent)) && (await ev(() => __SO.run().stage)) === 'beach');
+  await page.reload({ waitUntil: 'networkidle' }); await sleep(600);
+  ok(`${tag} resume shows the place`, /The Beach/.test(await ev(() => (document.querySelector('[data-a=resume]') || {}).textContent || '')));
+  await ev(() => document.querySelector('[data-a=resume]').click()); await sleep(600);
+  ok(`${tag} resumed run is still at the Beach`, (await ev(() => __SO.run().stage)) === 'beach' && (await scr()) === 'map');
+
+  // --- Last Orders (open after the first win)
+  await ev(() => { const R = __SO.run(); R.part = 4; __SO.S.scr = 'stage'; __SO.render(); }); await sleep(600);
+  ok(`${tag} Last Orders: the B&B and the Old Pier are open`, (await places()) === 'bnb+ oldpier+', await places());
+  ok(`${tag} Last Orders: Call it a day`, await ev(() => !!document.querySelector('[data-a=callday]')));
+  await fits('Last Orders picker'); await page.screenshot({ path: `${SHOTS}/m1-06-last-orders.png` });
+  await ev(() => document.querySelector('[data-a=callday]').click()); await sleep(1200);
+  ok(`${tag} calling it a day ends on the report`, (await scr()) === 'report' && await ev(() => __SO.S.end.won));
+
+  ok(`${tag} achievements: combo, postcard, rock`, await ev(() => { const u = SeenOffAchievements.unlocked(); return !!(u.PROPER_JOB && u.FIRST_POSTCARD && u.FIRST_STICK && u.RUN_WON); }), Object.keys(await ev(() => SeenOffAchievements.unlocked())).join(','));
+  ok(`${tag} trade-mark check: no banned names in the page`, !(await ev(() => /Pleasure Beach|Illuminations|Blackpool Tower|Dreamies|Grok/i.test(document.documentElement.outerHTML))));
+  ok(`${tag} zero external requests`, external.length === 0, external.slice(0, 5).join(' '));
+  ok(`${tag} no page errors`, errors.length === 0, errors.slice(0, 3).join(' | '));
+  await ctx.close();
+}
 (async () => {
   await new Promise(r => srv.listen(0, '127.0.0.1', r)); const port = srv.address().port;
   const browser = await chromium.launch({ executablePath: EXE, headless: true });
-  try { await run(browser, 1280, 800, '1280x800', port); await run(browser, 1920, 1080, '1920x1080', port); }
+  try { await run(browser, 1280, 800, '1280x800', port); await run(browser, 1920, 1080, '1920x1080', port); await dayOut(browser, port); }
   catch (e) { console.error(e); results.push({ name: 'exception', pass: false, extra: String(e) }); }
   await browser.close(); srv.close();
   fs.writeFileSync(path.join(SHOTS, 'verify-results.json'), JSON.stringify(results, null, 2));

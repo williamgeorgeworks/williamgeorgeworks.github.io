@@ -102,11 +102,15 @@ function defaultItem(list){
   if(targeting()){var en=list.filter(function(x){return x.enemy!=null;});if(en.length)return en[0];}
   var m=S.mode,c=null;
   if(m==='cut'||m==='edit')c=q('#view .cd:not(.no)[data-a="dk"]')||q('#view [data-a="back"]');
+  else if(m==='album')c=q('#view .chip.on')||q('#view [data-a="back"]');
   else if(m)c=q('#view [data-a="back"]');
   else if(S.scr==='title')c=q('#view .pick.on')||q('#view [data-a="begin"]');
   else if(S.scr==='cat')c=q('#view [data-a="cat"]');
   else if(S.scr==='map')c=q('#view .node.go');
   else if(S.scr==='combat')c=q('#hand .cd.sel')||q('#hand .cd:not(.no)')||q('#view [data-a="end"]');
+  else if(S.scr==='stage')c=q('#view [data-a="place"]:not([disabled])');
+  else if(S.scr==='report')c=q('#view [data-a="home"]');
+  else if(S.scr==='souvenir')c=q('#view [data-a="souv"]:not([disabled])')||q('#view [data-a="gohome"]');
   else if(S.scr==='reward')c=q('#view [data-a="boss"]')||q('#view [data-a="take"]')||q('#view [data-a="leave"]');
   else c=q('#view .btn.go')||q('#view [data-a="opt"]')||q('#view .cd:not(.no)')||q('#view [data-a]');
   return c||list[0]||null;
@@ -256,11 +260,14 @@ var AW={scr:'',cats:0};
 function watchAch(){
   var U=window.SeenOffAchievements;if(!U)return;var run=SO.run(),B=SO.B();
   if(S.scr!==AW.scr){
-    if(S.scr==='reward'&&B&&B.won){U.unlock('FIRST_BLOOD');if(S.rw&&S.rw.kind==='B'&&run)U.unlock(['','PIER_SOUTH','PIER_CENTRAL','PIER_NORTH'][run.act]);}
-    if(S.scr==='over'&&S.end&&S.end.won){U.unlock('PIER_NORTH');U.unlock('RUN_WON');if(S.end.lvl>=1)U.unlock('ENCORE_1');if(S.end.lvl>=5)U.unlock('ENCORE_5');}
+    if(S.scr==='reward'&&B&&B.won){U.unlock('FIRST_BLOOD');if(S.rw&&S.rw.kind==='B'&&run)U.unlock({south:'PIER_SOUTH',central:'PIER_CENTRAL',north:'PIER_NORTH'}[run.stage]);
+      if(B.cmax>=5)U.unlock('PROPER_JOB');if(B.cmax>=10)U.unlock('SCENES');}
+    if(S.scr==='report'&&S.end&&S.end.won){U.unlock('RUN_WON');if(S.end.lvl>=1)U.unlock('ENCORE_1');if(S.end.lvl>=5)U.unlock('ENCORE_5');}
+    var D=SO.DAY;if(D){if(Object.keys(D.album).length)U.unlock('FIRST_POSTCARD');if(D.sticks>=1)U.unlock('FIRST_STICK');}
     AW.scr=S.scr;}
   if(run&&run.cats&&run.cats.length>AW.cats){U.unlock('FIRST_FAMILIAR');}AW.cats=run&&run.cats?run.cats.length:0;
 }
+window.addEventListener('seenoff:stick',function(e){var D=SO.DAY;if(!D)return;e.detail.sticks.forEach(function(k,j){setTimeout(function(){var d=document.createElement('div');d.className='so-toast stick';d.innerHTML='Stick of rock pulled<small></small>';d.lastChild.textContent=SO.STICKS[k][3];document.body.appendChild(d);setTimeout(function(){d.remove();},3200);},j*900);});});
 window.addEventListener('seenoff:achievement',function(e){var d=document.createElement('div');d.className='so-toast';d.innerHTML='Achievement<small></small>';d.lastChild.textContent=e.detail.name;document.body.appendChild(d);setTimeout(function(){d.remove();},3800);});
 
 /* ================= fit the fight to the window ================= */

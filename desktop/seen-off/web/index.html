@@ -236,6 +236,7 @@ button{font:inherit;cursor:pointer}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 <link rel="stylesheet" href="desktop.css">
+<link rel="stylesheet" href="dayout.css">
 </head>
 <body>
 <div class="wrap">
@@ -269,7 +270,7 @@ button{font:inherit;cursor:pointer}
         <ul>
           <li><b>South Pier</b><br><span>The one with the rides, on a bright afternoon: a rollercoaster out over the water, a swing boat and, on a wide enough screen, a couple of deckchairs.</span></li>
           <li><b>Central Pier</b><br><span>The one with the big wheel, at sunset, with the sideshows lit.</span></li>
-          <li><b>North Pier</b><br><span>The Victorian one, after dark: lamps, a carousel, the Illuminations on and the Tower next door.</span></li>
+          <li><b>North Pier</b><br><span>The Victorian one, after dark: lamps, a carousel, the Lights on and the Tower next door.</span></li>
         </ul>
       </div>
       <div>
@@ -286,7 +287,7 @@ button{font:inherit;cursor:pointer}
       </div>
     </section>
   </div>
-  <p class="foot" id="dkFoot">The tune is a new one, a waltz for the end of the pier. Everything is drawn in code, in the ink of our books, with the Illuminations switched on. Reggie and Terry appear as themselves. Kenneth is the third Quill: he comes from the world of Grok, where he is the Ferret&rsquo;s chief of staff. He appears with a bag on his head because nobody has drawn him yet. Dreamies is a trade mark of its owner, who has nothing to do with this game, and the game has nothing to do with any other card game. No seagulls were slain. They were seen off, and they will be back.</p>
+  <p class="foot" id="dkFoot">The tune is a new one, a waltz for the end of the pier. Everything is drawn in code, in the ink of our books, with the Lights switched on. Reggie and Terry appear as themselves. Kenneth is the third Quill: he comes from the Cloud, where he is the Ferret&rsquo;s chief of staff. He appears with a bag on his head because nobody has drawn him yet. The game has nothing to do with any other card game. No seagulls were slain. They were seen off, and they will be back.</p>
 </div>
 
 <script>
@@ -316,7 +317,7 @@ function app(t,k,n){if(!t||t.dead)t=rndAlive();if(!t)return;t.st[k]=(t.st[k]||0)
 function appAll(k,n){alive().forEach(function(e){app(e,k,n);});}
 function me(k,n){H.st[k]=(H.st[k]||0)+n;if(NAMES[k])fxOn(H,'+'+n+' '+NAMES[k],COL.green);}
 function en(n){B.energy+=n;}
-function gold(n){n=Math.round(n*(has('float')?1.25:1));RUN.gold+=n;sfx('coin',dl(fxOn(H,'+'+n+' Dreamies',COL.gold)));}
+function gold(n){n=Math.round(n*(has('float')?1.25:1));RUN.gold+=n;sfx('coin',dl(fxOn(H,'+'+n+' Scrumplings',COL.gold)));}
 function addHand(id,zero,tmp){if(B.hand.length>=10)return;B.hand.push({id:id,u:0,z:zero?1:0,tmp:tmp?1:0});}
 function randCard(h){var p=h?POOL[h]:POOL.r.concat(POOL.t,POOL.k);return pick(p);}
 var NAMES={gus:'Gusto',poi:'Poise',sog:'Soggy',flu:'Flustered',inv:'Invoice',claw:'Claws'};
@@ -327,7 +328,7 @@ C('cough','r','Polite Cough','S',1,'b','Gain $0 Block.',[[5,8]],function(t,v){bl
 C('invoice','r','Imaginary Invoice','S',1,'b','Apply $0 Invoice.',[[5,7]],function(t,v){app(t,'inv',v[0]);},{t:1});
 C('tenner','r','Extra Tenner for the Y','S',0,'c','Apply $0 Invoice. Draw 1 card.',[[3,4]],function(t,v){app(t,'inv',v[0]);draw(1);},{t:1});
 C('patter','r','Sales Patter','S',1,'c','Apply $0 Soggy and $0 Flustered.',[[1,2]],function(t,v){app(t,'sog',v[0]);app(t,'flu',v[0]);},{t:1});
-C('earner','r','A Nice Little Earner','S',1,'u','Gain $0 Block and $1 Dreamies. Exhaust.',[[7,10],[8,12]],function(t,v){blk(v[0]);gold(v[1]);},{x:1});
+C('earner','r','A Nice Little Earner','S',1,'u','Gain $0 Block and $1 Scrumplings. Exhaust.',[[7,10],[8,12]],function(t,v){blk(v[0]);gold(v[1]);},{x:1});
 C('factcheck','r','Fact Check','S',1,'c','Draw $0 cards.',[[2,3]],function(t,v){draw(v[0]);});
 C('lineedit','r','Line Edit','A',1,'c','Deal $0 damage twice.',[[4,6]],function(t,v){atk(t,v[0],2);},{t:1});
 C('itemised','r','Itemised Bill','S',2,'u','Apply $0 Invoice to ALL enemies.',[[4,6]],function(t,v){appAll('inv',v[0]);});
@@ -336,7 +337,7 @@ C('remit','r','Kindly Remit','A',1,'c','Deal $0 damage. If the enemy has an Invo
 C('braveface','r','Brave Face','S',2,'c','Gain $0 Block.',[[13,17]],function(t,v){blk(v[0]);});
 C('myoldson','r','My Old Son','P',1,'u','Gain $0 Poise.',[[2,3]],function(t,v){me('poi',v[0]);});
 C('cartel','r','Cartel Pricing','S',1,'r','Double an enemy’s Invoice. Exhaust.',[],function(t){if(t.st.inv)app(t,'inv',t.st.inv);},{t:1,x:1,uc:0});
-C('rounding','r','Rounding Up','A',1,'u','Deal $0 damage. If that sees the enemy off, gain $1 Dreamies.',[[9,12],[10,15]],function(t,v){atk(t,v[0]);if(t.dead)gold(v[1]);},{t:1});
+C('rounding','r','Rounding Up','A',1,'u','Deal $0 damage. If that sees the enemy off, gain $1 Scrumplings.',[[9,12],[10,15]],function(t,v){atk(t,v[0]);if(t.dead)gold(v[1]);},{t:1});
 C('proofread','r','Proofread','S',1,'c','Gain $0 Block. Draw 1 card.',[[6,9]],function(t,v){blk(v[0]);draw(1);});
 C('finaldemand','r','Final Demand','A',2,'u','Deal $0 damage. The enemy pays its Invoice now.',[[8,12]],function(t,v){atk(t,v[0]);if(!t.dead&&t.st.inv)hurt(t,t.st.inv);},{t:1});
 C('dignity','r','Wounded Dignity','P',1,'u','Whenever an attack costs you health, gain $0 Gusto.',[[1,2]],function(t,v){me('dign',v[0]);});
@@ -360,7 +361,7 @@ C('steady','t','Steady Hand','P',1,'u','Gain $0 Poise.',[[2,3]],function(t,v){me
 C('refphoto','t','Reference Photo','S',1,'c','Apply $0 Flustered.',[[2,3]],function(t,v){app(t,'flu',v[0]);},{t:1});
 C('masterpiece','t','Masterpiece','A',3,'r','Deal $0 damage.',[[30,40]],function(t,v){atk(t,v[0]);},{t:1});
 C('scribble','t','Scribble','A',0,'x','Deal $0 damage. Exhaust.',[[4,4]],function(t,v){atk(t,v[0]);},{t:1,x:1});
-/* Kenneth, the third Quill, from Grok */
+/* Kenneth, the third Quill, from the Cloud */
 C('handshake','k','Firm Handshake','A',1,'b','Deal $0 damage.',[[6,9]],function(t,v){atk(t,v[0]);},{t:1});
 C('nod','k','Vague Nod','S',1,'b','Gain $0 Block.',[[5,8]],function(t,v){blk(v[0]);});
 C('whoinv','k','Who Invited Him?','S',0,'b','Add $0 random card to your hand. It costs 0 and is Fleeting.',[[1,2]],function(t,v){for(var i=0;i<v[0];i++)addHand(randCard(),1,1);});
@@ -398,12 +399,12 @@ var HEROES={
    blurb:'Invoices everything. Enemies pay up a little more each turn.'},
  t:{id:'t',name:'Terry',title:'The Mechanical Editor',hp:78,deck:['inkblot','inkblot','inkblot','inkblot','sketch','sketch','sketch','sketch','splatter'],
    blurb:'Ink, outrage and big lettering. Hits everything, often.'},
- k:{id:'k',name:'Kenneth',title:'Chief of Staff, by way of Grok',hp:66,deck:['handshake','handshake','handshake','handshake','nod','nod','nod','nod','whoinv'],
-   blurb:'The third Quill, from the world of Grok, where he is the Ferret’s chief of staff. Nobody has drawn him yet, and his magic is anybody’s guess.'}
+ k:{id:'k',name:'Kenneth',title:'Chief of Staff, by way of the Cloud',hp:66,deck:['handshake','handshake','handshake','handshake','nod','nod','nod','nod','whoinv'],
+   blurb:'The third Quill, from the Cloud, where he is the Ferret’s chief of staff. Nobody has drawn him yet, and his magic is anybody’s guess.'}
 };
 var CATS={
  arthur:{name:'Arthur',card:'ruling',perk:'Diplomatic immunity: start every fight with 8 Block.',body:'#f3e9d8',head:'#f3e9d8',face:'#8a8c99',ear:'#5d6070',eye:'#3f7fd6',fluff:1,hat:'#e3182d'},
- spyro:{name:'Spyro',card:'decree',perk:'The true king: at the end of your turn, 3 damage to a random enemy.',body:'#ffffff',head:'#ffffff',spot:'#d98a3a',ear:'#ffffff',eye:'#a9b63c',fluff:0,hat:'#ffb300'},
+ spyro:{name:'Spyro',card:'decree',perk:'The true king: at the end of your turn, 3 damage to a random enemy.',body:'#ffffff',head:'#ffffff',spot:'#e08a3a',sx:2.5,sy:-9.5,sr:2.6,tail:'#e8913c',ring:'#b9621f',ear:'#ffffff',eye:'#a9b63c',fluff:0,hat:'#ffb300'},
  tilly:{name:'Tilly',card:'ripface',perk:'Shy and quiet: anything that hits you gets 3 damage back.',body:'#efe6d6',head:'#e4dccf',face:'#b9b2a8',ear:'#9a948c',eye:'#5a9bd8',fluff:1,hat:'#7a3ff0'},
  trixie:{name:'Trixie',card:'requisition',perk:'A tight operation: 1 extra Energy on the first turn of every fight.',body:'#eadfcd',head:'#6a564b',face:'#3f322c',ear:'#3f322c',eye:'#6aa6ee',fluff:1,whisk:'#ffffff',hat:'#1fb85a'},
  dexter:{name:'Dexter',card:'boo',perk:'The grey wolf: nervous, so you draw 2 extra cards on the first turn.',body:'#4a4a52',head:'#3c3c44',ear:'#2c2c33',ruff:'#9a9aa3',eye:'#e9a400',fluff:1,whisk:'#ffffff',hat:'#2456e6'},
@@ -413,9 +414,9 @@ var CATIDS=Object.keys(CATS);
 var RELICS={
  chips:['Tray of Chips','Raises your maximum health by 8.'],rock:['Stick of Rock','Start every fight with 1 Gusto.'],deckchair:['Deckchair','Start every fight with 1 Poise.'],
  hat:['Kiss-Me-Quick Hat','Your first Attack in every fight does double damage.'],tide:['Tide Table','Every third turn, 1 extra Energy.'],bell:['Donkey Bell','Rests heal 10 more.'],
- bulb:['Illuminations Bulb','Draw 1 extra card at the start of every fight.'],float:['Lucky Float','A quarter more Dreamies from everything.'],brolly:['Moulding Museum Brolly','The first time you would lose health in a fight, you do not.'],
+ bulb:['Lights Bulb','Draw 1 extra card at the start of every fight.'],float:['Lucky Float','A quarter more Scrumplings from everything.'],brolly:['Moulding Museum Brolly','The first time you would lose health in a fight, you do not.'],
  wetfish:['Wet Fish','Every enemy starts the fight Soggy.'],stove:['Small Stove','Whenever you rest, you also brew something.'],gavel:['Tribunal Gavel','Every tenth card you play deals 8 damage to ALL enemies.'],
- ghost:['Ghost Story','Flustered enemies take three-quarters more damage, not half.'],bill:['Unpaid Bill','Every enemy starts the fight with 3 Invoice.'],bag:['Bag of Dreamies','60 Dreamies, now.'],
+ ghost:['Ghost Story','Flustered enemies take three-quarters more damage, not half.'],bill:['Unpaid Bill','Every enemy starts the fight with 3 Invoice.'],bag:['Bag of Scrumplings','60 Scrumplings, now.'],
  vinyl:['Twelve-Inch Single','Every fourth card you play in a turn draws you a card.'],life:['Tenth Life','The first time you would be seen off, get up again on 30% health.'],
  ticketb:['Tower Ticket','1 extra Energy every turn. Card rewards offer 2 cards, not 3.',1],accord:['The Accord','1 extra Energy every turn. Every fight starts with a Mislaid Sock in your deck.',1],
  manus:['Finished Manuscript','At the start of every fight, gain 2 Gusto and 2 Poise. Lose 6 maximum health.',1]
@@ -446,14 +447,219 @@ var EN={
  algo:{n:'The Algorithm',hp:[134,140],elite:1,sc:1.2,ai:function(e){return cyc(e,[{n:'Engagement',a:7,x:3},{n:'Optimise',g:3,b:12},{n:'Suppress',a:10,add:['wblock',1]},{n:'Trending',a:21}]);}},
  page:{n:'The Blank Page',hp:[224,232],boss:1,sc:1.5,ai:function(e){
    if(!e.blink&&e.hp<=e.max/2){e.blink=1;return {n:'The Cursor Blinks',g:4,b:20};}
-   return cyc(e,[{n:'Stare',add:['wblock',2],a:6},{n:'Erase',a:21},{n:'White Out',a:8,x:3},{n:'Doubt',sog:2,flu:2,b:10}]);}}
+   return cyc(e,[{n:'Stare',add:['wblock',2],a:6},{n:'Erase',a:21},{n:'White Out',a:8,x:3},{n:'Doubt',sog:2,flu:2,b:10}]);}},
+ /* the Prom (day out). art:'…' borrows an existing drawing until its own is made (placeholder) */
+ breeze:{n:'Sea Breeze',hp:[24,28],art:'lady',sc:.75,ai:function(e){return cyc(e,[{n:'Gust',a:6,flu:1},{n:'Bluster',a:4,x:2}]);}},
+ lamppost:{n:'Seagull on a Lamppost',hp:[22,26],art:'gull',ai:function(e){return cyc(e,[{n:'Eyeing Your Chips',g:2},{n:'Swoop',a:10}]);}},
+ inspector:{n:'Ticket Inspector',hp:[36,40],art:'jobs',ai:function(e){return cyc(e,[{n:'Tickets Please',add:['ticket',1],a:4},{n:'Fixed Penalty',a:11}]);}},
+ stag:{n:'The Stag Do',hp:[18,22],art:'bogg',sc:.85,pal:1,ai:function(e){return cyc(e,[{n:'Lads Lads Lads',a:5,x:2},{n:'Another Round',g:2}]);}},
+ bride:{n:'The Bride',hp:[52,56],elite:1,pal:1,art:'lady',ai:function(e){return cyc(e,[{n:'Sash',b:8,g:1},{n:'Inflatable Thing',a:14},{n:'Prosecco',g:3}]);}},
+ maid:{n:'Bridesmaid',hp:[12,14],sc:.7,art:'tea',ai:function(e){return cyc(e,[{n:'Woo!',a:4},{n:'Selfie',flu:1,a:2}]);}},
+ tram:{n:'The Last Tram',hp:[118,124],boss:1,sc:1.4,art:'clock',ai:function(e){return cyc(e,[{n:'Ding Ding: 3',a:5,b:8},{n:'Ding Ding: 2',a:5,b:8},{n:'Mind the Gap',a:9},{n:'Ding Ding: 1',b:12},{n:'Terminus',a:26}]);}}
 };
 var ENC={
  1:{F:[['gull'],['pigeon','pigeon'],['deck'],['fish','fish'],['jobs'],['gull','fish'],['pigeon','pigeon','fish']],L:[['warden'],['gull','gull','gull']],B:[['king']]},
  2:{F:[['bogg'],['tea','tea','tea'],['drip'],['letter'],['letter','tea'],['bogg','tea']],L:[['lady'],['bogg','drip']],B:[['milk','pot']]},
- 3:{F:[['bot'],['typo','typo','typo','typo'],['clock'],['printer'],['bot','typo','typo'],['printer','typo']],L:[['algo'],['clock','bot']],B:[['page']]}
+ 3:{F:[['bot'],['typo','typo','typo','typo'],['clock'],['printer'],['bot','typo','typo'],['printer','typo']],L:[['algo'],['clock','bot']],B:[['page']]},
+ prom:{F:[['breeze'],['lamppost'],['inspector'],['stag','stag'],['lamppost','breeze'],['pigeon','pigeon','breeze']],L:[['bride','maid','maid'],['inspector','lamppost']],B:[['tram']]}
 };
 var ACTS=['','South Pier','Central Pier','North Pier'];
+
+/* ================= a day out (desktop, milestone 1) =================
+   A run is one day in Blackpool: Morning, Afternoon, Teatime, Evening and (after a first win)
+   Last Orders. Each part offers three places; each place is a 5-stop stage. Places without
+   their own crowd yet borrow one and say so ("coming soon"). */
+var PARTS=[
+ {id:'morning',n:'Morning',time:'9am',ic:'tram',stages:['prom','beach','rock'],ask:'Nine o’clock. The tide is out and so is everyone else. Where first?'},
+ {id:'afternoon',n:'Afternoon',time:'1pm',ic:'coaster',stages:['south','park','tower'],ask:'Dinner has gone down. Where next?'},
+ {id:'teatime',n:'Teatime',time:'5pm',ic:'wheel',stages:['central','chippy','arcades'],ask:'Five o’clock. Somebody mentions chips.'},
+ {id:'evening',n:'Evening',time:'9pm',ic:'lamp',stages:['north','lights','winter'],ask:'Nine o’clock, and the Lights are on.'},
+ {id:'last',n:'Last Orders',time:'Midnight',ic:'heart',stages:['bnb','oldpier'],ask:'Last orders. The sensible thing is to go home.'}
+];
+var STAGES={
+ prom:{n:'The Prom',sign:'THE PROM',look:1,enc:'prom',ready:1,ic:'tram',c1:'#bfe9ff',c2:'#2a8fe6',un:'start',stamp:'Ticket clipped',blurb:'A stiff breeze, a man hosing the pavement, trams ringing their bells.',foe:'Gulls, a ticket inspector, a stag do, the Last Tram',line:'A stiff breeze off the sea'},
+ beach:{n:'The Beach',sign:'THE BEACH',look:1,enc:'prom',ic:'drop',c1:'#fff1bd',c2:'#f0a63a',un:1,stamp:'Sand in everything',blurb:'The tide is miles out, and the donkeys have names on their bridles.',foe:'Sandcastles, jellyfish and a donkey who has had enough',line:'The tide is miles out'},
+ rock:{n:'The Rock Shop',sign:'ROCK SHOP',look:1,enc:'prom',ic:'rock',c1:'#ffd6e8',c2:'#ff4f9a',un:9,stamp:'Letters all the way through',blurb:'Rock being made in the window: pink, white, hot, and letters all the way through.',foe:'Sticks of rock, chattering teeth, a fudge tray',line:'Pink, white and hot'},
+ south:{n:'South Pier',sign:'SOUTH PIER',look:1,enc:1,ready:1,ic:'coaster',c1:'#8fdcff',c2:'#1596ff',un:'start',stamp:'Pier pass',blurb:'The one with the rides, on a bright afternoon.',foe:'Seagulls, deckchairs, a traffic warden, the King of the Seagulls',line:'An afternoon at the rides'},
+ park:{n:'The Pleasure Park',sign:'PLEASURE PARK',look:1,enc:1,ic:'coaster',c1:'#ffe97a',c2:'#ff8a1f',un:3,stamp:'You must be this tall',blurb:'Wooden rollercoasters, the ghost train, a sign saying “You must be this tall”.',foe:'Dodgems, a skeleton, Old Rattler the wooden coaster',line:'Here since 1923, apparently'},
+ tower:{n:'The Tower',sign:'THE TOWER',look:1,enc:1,ic:'tower',c1:'#ffb0b0',c2:'#c41228',un:11,stamp:'Going up',blurb:'The ballroom, the organ rising out of the floor, and the glass floor at the top.',foe:'A ballroom couple, a lift attendant, the Mighty Organ',line:'Mind the doors'},
+ central:{n:'Central Pier',sign:'CENTRAL PIER',look:2,enc:2,ready:1,ic:'wheel',c1:'#ffb08a',c2:'#a13fd6',un:'start',stamp:'Ride ticket',blurb:'The one with the big wheel, at sunset, with the sideshows lit.',foe:'A boggart, the Grey Lady, Milk First and Tea First',line:'Sunset under the big wheel'},
+ chippy:{n:'The Chippy',sign:'THE CHIPPY',look:2,enc:2,ic:'cup',c1:'#fff3d1',c2:'#e0a75a',un:5,stamp:'Salt and vinegar',blurb:'A queue out the door, vinegar in the air, and a big decision about scraps.',foe:'A battered sausage, mushy peas, the Woman Behind the Counter',line:'Vinegar in the air'},
+ arcades:{n:'Arcades & Bingo',sign:'ARCADES',look:2,enc:2,ic:'coin',c1:'#ffb3e2',c2:'#b83bd9',un:13,stamp:'Eyes down',blurb:'Tuppenny falls, claw grabbers, a bingo caller with a microphone.',foe:'A fruit machine, the Claw, the Bingo Caller',line:'Eyes down'},
+ north:{n:'North Pier',sign:'NORTH PIER',look:3,enc:3,ready:1,ic:'lamp',c1:'#a49cf5',c2:'#1c1763',un:'start',stamp:'Pier pass',blurb:'The Victorian one, after dark: lamps, a carousel, and the Tower next door.',foe:'Review bots, the Algorithm, the Blank Page',line:'After dark, the Lights on'},
+ lights:{n:'The Lights',sign:'THE LIGHTS',look:3,enc:3,ic:'spark',c1:'#fff08a',c2:'#7a3ff0',un:7,stamp:'Switched on',blurb:'Miles of lights, lit-up trams, and big glowing figures on the cliffs.',foe:'Faulty bulbs, a coach party, A Man Off the Telly',line:'Miles of lights'},
+ winter:{n:'The Winter Gardens',sign:'WINTER GARDENS',look:3,enc:3,ic:'star',c1:'#d4f78a',c2:'#14a84b',un:14,stamp:'One hundred and eighty',blurb:'A Victorian palace: a ballroom, a conference, darts night downstairs.',foe:'Delegates, a darts fan dressed as a banana, the Keynote Speaker',line:'Darts night downstairs'},
+ bnb:{n:'The B&B',sign:'NO VACANCIES',look:3,enc:3,hm:1.15,ic:'heart',c1:'#d8c4ff',c2:'#6a3fe0',un:'win',stamp:'Breakfast at 7.30',blurb:'“NO VACANCIES”, house rules on the door, breakfast at half seven sharp.',foe:'The House Rules, the Shower, the Landlady',line:'Breakfast at half seven sharp'},
+ oldpier:{n:'The Old Pier',sign:'CLOSED',look:3,enc:3,hm:1.2,ic:'mist',c1:'#e3e8f5',c2:'#4d5d8c',un:'win',stamp:'Seen off, the whole day',blurb:'Dawn, a sea fret, and a pier closed for the season.',foe:'Sea fret, rusty bolts, the Parliament of Gulls',line:'Dawn, and a sea fret'}
+};
+STAGES.beach.soon=STAGES.rock.soon='Coming soon: this lot are still on the coach, so the Prom crowd have filled in.';
+STAGES.park.soon=STAGES.tower.soon='Coming soon: this lot are still queuing, so the South Pier crowd have filled in.';
+STAGES.chippy.soon=STAGES.arcades.soon='Coming soon: this lot are still on their tea break, so the Central Pier crowd have filled in.';
+STAGES.lights.soon=STAGES.winter.soon=STAGES.bnb.soon=STAGES.oldpier.soon='Coming soon: this lot have not turned up yet, so the North Pier crowd have filled in.';
+function STGD(){return RUN&&RUN.stage?STAGES[RUN.stage]:null;}
+function stEnc(){var s=STGD();return s?s.enc:RUN.act;}
+function stName(act){var s=STGD();return s?s.n:ACTS[act];}
+function signFor(d){var s=STGD();return s?s.sign:d;}
+
+/* the stick of rock: every point of score goes in; each full stick is one unlock */
+var STICKS=[
+ [150,'place','beach','KISS ME QUICK'],[200,'hat','wig','SEEN OFF','Arthur’s tribunal wig (a cat hat)'],[250,'place','park','TEA FIRST'],
+ [300,'cards','r','NEVER HEARD OF HIM','Five new cards for Reggie'],[300,'place','chippy','GREAT MORNING'],[350,'shop2','','WISH YOU WERE HERE','Souvenir Shop line two'],
+ [400,'place','lights','MIND THE GAP'],[400,'cards','t','NO REFUNDS','Five new cards for Terry'],[450,'place','rock','BLACKPOOL'],
+ [500,'daily','','DAY TRIPPER','The Daily Run'],[500,'place','tower','GOING UP'],[550,'cards','k','BY WAY OF THE CLOUD','Five new cards for Kenneth'],
+ [600,'place','arcades','EYES DOWN'],[650,'place','winter','ONE HUNDRED AND EIGHTY']
+];
+(function(){var ph=['DO NOT ASK','LEAVE IT OUT','PAID IN FULL','EY UP','PROPER JOB','SCENES','HOLD YOUR NERVE','MILK FIRST','RULED AGAINST','STAND TO ATTENTION','WHO ME','QUIETLY DANGEROUS','THE TRUE KING','TIMID WOLF','THEY WILL BE BACK','LAST ORDERS'];
+  for(var i=0;i<16;i++)STICKS.push([700+Math.round(i*800/15),'later','',ph[i],'A surprise (more to come)']);})();
+function stickName(k){var s=STICKS[k];if(!s)return '';if(s[1]==='place')return STAGES[s[2]].n+' opens for the '+PARTS.filter(function(p){return p.stages.indexOf(s[2])>=0;})[0].n.toLowerCase();return s[4];}
+function stickNeed(k){var t=0;for(var i=0;i<=k&&i<STICKS.length;i++)t+=STICKS[i][0];return t;}   /* rock needed to finish stick k (0-based) */
+var DAY={rock:0,sticks:0,album:{},unseen:{},shelf:{},done1:0,combos:{},streak:{last:'',n:0,best:0},best:{combo:0}};
+try{var dr=JSON.parse(localStorage.getItem('so-day-v1')||'null');if(dr)for(var dk in DAY)if(dr[dk]!=null)DAY[dk]=dr[dk];}catch(e){}
+function saveDay(){try{localStorage.setItem('so-day-v1',JSON.stringify(DAY));}catch(e){}}
+function rockAdd(n){
+  var got=[];n=Math.max(0,Math.round(n||0));DAY.rock+=n;
+  while(DAY.sticks<STICKS.length&&DAY.rock>=stickNeed(DAY.sticks)){var s=STICKS[DAY.sticks];got.push(DAY.sticks);if(s[1]==='place')DAY.unseen[s[2]]=1;DAY.sticks++;}
+  saveDay();if(got.length){S.pops=(S.pops||[]).concat(got);try{window.dispatchEvent(new CustomEvent('seenoff:stick',{detail:{sticks:got.slice()}}));}catch(e){}}
+  return got;
+}
+var ROCK_RATE=.5; /* rock per point of score. Tuning knob: about half a run's score fills sticks 1-4 on a first day out, as in the plan's first-hours table */
+function bank(){if(!RUN)return [];var d=(RUN.score-(RUN.banked||0))*ROCK_RATE;RUN.banked=RUN.score;return rockAdd(d);}
+function isOpen(id){var s=STAGES[id];if(s.un==='start')return true;if(s.un==='win')return META.wins>0;return DAY.sticks>=s.un;}
+function canPick(id){if(!DAY.done1)return STAGES[id].un==='start';return isOpen(id);}
+function lastOpen(){return META.wins>0;}
+function enterStage(id){
+  if(!RUN||!STAGES[id]||!canPick(id))return;var s=STAGES[id];
+  RUN.stage=id;RUN.day.push(id);RUN.act=s.look;RUN.row=-1;RUN.col=1;RUN.map=genMap();S.note='';S.pops=[];
+  var a=DAY.album[id]||(DAY.album[id]={});a.v=1;delete DAY.unseen[id];saveDay();
+  S.scr='map';saveRun();render();
+}
+function stageDone(){
+  var a=DAY.album[RUN.stage]||(DAY.album[RUN.stage]={}),nw=!a.s;a.v=1;a.s=1;if(RUN.lvl>=3)a.g=1;saveDay();bank();
+  if(nw){RUN.stats.newp++;rockAdd(50);}   /* a place seen off for the first time: +50 rock, there and then */
+}
+var COMBO=[[10,'SCENES!',10],[7,'Ey up!',10],[5,'Proper job!',5],[3,'Nice.',2]];
+function comboTier(n){for(var i=0;i<COMBO.length;i++)if(n>=COMBO[i][0])return COMBO[i];return null;}
+function comboBonus(n){var t=comboTier(n);return t?{n:n,w:t[1],g:t[2]}:null;}
+function comboEl(){var c=$('soCombo');if(!c){c=document.createElement('div');c.id='soCombo';c.setAttribute('aria-live','polite');$('stage').appendChild(c);}return c;}
+function comboFx(n){
+  var c=comboEl(),t=comboTier(n),prev=c.getAttribute('data-n')|0;c.setAttribute('data-n',n);
+  if(n<2||S.scr!=='combat'){c.className='';c.innerHTML='';return;}
+  var tierUp=t&&t[0]===n;
+  c.innerHTML='<b>'+n+'</b><span>'+(t?t[1]:'in a row')+'</span>';c.className='on'+(tierUp?' tier':'')+(n>=10?' scenes':'');
+  if(!RM&&c.animate)c.animate([{transform:'rotate(-8deg) scale('+(tierUp?2.2:1.5)+')',opacity:.2},{transform:'rotate(-8deg) scale(1)',opacity:1}],{duration:tierUp?260:160,easing:'cubic-bezier(.2,.9,.3,1.4)'});
+  if(tierUp){chime(n,0,1);if(n>=10&&!RM){var st=$('stage').parentNode;st.classList.remove('so-shake');void st.offsetWidth;st.classList.add('so-shake');}}
+}
+function comboUp(){if(!B)return;B.combo=(B.combo||0)+1;if(B.combo>(B.cmax||0))B.cmax=B.combo;if(RUN&&RUN.stats){RUN.stats.cards++;if(B.combo>RUN.stats.combo)RUN.stats.combo=B.combo;}comboFx(B.combo);chime(B.combo,0);}
+function chime(i,d,big){ /* a little rising ping per card, a fanfare on a new tier */
+  try{if(!A.ac||A.ac.state!=='running'||A.muted)return;var t=A.ac.currentTime+(d||0),fs=big?[0,4,7,12]:[0],k;
+    for(k=0;k<fs.length;k++){var o=A.ac.createOscillator(),g=A.ac.createGain();o.type='triangle';o.frequency.value=523*Math.pow(2,(Math.min(i,14)*2+fs[k])/12);
+      o.connect(g);g.connect(A.master);g.gain.setValueAtTime(.05,t+k*.07);g.gain.exponentialRampToValueAtTime(.001,t+k*.07+.18);o.start(t+k*.07);o.stop(t+k*.07+.2);}}catch(e){}
+}
+function stampAt(e,over){ /* the SEEN OFF! rubber stamp lands on whatever was seen off */
+  var dly=Math.max(0,(e.deadT||now())-now())+120,s=STGD(),sub=RUN&&RUN.hero==='r'?'Paid':(s?s.stamp:'Pier pass');
+  setTimeout(function(){
+    if(!B||S.scr!=='combat'&&!beating())return;var L=$('ghosts'),p=cvPos(e.x||W*.7,(e.y||190)-44);if(!L||!p)return;
+    var d=document.createElement('div');d.className='so-stamp';d.style.left=p[0]+'px';d.style.top=p[1]+'px';d.style.setProperty('--rot',(Math.random()*16-8).toFixed(1)+'deg');
+    d.innerHTML='<b>SEEN OFF!</b><i>'+sub+'</i>';L.appendChild(d);
+    if(!RM){var st=$('stage').parentNode,k=over>=12?'so-shake2':'so-shake';st.classList.remove('so-shake','so-shake2');void st.offsetWidth;st.classList.add(k);setTimeout(function(){st.classList.remove(k);},420);}
+    sfx('block');
+  },dly);
+}
+function clearStamps(){Array.prototype.forEach.call(document.querySelectorAll('.so-stamp'),function(x){x.remove();});}
+function coinShower(n){
+  if(!n)return;var st=$('stage'),w=st.clientWidth;emit(PO,'coin',w/2,-14,clamp(Math.round(n*1.2),14,60),{v:90,g:560,life:1.7,s:6.5,jx:w*.86,a:1.5708,spread:.7,stag:.018});
+  for(var i=0;i<Math.min(9,Math.ceil(n/6));i++)chime(i,.15+i*.075);
+}
+function today(){var d=new Date();return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2);}
+function streakTick(){ /* cosmetic only: a missed day halves it, never resets it */
+  var s=DAY.streak,t=today();if(s.last===t)return;var gap=s.last?Math.round((new Date(t)-new Date(s.last))/864e5):1;
+  s.n=gap===1?s.n+1:Math.max(1,Math.ceil(s.n/2));s.last=t;s.best=Math.max(s.best,s.n);saveDay();
+}
+function dayReport(won,pts){
+  var before=DAY.rock,firstWin=won&&META.wins===0,bonus=0,why=[];
+  if(won){bonus+=100;why.push('a day out, finished');}
+  var ck=RUN.hero+':'+(RUN.cats[0]||'');if(RUN.cats[0]&&!DAY.combos[ck]){DAY.combos[ck]=1;bonus+=50;why.push('a new Quill and cat');}
+  var s0=DAY.sticks,got=bank().concat(rockAdd(bonus));
+  if(RUN.stats.combo>DAY.best.combo)DAY.best.combo=RUN.stats.combo;
+  var first=!DAY.done1;DAY.done1=1;streakTick();saveDay();
+  var c=RUN.cats[0]?CATS[RUN.cats[0]].name:'Nobody',pl=RUN.stage?STAGES[RUN.stage].n:'the Prom',by=B&&!won?(B.en.filter(function(e){return !e.dead;}).map(function(e){return e.name;})[0]||'Something'):'';
+  var note={r:won?'Weather fair. Invoiced '+RUN.stats.kills+' of them. '+c+' ruled against the milk. Wish you were here, but not on my account.':'Got as far as '+pl+'. '+by+' saw me off, and will be hearing from me. '+c+' has kept the receipts.',
+    t:won?'Hit everything. Most of it deserved it. '+c+' said nothing all day, which I respect. Back next week.':'Got as far as '+pl+'. '+by+' had the better of it. '+c+' looked away. I will be back. They always say that.',
+    k:won?'Day out logged. '+RUN.stats.kills+' incidents, all resolved. '+c+' has been added to the org chart. The bag is staying on.':'Day out paused at '+pl+'. '+by+' has been escalated. '+c+' is drafting the minutes.'}[RUN.hero];
+  return {won:won,firstWin:firstWin,first:first,note:note,places:RUN.day.slice(),kills:RUN.stats.kills,combo:RUN.stats.combo,spent:RUN.stats.spent,cards:RUN.stats.cards,fights:RUN.stats.fights,
+    left:RUN.gold,newp:RUN.stats.newp,rock0:before,rock1:DAY.rock,s0:s0,got:got,bonus:bonus,why:why,whole:RUN.part>=5};
+}
+/* souvenirs: cosmetic tat for the Souvenir Shelf, bought with whatever is left */
+var SOUV=[['magnet','Fridge Magnet','A tram, roughly.',10],['pc','Postcard of a Donkey','The donkey is called Brian.',10],['rocknm','Stick of Rock with Your Cat’s Name','Spelled nearly right.',15],
+ ['bucket','Bucket and Spade','For the tide, if it comes back.',20],['towel','Tea Towel','A map of the prom, in brown.',25],['wand','Light-up Wand','Flashes three colours. Two work.',25],
+ ['khat','Kiss-Me-Quick Hat','Nobody has.',30],['shells','Shell-Covered Box','Holds nothing well.',35],['globe','Snow Globe','Snow, on the seaside. Do not ask.',40],
+ ['gull','Ceramic Gull','It is looking at your chips.',45],['tram','Tram Money Box','Ding ding.',50],['tower','Model of the Tower','Slightly wrong.',60],
+ ['baro','Brass Barometer','Permanently on “Change”.',90,1],['photo','Framed Pier Photo','Somebody else’s family.',80,1],['jug','Toby Jug','Of nobody in particular.',110,1]];
+function souvList(){var two=DAY.sticks>=6;return SOUV.filter(function(s){return !s[4]||two;});}
+/* ---------- the screens a day out adds ---------- */
+function rockHTML(cls,r){
+  var k=Math.min(DAY.sticks,STICKS.length),last=k>=STICKS.length,base=k?stickNeed(k-1):0,need=last?1:stickNeed(k)-base,have=last?1:DAY.rock-base,
+      pct=Math.round(clamp(have/need,0,1)*100),from=r&&r.s0===DAY.sticks?Math.round(clamp((r.rock0-base)/need,0,1)*100):0;
+  return '<div class="rock '+(cls||'')+'" style="--from:'+from+'%;--to:'+pct+'%"><span class="rk-lab">'+ic('rock')+(last?'Every stick pulled':'Stick of rock #'+(k+1))+'</span>'+
+    '<span class="rk-bar" title="'+have+' of '+need+'"><span class="rk-fill"></span><span class="rk-word">'+(last?'ALL PULLED':STICKS[k][3])+'</span></span>'+
+    '<span class="rk-next">'+(last?'Nothing left to unlock. Yet.':'Next: '+stickName(k)+' <small>('+Math.max(0,need-have)+' to go)</small>')+'</span></div>';
+}
+function popsHTML(list){
+  if(!list||!list.length)return '';var more=list.length>3?list.length-3:0;list=list.slice(0,3);
+  return '<div class="pops">'+list.map(function(k,j){return '<span class="pop" style="--i:'+j+'">'+ic('rock')+'<b>#'+(k+1)+' '+STICKS[k][3]+'</b> '+stickName(k)+(STICKS[k][1]==='place'||STICKS[k][1]==='shop2'?'':' <small>(milestone 2)</small>')+'</span>';}).join('')+(more?'<span class="pop">+'+more+' more in the Rock collection</span>':'')+'</div>';
+}
+function stageHTML(){
+  var P=PARTS[RUN.part],h='<div class="panel day"><h2><span class="crest">'+ic(P.ic)+'</span>'+P.n+', '+P.time+'</h2><p>'+(S.note||P.ask)+(!DAY.done1?' <em>Your first day out sticks to the classic route.</em>':'')+'</p>'+popsHTML(S.pops)+'<div class="places">';
+  P.stages.forEach(function(id,j){var s=STAGES[id],ok=canPick(id),op=isOpen(id),a=DAY.album[id]||{},why;
+    why=!DAY.done1&&s.un!=='start'?'After your first day out':s.un==='win'?'Win a day out to open':'Stick of rock #'+s.un+' opens this';
+    h+='<button type="button" class="place'+(ok?'':' locked')+'" data-a="place" data-i="'+id+'"'+(ok?'':' disabled aria-disabled="true"')+' style="--c1:'+s.c1+';--c2:'+s.c2+';--i:'+j+'">'+
+      '<span class="pl-art">'+ic(ok?s.ic:'what')+'</span><b>'+s.n+'</b>'+
+      (ok&&DAY.unseen[id]?'<span class="tag new">New!</span>':ok&&!s.ready?'<span class="tag soon">Coming soon</span>':a.s?'<span class="tag done">Seen off</span>':'')+
+      '<em>'+s.blurb+'</em>'+(ok?'<span class="pl-foe"><i>Expect</i> '+(s.ready?s.foe:'stand-ins: '+s.soon.replace(/^Coming soon: /,''))+'</span>':'<span class="pl-lock">'+ic('shield')+why+'</span>')+'</button>';});
+  h+='</div>'+rockHTML('sm')+(RUN.part===4?'<button type="button" class="btn quiet" data-a="callday">Call it a day</button>':'')+'</div>';
+  return h;
+}
+function postcardHTML(id){
+  var s=STAGES[id],a=DAY.album[id]||{},v=!!a.v;
+  return '<div class="pcard'+(v?'':' blank')+'" style="--c1:'+s.c1+';--c2:'+s.c2+'"><span class="pc-art">'+ic(v?s.ic:'what')+'</span><i>'+(v?'Greetings from':'Not yet visited')+'</i><b>'+(v?s.n:'? ? ?')+'</b>'+
+    '<span class="pc-st"><em class="'+(a.v?'on':'')+'" title="Visited">V</em><em class="'+(a.s?'on':'')+'" title="Seen off">S</em><em class="g'+(a.g?' on':'')+'" title="Gold foil: seen off on Encore 3 or higher">G</em></span></div>';
+}
+var SHELFX={fudge:['Bag of Fudge','Whatever you had left.']};
+function albumHTML(){
+  var t=S.tab||'cards',h='<div class="panel album"><h2>The Postcard Album</h2><div class="row tabs">';
+  [['cards','Postcards'],['rock','Rock collection'],['shelf','Souvenir shelf']].forEach(function(x){h+='<button type="button" class="chip'+(t===x[0]?' on':'')+'" data-a="tab" data-i="'+x[0]+'">'+x[1]+'</button>';});
+  h+='</div>';
+  if(t==='cards'){var n=0;Object.keys(DAY.album).forEach(function(k){var a=DAY.album[k];n+=(a.v?1:0)+(a.s?1:0)+(a.g?1:0);});
+    h+='<p>'+n+' of 42 stamps. <small class="ph">Postcard art is placeholder.</small></p><div class="pgrid">';
+    PARTS.forEach(function(P){P.stages.forEach(function(id){h+=postcardHTML(id);});});h+='</div>';}
+  else if(t==='rock'){h+='<p>'+DAY.sticks+' of '+STICKS.length+' sticks pulled. Every point you score goes into the next one.</p>'+rockHTML('sm')+'<div class="rgrid">';
+    STICKS.forEach(function(s,k){h+='<span class="rstick'+(k<DAY.sticks?' on':'')+'" title="'+(k<DAY.sticks?stickName(k):'Not pulled yet')+'"><b>'+(k<DAY.sticks?s[3]:'#'+(k+1))+'</b></span>';});h+='</div>';}
+  else{var ks=Object.keys(DAY.shelf);h+='<p>'+(ks.length?'Everything you brought home. Nothing here does anything, which is the point.':'Nothing yet. Spend what is left at the end of a day out.')+' Day Tripper streak: '+DAY.streak.n+(DAY.streak.n===1?' day':' days')+' (best '+DAY.streak.best+').</p><div class="list shelf">';
+    ks.forEach(function(k){var it=SOUV.filter(function(x){return x[0]===k;})[0]||[k].concat(SHELFX[k]||[k,'']);h+='<div class="item k-rel"><span><b>'+it[1]+'</b> '+it[2]+'</span><span class="lt">×'+DAY.shelf[k]+'</span></div>';});h+='</div>';}
+  return h+'<button type="button" class="btn quiet" data-a="back">Back</button></div>';
+}
+function reportHTML(){
+  var e=S.end,r=e.rep,P=r.places.map(function(id){return STAGES[id]?STAGES[id].n:id;});
+  var h='<div class="panel report'+(e.won?' won':'')+'"><h2>'+(r.whole?'Seen off, the whole day':e.won?'A day out, seen off':'Seen off yourself')+'</h2>'+
+    '<div class="pc-back"><div class="pc-msg"><span class="pc-head">The Day Out Report</span><p class="hand">'+r.note+'</p><p class="sig">'+HEROES[e.hero].name+(e.lvl?' · Encore '+e.lvl:'')+'</p></div>'+
+    '<div class="pc-addr"><span class="pc-stamp">'+ic(r.places.length?STAGES[r.places[r.places.length-1]].ic:'tram')+'</span><dl>'+
+    '<dt>Went to</dt><dd class="pl">'+(P.join(' → ')||'Nowhere, in the end')+'</dd>'+
+    '<dt>Seen off</dt><dd data-n="'+r.kills+'">0</dd><dt>Best combo</dt><dd data-n="'+r.combo+'">0</dd><dt>Cards played</dt><dd data-n="'+r.cards+'">0</dd><dt>Scrumplings spent</dt><dd data-n="'+r.spent+'">0</dd></dl></div></div>'+
+    '<div class="rp-mid"><div class="rp-score"><span>Score</span><b class="big" id="bigScore">'+e.pts+'</b>'+(e.best&&e.pts>0?'<span class="newbest">New best!</span>':'')+'</div>'+rockHTML('rp',r)+'</div>'+
+    (r.why.length||r.newp?'<p class="rp-why">'+(r.why.length?'Bonus rock +'+r.bonus+': '+r.why.join(', ')+'. ':'')+(r.newp?'New places seen off today: '+r.newp+' (+50 rock each). ':'')+(r.firstWin?'<b>Last Orders is now open.</b>':'')+'</p>':'')+popsHTML(r.got)+
+    '<div class="row"><button type="button" class="btn go" data-a="home">'+(r.left>0?'Spend '+r.left+' Scrumplings on the way home':'Head home')+'</button><button type="button" class="btn quiet" data-a="album">Postcard album</button><button type="button" class="btn quiet" data-a="copy">Copy my result</button></div>'+
+    '<p class="share" id="shareText" hidden>I scored '+e.pts+' in Seen Off as '+HEROES[e.hero].name+(e.won?' and saw off a whole day out in Blackpool.':', and got as far as '+(P[P.length-1]||'the Prom')+'.')+'</p></div>';
+  return h;
+}
+function reportFx(){
+  Array.prototype.forEach.call(document.querySelectorAll('.report dd[data-n]'),function(d,j){var n=+d.getAttribute('data-n');setTimeout(function(){countUp(d,n,500);if(n)chime(j*2,0);},300+j*260);});
+}
+function souvHTML(){
+  var g=RUN?RUN.gold:0,h='<div class="panel souv"><div class="awning" aria-hidden="true"></div><h2>On the way home</h2><p>'+(S.note||'You have '+g+' Scrumplings left. Whatever you do not spend turns into fudge.')+'</p><div class="sgrid">';
+  souvList().forEach(function(s){var own=DAY.shelf[s[0]]||0;h+='<button type="button" class="sv" data-a="souv" data-i="'+s[0]+'"'+(g<s[3]?' disabled':'')+'><b>'+s[1]+'</b><em>'+s[2]+'</em><span class="pr">'+ic('coin')+s[3]+(own?' · have '+own:'')+'</span></button>';});
+  return h+'</div><button type="button" class="btn go" data-a="gohome">'+(g>0?'Home (the rest becomes fudge)':'Home')+'</button></div>';
+}
+
 
 /* ================= saved things ================= */
 var META={runs:0,wins:0,best:0,open:0,far:0,mw:0,six:0,hw:{},cw:{}};
@@ -471,12 +677,11 @@ function genMap(){
   var rows=[[{t:'F'},{t:'F'},{t:'F'}]];
   rows.push(shuffle(['F','F','E']).map(function(t){return {t:t};}));
   rows.push(shuffle(['L','S',pick(['F','T'])]).map(function(t){return {t:t};}));
-  rows.push(shuffle(['F','E',pick(['L','T'])]).map(function(t){return {t:t};}));
   rows.push([{t:'R'},{t:'R'},{t:'R'}]);rows.push([{t:'B'}]);return rows;
 }
 function newRun(){
   var h=HEROES[S.hero];
-  RUN={hero:h.id,lvl:S.lvl,max:h.hp,hp:h.hp,gold:60,deck:h.deck.map(function(id){return {id:id,u:0};}),relics:[],cats:[],brews:[],act:1,row:-1,col:1,map:genMap(),score:0,floor:0,seen:[],en:0,first:1};
+  RUN={hero:h.id,lvl:S.lvl,max:h.hp,hp:h.hp,gold:60,deck:h.deck.map(function(id){return {id:id,u:0};}),relics:[],cats:[],brews:[],act:1,row:-1,col:1,map:[],part:0,stage:null,day:[],stats:{kills:0,cards:0,spent:0,combo:0,fights:0,newp:0},banked:0,score:0,floor:0,seen:[],en:0,first:1};
   META.runs++;saveMeta();S.scr='cat';S.offer=shuffle(CATIDS.slice()).slice(0,3);saveRun();render();
 }
 function addCat(id){RUN.cats.push(id);RUN.deck.push({id:CATS[id].card,u:0});}
@@ -501,18 +706,20 @@ function enterNode(c){
 function leaveNode(){
   var n=RUN.map[RUN.row][RUN.col];S.mode=null;
   if(n.t==='B'){
-    if(RUN.act>=3){finish(true);return;}
-    RUN.act++;RUN.row=-1;RUN.col=1;RUN.map=genMap();RUN.hp=Math.max(RUN.hp,Math.round(RUN.max*(RUN.lvl>=3?.75:1)));
+    stageDone();RUN.part++;
+    if(RUN.part>=5||(RUN.part===4&&!lastOpen())){finish(true);return;}
+    RUN.hp=Math.max(RUN.hp,Math.round(RUN.max*(RUN.lvl>=3?.75:1)));S.scr='stage';S.note='';saveRun();render();return;
   }
   S.scr='map';saveRun();render();
 }
 function score(){return Math.round(RUN.score*(1+.25*RUN.lvl));}
 function finish(won){
-  if(won){RUN.score+=500+RUN.hp*2;}
+  if(won){RUN.score+=500+RUN.hp*2+(RUN.part>=5?250:0);}
   var pts=score(),newBest=pts>META.best;if(newBest)META.best=pts;
+  var rep=dayReport(won,pts);
   if(won){META.wins++;META.hw[RUN.hero]=(META.hw[RUN.hero]||0)+1;RUN.cats.forEach(function(c){META.cw[c]=1;});if(RUN.cats.length>=6)META.six=1;META.mw=Math.max(META.mw,RUN.lvl+1);if(RUN.lvl===META.open&&META.open<5)META.open++;}
   S.end={won:won,pts:pts,best:newBest,floor:RUN.floor,act:RUN.act,hero:RUN.hero,lvl:RUN.lvl,cats:RUN.cats.length,by:B&&!won?B.en.filter(function(e){return !e.dead;}).map(function(e){return e.name;})[0]:''};
-  saveMeta();if(B)B.over=true;try{localStorage.removeItem('stp-run');}catch(e){}S.mode=null;S.scr='over';sfx(won?'win':'lose');if(!won&&B)beat(1400);render();loadWall();
+  S.end.rep=rep;S.end.stage=RUN.stage;saveMeta();if(B)B.over=true;try{localStorage.removeItem('stp-run');}catch(e){}S.mode=null;S.scr='report';sfx(won?'win':'lose');if(!won&&B)beat(1400);render();loadWall();
 }
 
 /* ================= a fight ================= */
@@ -525,20 +732,20 @@ function dl(t){return Math.max(0,(t-now())/1000);}
 function fxReset(d){fxN=0;FXD=d||0;}
 function fxOn(who,text,col){
   if(!who)return now();var k='txt',v=0,m=/^-(\d+)/.exec(text),t=ft();
-  if(m){k='dmg';v=+m[1];}else if(/^\+\d+ Block$/.test(text))k='blk';else if(text==='Blocked')k='clang';else if(/Dreamies$/.test(text))k='gold';else if(/^\+\d+$/.test(text))k='heal';else if(/!$/.test(text))k='big';
+  if(m){k='dmg';v=+m[1];}else if(/^\+\d+ Block$/.test(text))k='blk';else if(text==='Blocked')k='clang';else if(/Scrumplings$/.test(text))k='gold';else if(/^\+\d+$/.test(text))k='heal';else if(/!$/.test(text))k='big';
   var f={who:who,text:text,col:col,t:t,n:fxN%4,k:k,v:v,fired:0};FX.push(f);fxN++;if(FX.length>40)FX.shift();pre(f);return t;
 }
 function startCombat(kind){
-  var tbl=ENC[RUN.act][kind],set=(kind==='F'&&RUN.first)?pick(tbl.slice(0,4)):pick(tbl),hm=1+.1*RUN.lvl;RUN.first=0;
+  var tbl=ENC[stEnc()][kind],set=(kind==='F'&&RUN.first)?pick(tbl.slice(0,4)):pick(tbl),hm=(1+.1*RUN.lvl)*(STGD()&&STGD().hm||1);RUN.first=0;
   H={hero:1,name:HEROES[RUN.hero].name,block:0,st:{}};Object.defineProperty(H,'hp',{get:function(){return RUN.hp;},set:function(v){RUN.hp=v;}});H.max=RUN.max;
-  B={kind:kind,en:[],draw:[],hand:[],disc:[],turn:0,energy:0,over:false,won:false,count:0,tcount:0,hat:has('hat'),brolly:has('brolly'),mult:1};
+  B={kind:kind,en:[],draw:[],hand:[],disc:[],turn:0,energy:0,over:false,won:false,count:0,tcount:0,combo:0,cmax:0,hat:has('hat'),brolly:has('brolly'),mult:1};
   set.forEach(function(k,i){var d=EN[k],hp=Math.round(ri(d.hp[0],d.hp[1])*hm);B.en.push({k:k,name:d.n,hp:hp,max:hp,block:0,st:{},i:set.length>1?i:0,sc:d.sc||1,boss:d.boss,elite:d.elite,slot:i,seed:ri(1,99999)});});
   B.draw=shuffle(RUN.deck.map(function(c){return {id:c.id,u:c.u};}));
   if(has('accord'))B.draw.splice(ri(0,B.draw.length),0,{id:'sock',u:0});
   if(has('rock'))H.st.gus=1;if(has('deckchair'))H.st.poi=1;if(has('manus')){H.st.gus=(H.st.gus||0)+2;H.st.poi=(H.st.poi||0)+2;}
   if(hasCat('tilly'))H.st.claw=3;if(hasCat('arthur'))H.block=8;
   B.en.forEach(function(e){if(has('wetfish'))e.st.sog=1;if(has('bill'))e.st.inv=3;e.mv=nextMove(e);});
-  S.scr='combat';S.sel=-1;S.brewSel=-1;FX=[];fxReset(0);startTurn(true);
+  S.scr='combat';S.sel=-1;S.brewSel=-1;FX=[];fxReset(0);clearStamps();startTurn(true);
 }
 function nextMove(e){var m=EN[e.k].ai(e),o={},k;for(k in m)o[k]=m[k];if(o.a)o.a=Math.round(o.a*(1+.07*RUN.lvl));return o;}
 function dmgCalc(base,src,dst){var d=base+(src.st.gus||0);if(src===H)d*=B.mult;if(src.st.sog>0)d*=.75;if(dst.st.flu>0)d*=(dst!==H&&has('ghost'))?1.75:1.5;return Math.max(0,Math.floor(d));}
@@ -558,14 +765,14 @@ function strike(src,dst,base){
 }
 function hurt(e,n){if(e.dead||B.over)return;e.hp-=n;e.hitT=fxOn(e,'-'+n,COL.purple);check(e);}
 function check(e){
-  if(e.hp>0||e.dead)return;e.dead=true;e.hp=0;e.deadT=ft();sfx('kill',dl(e.deadT));
+  if(e.hp>0||e.dead)return;var ov=Math.max(0,-e.hp);e.dead=true;e.hp=0;e.deadT=ft();sfx('kill',dl(e.deadT));stampAt(e,ov);if(RUN&&RUN.stats)RUN.stats.kills++;
   if(EN[e.k].pal)alive().forEach(function(o){o.st.gus=(o.st.gus||0)+4;fxOn(o,'Vindicated!',COL.red);});
   if(!alive().length)victory();
 }
 function defeat(){
   if(B.over)return;
   if(has('life')&&!RUN.lifeUsed){RUN.lifeUsed=1;RUN.hp=Math.round(RUN.max*.3);fxOn(H,'Tenth Life!',COL.green);return;}
-  RUN.hp=0;B.over=true;finish(false);
+  RUN.hp=0;B.over=true;finish(RUN.part>=4);   /* falling over during Last Orders still counts the day */
 }
 function draw(n){
   for(var i=0;i<n;i++){
@@ -575,7 +782,7 @@ function draw(n){
   }
 }
 function startTurn(first){
-  B.turn++;B.tcount=0;if(!first)H.block=0;
+  B.turn++;B.tcount=0;B.combo=0;comboFx(0);if(!first)H.block=0;
   B.energy=3+RUN.en+(has('tide')&&B.turn%3===0?1:0)+(hasCat('trixie')&&B.turn===1?1:0);
   if(H.st.next){H.block+=H.st.next;H.st.next=0;}
   if(H.st.ci)alive().forEach(function(e){e.st.inv=(e.st.inv||0)+H.st.ci;});
@@ -594,7 +801,7 @@ function playCard(i,ti){
   fxReset(RM?0:150);B.energy-=cost(ci);B.hand.splice(i,1);S.sel=-1;
   var times=1;if(H.st.dbl>0&&ci.id!=='plusone'){times=2;H.st.dbl--;}
   B.mult=1;if(d.type==='A'&&B.hat){B.mult=2;B.hat=false;}
-  sfx('card');
+  sfx('card');comboUp();
   for(var k=0;k<times&&!B.over&&S.scr==='combat';k++)d.fn(t,vals(d,ci.u),ci);
   if(B.over||S.scr!=='combat')return true;
   B.mult=1;
@@ -654,7 +861,8 @@ function rollCards(){
 function victory(){
   B.over=true;B.won=true;var k=B.kind,g=k==='B'?ri(55,70):k==='L'?ri(28,38):ri(11,19);
   g=Math.round(g*(has('float')?1.25:1));RUN.gold+=g;RUN.score+=(k==='B'?150:k==='L'?60:20)+RUN.floor*5;
-  var rw={gold:g,cards:rollCards(),took:0,relic:null,brew:null,healed:0,kind:k};
+  var cb=comboBonus(B.cmax);if(cb){RUN.gold+=cb.g;g+=cb.g;}RUN.stats.fights++;
+  var rw={gold:g,cards:rollCards(),took:0,relic:null,brew:null,healed:0,kind:k,combo:cb};
   if(hasCat('daisy'))rw.healed=heal(4);
   if(k==='L'){rw.relic=freeRelic(0);if(rw.relic)addRelic(rw.relic);}
   if(Math.random()<(k==='F'?.35:.6)){var b=pick(Object.keys(BREWS));if(gainBrew(b))rw.brew=b;}
@@ -672,21 +880,25 @@ function openShop(){
   S.scr='shop';
 }
 var EVENTS=[
- {id:'cat',t:'A cat has decided you live here now',tx:function(){var c=S.ev.cat;return c?CATS[c].name+' is sitting on your spell book and shows no sign of moving. '+CATS[c].perk:'Every cat you know is already here. They have brought you a small pile of Dreamies, or possibly taken them from someone.';},
-  opts:function(){var c=S.ev.cat;return c?[['Make room for '+CATS[c].name,function(){addCat(c);return CATS[c].name+' has joined you, and '+CARDS[CATS[c].card].name+' is in your deck.';}],['Explain that you are busy',function(){RUN.gold+=25;return 'The cat leaves 25 Dreamies behind, pointedly.';}]]:[['Accept the Dreamies',function(){RUN.gold+=60;return '60 Dreamies. Do not ask.';}]];},
+ {id:'cat',t:'A cat has decided you live here now',tx:function(){var c=S.ev.cat;return c?CATS[c].name+' is sitting on your spell book and shows no sign of moving. '+CATS[c].perk:'Every cat you know is already here. They have brought you a small pile of Scrumplings, or possibly taken them from someone.';},
+  opts:function(){var c=S.ev.cat;return c?[['Make room for '+CATS[c].name,function(){addCat(c);return CATS[c].name+' has joined you, and '+CARDS[CATS[c].card].name+' is in your deck.';}],['Explain that you are busy',function(){RUN.gold+=25;return 'The cat leaves 25 Scrumplings behind, pointedly.';}]]:[['Accept the Scrumplings',function(){RUN.gold+=60;return '60 Scrumplings. Do not ask.';}]];},
   init:function(){S.ev.cat=shuffle(CATIDS.filter(function(c){return !hasCat(c);}))[0]||null;}},
  {id:'tribunal',t:'Summon the Tribunal',tx:function(){return 'Arthur will rule on whether the milk goes in first. He requires a side from you before he ignores it.';},
-  opts:function(){return [['Tea first',function(){var c=pick(RUN.deck.filter(function(x){return !x.u&&CARDS[x.id].n.length;}));if(c){c.u=1;return 'Ruled in your favour. '+CARDS[c.id].name+' has been improved.';}return 'Ruled in your favour. Nothing happens, as is traditional.';}],['Milk first',function(){RUN.gold+=45;return 'Fined 45 Dreamies, which Arthur then gives to you by mistake.';}],['Abstain',function(){var h=heal(12);return 'You sit quietly at the back and recover '+h+' health.';}]];}},
+  opts:function(){return [['Tea first',function(){var c=pick(RUN.deck.filter(function(x){return !x.u&&CARDS[x.id].n.length;}));if(c){c.u=1;return 'Ruled in your favour. '+CARDS[c.id].name+' has been improved.';}return 'Ruled in your favour. Nothing happens, as is traditional.';}],['Milk first',function(){RUN.gold+=45;return 'Fined 45 Scrumplings, which Arthur then gives to you by mistake.';}],['Abstain',function(){var h=heal(12);return 'You sit quietly at the back and recover '+h+' health.';}]];}},
  {id:'chips',t:'The chip shop on the prom',tx:function(){return 'Salt? Vinegar? Both. It is the only correct answer and they know it.';},
-  opts:function(){return [['Large chips (30 Dreamies): heal 22',function(){if(RUN.gold<30)return null;RUN.gold-=30;return 'Recovered '+heal(22)+' health. A seagull watched the whole thing.';}],['A tray to keep (45 Dreamies): +6 maximum health',function(){if(RUN.gold<45)return null;RUN.gold-=45;RUN.max+=6;RUN.hp+=6;return 'Your maximum health goes up by 6.';}],['Scraps, free: heal 6',function(){return 'Recovered '+heal(6)+' health.';}]];}},
+  opts:function(){return [['Large chips (30 Scrumplings): heal 22',function(){if(RUN.gold<30)return null;RUN.gold-=30;return 'Recovered '+heal(22)+' health. A seagull watched the whole thing.';}],['A tray to keep (45 Scrumplings): +6 maximum health',function(){if(RUN.gold<45)return null;RUN.gold-=45;RUN.max+=6;RUN.hp+=6;return 'Your maximum health goes up by 6.';}],['Scraps, free: heal 6',function(){return 'Recovered '+heal(6)+' health.';}]];}},
  {id:'invoice',t:'An imaginary invoice',tx:function(){return 'Reggie has sent an invoice for services rendered, with an extra tenner for the Y. It is addressed to you.';},
-  opts:function(){return [['Pay it (40 Dreamies): strike a card from your deck',function(){if(RUN.gold<40)return null;RUN.gold-=40;S.mode='cut';return '';}],['Dispute it: gain 30 Dreamies and a Mislaid Sock',function(){RUN.gold+=30;RUN.deck.push({id:'sock',u:0});return 'You are 30 Dreamies up and one sock down.';}]];}},
+  opts:function(){return [['Pay it (40 Scrumplings): strike a card from your deck',function(){if(RUN.gold<40)return null;RUN.gold-=40;S.mode='cut';return '';}],['Dispute it: gain 30 Scrumplings and a Mislaid Sock',function(){RUN.gold+=30;RUN.deck.push({id:'sock',u:0});return 'You are 30 Scrumplings up and one sock down.';}]];}},
  {id:'dear',t:'Dear Terry',tx:function(){return 'You have written to Terry with a problem. His reply runs to four pages and a diagram.';},
-  opts:function(){return [['Follow the advice: lose 7 health, gain a keepsake',function(){var r=freeRelic(0);RUN.hp=Math.max(1,RUN.hp-7);if(r){addRelic(r);return 'It hurt, but you now own: '+RELICS[r][0]+'. '+RELICS[r][1];}RUN.gold+=50;return 'It hurt. 50 Dreamies by way of apology.';}],['File it carefully',function(){return 'You file it under T.';}]];}},
+  opts:function(){return [['Follow the advice: lose 7 health, gain a keepsake',function(){var r=freeRelic(0);RUN.hp=Math.max(1,RUN.hp-7);if(r){addRelic(r);return 'It hurt, but you now own: '+RELICS[r][0]+'. '+RELICS[r][1];}RUN.gold+=50;return 'It hurt. 50 Scrumplings by way of apology.';}],['File it carefully',function(){return 'You file it under T.';}]];}},
  {id:'ferret',t:'The Ferret is fishing',tx:function(){return 'He has been here since six. Not a bite. Great morning, he says, and means it.';},
-  opts:function(){return [['Sit with him a while: heal 15',function(){return 'Nothing is caught. You recover '+heal(15)+' health anyway.';}],['Borrow a brew from his flask',function(){return gainBrew()?'He hands over a '+BREWS[RUN.brews[RUN.brews.length-1]][0]+'.':'Your pockets are full. He shrugs.';}]];}}
+  opts:function(){return [['Sit with him a while: heal 15',function(){return 'Nothing is caught. You recover '+heal(15)+' health anyway.';}],['Borrow a brew from his flask',function(){return gainBrew()?'He hands over a '+BREWS[RUN.brews[RUN.brews.length-1]][0]+'.':'Your pockets are full. He shrugs.';}]];}},
+ {id:'sue',st:'prom',t:'The Man Who Wanted to Sue God',tx:function(){return 'A man on a bench is drafting a claim against the Almighty. He needs a witness, and you have a pen.';},
+  opts:function(){return [['Sign as witness: a rare card, and a Writer’s Block',function(){var p=POOL[RUN.hero].filter(function(id){return CARDS[id].rar==='r';}),c=pick(p.length?p:POOL[RUN.hero]);RUN.deck.push({id:c,u:0});RUN.deck.push({id:'wblock',u:0});return 'You sign. '+CARDS[c].name+' goes in your deck, and so does the doubt.';}],
+   ['Advise him to settle: heal 12',function(){return 'He says he will think about it. You recover '+heal(12)+' health.';}],
+   ['Ask about his fees: 50 Scrumplings',function(){RUN.gold+=50;return 'He is working on a no-win, no-fee basis. He gives you 50 Scrumplings to go away.';}]];}}
 ];
-function openEvent(){var p=EVENTS.filter(function(e){return RUN.seen.indexOf(e.id)<0;});if(!p.length){RUN.seen=[];p=EVENTS;}var ev=pick(p);RUN.seen.push(ev.id);S.ev={d:ev,res:''};if(ev.init)ev.init();S.scr='event';}
+function openEvent(){var p=EVENTS.filter(function(e){return RUN.seen.indexOf(e.id)<0&&(!e.st||e.st===RUN.stage);}),own=p.filter(function(e){return e.st;});if(own.length)p=own;if(!p.length){RUN.seen=[];p=EVENTS;}var ev=pick(p);RUN.seen.push(ev.id);S.ev={d:ev,res:''};if(ev.init)ev.init();S.scr='event';}
 
 /* ================= drawing: wobbly ink ================= */
 var cv=$('scene'),ctx=cv.getContext('2d'),W=680,Hh=360,PORT=false,scale=1;
@@ -749,7 +961,7 @@ function catHead(c,r){
   [-1,1].forEach(function(s){poly([s*7,-12,s*19,-34-r()*2,s*24,-7],c.ear);ctx.beginPath();ctx.moveTo(s*12,-13);ctx.lineTo(s*18.5,-26);ctx.lineTo(s*21,-11);ctx.closePath();ctx.fillStyle=COL.pink;ctx.fill();});
   if(c.fluff)fur(0,0,26,22,22,.13,r);else smooth(blob(0,0,23,20,10,.05,r));ink(c.head);
   if(c.face){smooth(blob(3,4,15,13,9,.08,r));ctx.fillStyle=c.face;ctx.fill();}
-  if(c.spot){ell(-9,-10,6,4,-.3);ctx.fillStyle=c.spot;ctx.fill();}
+  if(c.spot){ell(c.sx!=null?c.sx:-9,c.sy!=null?c.sy:-10,c.sr||6,(c.sr||6)*.7,-.3);ctx.fillStyle=c.spot;ctx.fill();}
   var cbl=blink();[-6,11].forEach(function(ex){if(cbl){ctx.beginPath();ctx.arc(ex+.6,-4,4.2,.3,Math.PI-.3);ctx.strokeStyle=COL.ink;ctx.lineWidth=1.7;ctx.lineCap='round';ctx.stroke();return;}ell(ex,-2.5,5.2,4.2);ctx.fillStyle='#fff';ctx.fill();ell(ex+.8,-2.5,3.7,3.6);ctx.fillStyle=c.eye;ctx.fill();ell(ex+1.4,-2.5,1.5,3);ctx.fillStyle=COL.ink;ctx.fill();});
   poly([0,8,7,8,3.5,12],COL.pink,1.4);var w=c.whisk||COL.ink;
   ctx.beginPath();ctx.arc(.5,13,3.4,.1,Math.PI);ctx.moveTo(10.4,13);ctx.arc(7,13,3.4,0,Math.PI-.1);ctx.strokeStyle=w;ctx.lineWidth=1.5;ctx.stroke();
@@ -758,7 +970,7 @@ function catHead(c,r){
   poly([-17,-17,2,-58-r()*2,19,-19],c.hat,2.2);ctx.beginPath();ctx.ellipse(1,-18,25,6,-.05,0,6.283);ink(c.hat,2.2);star(2,-34,5,'#ffe27a');
 }
 function drawCat(id,r,t){var c=CATS[id];ctx.fillStyle='rgba(20,20,20,.13)';ell(0,2,22,4);ctx.fill();
-  ctx.save();ctx.translate(14,-14);ctx.rotate(.5+Math.sin(t*3+id.length)*.2);if(c.fluff)fur(0,-14,6,17,12,.3,r);else ell(0,-14,3.5,16);ink(c.tail||c.ear,1.8);ctx.restore();
+  ctx.save();ctx.translate(14,-14);ctx.rotate(.5+Math.sin(t*3+id.length)*.2);if(c.fluff)fur(0,-14,6,17,12,.3,r);else ell(0,-14,3.5,16);ink(c.tail||c.ear,1.8);if(c.ring){[-24,-17,-10].forEach(function(y){line([-3.2,y,3.2,y-1.5],2.2,c.ring);});}ctx.restore();
   if(c.fluff)fur(0,-13,16,15,18,.14,r);else smooth(blob(0,-13,14,14,9,.05,r));ink(c.body,2);
   ctx.save();ctx.translate(-1,-36+Math.sin(t*2.6+id.length)*1.2);ctx.scale(.72,.72);catHead(c,r);ctx.restore();}
 /* the opposition */
@@ -927,7 +1139,7 @@ function ease(x){var c=1.70158;x-=1;return 1+(c+1)*x*x*x+c*x*x;}
 
 /* ---- three piers, and no two alike ----
    South Pier is the one with the rides, on a bright afternoon. Central Pier is the Big Wheel, at sunset.
-   North Pier is the old Victorian one, at night, with the Illuminations on and the Tower next door.
+   North Pier is the old Victorian one, at night, with the Lights on and the Tower next door.
    Each is painted in two sheets, what is far off (sky, shore, sea) and what stands on the pier itself,
    so that the waves and the moving things can run between the two. */
 var SKIES={1:[[0,'#1596ff'],[.55,'#4fc3ff'],[1,'#c4f1ff']],2:[[0,'#4b22c9'],[.38,'#e0338a'],[.72,'#ff8a3d'],[1,'#ffd76b']],3:[[0,'#06082b'],[.6,'#17125f'],[1,'#3d1a94']]},
@@ -1006,7 +1218,7 @@ function southNear(){
   rect(hx,hz+2,hw,base-hz,'#fff',1.8);ctx.fillStyle=COL.red;for(i=0;i<3;i++)ctx.fillRect(hx+hw*(.12+i*.3),hz+3,hw*.16,base-hz-2);
   poly([hx-5,hz+3,hx+hw/2,hz-13,hx+hw+5,hz+3],COL.red,1.8);
   /* and its name, on a board over the station */
-  board('SOUTH PIER',b[0],b[1],b[2],b[3],'#fff',COL.red,PORT?11:13);
+  board(signFor('SOUTH PIER'),b[0],b[1],b[2],b[3],'#fff',COL.red,PORT?11:13);
 }
 function southSky(t){
   var i,x,y,q=PORT?.82:1;
@@ -1063,7 +1275,7 @@ function centralNear(){
   /* the way in: two barber's poles, and the name on a board between them */
   [-1,1].forEach(function(s){candy(gx+s*px,gy-bh/2-9,base,7);ell(gx+s*px,gy-bh/2-13,5,5);ink('#ffd23f',1.8);});
   ctx.beginPath();ctx.arc(gx,gy-bh/2+1,bw*.2,Math.PI,0);ctx.closePath();ink('#ff4f9a',2.2);star(gx,gy-bh/2-bw*.085,bw*.07,'#ffe14d');
-  board('CENTRAL PIER',gx,gy,bw,bh,'#ffd23f',COL.ink,g[4]);
+  board(signFor('CENTRAL PIER'),gx,gy,bw,bh,'#ffd23f',COL.ink,g[4]);
 }
 function centralSky(t){
   var hz=GY-46,i,a,cx,cy,wh=wheelAt(),x=wh[0],y=wh[1],R=wh[2],rot=RM?.2:t*.13,n=12,cols=['#ff4f9a','#ffe14d','#29e0ff','#b6f23c','#ff8a1f','#ffffff'],sx=W*.655,base=GY+2,cream='#fff1d6';
@@ -1550,7 +1762,7 @@ function drawScene(dt){
     if(e.gone){q=(n-e.deadT)/640;if(q>=1)return;a2.fl=q<.16?1:0;a2.x+=q*q*150;a2.y-=Math.sin(Math.min(1,q*1.15)*Math.PI)*46+q*20;a2.rot=q*5.2;a2.sx=a2.sy=q<.16?1+q*1.4:Math.max(.05,1.22-(q-.16)*1.2);a2.cy=52*e.sc;al2=q>.7?(1-q)/.3:1;
       if(!e.poof){e.poof=1;if(!RM){ZP=Math.max(ZP,e.boss?.09:e.elite?.065:.045);emit(PT,'coin',ex,e.y,e.boss?9:e.elite?6:3,{v:180,life:.85,s:5,g:640,a:-1.5708,spread:1.7});}emit(PT,'star',ex,e.y,9,{v:200,life:.7,cols:['#ffe14d','#fff','#ff4f9a'],s:6,g:300});emit(PT,'puff',ex,e.y+20,6,{v:50,life:.5,col:'#fff',s:9,g:-30,jx:40,jy:30});emit(PT,'ring',ex,e.y,1,{g:0,life:.4,col:'#fff',s:7,grow:70});SHK=Math.max(SHK,e.boss?12:6);if(e.boss||e.elite)FLA=Math.max(FLA,.45);}}
     else{shadow(ex,ey,30*e.sc,act);if(!RM){a2.sy*=1+.013*Math.sin(t*2.3+e.seed);a2.sx*=1-.008*Math.sin(t*2.3+e.seed);}}
-    EYE=e.seed;drawEnt(function(){ctx.scale(e.sc,e.sc);(ART[e.k]||ART.bot)(e,rng(e.seed+boil*31),t);},ex,ey,a2,al2);EYE=0;
+    EYE=e.seed;drawEnt(function(){ctx.scale(e.sc,e.sc);(ART[e.k]||ART[EN[e.k].art]||ART.bot)(e,rng(e.seed+boil*31),t);},ex,ey,a2,al2);EYE=0;
   });
   /* anything due lands now */
   for(i=0;i<FX.length;i++){f=FX[i];if(!f.fired&&n>=f.t){f.fired=1;fireFx(f,n);}}
@@ -1585,7 +1797,7 @@ function drawScene(dt){
   if(HV>.02&&!RM){var vg=ctx.createRadialGradient(W/2,Hh/2,Hh*.3,W/2,Hh/2,W*.62);vg.addColorStop(0,'rgba(227,24,45,0)');vg.addColorStop(1,'rgba(227,24,45,'+(HV*.75).toFixed(3)+')');ctx.fillStyle=vg;ctx.fillRect(-BM,-BM,W+BM*2,Hh+BM*2);}
   if(FLA>.02&&!RM){ctx.fillStyle='rgba(255,255,255,'+FLA.toFixed(3)+')';ctx.fillRect(-BM,-BM,W+BM*2,Hh+BM*2);}
   /* where and when */
-  ctx.font='12px '+FONT_D;var lab=ACTS[act].toUpperCase()+' · TURN '+B.turn,lw=ctx.measureText(lab).width+18;ctx.setTransform(scale,0,0,scale,0,0);rr(7,7,lw,19,9);ctx.fillStyle='rgba(20,20,20,.78)';ctx.fill();ctx.fillStyle='#fff';ctx.textAlign='left';ctx.fillText(lab,16,20.5);
+  ctx.font='12px '+FONT_D;var lab=stName(act).toUpperCase()+' · TURN '+B.turn,lw=ctx.measureText(lab).width+18;ctx.setTransform(scale,0,0,scale,0,0);rr(7,7,lw,19,9);ctx.fillStyle='rgba(20,20,20,.78)';ctx.fill();ctx.fillStyle='#fff';ctx.textAlign='left';ctx.fillText(lab,16,20.5);
 }
 function frame(){var n=now(),dt=Math.min(.05,Math.max(0,(n-(LT||n))/1000));LT=n;drawScene(dt);drawOverlay(dt);tickHud();requestAnimationFrame(frame);}
 
@@ -1623,7 +1835,10 @@ var IC={
  lamp:'<path d="M10.800 12.500h2.400V21h-2.400z"/><path d="M7.500 22h9" fill="none"/><path d="M7.200 12.500 6 5.500h12l-1.200 7z"/><path d="M8.500 5.500 12 1.500l3.500 4z"/>'
 };
 var PIC=['star','coaster','wheel','lamp'];
-var PSAY=['','Behind them, a rollercoaster and a swing boat on a sunny afternoon.','Behind them, the big wheel and the sideshows at sunset.','Behind them, the Tower lit up, a carousel and the Illuminations, at night.'];
+IC.tram='<rect x="3" y="5.5" width="18" height="12.5" rx="2.5"/><path d="M6 9h4.5v3.5H6zM13.5 9H18v3.5h-4.5z" fill="#fff"/><path d="M12 5.5V2M8.5 2h7" fill="none"/><circle cx="7.5" cy="20.5" r="1.8"/><circle cx="16.5" cy="20.5" r="1.8"/>';
+IC.rock='<g transform="rotate(32 12 12)"><rect x="8.6" y="1" width="6.8" height="22" rx="3.4"/><path d="M8.8 6.5l6.4 2.4M8.8 11.5l6.4 2.4M8.8 16.5l6.4 2.4" fill="none" stroke="#ff4f9a"/></g>';
+IC.tower='<path d="M12 1 13.4 7.5h-2.8zM10.3 7.5h3.4l1.7 9.5H8.6zM8.2 17h7.6l2 5.5H6.2z"/><path d="M9.6 12h4.8" fill="none"/>';
+var PSAY=['','Behind them, a rollercoaster and a swing boat on a sunny afternoon.','Behind them, the big wheel and the sideshows at sunset.','Behind them, the Tower lit up, a carousel and the Lights, at night.'];
 function ic(n,c){return '<svg class="ic'+(c?' '+c:'')+'" viewBox="0 0 24 24" aria-hidden="true" focusable="false">'+(IC[n]||IC.star)+'</svg>';}
 function cardIcon(d){
   var t=d.tx;
@@ -1640,23 +1855,23 @@ function cardIcon(d){
   if(/Draw/.test(t))return 'cards';
   if(/Flustered/.test(t))return 'dizzy';
   if(/Soggy/.test(t))return 'drop';
-  if(/Dreamies/.test(t))return 'coin';
+  if(/Scrumplings/.test(t))return 'coin';
   return d.type==='P'?'star':'spark';
 }
-var KW=/\b(Block|Invoice|Gusto|Poise|Soggy|Flustered|Energy|Dreamies|Exhaust|Fleeting|Unplayable|Scribble|Brew)\b/g;
+var KW=/\b(Block|Invoice|Gusto|Poise|Soggy|Flustered|Energy|Scrumplings|Exhaust|Fleeting|Unplayable|Scribble|Brew)\b/g;
 function cardRich(ci){var d=CARDS[ci.id],v=vals(d,ci.u),b=vals(d,0);return d.tx.replace(KW,'<em>$1</em>').replace(/\$(\d)/g,function(m,i){return '<u'+(ci.u&&v[+i]!==b[+i]?' class="upv"':'')+'>'+v[+i]+'</u>';});}
 function cardHTML(ci,attr,extra){
   var d=CARDS[ci.id],z=B&&S.scr==='combat'&&ci.z,c=z?0:((ci.u&&d.o.uc!=null)?d.o.uc:d.cost),x=extra||{};
   return '<button type="button" class="cd t-'+d.type+' h-'+d.h+' q-'+d.rar+(ci.u?' up':'')+(x.cls?' '+x.cls:'')+'"'+(x.sty?' style="'+x.sty+'"':'')+' '+(attr||'')+'>'+(d.o.unp?'':'<span class="co'+(z?' z':'')+'">'+c+'</span>')+
     (d.h==='s'?'':'<span class="tab">'+(d.h==='c'?ic('paw'):d.h.toUpperCase())+'</span>')+
     '<b>'+d.name+(ci.u?'+':'')+'</b><span class="art">'+ic(cardIcon(d))+'</span><i>'+TYPE[d.type]+(ci.tmp&&d.type!=='X'?' · fleeting':'')+'</i><span class="tx">'+cardRich(ci)+'</span>'+
-    (x.pr?'<span class="pr">'+ic('coin')+x.pr+'<span class="vh"> Dreamies</span></span>':'')+(d.rar==='c'||d.rar==='u'||d.rar==='r'?'<span class="gem"></span>':'')+'</button>';
+    (x.pr?'<span class="pr">'+ic('coin')+x.pr+'<span class="vh"> Scrumplings</span></span>':'')+(d.rar==='c'||d.rar==='u'||d.rar==='r'?'<span class="gem"></span>':'')+'</button>';
 }
 var PREV={run:null,hp:0,gold:0,dh:0,dg:0,en:-1,rel:0,br:0,dr:0,db:0,plan:null,pd:-1,pc:-1},LASTKEY='',HSEEN=[];
-var PLINE=['','An afternoon at the rides','Sunset under the big wheel','After dark, Illuminations on'];
+var PLINE=['','An afternoon at the rides','Sunset under the big wheel','After dark, the Lights on'];
 function hudHTML(){
   var snd='<button type="button" class="chip" data-a="mute" aria-pressed="'+A.muted+'" aria-label="Sound '+(A.muted?'off':'on')+'" title="Sound '+(A.muted?'off':'on')+'">'+ic(A.muted?'mute':'snd')+'<span class="w">Sound '+(A.muted?'off':'on')+'</span></button>';
-  if(!RUN||S.scr==='title'||(S.scr==='over'&&!beating())){PREV.run=null;PREV.dh=PREV.dg=0;return '<span class="pill ttl">Seen Off</span><span class="sp"></span><span class="pill act">Encore '+S.lvl+'</span>'+snd;}
+  if(!RUN||S.scr==='title'||S.scr==='souvenir'||((S.scr==='over'||S.scr==='report')&&!beating())){PREV.run=null;PREV.dh=PREV.dg=0;return '<span class="pill ttl">Seen Off</span><span class="sp"></span><span class="pill act">Encore '+S.lvl+'</span>'+snd;}
   var same=PREV.run===RUN,dh=same?RUN.hp-PREV.hp:0,dg=same?RUN.gold-PREV.gold:0,fight=S.scr==='combat'||beating(),vict,pl;
   PREV.dr=same?RUN.relics.length-PREV.rel:0;PREV.db=same?RUN.brews.length-PREV.br:0;PREV.run=RUN;PREV.hp=RUN.hp;PREV.gold=RUN.gold;PREV.rel=RUN.relics.length;PREV.br=RUN.brews.length;PREV.dh=dh;PREV.dg=dg;PREV.plan=null;
   if(!same)GLAG=HLAG=null;
@@ -1665,7 +1880,7 @@ function hudHTML(){
     else if(dg<0)GLAG={from:lagVal(GLAG,RUN.gold-dg),t0:now(),d:280};
     if(!fight&&dh>0)HLAG={from:RUN.hp-dh,t0:now()+330,d:480};
   }
-  var h='<span class="pill who" style="--c:'+HCOL[RUN.hero]+'">'+HEROES[RUN.hero].name+'</span><span class="pill hp'+(RUN.hp>0&&RUN.hp<=RUN.max*.25?' low':'')+(dh>0?' up':dh<0?' down':'')+'" id="hpPill" title="Health">'+ic('heart')+'<span class="vh">Health </span><span id="hpN">'+Math.max(0,lagVal(HLAG,RUN.hp))+'</span>/'+RUN.max+'</span><span class="pill gold'+(dg>0?(PREV.plan?'':' up'):dg<0?' down':'')+'" id="goldPill" title="Dreamies">'+ic('coin')+'<span id="goldN">'+lagVal(GLAG,RUN.gold)+'</span><span class="w">&nbsp;Dreamies</span></span><span class="pill act">'+ic(PIC[RUN.act])+ACTS[RUN.act].replace(' Pier','<span class="w"> Pier</span>')+' '+(RUN.row+1)+'/6</span><span class="sp"></span>';
+  var h='<span class="pill who" style="--c:'+HCOL[RUN.hero]+'">'+HEROES[RUN.hero].name+'</span><span class="pill hp'+(RUN.hp>0&&RUN.hp<=RUN.max*.25?' low':'')+(dh>0?' up':dh<0?' down':'')+'" id="hpPill" title="Health">'+ic('heart')+'<span class="vh">Health </span><span id="hpN">'+Math.max(0,lagVal(HLAG,RUN.hp))+'</span>/'+RUN.max+'</span><span class="pill gold'+(dg>0?(PREV.plan?'':' up'):dg<0?' down':'')+'" id="goldPill" title="Scrumplings">'+ic('coin')+'<span id="goldN">'+lagVal(GLAG,RUN.gold)+'</span><span class="w">&nbsp;Scrumplings</span></span><span class="pill act">'+(function(){var sg=S.scr==='stage'?null:STGD(),pp=PARTS[Math.min(RUN.part||0,4)];return sg?ic(sg.ic)+sg.n+' '+(RUN.row+1)+'/5':ic(pp.ic)+pp.n;})()+'</span><span class="sp"></span>';
   RUN.brews.forEach(function(b,i){h+='<button type="button" class="chip brew'+(S.brewSel===i?' on':'')+'" data-a="brew" data-i="'+i+'" title="'+BREWS[b][1]+'">'+ic('cup')+BREWS[b][0]+'</button>';});
   h+='<button type="button" class="chip dk" data-a="deck" aria-label="Deck, '+RUN.deck.length+' cards" title="Your deck">'+ic('cards')+'<span class="w">Deck</span>'+RUN.deck.length+'</button>';
   if(RUN.relics.length)h+='<button type="button" class="chip rel" data-a="relics" aria-label="Keepsakes, '+RUN.relics.length+'" title="Keepsakes">'+ic('star')+'<span class="w">Keepsakes</span>'+RUN.relics.length+'</button>';
@@ -1685,21 +1900,24 @@ function hudFx(){ /* whatever was gained flies to where it is counted */
   if(dr>0)fly('star',src,elPos(document.querySelector('.chip.rel')),5,{delay:d0,col:'#ffe14d',cb:function(){bumpEl('.chip.rel');}});
   if(db>0)fly('drop',src,elPos(lastOf('.chip.brew')),4,{delay:d0+70,col:'#4fe07a',cb:function(){bumpEl(lastOf('.chip.brew'));}});
 }
-var NODE={F:['Fight',''],L:['Elite','tougher, drops a keepsake'],E:['Event','who knows'],S:['Shop','spend Dreamies'],T:['Keepsake','free'],R:['Rest','heal or edit'],B:['Boss','the end of the pier']},
+var NODE={F:['Fight',''],L:['Elite','tougher, drops a keepsake'],E:['Event','who knows'],S:['Shop','spend Scrumplings'],T:['Keepsake','free'],R:['Rest','heal or edit'],B:['Boss','the end of the pier']},
     NIC={F:'burst',L:'flame',E:'what',S:'coin',T:'gift',R:'cup',B:'crown'};
 function beatHTML(ph){var won=S.scr==='reward';return '<div class="beat '+(won?'won':'lost')+'" data-a="skip"'+(ph?' style="min-height:'+ph+'px"':'')+'><b>'+(won?(S.rw.kind==='B'?'The pier is yours!':'Seen off!'):'Seen off yourself')+'</b><span>Tap to carry on</span></div>';}
 function render(){
-  var v=$('view'),st=$('stage'),h='',i,bt=beating()&&B&&(S.scr==='reward'||S.scr==='over'),key=(bt?'beat':S.scr)+'|'+(S.mode||''),ent=key!==LASTKEY,hd=$('hand'),hs=hd?hd.scrollLeft:0,ph=v.offsetHeight,oldR=[],prevHand=HSEEN,late=S.late||0,arr=0;
+  var v=$('view'),st=$('stage'),h='',i,bt=beating()&&B&&(S.scr==='reward'||S.scr==='over'||S.scr==='report'),key=(bt?'beat':S.scr)+'|'+(S.mode||''),ent=key!==LASTKEY,hd=$('hand'),hs=hd?hd.scrollLeft:0,ph=v.offsetHeight,oldR=[],prevHand=HSEEN,late=S.late||0,arr=0;
   if(hd&&!RM)Array.prototype.forEach.call(hd.children,function(el){oldR.push(rectIn(el));});S.late=0;
+  if(RUN&&RUN.stats&&S.scr!=='souvenir'){if(RUN.lastGold!=null&&RUN.gold<RUN.lastGold)RUN.stats.spent+=RUN.lastGold-RUN.gold;RUN.lastGold=RUN.gold;}
+  if(S.scr!=='combat'&&!bt){clearStamps();comboFx(0);}
   LASTKEY=key;cv.hidden=!(S.scr==='combat'||bt);
   st.setAttribute('data-scr',bt?'combat':S.scr);st.setAttribute('data-act',RUN?RUN.act:1);
   /* the booth wears the colours of whichever pier you are on, and its own between runs */
-  var bo=st.parentNode,pier=(!RUN||S.scr==='title'||(S.scr==='over'&&!bt))?0:RUN.act;if(pier)bo.setAttribute('data-act',pier);else bo.removeAttribute('data-act');
-  if(pier)cv.setAttribute('aria-label','The battle on '+ACTS[pier]+': your Quill and familiars on the left, the opposition on the right. '+PSAY[pier]);
+  var bo=st.parentNode,pier=(!RUN||S.scr==='title'||S.scr==='stage'||S.scr==='souvenir'||((S.scr==='over'||S.scr==='report')&&!bt))?0:RUN.act;st.setAttribute('data-stage',RUN&&RUN.stage&&pier?RUN.stage:'');if(pier)bo.setAttribute('data-act',pier);else bo.removeAttribute('data-act');
+  if(pier)cv.setAttribute('aria-label','The battle on '+stName(pier)+': your Quill and familiars on the left, the opposition on the right. '+PSAY[pier]);
   if(S.mode)st.setAttribute('data-mode',S.mode);else st.removeAttribute('data-mode');
   $('hud').innerHTML=hudHTML();v.className=ent?'enter':'';
   if(S.scr!=='combat'){HSEEN=[];PREV.en=-1;}
   if(bt){v.innerHTML=beatHTML(ph);hudFx();return;}
+  if(S.mode==='album'){v.innerHTML=albumHTML();hudFx();return;}
   if(S.mode==='deck'||S.mode==='cut'||S.mode==='edit'||S.mode==='relics'){v.innerHTML=deckHTML();arts();hudFx();return;}
   if(S.scr==='title'){
     var saved=loadRun();
@@ -1708,18 +1926,18 @@ function render(){
     h+='</div><div class="row">';
     for(i=0;i<=5;i++)h+='<button type="button" class="chip'+(S.lvl===i?' on':'')+'" data-a="lvl" data-i="'+i+'"'+(i>META.open?' disabled':'')+'>Encore '+i+'</button>';
     h+='</div><p style="font-size:.85rem;font-style:italic">'+(S.lvl?'Encore '+S.lvl+': everything out there is '+S.lvl*10+'% tougher and hits harder, and the score counts for '+(100+25*S.lvl)+'%.':'Win a run to open the next Encore: tougher piers, bigger scores.')+'</p>';
-    h+='<div class="row"><button type="button" class="btn big2" data-a="begin">Begin the climb</button>'+(saved?'<button type="button" class="btn quiet" data-a="resume">Carry on as '+HEROES[saved.hero].name+' ('+ACTS[saved.act]+')</button>':'')+'</div></div>';
+    h+='<div class="row"><button type="button" class="btn big2" data-a="begin">Start the day</button><button type="button" class="btn quiet" data-a="album">Postcard album</button>'+(saved?'<button type="button" class="btn quiet" data-a="resume">Carry on as '+HEROES[saved.hero].name+' ('+(saved.stage&&STAGES[saved.stage]?STAGES[saved.stage].n:PARTS[saved.part||0].n)+')</button>':'')+'</div></div>';
   }else if(S.scr==='cat'){
     h='<div class="panel"><h2>Three cats have noticed you</h2><p>One of them will come along as your familiar. Its trick works in every fight, and its card goes in your deck.</p><div class="row">';
     S.offer.forEach(function(c){var x=CATS[c];h+='<button type="button" class="pick" style="--c:'+x.hat+';--tint:'+tint(x.hat)+'" data-a="cat" data-i="'+c+'"><canvas data-art="cat" data-id="'+c+'" aria-hidden="true"></canvas><b>'+x.name+'</b><span>'+x.perk+'</span><span><em>Card: '+CARDS[x.card].name+'</em></span></button>';});
     h+='</div></div>';
   }else if(S.scr==='map'){
-    h='<div class="panel"><h2><span class="crest">'+ic(PIC[RUN.act])+'</span>'+ACTS[RUN.act]+'</h2><p>'+(S.note||'Pick your next stop. From each one you can go straight on or one step to either side.')+'</p><div class="map">';
+    h='<div class="panel"><h2><span class="crest">'+ic(STGD().ic)+'</span>'+STGD().n+'</h2><p>'+(S.note||(STGD().ready?'':STGD().soon+' ')+'Pick your next stop. From each one you can go straight on or one step to either side.')+'</p><div class="map">';
     for(var r=RUN.map.length-1;r>=0;r--){var row=RUN.map[r];h+='<div class="maprow'+(row.length===1?' boss':'')+'">';
       row.forEach(function(nd,c){var go=r===RUN.row+1&&canGo(c),here=nd.was&&r===RUN.row&&c===RUN.col;h+='<button type="button" class="node t-'+nd.t+(go?' go':'')+(nd.was?' was':'')+(here?' here':'')+'" style="--i:'+c+'" data-a="node" data-i="'+c+'"'+(go?'':' disabled')+'>'+ic(NIC[nd.t])+NODE[nd.t][0]+'<small>'+(here?'you are here':nd.was?'been':NODE[nd.t][1]||'&nbsp;')+'</small></button>';});h+='</div>';}
     h+='</div></div>';
     /* a new pier is announced before you set off along it */
-    if(ARR.run!==RUN||ARR.act!==RUN.act){ARR.run=RUN;ARR.act=RUN.act;if(!RM&&!window.__STP_NOBEAT){arr=1;h+='<div class="arrive" data-a="skip" aria-hidden="true"><div class="crest">'+ic(PIC[RUN.act])+'</div><b>'+ACTS[RUN.act]+'</b><i>'+PLINE[RUN.act]+'</i><span>Pier '+RUN.act+' of 3 &middot; tap to carry on</span></div>';}}
+    if(ARR.run!==RUN||ARR.act!==RUN.stage){ARR.run=RUN;ARR.act=RUN.stage;if(!RM&&!window.__STP_NOBEAT){arr=1;h+='<div class="arrive" data-a="skip" aria-hidden="true"><div class="crest">'+ic(STGD().ic)+'</div><b>'+STGD().n+'</b><i>'+STGD().line+(STGD().ready?'':' &middot; coming soon')+'</i><span>'+PARTS[RUN.part].n+', '+PARTS[RUN.part].time+' &middot; tap to carry on</span></div>';}}
   }else if(S.scr==='combat'){
     var selc=S.sel>=0?B.hand[S.sel]:null,det,any=B.hand.some(function(c){return playable(c);}),enb=PREV.en>=0&&PREV.en!==B.energy,spent=PREV.en>B.energy,nn=late,pdr=PREV.pd>=0&&PREV.pd!==B.draw.length,pdi=PREV.pc>=0&&PREV.pc!==B.disc.length;PREV.en=B.energy;PREV.pd=B.draw.length;PREV.pc=B.disc.length;
     if(S.brewSel>=0)det='<b>'+BREWS[RUN.brews[S.brewSel]][0]+'.</b> Tap the enemy it is for.';
@@ -1730,24 +1948,24 @@ function render(){
     h+='</div>';HSEEN=B.hand.slice();S.shake=0;
   }else if(S.scr==='reward'){
     var rw=S.rw,li=0;
-    h='<div class="panel"><h2>'+(rw.kind==='B'?'The pier is yours':'Seen off')+'</h2><div class="loot"><span class="lt gold" id="rwLoot" style="--i:'+(li++)+'">'+ic('coin')+'<span id="rwGold">'+rw.gold+'</span>&nbsp;Dreamies</span>'+(rw.pts?'<span class="lt pts" style="--i:'+(li++)+'">'+ic('star')+'<span id="rwPts">'+rw.pts+'</span>&nbsp;points</span>':'')+(rw.healed?'<span class="lt heal" style="--i:'+(li++)+'">'+ic('heart')+'Daisy has seen to '+rw.healed+' health</span>':'')+(rw.brew?'<span class="lt brew" style="--i:'+(li++)+'">'+ic('cup')+'Somebody left a '+BREWS[rw.brew][0]+'</span>':'')+(rw.relic?'<span class="lt rel" style="--i:'+(li++)+'">'+ic('star')+'A keepsake</span>':'')+'</div>'+(rw.relic?'<p><strong>'+RELICS[rw.relic][0]+'.</strong> '+RELICS[rw.relic][1]+'</p>':'');
+    h='<div class="panel"><h2>'+(rw.kind==='B'?'The pier is yours':'Seen off')+'</h2><div class="loot"><span class="lt gold" id="rwLoot" style="--i:'+(li++)+'">'+ic('coin')+'<span id="rwGold">'+rw.gold+'</span>&nbsp;Scrumplings</span>'+(rw.combo?'<span class="lt combo" style="--i:'+(li++)+'">'+ic('cards')+rw.combo.n+' combo, '+rw.combo.w+' +'+rw.combo.g+'</span>':'')+(rw.pts?'<span class="lt pts" style="--i:'+(li++)+'">'+ic('star')+'<span id="rwPts">'+rw.pts+'</span>&nbsp;points</span>':'')+(rw.healed?'<span class="lt heal" style="--i:'+(li++)+'">'+ic('heart')+'Daisy has seen to '+rw.healed+' health</span>':'')+(rw.brew?'<span class="lt brew" style="--i:'+(li++)+'">'+ic('cup')+'Somebody left a '+BREWS[rw.brew][0]+'</span>':'')+(rw.relic?'<span class="lt rel" style="--i:'+(li++)+'">'+ic('star')+'A keepsake</span>':'')+'</div>'+(rw.relic?'<p><strong>'+RELICS[rw.relic][0]+'.</strong> '+RELICS[rw.relic][1]+'</p>':'');
     if(rw.boss&&!rw.bossTook){h+='<p><strong>Choose one for the road:</strong></p><div class="list">';
-      rw.boss.forEach(function(o,i){var tx=o[0]==='relic'?(o[1]?'<b>'+RELICS[o[1]][0]+'</b> '+RELICS[o[1]][1]:'<b>Nothing left</b>'):o[0]==='cat'?'<b>'+CATS[o[1]].name+' joins you</b> '+CATS[o[1]].perk:o[0]==='gold'?'<b>80 Dreamies</b> Every cat is already here.':'<b>A good night’s sleep</b> +10 maximum health.';
+      rw.boss.forEach(function(o,i){var tx=o[0]==='relic'?(o[1]?'<b>'+RELICS[o[1]][0]+'</b> '+RELICS[o[1]][1]:'<b>Nothing left</b>'):o[0]==='cat'?'<b>'+CATS[o[1]].name+' joins you</b> '+CATS[o[1]].perk:o[0]==='gold'?'<b>80 Scrumplings</b> Every cat is already here.':'<b>A good night’s sleep</b> +10 maximum health.';
         h+='<div class="item k-'+(o[0]==='relic'?'rel':o[0]==='cat'?'cat':o[0]==='hp'?'brew':'gold')+'"><span>'+tx+'</span><button type="button" class="btn quiet" data-a="boss" data-i="'+i+'">Take</button></div>';});h+='</div>';}
     else if(!rw.took){h+='<p><strong>Add a card to your deck:</strong></p><div class="cards">';rw.cards.forEach(function(id,i){h+=cardHTML({id:id,u:0},'data-a="take" data-i="'+i+'"',{sty:'--i:'+i});});h+='</div><button type="button" class="btn quiet" data-a="take" data-i="-1">None of those</button>';}
-    else h+='<button type="button" class="btn go" data-a="leave">'+(rw.kind==='B'&&RUN.act>=3?'Take a bow':rw.kind==='B'?'On to '+ACTS[RUN.act+1]:'Onward')+'</button>';
+    else h+='<button type="button" class="btn go" data-a="leave">'+(rw.kind==='B'?(RUN.part>=4||(RUN.part>=3&&!lastOpen())?'Take a bow':'On to '+PARTS[RUN.part+1].n.toLowerCase()):'Onward')+'</button>';
     h+='</div>';
   }else if(S.scr==='rest'){
     var amt=Math.round(RUN.max*(RUN.lvl>=4?.25:.3))+(has('bell')?10:0);
     h='<div class="panel"><h2>A brew and a sit down</h2><div class="bigic" style="--c:#14a84b">'+ic('cup')+'</div><p>The deckchair is free and nobody is looking at you. One or the other:</p><div class="row"><button type="button" class="btn go" data-a="rest">'+ic('cup')+'Rest: heal '+amt+'</button><button type="button" class="btn quiet" data-a="edit">'+ic('star')+'Edit: improve a card</button></div></div>';
   }else if(S.scr==='treasure'){
-    h='<div class="panel"><h2>Somebody left this</h2><div class="bigic" style="--c:#ff4f9a">'+ic(S.got?'gift':'coin')+'</div><div class="loot"><span class="lt '+(S.got?'rel':'gold')+'">'+ic(S.got?'gift':'coin')+(S.got?'A keepsake':'50 Dreamies')+'</span></div>'+(S.got?'<p><strong>'+RELICS[S.got][0]+'.</strong> '+RELICS[S.got][1]+'</p>':'<p>50 Dreamies in a carrier bag.</p>')+'<button type="button" class="btn go" data-a="leave">Onward</button></div>';
+    h='<div class="panel"><h2>Somebody left this</h2><div class="bigic" style="--c:#ff4f9a">'+ic(S.got?'gift':'coin')+'</div><div class="loot"><span class="lt '+(S.got?'rel':'gold')+'">'+ic(S.got?'gift':'coin')+(S.got?'A keepsake':'50 Scrumplings')+'</span></div>'+(S.got?'<p><strong>'+RELICS[S.got][0]+'.</strong> '+RELICS[S.got][1]+'</p>':'<p>50 Scrumplings in a carrier bag.</p>')+'<button type="button" class="btn go" data-a="leave">Onward</button></div>';
   }else if(S.scr==='shop'){
-    var sh=S.shop;h='<div class="panel"><div class="awning" aria-hidden="true"></div><h2>Reggie’s Emporium</h2><p>Everything priced in Dreamies. '+(S.note||'No refunds, no credit, no haggling, my old son.')+'</p><div class="cards">';
+    var sh=S.shop;h='<div class="panel"><div class="awning" aria-hidden="true"></div><h2>Reggie’s Emporium</h2><p>Everything priced in Scrumplings. '+(S.note||'No refunds, no credit, no haggling, my old son.')+'</p><div class="cards">';
     sh.cards.forEach(function(c,i){if(!c.sold)h+=cardHTML({id:c.id,u:0},'data-a="buy" data-i="c'+i+'"',{pr:c.p,cls:RUN.gold<c.p?'no':'',sty:'--i:'+i});});h+='</div><div class="list">';
     sh.rel.forEach(function(c,i){if(!c.sold)h+='<div class="item k-rel"><span><b>'+RELICS[c.id][0]+'</b> '+RELICS[c.id][1]+'</span><button type="button" class="btn quiet" data-a="buy" data-i="r'+i+'"'+(RUN.gold<c.p?' disabled':'')+'>'+ic('coin')+c.p+'</button></div>';});
     sh.brews.forEach(function(c,i){if(!c.sold)h+='<div class="item k-brew"><span><b>'+BREWS[c.id][0]+'</b> '+BREWS[c.id][1]+'</span><button type="button" class="btn quiet" data-a="buy" data-i="b'+i+'"'+(RUN.gold<c.p||RUN.brews.length>=3?' disabled':'')+'>'+ic('coin')+c.p+'</button></div>';});
-    if(sh.cat&&!sh.cat.sold)h+='<div class="item k-cat"><span><b>Dreamies for '+CATS[sh.cat.id].name+'</b> '+CATS[sh.cat.id].name+' joins you. '+CATS[sh.cat.id].perk+'</span><button type="button" class="btn quiet" data-a="buy" data-i="k"'+(RUN.gold<sh.cat.p?' disabled':'')+'>'+ic('coin')+sh.cat.p+'</button></div>';
+    if(sh.cat&&!sh.cat.sold)h+='<div class="item k-cat"><span><b>Scrumplings for '+CATS[sh.cat.id].name+'</b> '+CATS[sh.cat.id].name+' joins you. '+CATS[sh.cat.id].perk+'</span><button type="button" class="btn quiet" data-a="buy" data-i="k"'+(RUN.gold<sh.cat.p?' disabled':'')+'>'+ic('coin')+sh.cat.p+'</button></div>';
     if(sh.cut)h+='<div class="item k-cut"><span><b>The red pen</b> Strike one card out of your deck for good.</span><button type="button" class="btn quiet" data-a="buy" data-i="x"'+(RUN.gold<sh.cut?' disabled':'')+'>'+ic('coin')+sh.cut+'</button></div>';
     h+='</div><button type="button" class="btn" data-a="leave">Leave the shop</button></div>';
   }else if(S.scr==='event'){
@@ -1755,6 +1973,9 @@ function render(){
     if(ev.res)h+='</div><button type="button" class="btn go" data-a="leave">Onward</button>';
     else{ev.d.opts().forEach(function(o,i){h+='<button type="button" class="btn quiet opt" data-a="opt" data-i="'+i+'">'+o[0]+'</button>';});h+='</div>'+(S.note?'<p><em>'+S.note+'</em></p>':'');}
     h+='</div>';
+  }else if(S.scr==='stage'){h=stageHTML();
+  }else if(S.scr==='report'){h=reportHTML();
+  }else if(S.scr==='souvenir'){h=souvHTML();
   }else if(S.scr==='over'){
     var e=S.end;
     h='<div class="panel'+(e.won?' won':'')+'"><h2>'+(e.won?'All three piers, seen off':'Seen off yourself')+'</h2>'+(e.won?'<div class="bigic" style="--c:#ffc61a">'+ic('crown')+'</div>':'')+'<div class="big" id="bigScore">'+e.pts+'</div>'+(e.best&&e.pts>0?'<span class="newbest">New best!</span>':'')+'<p><strong>'+(e.won?HEROES[e.hero].name+' reached the end of North Pier with '+e.cats+(e.cats===1?' familiar':' familiars')+', on Encore '+e.lvl+'.':HEROES[e.hero].name+' got as far as '+ACTS[e.act]+', stop '+e.floor+' of 18'+'.'+(e.by?' The culprit: '+e.by+'.':''))+'</strong></p>'+
@@ -1772,8 +1993,9 @@ function render(){
   if(arr){var ae=v.querySelector('.arrive');setTimeout(function(){if(ae&&ae.parentNode)ae.parentNode.removeChild(ae);},1560);}
   if(S.scr==='over')wallLine();
   if(ent){
-    if(S.scr==='over'){countUp($('bigScore'),S.end.pts,S.end.pts>0?900:0);if(S.end.won)confetti(true);else if(S.end.best&&S.end.pts>0)confetti(false);}
-    else if(S.scr==='reward'){countUp($('rwGold'),S.rw.gold,500);countUp($('rwPts'),S.rw.pts,650);if(S.rw.kind==='B')confetti(false);
+    if(S.scr==='report'){countUp($('bigScore'),S.end.pts,S.end.pts>0?900:0);reportFx();if(S.end.won)confetti(true);else if(S.end.best&&S.end.pts>0)confetti(false);}
+    else if(S.scr==='over'){countUp($('bigScore'),S.end.pts,S.end.pts>0?900:0);if(S.end.won)confetti(true);else if(S.end.best&&S.end.pts>0)confetti(false);}
+    else if(S.scr==='reward'){countUp($('rwGold'),S.rw.gold,500);coinShower(S.rw.gold);countUp($('rwPts'),S.rw.pts,650);if(S.rw.kind==='B')confetti(false);
       Array.prototype.forEach.call(v.querySelectorAll('.cards .cd.q-r'),function(el){var k=LASTKEY;setTimeout(function(){if(el.isConnected&&LASTKEY===k)sparkAt(elPos(el),'stars');},650);});}
     else if(S.scr==='treasure')sparkAt(elPos(v.querySelector('.lt')),'stars');
   }
@@ -1803,8 +2025,8 @@ function act(a,i,el){
   else if(a==='hero'){S.hero=i;}
   else if(a==='lvl'){if(+i<=META.open)S.lvl=+i;}
   else if(a==='begin'){newRun();return;}
-  else if(a==='resume'){RUN=loadRun();if(RUN){S.lvl=RUN.lvl;S.scr=RUN.cats.length?'map':'cat';if(S.scr==='cat')S.offer=shuffle(CATIDS.slice()).slice(0,3);}}
-  else if(a==='cat'){addCat(i);S.scr='map';S.note=CATS[i].name+' has come along. '+CARDS[CATS[i].card].name+' is in your deck.';saveRun();}
+  else if(a==='resume'){RUN=loadRun();if(RUN){S.lvl=RUN.lvl;S.scr=RUN.cats.length?(RUN.stage?'map':'stage'):'cat';if(S.scr==='cat')S.offer=shuffle(CATIDS.slice()).slice(0,3);}}
+  else if(a==='cat'){addCat(i);S.scr='stage';S.note=CATS[i].name+' has come along. '+CARDS[CATS[i].card].name+' is in your deck.';saveRun();}
   else if(a==='node'){enterNode(+i);return;}
   else if(a==='card'){i=+i;if(S.sel===i){sn=snapCard(i);one=alive();one=one.length===1?B.en.indexOf(one[0]):null;if(playCard(i,null))flyCard(sn,one);else if(B.hand[i]&&!playable(B.hand[i])){sfx('no');S.shake=!CARDS[B.hand[i].id].o.unp;}}else{S.sel=i;S.brewSel=-1;}}
   else if(a==='enemy'){i=+i;if(S.brewSel>=0)useBrew(S.brewSel,i);else if(S.sel>=0){sn=snapCard(S.sel);if(playCard(S.sel,i))flyCard(sn,i);}}
@@ -1826,6 +2048,13 @@ function act(a,i,el){
     else if(k==='k'){if(sh.cat&&!sh.cat.sold&&RUN.gold>=sh.cat.p){RUN.gold-=sh.cat.p;sh.cat.sold=1;addCat(sh.cat.id);S.note=CATS[sh.cat.id].name+' has been bought, in so far as a cat can be.';sfx('coin');}}
     else{it=(k==='c'?sh.cards:k==='r'?sh.rel:sh.brews)[n];if(it&&!it.sold&&RUN.gold>=it.p&&(k!=='b'||RUN.brews.length<3)){RUN.gold-=it.p;it.sold=1;if(k==='c')RUN.deck.push({id:it.id,u:0});else if(k==='r')addRelic(it.id);else gainBrew(it.id);S.note='A pleasure doing business.';sfx('coin');}}}
   else if(a==='opt'){var op=S.ev.d.opts()[+i],res=op[1]();if(res===null){S.note='You cannot afford that.';}else{S.note='';if(S.mode!=='cut')S.ev.res=res||'Done.';}}
+  else if(a==='place'){enterStage(i);return;}
+  else if(a==='callday'){finish(true);return;}
+  else if(a==='album'){S.mode='album';S.tab=S.tab||'cards';}
+  else if(a==='tab'){S.tab=i;}
+  else if(a==='home'){S.scr='souvenir';S.note='';}
+  else if(a==='souv'){var it=SOUV.filter(function(x){return x[0]===i;})[0];if(it&&RUN&&RUN.gold>=it[3]){RUN.gold-=it[3];DAY.shelf[i]=(DAY.shelf[i]||0)+1;saveDay();S.note=it[1]+', wrapped in newspaper. '+RUN.gold+' Scrumplings left.';sfx('coin');}}
+  else if(a==='gohome'){if(RUN&&RUN.gold>0){DAY.shelf.fudge=(DAY.shelf.fudge||0)+1;saveDay();}RUN=null;B=null;H=null;S.scr='title';S.end=null;S.note='';S.mode=null;}
   else if(a==='again'){RUN=null;B=null;H=null;S.scr='title';S.end=null;}
   else if(a==='copy'){var st=$('shareText');try{navigator.clipboard.writeText(st.textContent).then(function(){},function(){});}catch(e){}return;}
   if(a==='buy'&&RUN&&RUN.gold<g0){ /* the money goes one way and the goods the other */
@@ -1895,7 +2124,7 @@ document.addEventListener('visibilitychange',function(){if(!A.ac)return;try{if(d
 (function(){var ul=$('catList');CATIDS.forEach(function(id){var c=CATS[id],li=document.createElement('li');li.style.borderLeftColor=c.hat;var b=document.createElement('b');b.textContent=c.name;li.appendChild(b);li.appendChild(document.createElement('br'));var s=document.createElement('span');s.textContent=c.perk;li.appendChild(s);ul.appendChild(li);});})();
 S.lvl=0;render();loadWall();requestAnimationFrame(frame);
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){if(S.scr!=='combat')render();});
-window.__SO={S:S,act:act,render:render,run:function(){return RUN;},B:function(){return B;},H:function(){return H;},BOX:function(){return BOX;},cvPos:cvPos,beating:beating,trav:function(){return TRAV;},beat:function(){return BEAT;},META:META,CARDS:CARDS,alive:alive,playable:playable,A:A};
+window.__SO={S:S,act:act,render:render,run:function(){return RUN;},B:function(){return B;},H:function(){return H;},BOX:function(){return BOX;},cvPos:cvPos,beating:beating,trav:function(){return TRAV;},beat:function(){return BEAT;},META:META,CARDS:CARDS,alive:alive,playable:playable,A:A,DAY:DAY,STAGES:STAGES,PARTS:PARTS,STICKS:STICKS,enterStage:enterStage,saveDay:saveDay,saveRun:saveRun,finish:finish,fx:function(){return PO.length;}};
 if(window.__STP_TEST)window.__STP={S:S,run:function(){return RUN;},B:function(){return B;},H:function(){return H;},act:act,playCard:playCard,endTurn:endTurn,playable:playable,cost:cost,dmgCalc:dmgCalc,alive:alive,CARDS:CARDS,POOL:POOL,META:META,canGo:canGo,A:A,SONG:SONG,tone:tone,render:render,an:function(){return {AN:AN,SW:SW,FL:FL,ZP:ZP,GLAG:GLAG,HLAG:HLAG,TRAV:TRAV};},fx:function(){return {FX:FX,PT:PT,PO:PO,WB:WB,BEAT:BEAT};},endBeat:endBeat,beating:beating,sparkAt:sparkAt,confetti:confetti,ic:ic,IC:IC};
 })();
 </script>

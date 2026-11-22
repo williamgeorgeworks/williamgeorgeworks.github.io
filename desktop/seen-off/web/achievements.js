@@ -14,9 +14,13 @@
     PIER_SOUTH:    'South Pier, seen off',
     PIER_CENTRAL:  'Central Pier, seen off',
     PIER_NORTH:    'North Pier, seen off',
-    RUN_WON:       'All three piers, seen off',
+    RUN_WON:       'A whole day out, seen off',
     ENCORE_1:      'Win a run on Encore 1 or higher',
-    ENCORE_5:      'Win a run on Encore 5'
+    ENCORE_5:      'Win a run on Encore 5',
+    PROPER_JOB:    'Proper job! Play 5 cards in one turn',
+    SCENES:        'SCENES! Play 10 cards in one turn',
+    FIRST_POSTCARD:'Wish you were here: your first postcard',
+    FIRST_STICK:   'Pull your first stick of rock'
   };
   var got={};try{got=JSON.parse(localStorage.getItem(KEY)||'{}')||{};}catch(e){}
   function backend(id){

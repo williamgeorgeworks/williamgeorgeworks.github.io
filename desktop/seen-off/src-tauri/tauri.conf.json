@@ -4,8 +4,7 @@
   "version": "0.1.0",
   "identifier": "uk.co.williamgeorgeworks.seenoff",
   "build": {
-    "frontendDist": "../web",
-    "beforeBuildCommand": "python3 build_bundle.py"
+    "frontendDist": "../web"
   },
   "app": {
     "withGlobalTauri": true,
@@ -24,22 +23,28 @@
       }
     ],
     "security": {
-      "csp": "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; media-src 'self' data: blob:; connect-src ipc: http://ipc.localhost; object-src 'none'; base-uri 'none'"
+      "csp": "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; media-src 'self' data: blob:; connect-src ipc: http://ipc.localhost; object-src 'none'; base-uri 'none'",
+      "dangerousDisableAssetCspModification": [
+        "style-src"
+      ]
     }
   },
   "bundle": {
     "active": true,
-    "targets": "all",
+    "targets": [
+      "nsis",
+      "deb",
+      "appimage"
+    ],
     "category": "Game",
     "publisher": "William George Works",
     "copyright": "William George Works",
     "shortDescription": "A card game of doubtful magic",
-    "longDescription": "Seen Off: pick a Quill, pick a cat, build a deck and see off whatever is lurking along three piers.",
+    "longDescription": "Seen Off: pick a Quill, pick a cat, build a deck and see off whatever is lurking on a day out in Blackpool.",
     "icon": [
       "icons/32x32.png",
       "icons/128x128.png",
       "icons/128x128@2x.png",
-      "icons/icon.icns",
       "icons/icon.ico"
     ],
     "resources": {
@@ -48,16 +53,17 @@
       "../THIRD_PARTY_NOTICES.md": "licences/THIRD_PARTY_NOTICES.md"
     },
     "windows": {
-      "webviewInstallMode": { "type": "embedBootstrapper" },
-      "nsis": { "installMode": "currentUser" }
+      "webviewInstallMode": {
+        "type": "embedBootstrapper"
+      },
+      "nsis": {
+        "installMode": "currentUser"
+      }
     },
     "linux": {
-      "appimage": { "bundleMediaFramework": false }
-    },
-    "macOS": {
-      "minimumSystemVersion": "10.15",
-      "signingIdentity": null,
-      "hardenedRuntime": true
+      "appimage": {
+        "bundleMediaFramework": false
+      }
     }
   }
 }
