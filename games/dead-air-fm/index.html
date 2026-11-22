@@ -7,7 +7,7 @@
   <meta name="description" content="A pirate-radio pinball roguelike from William George Works. Get Ferret, Jo and the Quills on air across three machines.">
   <title>Dead Air FM · William George Works Arcade</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23192224'/%3E%3Cpath d='M3 18h5l3-11 5 19 5-22 3 14h5' fill='none' stroke='%237aebc9' stroke-width='3'/%3E%3C/svg%3E">
-  <link rel="stylesheet" href="cabinet.css?v=e4716833193f">
+  <link rel="stylesheet" href="cabinet.css?v=fc382e471b3b">
 </head>
 <body>
   <main id="cabinet">
@@ -38,12 +38,13 @@
         <section class="module score-module"><div class="module-label"><span><i class="lamp amber"></i> Score counter</span><i data-icon="meter"></i></div><div class="score-face"><span class="counter" id="score">000000</span><div class="score-sub"><span>Personal best</span><b id="highScore">000000</b></div></div><div class="ball-row"><span class="micro">Balls in play &amp; reserve</span><div id="balls"></div></div></section>
         <section class="module tuner-module"><div class="module-label"><span><i data-icon="radio"></i> Signal desk</span><span id="signalNumber">0%</span></div><div class="module-body"><div class="meter-track" id="signalMeter" role="meter" aria-label="Signal meter" aria-valuemin="0" aria-valuemax="100"></div><div id="bands" class="band-row"></div><p id="objective"></p></div></section>
         <section class="module bass-module"><div class="module-label"><span><i data-icon="wave"></i> Bass drop</span><span id="bpm">172 BPM</span></div><div class="module-body"><div class="pulse-row"><div class="beat-mark" id="beatMark"><i></i></div><span id="bassStatus">Charging</span><span id="bassCharge"></span></div><button class="btn btn-teal" data-action="bass" id="bassBtn">Drop bass <kbd>Space</kbd></button><button class="nudge" data-action="nudge" id="nudgeBtn">Nudge table <kbd>N</kbd></button></div></section>
-        <div class="score-links"><button class="cabinet-records" data-action="leaderboard"><i data-icon="radio"></i> Public top ten</button><button class="cabinet-records" data-action="records"><i data-icon="record"></i> Cabinet records</button></div>
+        <div class="score-links"><button class="cabinet-records" data-action="leaderboard"><i data-icon="radio"></i> Public top ten</button><button class="cabinet-records" data-action="trophies"><i data-icon="trophy"></i> Trophies</button><button class="cabinet-records" data-action="records"><i data-icon="record"></i> Cabinet records</button></div>
       </aside>
     </div>
     <footer><span class="status-line"><i class="lamp" id="statusLamp"></i><span id="ticker">Studio standing by.</span></span><button data-action="help">Controls &amp; credits</button></footer>
   </main>
   <div id="overlay" hidden></div><div class="sr-only" id="announce" role="status" aria-live="polite"></div>
   <noscript>This pinball machine needs JavaScript to play.</noscript>
-  <script src="physics.js"></script><script src="rules.js"></script><script src="sound.js"></script><script src="table.js"></script><script src="cabinet.js?v=b4d23abcd7ee"></script>
+  <script src="physics.js"></script><script src="rules.js"></script><script src="sound.js"></script><script src="table.js"></script>
+  <script src="../../badges.js?v=fm-trophies-1"></script><script src="cabinet.js?v=9d5f03279826"></script>
 </body></html>

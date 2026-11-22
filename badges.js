@@ -4,13 +4,101 @@
   "use strict";
   function load(k) { try { return JSON.parse(localStorage.getItem(k) || "null") || {}; } catch (e) { return {}; } }
   function num(k) { try { return parseInt(localStorage.getItem(k) || "0", 10) || 0; } catch (e) { return 0; } }
-  function listGet(k) { try { return JSON.parse(localStorage.getItem(k) || "null"); } catch (e) { return null; } }
-  function listSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+  var sessionLists = {};
+  function listGet(k) {
+    if (sessionLists[k]) return sessionLists[k];
+    try { var value = JSON.parse(localStorage.getItem(k) || "null"); return Array.isArray(value) ? value : null; }
+    catch (e) { return null; }
+  }
+  function listSet(k, v) {
+    try { localStorage.setItem(k, JSON.stringify(v)); delete sessionLists[k]; }
+    catch (e) { sessionLists[k] = v; }
+  }
   function el(t, c, x) { var e = document.createElement(t); if (c) e.className = c; if (x != null) e.textContent = x; return e; }
 
   var TIERS = {
     bronze: ["#f0b27a", "#9a5b24", "Bronze"], silver: ["#f4f7f9", "#8f9aa3", "Silver"],
     gold: ["#ffe27a", "#c98a00", "Gold"], legend: ["#ff9ad1", "#6a1fe0", "Legend"]
+  };
+
+  /* A separate flag for each milestone and mod means two tabs can bank different
+     discoveries simultaneously without overwriting one another's progress. */
+  var fmPrefix = "wgw.dead-air-fm.trophies.1.";
+  var fmEarned = new Set(), fmGear = new Set();
+  var quillMods = ["coil", "pencil", "splitter"];
+  var catMods = ["cushion", "box", "needle", "patchbay", "marshal", "tin"];
+  var collectionMods = quillMods.concat(catMods);
+  function fmBadge(id, name, how, tier, icon) {
+    return { id: "fm-" + id, name: name, how: how, game: "Dead Air FM", tier: tier, icon: icon };
+  }
+  var fmBadges = [
+    fmBadge("pirate", "Pirate on the Premises", "Hit your first scoring switch", "bronze", "flag"),
+    fmBadge("solder", "Jo’s Soldering Iron", "Fit your first crew mod", "bronze", "bolt"),
+    fmBadge("beat", "Right on the One", "Land a perfect Bass Drop on the beat", "silver", "bolt"),
+    fmBadge("double", "Double Booking", "Get two balls on the table at once", "silver", "star"),
+    fmBadge("aerials", "Above the Aerials", "Put the Boiler Room broadcast on air", "silver", "flag"),
+    fmBadge("quills", "Three Quills, One Plug", "Fit Terry’s coil, Reggie’s pencil and Kenneth’s splitter across any number of runs", "gold", "book"),
+    fmBadge("cats", "Six Cats on the Rider", "Fit a mod from each of the six cats across any number of runs", "gold", "paw"),
+    fmBadge("royalties", "Arthur Wants Royalties", "Broadcast from the Moonshot and finish the run", "gold", "cup"),
+    fmBadge("legend", "Dead Air Legend", "Finish all three broadcasts on Dead Zone difficulty", "legend", "crown")
+  ];
+  function rememberFM(set, key) {
+    if (set.has(key)) return false;
+    set.add(key);
+    try { localStorage.setItem(fmPrefix + key, "1"); } catch (e) { /* Session progress still counts. */ }
+    return true;
+  }
+  function fmList() {
+    return fmBadges.map(function (badge) {
+      return Object.assign({}, badge, { got: fmEarned.has(badge.id) });
+    });
+  }
+  function collectFM(state, record) {
+    state = state || {}; record = record || {};
+    var stats = state.stats || {}, last = record.last || {};
+    var kit = Array.isArray(state.kit) ? state.kit : [];
+    var previousKit = Array.isArray(record.gear) ? record.gear : [];
+    var changed = false;
+    function award(id, eligible) { if (eligible && rememberFM(fmEarned, "fm-" + id)) changed = true; }
+    kit.concat(previousKit).forEach(function (id) {
+      if (collectionMods.indexOf(id) !== -1) rememberFM(fmGear, id);
+    });
+    var won = state.phase === "won" || record.wins > 0 || last.won === true;
+    var broadcast = stats.broadcasts > 0 || state.stage >= 2 || record.bestStage >= 2 || won;
+    award("pirate", stats.hits > 0 || record.bestChain > 0 || record.highScore > 0 || broadcast);
+    award("solder", kit.length > 0 || previousKit.length > 0 || stats.gear > 0 || state.stage >= 2 || record.bestStage >= 2 || won);
+    award("beat", stats.perfect > 0);
+    award("double", stats.multiballs > 0);
+    award("aerials", broadcast);
+    award("quills", quillMods.every(function (id) { return fmGear.has(id); }));
+    award("cats", catMods.every(function (id) { return fmGear.has(id); }));
+    award("royalties", won);
+    award("legend", (state.phase === "won" && state.difficulty === 2) || (last.won === true && last.difficulty === 2));
+    return changed;
+  }
+  function readFM(set, key) {
+    try { if (localStorage.getItem(fmPrefix + key) === "1") set.add(key); } catch (e) {}
+  }
+  function readFMFlags() {
+    fmBadges.forEach(function (badge) { readFM(fmEarned, badge.id); });
+    collectionMods.forEach(function (id) { readFM(fmGear, id); });
+  }
+  readFMFlags();
+  // Read the pre-trophy cabinet saves once. The live game supplies new events directly.
+  collectFM(load("wgw.dead-air-fm.run.1").state, load("wgw.dead-air-fm.records.1"));
+  window.addEventListener("storage", function (event) {
+    if (!event.key || event.key.indexOf(fmPrefix) !== 0 || event.newValue !== "1") return;
+    var key = event.key.slice(fmPrefix.length);
+    if (collectionMods.indexOf(key) !== -1) {
+      fmGear.add(key);
+      collectFM();
+    } else if (fmBadges.some(function (badge) { return badge.id === key; })) fmEarned.add(key);
+    if (wall && !document.hidden) renderWall();
+  });
+  window.WGWDeadAirTrophies = {
+    update: function (state, record) { if (collectFM(state, record) && !wall) check(); },
+    list: fmList,
+    medal: medal
   };
   function defs() {
     var g = load("gtk-v1"), r = load("rlgl-v1"), f = load("fd-v1"), a = num("arthur-best"), s = load("wgw-streak"), k = load("kgp-v1"), p = load("stp-v1");
@@ -75,6 +163,7 @@
       { id: "ovation", name: "Standing Ovation", how: "Win a run on Encore 5", game: "Seen Off", tier: "legend", icon: "crown", got: +p.mw >= 6 },
       { id: "tour", name: "Grand Tour", how: "Play Grand Theft Kitty, Red Light Green Light, Arthur's Tribunal, Ferret's Ditch and The Kitty Grand Prix", game: "The arcade", tier: "legend", icon: "flag", got: five >= 5 }
     ];
+    list = list.concat(fmList());
     var n = list.filter(function (b) { return b.got; }).length;
     list.push({ id: "pothunter", name: "Pot Hunter", how: "Win 25 of the other badges", game: "The arcade", tier: "gold", icon: "cup", got: n >= 25 });
     return list;
@@ -118,22 +207,27 @@
   function rankFor(n) { var r = RANKS[0][1]; RANKS.forEach(function (x) { if (n >= x[0]) r = x[1]; }); return r; }
 
   /* the wall */
-  var wall = document.getElementById("badges");
-  var list = defs(), got = list.filter(function (b) { return b.got; });
-  if (wall) {
-    var viewed = listGet("wgw-badges-viewed") || [];
+  var wall = document.getElementById("badges"), fmWallCount = -1;
+  var viewed = wall ? listGet("wgw-badges-viewed") || [] : [];
+  function renderWall() {
+    if (fmWallCount === fmEarned.size) return;
+    var initial = fmWallCount < 0;
+    fmWallCount = fmEarned.size;
+    var list = defs(), got = list.filter(function (b) { return b.got; });
     wall.textContent = "";
     wall.appendChild(el("p", "scrawl", "Your trophy cabinet"));
     wall.appendChild(el("div", "wgwb-rank", rankFor(got.length)));
     wall.appendChild(el("p", "wgwb-sub", got.length + " of " + list.length + " badges earned. " + (got.length === list.length ? "That is the lot. Frame it." : "Locked ones show how to win them.")));
     var bar = el("div", "wgwb-bar"), fill = el("i"); fill.style.width = Math.round(got.length / list.length * 100) + "%"; bar.appendChild(fill); wall.appendChild(bar);
-    var SHELVES = ["Seen Off", "The Kitty Grand Prix", "Grand Theft Kitty", "Red Light, Green Light", "Arthur's Tribunal", "Ferret's Ditch", "The papers", "The arcade"];
+    var SHELVES = ["Dead Air FM", "Seen Off", "The Kitty Grand Prix", "Grand Theft Kitty", "Red Light, Green Light", "Arthur's Tribunal", "Ferret's Ditch", "The papers", "The arcade"];
     var TORDER = { bronze: 0, silver: 1, gold: 2, legend: 3 };
     SHELVES.forEach(function (name) {
       var mine = list.filter(function (b) { return b.game === name; });
       if (!mine.length) return;
       var have = mine.filter(function (b) { return b.got; }).length;
-      var h = el("h3", "wgwb-shelf", name); h.appendChild(el("span", null, have + " of " + mine.length)); wall.appendChild(h);
+      var h = el("h3", "wgwb-shelf", name);
+      if (name === "Dead Air FM") h.id = "dead-air-fm-trophies";
+      h.appendChild(el("span", null, have + " of " + mine.length)); wall.appendChild(h);
       var grid = el("div", "wgwb-wall");
       mine.sort(function (a, b) { return ((b.got ? 1 : 0) - (a.got ? 1 : 0)) || (TORDER[a.tier] - TORDER[b.tier]); }).forEach(function (b) {
         var m = el("div", "wgwb-m " + (b.got ? "got " : "locked ") + b.tier);
@@ -146,7 +240,16 @@
       wall.appendChild(grid);
     });
     wall.appendChild(el("p", "fine", "Kept in this browser only, so they will not follow you to another device."));
-    listSet("wgw-badges-viewed", got.map(function (b) { return b.id; }));
+    var ids = got.map(function (b) { return b.id; });
+    listSet("wgw-badges-viewed", ids);
+    if (initial) listSet("wgw-badges-toasted", ids);
+  }
+  if (wall) {
+    renderWall();
+    window.addEventListener("pageshow", function (event) {
+      if (event.persisted) { readFMFlags(); renderWall(); }
+    });
+    document.addEventListener("visibilitychange", function () { if (!document.hidden) renderWall(); });
   }
 
   /* the toast, on game pages and anywhere else that loads this */
@@ -167,5 +270,5 @@
     var fresh = now.filter(function (b) { return seen.indexOf(b.id) < 0; });
     if (fresh.length) { listSet("wgw-badges-toasted", seen.concat(fresh.map(function (b) { return b.id; }))); q = q.concat(fresh); next(); }
   }
-  if (!wall) { check(); setInterval(check, 2000); } else { listSet("wgw-badges-toasted", got.map(function (b) { return b.id; })); }
+  if (!wall) { check(); setInterval(check, 2000); }
 })();
