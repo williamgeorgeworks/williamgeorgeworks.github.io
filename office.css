@@ -6,18 +6,28 @@
   margin: 0 0 14px;
   transform: rotate(-1.5deg);
 }
+.office-pan-hint {
+  font-family: var(--hand);
+  color: var(--faint);
+  font-size: 18px;
+  text-align: center;
+  margin: 0 auto 10px;
+  max-width: 22em;
+}
 .office-stage-wrap {
   width: 100%;
   margin: 0 0 28px;
   text-align: center;
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
 }
 .office-stage {
   background: #141414;
   overflow: hidden;
   line-height: 0;
   display: inline-block;
-  max-width: 100%;
+  max-width: none;
 }
 .office-stage canvas {
   display: block;
@@ -94,4 +104,29 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .office-demo { transform: none; }
+}
+
+html.office-embed,
+html.office-embed body {
+  margin: 0;
+  background: #141414;
+}
+html.office-embed header,
+html.office-embed footer,
+html.office-embed nav,
+html.office-embed .office-board,
+html.office-embed .office-lede,
+html.office-embed .office-demo,
+html.office-embed .office-pan-hint,
+html.office-embed .hero,
+html.office-embed .site {
+  display: none !important;
+}
+html.office-embed .office-stage-wrap {
+  margin: 0;
+  overflow: hidden;
+}
+html.office-embed .office-stage canvas {
+  width: 100%;
+  height: auto;
 }

@@ -1,4 +1,4 @@
-/* Virtual office — three private offices and ten desks on the open floor.
+/* Virtual office — private offices, an open floor, amenity rooms, and the machine.
    To add or remove someone (including Kenneth, Terrance or Reginald), edit STAFF only. */
 
 /* Paste the Worker address here after Kenneth deploys it, then open a follow-up PR
@@ -54,16 +54,15 @@ const WORK_FLAVOUR = [
   "Having a moment with the work"
 ];
 const IDLE_FLAVOUR = [
-  "Kettle duty",
-  "Staring at the printer",
   "A wander, purely medicinal",
   "Between engagements",
   "Consulting the biscuits",
   "Out to lunch, spiritually",
   "Examining the ceiling for clues",
   "Waiting for the muse, or lunch",
-  "Off to the kettle, diplomatically",
-  "Practising looking busy"
+  "Practising looking busy",
+  "Loitering with intent",
+  "A lap of the floor, then another"
 ];
 const CELE_FLAVOUR = [
   "A brief, unsanctioned jig",
@@ -72,13 +71,22 @@ const CELE_FLAVOUR = [
   "Off to the kettle in triumph"
 ];
 
-const W = 640, H = 430, FLOOR_Y = 122;
+const W = 640, H = 760, FLOOR_Y = 122;
+const MACHINE = { x: 558, y: 352, w: 74, h: 62, cx: 595, cy: 383, berth: 52 };
+
 let viewScale = 1;
 const REDUCE = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const params = new URLSearchParams(location.search);
 const DEMO = params.get("demo") || "";
+const EMBED = params.get("embed") === "1" || (!document.getElementById("office-canvas") && !!document.getElementById("office-live"));
+const EMBED_CAM_X = 0;
+const EMBED_CAM_Y = 148;
+const EMBED_W = 640;
+const EMBED_H = 240;
 
-const canvas = document.getElementById("office-canvas");
+if (EMBED && params.get("embed") === "1") document.documentElement.classList.add("office-embed");
+
+const canvas = document.getElementById("office-canvas") || document.getElementById("office-live");
 const ctx = canvas.getContext("2d");
 const boardList = document.getElementById("office-board-list");
 const feedNote = document.getElementById("office-feed-note");
@@ -103,19 +111,26 @@ function pick(arr, salt) {
 
 
 function fitCanvas() {
-  const avail = document.documentElement.clientWidth;
-  if (avail >= 1280) {
-    viewScale = 2;
-    canvas.style.width = (W * 2) + "px";
-    canvas.style.height = (H * 2) + "px";
-  } else if (avail >= 640) {
+  if (EMBED) {
     viewScale = 1;
-    canvas.style.width = W + "px";
-    canvas.style.height = H + "px";
-  } else {
-    viewScale = avail / W;
-    canvas.style.width = "100%";
-    canvas.style.height = "auto";
+    canvas.width = EMBED_W;
+    canvas.height = EMBED_H;
+    canvas.style.width = "";
+    canvas.style.height = "";
+    return;
+  }
+  /* Integer scale only, and never shrink below 1x. On a narrow phone the
+     stage scrolls sideways instead of becoming a tiny blur. */
+  const avail = document.documentElement.clientWidth;
+  const scale = Math.max(1, Math.floor(avail / W));
+  viewScale = scale;
+  canvas.style.width = (W * scale) + "px";
+  canvas.style.height = (H * scale) + "px";
+  const wrap = document.getElementById("office-stage-wrap");
+  const hint = document.getElementById("office-pan-hint");
+  if (wrap && hint) {
+    const overflow = W * scale > wrap.clientWidth + 8;
+    hint.hidden = !overflow;
   }
 }
 
@@ -157,9 +172,48 @@ function layoutOffices() {
   });
 }
 
+function layoutAmenities() {
+  const rows = [
+    { y: 428, h: 154, doors: "n", items: [
+      { id: "canteen", plate: ["CANTEEN"], x: 4, w: 250 },
+      { id: "tv", plate: ["TV ROOM"], x: 258, w: 186 },
+      { id: "meet-a", plate: ["MEETING A"], x: 448, w: 188 }
+    ]},
+    { y: 598, h: 156, doors: "n", items: [
+      { id: "music", plate: ["MUSIC"], x: 4, w: 210 },
+      { id: "reflection", plate: ["REFLECTION"], x: 218, w: 210 },
+      { id: "meet-b", plate: ["MEETING B"], x: 432, w: 204 }
+    ]}
+  ];
+  /* The last bay on the bottom row is left as a short meeting room;
+     the weird machine lives in the open-floor corner above, not in a room. */
+  rows.forEach(row => {
+    row.items.forEach(item => {
+      const cx = item.x + Math.round(item.w / 2);
+      rooms.push({
+        id: item.id,
+        plate: item.plate,
+        amenity: true,
+        doorSide: row.doors,
+        x: item.x,
+        y: row.y,
+        w: item.w,
+        h: row.h,
+        cx: cx,
+        doorX: cx,
+        doorY: row.y - 6,
+        doorW: 24
+      });
+      hotspots.push({ x: cx - 16, y: row.y + 70, room: item.id, kind: item.id });
+      hotspots.push({ x: cx + 18, y: row.y + 110, room: item.id, kind: item.id });
+    });
+  });
+}
+
 function layoutDesks() {
   desks.length = 0;
   layoutOffices();
+  layoutAmenities();
   const floorStaff = STAFF.filter(s => !s.office);
   const n = floorStaff.length;
   const topN = Math.ceil(n / 2);
@@ -188,23 +242,45 @@ function layoutDesks() {
 }
 
 function setupHotspots() {
-  hotspots.length = 0;
+  /* Amenity rooms already added their interior spots in layoutAmenities. */
   [
     { x: 54, y: FLOOR_Y + 28, kind: "kettle" },
-    { x: 586, y: FLOOR_Y + 28, kind: "printer" },
+    { x: 500, y: FLOOR_Y + 28, kind: "printer" },
     { x: 320, y: FLOOR_Y + 30, kind: "plant" },
     { x: 160, y: FLOOR_Y + 118 },
     { x: 320, y: FLOOR_Y + 118 },
-    { x: 480, y: FLOOR_Y + 118 },
-    { x: 90, y: H - 28 },
-    { x: 250, y: H - 28 },
-    { x: 400, y: H - 28 },
-    { x: 550, y: H - 28 }
-  ].forEach(s => hotspots.push(s));
+    { x: 430, y: FLOOR_Y + 118 },
+    { x: 90, y: FLOOR_Y + 270 },
+    { x: 250, y: FLOOR_Y + 270 },
+    { x: 400, y: FLOOR_Y + 270 },
+    { x: 80, y: 416, kind: "corridor" },
+    { x: 240, y: 416, kind: "corridor" },
+    { x: 400, y: 416, kind: "corridor" },
+    { x: 80, y: 586, kind: "corridor" },
+    { x: 300, y: 586, kind: "corridor" }
+  ].forEach(s => {
+    if (!nearMachine(s.x, s.y)) hotspots.push(s);
+  });
   rooms.forEach(r => {
+    if (r.amenity) return;
     hotspots.push({ x: r.cx - 24, y: r.y + 90, room: r.id });
     hotspots.push({ x: r.doorX, y: r.doorY, room: r.id });
   });
+}
+
+function nearMachine(x, y, extra) {
+  return Math.hypot(x - MACHINE.cx, y - MACHINE.cy) < MACHINE.berth + (extra || 0);
+}
+
+function aroundMachine(x1, y1, x2, y2) {
+  const mx = MACHINE.cx, my = MACHINE.cy, r = MACHINE.berth + 8;
+  const dx = x2 - x1, dy = y2 - y1;
+  const len2 = dx * dx + dy * dy || 1;
+  let t = ((mx - x1) * dx + (my - y1) * dy) / len2;
+  t = Math.max(0, Math.min(1, t));
+  const px = x1 + t * dx, py = y1 + t * dy;
+  if (Math.hypot(px - mx, py - my) >= r) return null;
+  return { x: MACHINE.x - 18, y: my };
 }
 
 function roomAt(x, y) {
@@ -213,11 +289,23 @@ function roomAt(x, y) {
 
 function setRoute(who, dest) {
   who.waypoints = [];
+  if (nearMachine(dest.x, dest.y, -8)) {
+    dest = { x: MACHINE.x - 24, y: dest.y };
+  }
   const from = roomAt(who.x, who.y);
   const to = roomAt(dest.x, dest.y);
   if (from && (!to || from.id !== to.id)) who.waypoints.push({ x: from.doorX, y: from.doorY });
   if (to && (!from || from.id !== to.id)) who.waypoints.push({ x: to.doorX, y: to.doorY });
   who.waypoints.push({ x: dest.x, y: dest.y });
+  const points = [{ x: who.x, y: who.y }].concat(who.waypoints);
+  const out = [];
+  for (let i = 0; i < points.length - 1; i++) {
+    const a = points[i], b = points[i + 1];
+    const detour = aroundMachine(a.x, a.y, b.x, b.y);
+    if (detour) out.push(detour);
+    out.push(b);
+  }
+  who.waypoints = out;
   who.target = who.waypoints.shift();
 }
 
@@ -246,6 +334,8 @@ function makePerson(staff, index) {
     wait: 0.4 * index,
     walkT: index * 0.3,
     celeT: 0,
+    glanceT: 0,
+    pendingDest: null,
     facing: "r",
     flavour: flavourFor(staff.id, "idle", index + 3),
     typeT: 0
@@ -257,6 +347,7 @@ function makeCat(id, x, y) {
 }
 
 function buildBoard() {
+  if (!boardList) return;
   boardList.innerHTML = "";
   STAFF.forEach(s => {
     const li = document.createElement("li");
@@ -270,7 +361,8 @@ function buildBoard() {
 }
 
 function paintBoard() {
-  feedNote.hidden = !feedOffline;
+  if (feedNote) feedNote.hidden = EMBED || !feedOffline;
+  if (EMBED || !boardList) return;
   people.forEach(p => {
     const li = document.getElementById("board-" + p.id);
     if (!li) return;
@@ -325,6 +417,13 @@ function applyBots(bots) {
   people.forEach(p => {
     const state = map[p.id] === "working" ? "working" : "idle";
     setWant(p, state);
+    if (REDUCE && state === "working" && p.desk) {
+      p.x = p.desk.chairX;
+      p.y = p.desk.chairY;
+      p.phase = "working";
+      p.target = null;
+      p.waypoints = [];
+    }
   });
 }
 
@@ -351,17 +450,35 @@ function stepMove(who, dt, speed) {
   return false;
 }
 
+const PLACE_FLAVOUR = {
+  canteen: ["Frank's domain, the canteen", "A diplomatic bacon sandwich", "Lunch, or the idea of lunch"],
+  tv: ["Watching something unspeakable", "The TV is winning, quietly"],
+  music: ["Brian's natural haunt", "Having a listen"],
+  reflection: ["A quiet word with himself", "In the reflection room, eyes shut"],
+  "meet-a": ["In a meeting, sort of", "The meeting about meetings"],
+  "meet-b": ["Around the table", "Nodding at a whiteboard"],
+  kettle: ["Kettle duty", "Off to the kettle, diplomatically"],
+  printer: ["Staring at the printer"]
+};
+
+function flavourForPlace(person, dest) {
+  const key = (dest && (dest.kind || dest.room)) || "";
+  const list = PLACE_FLAVOUR[key];
+  if (list) return pick(list, (Date.now() / 1000 | 0) + person.id.length);
+  return flavourFor(person.id, "idle", Date.now() / 1000 | 0);
+}
+
 function idleTarget(person) {
+  const safe = hotspots.filter(s => !nearMachine(s.x, s.y));
+  let preferred = [];
+  if (person.id === "frank") preferred = safe.filter(s => s.room === "canteen" || s.kind === "canteen");
+  if (person.id === "brian") preferred = safe.filter(s => s.room === "music" || s.kind === "music");
   let pool;
-  if (person.staff.office) {
-    pool = Math.random() < 0.45
-      ? hotspots.filter(s => s.room === person.id)
-      : hotspots.filter(s => !s.room);
-  } else {
-    pool = hotspots.filter(s => !s.room);
-  }
+  if (preferred.length && Math.random() < 0.55) pool = preferred;
+  else if (person.staff.office && Math.random() < 0.3) pool = safe.filter(s => s.room === person.id);
+  else pool = safe;
   const far = pool.filter(s => Math.hypot(s.x - person.x, s.y - person.y) > 28);
-  const use = far.length ? far : (pool.length ? pool : hotspots.filter(s => !s.room));
+  const use = far.length ? far : (pool.length ? pool : safe);
   return use[Math.floor(Math.random() * use.length)];
 }
 
@@ -412,13 +529,40 @@ function tickPerson(p, dt) {
   }
   if (p.wait > 0) {
     p.wait -= dt;
+    if (!REDUCE && p.glanceT <= 0 && nearMachine(p.x, p.y, 40) && !nearMachine(p.x, p.y) && Math.random() < 0.02) {
+      p.glanceT = 0.9;
+      p.facing = p.x < MACHINE.cx ? "r" : "l";
+      p.flavour = "Giving the machine a wide berth";
+      paintBoard();
+    }
+    if (p.glanceT > 0) p.glanceT -= dt;
+    if (p.wait <= 0 && p.pendingDest) {
+      setRoute(p, p.pendingDest);
+      p.pendingDest = null;
+    }
     return;
   }
   const arrived = stepMove(p, dt, 38);
   if (arrived) {
     p.wait = 1.2 + Math.random() * 2.8;
-    setRoute(p, idleTarget(p));
+    p.flavour = flavourHere(p);
+    paintBoard();
+    p.pendingDest = idleTarget(p);
+    p.target = null;
   }
+}
+
+function flavourHere(person) {
+  const room = roomAt(person.x, person.y);
+  if (room && room.amenity) return flavourForPlace(person, { room: room.id, kind: room.id });
+  let best = null, bestD = 24;
+  hotspots.forEach(s => {
+    if (s.room || (s.kind !== "kettle" && s.kind !== "printer")) return;
+    const d = Math.hypot(s.x - person.x, s.y - person.y);
+    if (d < bestD) { best = s; bestD = d; }
+  });
+  if (best) return flavourForPlace(person, best);
+  return flavourFor(person.id, "idle", Date.now() / 1000 | 0);
 }
 
 function tickCat(c, dt) {
@@ -434,11 +578,11 @@ function tickCat(c, dt) {
   const arrived = stepMove(c, dt, 28);
   if (arrived) {
     c.wait = 0.8 + Math.random() * 3;
-    const floor = hotspots.filter(s => !s.room);
+    const floor = hotspots.filter(s => !s.room && !nearMachine(s.x, s.y, 10) && (s.y || 0) < 430);
     const spots = floor.filter(s => Math.hypot(s.x - c.x, s.y - c.y) > 20);
     const use = spots.length ? spots : floor;
-    const t = use[Math.floor(Math.random() * use.length)];
-    c.target = { x: t.x + (Math.random() * 16 - 8), y: t.y + (Math.random() * 10 - 5) };
+    const dest = use[Math.floor(Math.random() * use.length)];
+    if (dest) c.target = { x: dest.x + (Math.random() * 16 - 8), y: dest.y + (Math.random() * 10 - 5) };
   }
 }
 
@@ -485,11 +629,43 @@ function drawRoom() {
   p(310, FLOOR_Y + 6, 18, 18, "#f4f0e4");
   p(318, FLOOR_Y + 8, 2, 7, "#141414");
   p(318, FLOOR_Y + 14, 6, 2, "#141414");
-  /* ink splat */
-  p(18, H - 36, 10, 6, "#14141422");
-  p(22, H - 32, 6, 6, "#14141422");
-  p(600, H - 30, 12, 8, "#d1202f22");
-  drawPrivateOffices();
+  /* ink splat on the open floor, not in the new rooms */
+  p(18, FLOOR_Y + 290, 10, 6, "#14141422");
+  p(22, FLOOR_Y + 294, 6, 6, "#14141422");
+  /* open-floor furnishings */
+  drawPlant(140, FLOOR_Y + 18);
+  drawPlant(470, FLOOR_Y + 20);
+  drawPlant(70, FLOOR_Y + 200);
+  drawPlant(520, FLOOR_Y + 210);
+  /* water cooler */
+  p(200, FLOOR_Y + 8, 16, 6, "#c0c0c0");
+  p(204, FLOOR_Y + 14, 8, 18, "#8ec8e6");
+  p(202, FLOOR_Y + 32, 12, 6, "#c0c0c0");
+  if (!REDUCE && (t0 * 2 % 1) < 0.5) p(207, FLOOR_Y + 20, 2, 2, "#f4f0e4");
+  /* filing cabinets */
+  p(580, FLOOR_Y + 200, 22, 28, "#6b5344");
+  p(582, FLOOR_Y + 206, 18, 6, "#4a3a30");
+  p(582, FLOOR_Y + 216, 18, 6, "#4a3a30");
+  p(584, FLOOR_Y + 208, 3, 2, "#c4a574");
+  /* noticeboard */
+  p(420, FLOOR_Y + 4, 36, 22, "#6b3d12");
+  p(423, FLOOR_Y + 6, 10, 8, "#f4f0e4");
+  p(435, FLOOR_Y + 8, 8, 7, "#d1202f");
+  p(444, FLOOR_Y + 7, 9, 10, "#22409a");
+  /* coat rack */
+  p(18, FLOOR_Y + 200, 3, 28, "#3d2a1c");
+  p(14, FLOOR_Y + 204, 12, 2, "#3d2a1c");
+  p(12, FLOOR_Y + 206, 5, 10, "#1e3a5f");
+  p(20, FLOOR_Y + 208, 5, 12, "#7a1f2b");
+  /* sofa by the rug */
+  p(150, FLOOR_Y + 148, 44, 16, "#5a2a2a");
+  p(150, FLOOR_Y + 146, 8, 20, "#4a2020");
+  p(186, FLOOR_Y + 146, 8, 20, "#4a2020");
+  /* bin */
+  p(250, FLOOR_Y + 24, 10, 12, "#3d2a1c");
+  p(248, FLOOR_Y + 22, 14, 3, "#2a1c14");
+  drawMachine();
+  drawAllRooms();
   /* inner frame */
   p(0, 0, W, 2, "#141414");
   p(0, H - 2, W, 2, "#141414");
@@ -497,45 +673,86 @@ function drawRoom() {
   p(W - 2, 0, 2, H, "#141414");
 }
 
-function drawPrivateOffices() {
-  const carpets = { kenneth: "#c4a87a", terry: "#e8dcc0", reggie: "#d4b6a4" };
+function drawPlant(x, y) {
+  p(x, y + 16, 16, 8, "#6b4a2a");
+  p(x + 4, y + 4, 8, 12, "#0f4a4a");
+  p(x - 2, y - 2, 8, 10, "#1a6b4a");
+  p(x + 10, y, 8, 10, "#0f4a4a");
+}
+
+function drawMachine() {
+  const m = MACHINE;
+  p(m.x - 6, m.y - 6, m.w + 12, m.h + 14, "#2a1c16");
+  for (let i = 0; i < 8; i++) {
+    const c = i % 2 ? "#e6c200" : "#141414";
+    p(m.x - 6 + i * 10, m.y - 6, 6, 4, c);
+    p(m.x - 6 + i * 10, m.y + m.h + 4, 6, 4, c);
+  }
+  p(m.x + 10, m.y + 34, 54, 22, "#2a2420");
+  p(m.x + 16, m.y + 10, 40, 28, "#4a3a58");
+  const glow = REDUCE ? "#6b2a8a" : ((Math.sin((t0 || 0) * 3) > 0) ? "#a04ad0" : "#3dff7a");
+  p(m.x + 24, m.y - 2, 24, 18, glow);
+  p(m.x + 30, m.y + 2, 8, 8, "#f4f0e4");
+  p(m.x + 6, m.y + 22, 12, 2, "#141414");
+  p(m.x + 6, m.y + 22, 2, 22, "#141414");
+  p(m.x + 22, m.y + 40, 12, 12, "#f4f0e4");
+  p(m.x + 26, m.y + 44, 4, 6, "#d1202f");
+  p(m.x + 50, m.y + 4, 2, 18, "#c0c0c0");
+  if (!REDUCE && (((t0 || 0) * 6) % 1) < 0.18) {
+    p(m.x + 54, m.y - 2, 3, 3, "#e6c200");
+    p(m.x + 58, m.y + 4, 2, 2, "#f4f0e4");
+  }
+  if (viewScale >= 1 && !EMBED) drawLabel(m.cx, m.y + m.h - 6, "NO", "#d1202f");
+}
+
+function drawAllRooms() {
+  const carpets = {
+    kenneth: "#c4a87a", terry: "#e8dcc0", reggie: "#d4b6a4",
+    canteen: "#e8d0a8", tv: "#3a3450", music: "#4a2a3c",
+    reflection: "#d8e4d0", "meet-a": "#e8e0d4", "meet-b": "#e4dcc8"
+  };
   rooms.forEach(r => {
     p(r.x, r.y, r.w, r.h, carpets[r.id] || "#e4d4b8");
-    /* back wall */
-    p(r.x, r.y, r.w, 16, "#efe6d4");
-    /* little window */
-    p(r.cx - 22, r.y + 3, 44, 12, "#3d2a1c");
-    p(r.cx - 20, r.y + 4, 20, 10, "#8ec8e6");
-    p(r.cx + 1, r.y + 4, 19, 10, "#7eb8d8");
-    /* bookshelf for Terry and Reggie, as in their portraits */
-    if (r.id === "terry" || r.id === "reggie") {
-      p(r.x + 6, r.y + 20, 16, 28, "#6b4a2a");
-      p(r.x + 8, r.y + 22, 5, 8, "#7a1f2b");
-      p(r.x + 14, r.y + 22, 5, 8, "#22409a");
-      p(r.x + 8, r.y + 32, 5, 7, "#0f4a4a");
-      p(r.x + 14, r.y + 32, 5, 7, "#6b3d12");
+    if (!r.amenity) {
+      p(r.x, r.y, r.w, 16, "#efe6d4");
+      p(r.cx - 22, r.y + 3, 44, 12, "#3d2a1c");
+      p(r.cx - 20, r.y + 4, 20, 10, "#8ec8e6");
+      p(r.cx + 1, r.y + 4, 19, 10, "#7eb8d8");
+      if (r.id === "terry" || r.id === "reggie") {
+        p(r.x + 6, r.y + 20, 16, 28, "#6b4a2a");
+        p(r.x + 8, r.y + 22, 5, 8, "#7a1f2b");
+        p(r.x + 14, r.y + 22, 5, 8, "#22409a");
+        p(r.x + 8, r.y + 32, 5, 7, "#0f4a4a");
+        p(r.x + 14, r.y + 32, 5, 7, "#6b3d12");
+      }
     }
-    /* glass partitions: ink posts and pale glass */
     p(r.x, r.y, 2, r.h, "#141414");
     p(r.x + r.w - 2, r.y, 2, r.h, "#141414");
-    p(r.x, r.y, r.w, 2, "#141414");
-    /* front wall with a door gap */
     const doorL = r.doorX - Math.floor(r.doorW / 2);
     const doorR = doorL + r.doorW;
-    p(r.x, r.y + r.h - 3, doorL - r.x, 3, "#141414");
-    p(doorR, r.y + r.h - 3, r.x + r.w - doorR, 3, "#141414");
-    /* pale glass on the front wall either side of the door */
-    p(r.x + 2, r.y + r.h - 14, Math.max(0, doorL - r.x - 3), 8, "#c5d8e4");
-    p(doorR + 1, r.y + r.h - 14, Math.max(0, r.x + r.w - 2 - doorR - 1), 8, "#c5d8e4");
-    /* threshold */
-    p(doorL, r.y + r.h - 1, r.doorW, 4, "#6b4a2a");
-    /* nameplates are crisp at 1x/2x; on a small phone the board carries the names */
-    if (viewScale >= 1) {
-      const lines = r.staff.plate || [r.staff.name.toUpperCase()];
+    const north = r.doorSide === "n";
+    if (north) {
+      p(r.x, r.y, doorL - r.x, 3, "#141414");
+      p(doorR, r.y, r.x + r.w - doorR, 3, "#141414");
+      p(r.x, r.y + r.h - 3, r.w, 3, "#141414");
+      p(r.x + 2, r.y + 3, Math.max(0, doorL - r.x - 3), 8, "#c5d8e4");
+      p(doorR + 1, r.y + 3, Math.max(0, r.x + r.w - 2 - doorR - 1), 8, "#c5d8e4");
+      p(doorL, r.y - 2, r.doorW, 4, "#6b4a2a");
+    } else {
+      p(r.x, r.y, r.w, 2, "#141414");
+      p(r.x, r.y + r.h - 3, doorL - r.x, 3, "#141414");
+      p(doorR, r.y + r.h - 3, r.x + r.w - doorR, 3, "#141414");
+      p(r.x + 2, r.y + r.h - 14, Math.max(0, doorL - r.x - 3), 8, "#c5d8e4");
+      p(doorR + 1, r.y + r.h - 14, Math.max(0, r.x + r.w - 2 - doorR - 1), 8, "#c5d8e4");
+      p(doorL, r.y + r.h - 1, r.doorW, 4, "#6b4a2a");
+    }
+    drawAmenityFurniture(r);
+    if (viewScale >= 1 && !EMBED) {
+      const lines = (r.staff && r.staff.plate) || r.plate || [String(r.id).toUpperCase()];
       const plateW = Math.max.apply(null, lines.map(s => s.length * 4 + 6));
       const plateH = lines.length * 7 + 4;
       const px = r.cx - Math.round(plateW / 2);
-      const py = r.y + 17;
+      const py = north ? r.y + 6 : r.y + 17;
       p(px, py, plateW, plateH, "#f4f0e4");
       p(px, py, plateW, 1, "#3d2a1c");
       p(px, py + plateH - 1, plateW, 1, "#3d2a1c");
@@ -543,6 +760,65 @@ function drawPrivateOffices() {
     }
   });
 }
+
+function drawAmenityFurniture(r) {
+  if (r.id === "canteen") {
+    p(r.x + 8, r.y + 28, 70, 16, "#8b5a2b");
+    p(r.x + 14, r.y + 16, 16, 14, "#c0c0c0");
+    p(r.x + 18, r.y + 10, 8, 8, "#d8d2c6");
+    p(r.x + 40, r.y + 18, 12, 10, "#e07a2f");
+    p(r.x + 56, r.y + 20, 6, 8, "#d1202f");
+    p(r.x + 100, r.y + 70, 40, 24, "#f4f0e4");
+    p(r.x + 104, r.y + 92, 6, 8, "#3d2a1c");
+    p(r.x + 130, r.y + 92, 6, 8, "#3d2a1c");
+    p(r.x + 160, r.y + 70, 40, 24, "#f4f0e4");
+    p(r.x + 164, r.y + 92, 6, 8, "#3d2a1c");
+    p(r.x + 190, r.y + 92, 6, 8, "#3d2a1c");
+    drawPlant(r.x + r.w - 28, r.y + 28);
+  } else if (r.id === "tv") {
+    p(r.cx - 20, r.y + 24, 40, 28, "#141414");
+    const flicker = REDUCE ? "#22409a" : (((t0 || 0) * 8 | 0) % 2 ? "#2a50b0" : "#3a6ad4");
+    p(r.cx - 16, r.y + 28, 32, 20, flicker);
+    p(r.x + 20, r.y + 90, 70, 18, "#4a3048");
+    p(r.x + 20, r.y + 86, 10, 24, "#3a2438");
+    p(r.x + 80, r.y + 86, 10, 24, "#3a2438");
+    p(r.x + 44, r.y + 78, 22, 10, "#6b4a2a");
+    drawPlant(r.x + r.w - 26, r.y + 100);
+  } else if (r.id === "music") {
+    p(r.x + 16, r.y + 36, 18, 28, "#1a1a1a");
+    p(r.x + 18, r.y + 40, 14, 16, "#3a3a3a");
+    p(r.x + 48, r.y + 48, 28, 16, "#d8d2c6");
+    p(r.x + 52, r.y + 44, 20, 6, "#141414");
+    p(r.x + 54, r.y + 46, 3, 3, "#f4f0e4");
+    p(r.x + 90, r.y + 50, 16, 16, "#2a1c14");
+    p(r.x + 92, r.y + 52, 12, 12, "#c41c1c");
+    p(r.x + 16, r.y + 90, 36, 10, "#6b3d12");
+    p(r.x + 20, r.y + 92, 10, 6, "#141414");
+    p(r.x + 32, r.y + 92, 10, 6, "#141414");
+    p(r.cx - 10, r.y + 24, 28, 18, "#7a1f2b");
+    p(r.cx - 6, r.y + 28, 20, 10, "#f4f0e4");
+  } else if (r.id === "reflection") {
+    p(r.cx - 30, r.y + 70, 60, 36, "#c8d8c4");
+    p(r.cx - 16, r.y + 80, 14, 10, "#d4a07a");
+    p(r.cx + 4, r.y + 82, 14, 10, "#e0b894");
+    p(r.cx - 8, r.y + 40, 16, 10, "#8ec8e6");
+    p(r.cx - 6, r.y + 36, 12, 6, "#7eb8d8");
+    if (!REDUCE) p(r.cx, r.y + 32, 2, 3, "#f4f0e4");
+    drawPlant(r.x + 12, r.y + 36);
+    drawPlant(r.x + r.w - 28, r.y + 100);
+  } else if (r.id === "meet-a" || r.id === "meet-b") {
+    p(r.cx - 32, r.y + 60, 64, 28, "#8b5a2b");
+    p(r.cx - 36, r.y + 88, 8, 8, "#3d2a1c");
+    p(r.cx + 28, r.y + 88, 8, 8, "#3d2a1c");
+    p(r.cx - 36, r.y + 52, 8, 8, "#3d2a1c");
+    p(r.cx + 28, r.y + 52, 8, 8, "#3d2a1c");
+    p(r.x + 8, r.y + 30, 28, 20, "#f4f0e4");
+    p(r.x + 12, r.y + 34, 16, 2, "#22409a");
+    p(r.x + 14, r.y + 38, 10, 2, "#d1202f");
+    p(r.x + 16, r.y + 42, 12, 2, "#141414");
+  }
+}
+
 
 
 
@@ -822,6 +1098,7 @@ function drawPerson(pr) {
   /* eyes */
   p(x - 3, y - 26, 2, 2, "#141414");
   p(x + 1, y - 26, 2, 2, "#141414");
+  if (pr.glanceT > 0) p(x + (left ? -8 : 6), y - 34, 2, 4, "#8ec8e6");
   const held = ["clipboard", "envelope", "book", "joystick", "basket", "spool", "duck", "quill"];
   if (held.includes(s.prop)) {
     drawProp(left ? x - 14 : x + 7, y - 18, s.prop, pr.facing);
@@ -885,6 +1162,15 @@ function drawDexter(c) {
 
 function drawFrame() {
   ctx.imageSmoothingEnabled = false;
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  if (EMBED) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(0, 0, EMBED_W, EMBED_H);
+    ctx.clip();
+    ctx.translate(-EMBED_CAM_X, -EMBED_CAM_Y);
+  }
   drawRoom();
   const sprites = [];
   desks.forEach(d => sprites.push({ y: d.y + 20, draw: () => drawDesk(d) }));
@@ -895,7 +1181,7 @@ function drawFrame() {
   }));
   sprites.sort((a, b) => a.y - b.y);
   sprites.forEach(s => s.draw());
-  if (viewScale >= 1) {
+  if (viewScale >= 1 && !EMBED) {
     desks.forEach(d => {
       if (d.private) return;
       const w = String(d.staff.tag).length * 4 + 3;
@@ -904,6 +1190,7 @@ function drawFrame() {
       drawLabel(d.cx, d.chairY + 7, d.staff.tag, "#141414");
     });
   }
+  if (EMBED) ctx.restore();
 }
 
 function applyDemo(now) {
@@ -968,7 +1255,16 @@ async function pullFeed() {
   }
 }
 
+let officeOnScreen = true;
+let rafId = 0;
+
+function shouldAnimate() {
+  return !REDUCE && !document.hidden && officeOnScreen;
+}
+
 function loop(ts) {
+  rafId = 0;
+  if (!shouldAnimate()) return;
   if (!t0) t0 = ts;
   const now = (ts - t0) / 1000;
   let dt = lastTs ? (ts - lastTs) / 1000 : 0.016;
@@ -981,18 +1277,42 @@ function loop(ts) {
   if (!DEMO && OFFICE_FEED_URL && !document.hidden && performance.now() - lastFeed > POLL_MS) {
     pullFeed();
   }
-  requestAnimationFrame(loop);
+  rafId = requestAnimationFrame(loop);
+}
+
+function resumeLoop() {
+  if (!shouldAnimate() || rafId) return;
+  lastTs = 0;
+  rafId = requestAnimationFrame(loop);
+}
+
+function watchEmbedVisibility() {
+  const el = document.getElementById("office-live-tile") || canvas;
+  if (el && "IntersectionObserver" in window) {
+    const io = new IntersectionObserver(entries => {
+      officeOnScreen = entries.some(e => e.isIntersecting);
+      if (officeOnScreen) resumeLoop();
+    }, { threshold: 0.08 });
+    io.observe(el);
+  }
+  document.addEventListener("visibilitychange", () => {
+    if (!document.hidden) {
+      if (!DEMO) pullFeed();
+      resumeLoop();
+    }
+  });
 }
 
 function boot() {
+  if (!canvas || !ctx) return;
   fitCanvas();
   window.addEventListener("resize", fitCanvas);
   layoutDesks();
   setupHotspots();
   STAFF.forEach((s, i) => people.push(makePerson(s, i)));
   cats.push(makeCat("arthur", 320, FLOOR_Y + 126));
-  cats.push(makeCat("dexter", 360, H - 30));
-  if (DEMO) {
+  cats.push(makeCat("dexter", 360, FLOOR_Y + 270));
+  if (DEMO && demoNote) {
     demoNote.hidden = false;
     feedOffline = false;
   }
@@ -1000,10 +1320,8 @@ function boot() {
   if (DEMO === "working" || DEMO === "celebrating" || DEMO === "1") applyDemo(DEMO === "1" ? 0 : 10);
   drawFrame();
   if (!DEMO) pullFeed();
-  document.addEventListener("visibilitychange", () => {
-    if (!document.hidden && !DEMO) pullFeed();
-  });
-  requestAnimationFrame(loop);
+  watchEmbedVisibility();
+  resumeLoop();
 }
 
 boot();
