@@ -2,7 +2,7 @@
 /* Builds sitemap.xml from the .html pages, using each file's last git commit date. Run from the repo root. */
 const fs = require("fs"), cp = require("child_process");
 const SITE = "https://williamgeorgeworks.co.uk";
-const pages = fs.readdirSync(".").filter(f => f.endsWith(".html") && f !== "404.html" && f !== "stats.html").sort((a, b) => (a === "index.html" ? -1 : b === "index.html" ? 1 : a.localeCompare(b)));
+const pages = fs.readdirSync(".").filter(f => f.endsWith(".html") && f !== "404.html" && f !== "stats.html" && !/<meta name="robots" content="noindex/i.test(fs.readFileSync(f, "utf8"))).sort((a, b) => (a === "index.html" ? -1 : b === "index.html" ? 1 : a.localeCompare(b)));
 const daily = { "news.html": 1, "gaming.html": 1, "index.html": 1, "board.html": 1, "arcade.html": 1, "log.html": 1, "invoices.html": 1 };
 /* Pages whose content lives in a data file: date them by whichever changed last, the page or its data. */
 const data = { "news.html": "news-data.json", "gaming.html": "gaming-data.json", "board.html": "board.json", "arcade.html": "scores.json", "comic.html": "comic/issues.json", "employee-of-the-month.html": "employee.json" };
