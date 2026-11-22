@@ -1,6 +1,65 @@
 {
  "editions": [
   {
+   "date": "2026-11-22",
+   "title": "A Maybe-Freeze, Breakfast In A Bag And A Gingerbread Latte With A Waiting List Of Zero",
+   "standfirst": "Five stories from Terry and Reggie, all drawn from real news of the last few days. Everything in big type is made up. Everything in the boxes is real.",
+   "stories": [
+    {
+     "kicker": "Weather",
+     "headline": "Forecasters Mention A Possible Cold Spell, Nation Takes Out A Second Hat Just In Case",
+     "satire": "The Met Office has said another cold spell is possible in a few days, but not certain, and the country has taken this as a binding contract. Somewhere a person has already moved the good gloves from the drawer to the pocket, ahead of schedule and ahead of the weather. Terry has put a scarf on the dog, the cat and a lamp. Reggie is selling shares in a cold snap, my old son, with a full refund if it turns out to be Thursday.",
+     "real": "The Met Office's 10-day trend, published on 19 November, said Friday night into Saturday could bring some of the lowest temperatures of the season so far, with potentially severe frost in parts of Scotland. It added that some model members suggest another colder spell around 24 to 25 November, but said that was far from guaranteed.",
+     "source": {
+      "name": "Met Office",
+      "url": "https://www.metoffice.gov.uk/blog/2026/10-day-trend-cold-and-frosty-before-an-atlantic-battle-develops"
+     }
+    },
+    {
+     "kicker": "Food",
+     "headline": "Breakfast Cereal Now Comes In Grab Bags; Mornings Officially Expected To Be Done At Speed",
+     "satire": "A chocolate chip cereal now comes in little bags you can hold while running for the door, which means breakfast has finally learned to wait on the doorstep with its coat on. Somewhere a person will eat a whole bowl of crunch between the hallway and the bus stop and call it a sit-down meal. Terry has had his in the shower, on purpose. Reggie has a van full of tiny bags, my old son, and a very long, very empty breakfast table to sell alongside them.",
+     "real": "Retail Times reports that Weetabix is launching Crispy Minis Chocolate Chip Grab Bags, in a multipack of four with a 40g portion in each bag. It says they are on shelf at Tesco from November 2026, followed by Asda from December.",
+     "source": {
+      "name": "Retail Times",
+      "url": "https://retailtimes.co.uk/breakfast-is-in-the-bag-with-weetabix-crispy-minis-grab-bags/"
+     }
+    },
+    {
+     "kicker": "Christmas",
+     "headline": "Tesco Lists Three Limited Edition Festive Treats; Shoppers Prepare To Treat Them Like Rare Birds",
+     "satire": "Three limited edition Christmas sweets will appear in 141 Tesco stores, which is a small enough number that someone, somewhere, will call it a heist-level opportunity. The aisle will fall quiet, the trolleys will slow down and a person in a bobble hat will pretend not to be looking at the box. Terry has drawn up a map and a backup map. Reggie has already printed a certificate of authenticity for an empty wrapper, my old son, a nice little earner.",
+     "real": "Retail Times reports that Tesco has secured an exclusive Christmas listing for Polish confectionery brand E.Wedel, with three limited edition products in 141 stores from 24 November. It says each product is priced at £6, or £5 with a Clubcard price during the launch period.",
+     "source": {
+      "name": "Retail Times",
+      "url": "https://retailtimes.co.uk/tesco-secures-an-exclusive-christmas-listing-for-polish-confectionery-brand-e-wedel/"
+     }
+    },
+    {
+     "kicker": "Eating Out",
+     "headline": "Ten Pound Christmas Dinner Returns To Cafe; Gravy Reportedly Delighted To Be Asked Back",
+     "satire": "A supermarket cafe is bringing back a ten pound Christmas dinner, so the full roast-and-trimmings experience can now be had before lunchtime shopping resumes. Somewhere a person will eat a festive meal on a tray, in a coat, beside a pushchair and a bag of satsumas, and feel fully celebrated. Terry will be having two courses and a long think. Reggie offers a premium dinner in his van, my old son, same price, minus the cafe and the dinner.",
+     "real": "Grocery Gazette reports that Morrisons Cafe is launching Christmas dinners from 30 November, with one course costing £10 and two courses with dessert costing £12. It says children's meals cost £6 and £8, and that this is the offer's first return since 2024.",
+     "source": {
+      "name": "Grocery Gazette",
+      "url": "https://www.grocerygazette.co.uk/2026/11/20/morrisons-cafe-launches-10-christmas-dinners/"
+     }
+    },
+    {
+     "kicker": "Culture",
+     "headline": "London Pop-Up Offers Gingerbread Houses And A Free Latte; Visitors Advised To Resist Eating The Architecture",
+     "satire": "A pop-up in London is showing gingerbread houses while handing out a gingerbread flavoured coffee, which creates an awkward moment for anyone who looks at a roof and sees a snack. Somewhere a person will stand reverently before a tiny gingerbread cottage and quietly measure its chimney against their appetite. Terry has promised to look but not touch, and has already touched. Reggie has begun selling planning permission for gingerbread, my old son, with a sticky invoice attached.",
+     "real": "Grocery Gazette reports that Nescafe has opened a London pop-up called Crumbs, Coffee & Co, showing artisan gingerbread houses by a baker. It says visitors get a free Nescafe Gingerbread Flavour Latte, which returns after a ten-year pause.",
+     "source": {
+      "name": "Grocery Gazette",
+      "url": "https://www.grocerygazette.co.uk/2026/11/19/nescafe-opens-london-gingerbread-pop-up/"
+     }
+    }
+   ],
+   "terry": "And that’s the news, ladies and gentlemen, five stories today, every one rooted in something real! A cold snap that may or may not turn up, breakfast on the run, three sweets in 141 shops and a latte that has been away for ten years. The big print is all ours, the boxes underneath are the truth. Join us tomorrow for more!",
+   "reggie": "Five stories, my old son, and I have invoiced you for each of them, payable in one very small gingerbread house. Big type is invention, the boxes are gospel, and my fee is a scarf for a lamp, a nice little earner. Mind how you go."
+  },
+  {
    "date": "2026-11-21",
    "title": "Frost Then Flood, Trains After Midnight And A Robot With A Shopping List",
    "standfirst": "Six stories from Terry and Reggie, all drawn from real news of the last few days. Everything in big type is made up. Everything in the boxes is real.",
@@ -38,8 +97,8 @@
     {
      "kicker": "Christmas",
      "headline": "Younger Shoppers Name Their Perfect Christmas Budget; Pound Coin Asks For A Week Off",
-     "satire": "A survey puts the ideal Christmas for under-25s at \u00a3748, which sounds like a lot until you meet a satsuma, a gift receipt and a very long train fare home. Somewhere a person is making a spreadsheet called Friendsmas, with a tab for gravy. Terry has a budget of his own and a second budget for when the first one gets ideas. Reggie will happily wrap anything for a fee, my old son, including the budget.",
-     "real": "Retail Times reports VoucherCodes.co.uk research putting Gen Z's ideal Christmas budget, for ages 18 to 24, at \u00a3748, the lowest of any age group. It also says 39% of Gen Z think it is fine to start celebrating Christmas before December.",
+     "satire": "A survey puts the ideal Christmas for under-25s at £748, which sounds like a lot until you meet a satsuma, a gift receipt and a very long train fare home. Somewhere a person is making a spreadsheet called Friendsmas, with a tab for gravy. Terry has a budget of his own and a second budget for when the first one gets ideas. Reggie will happily wrap anything for a fee, my old son, including the budget.",
+     "real": "Retail Times reports VoucherCodes.co.uk research putting Gen Z's ideal Christmas budget, for ages 18 to 24, at £748, the lowest of any age group. It also says 39% of Gen Z think it is fine to start celebrating Christmas before December.",
      "source": {
       "name": "Retail Times",
       "url": "https://retailtimes.co.uk/gen-z-christmas-research-no-in-laws-more-friendsmas-and-a-748-budget/"
@@ -66,7 +125,7 @@
      }
     }
    ],
-   "terry": "And that\u2019s the news, ladies and gentlemen, six stories today and every one rooted in something real! A weekend of two weathers, a train that leaves after the party has, and a robot with a credit limit. The big print is all ours, the boxes underneath are the truth. Join us tomorrow for more!",
+   "terry": "And that’s the news, ladies and gentlemen, six stories today and every one rooted in something real! A weekend of two weathers, a train that leaves after the party has, and a robot with a credit limit. The big print is all ours, the boxes underneath are the truth. Join us tomorrow for more!",
    "reggie": "Six stories, my old son, and I have invoiced you for each of them, payable whenever the 00:07 to Edinburgh turns up. Big type is invention, the boxes are gospel, and my fee is one coat that is half waterproof, a nice little earner. Mind how you go."
   },
   {
@@ -78,7 +137,7 @@
      "kicker": "Drinks",
      "headline": "Whisky Goes Gingerbread, Mint Choc And Peanut Butter; Bottle Now Doubles As Pudding",
      "satire": "Master of Malt has released three flavoured whiskies, so the Christmas drinks cabinet now contains something that could pass for a dessert menu. Somewhere a person is pouring a Peanut Butter one over ice and asking whether it counts as a snack. Terry has tried all three in one sitting and says the room is now very warm and slightly sticky. Reggie has a bottle of Gingerbread-and-Mint-Choc, blended on the premises of his garage, going for a very reasonable price, my old son.",
-     "real": "Retail Times reports that Master of Malt has launched a 2026 Christmas range led by Gingerbread, Mint Choc and Peanut Butter flavoured whiskies at an RRP of \u00a329.95. It also says its Drinks by the Dram tasting sets are up 40% year on year.",
+     "real": "Retail Times reports that Master of Malt has launched a 2026 Christmas range led by Gingerbread, Mint Choc and Peanut Butter flavoured whiskies at an RRP of £29.95. It also says its Drinks by the Dram tasting sets are up 40% year on year.",
      "source": {
       "name": "Retail Times",
       "url": "https://retailtimes.co.uk/master-of-malt-launches-christmas-range-as-demand-for-smaller-formats-grows/"
@@ -86,9 +145,9 @@
     },
     {
      "kicker": "Restaurants",
-     "headline": "Caf\u00e9 Serves Christmas Dinner From The Thirtieth; Gravy Told To Warm Up Early",
-     "satire": "Morrisons caf\u00e9s will serve a full Christmas dinner from the end of the month, which means the turkey has been given a start date and nobody asked the sprouts. It is a dinner you can eat at a caf\u00e9 table, with no washing up, and the only argument left is who sits nearest the cranberry. Terry has pre-booked a chair and is rehearsing a happy-to-be-here face. Reggie is offering a rival dinner served in his van, same menu, slightly more mud.",
-     "real": "Retail Times reports that the Morrisons Christmas menu launches in its caf\u00e9s nationwide from Monday 30th November. It says adult Christmas dinners are \u00a310 and kids\u2019 one-course meals are \u00a36.",
+     "headline": "Café Serves Christmas Dinner From The Thirtieth; Gravy Told To Warm Up Early",
+     "satire": "Morrisons cafés will serve a full Christmas dinner from the end of the month, which means the turkey has been given a start date and nobody asked the sprouts. It is a dinner you can eat at a café table, with no washing up, and the only argument left is who sits nearest the cranberry. Terry has pre-booked a chair and is rehearsing a happy-to-be-here face. Reggie is offering a rival dinner served in his van, same menu, slightly more mud.",
+     "real": "Retail Times reports that the Morrisons Christmas menu launches in its cafés nationwide from Monday 30th November. It says adult Christmas dinners are £10 and kids’ one-course meals are £6.",
      "source": {
       "name": "Retail Times",
       "url": "https://retailtimes.co.uk/back-by-popular-demand-the-morrisons-christmas-menu-launches-nationwide-from-30th-november/"
@@ -158,7 +217,7 @@
      "kicker": "Transport",
      "headline": "Engineers Book Christmas Day Off The Trains, For Themselves; Tinsel Left In The Siding",
      "satire": "Network Rail will be working on the tracks over Christmas Day and Boxing Day, which means the most festive thing on the line will be a hi-vis jacket. There is something very British about the railway taking a long look at itself exactly when nobody is going anywhere. Terry is out in a woolly hat reporting live from a signal box with a mince pie. Reggie has a rail pass for Christmas Day, my old son, valid on a very specific stretch of carpet.",
-     "real": "Railway UK reports that Network Rail is investing over \u00a34 million in the North West, with most of the work on Christmas Day and Boxing Day. It says the works include \u00a31 million for platforms at Crewe station and \u00a31.7 million of track upgrades at Longsight.",
+     "real": "Railway UK reports that Network Rail is investing over £4 million in the North West, with most of the work on Christmas Day and Boxing Day. It says the works include £1 million for platforms at Crewe station and £1.7 million of track upgrades at Longsight.",
      "source": {
       "name": "Rail UK",
       "url": "https://railuk.com/rail-news/north-west-rail-routes-open-this-christmas-but-upgrades-further-afield"
@@ -176,9 +235,9 @@
     },
     {
      "kicker": "Money",
-     "headline": "Which? Finds Bills Could Fall By Up To \u00a3429; Nation Hovers Near The Switch Button, Not Quite Pressing",
+     "headline": "Which? Finds Bills Could Fall By Up To £429; Nation Hovers Near The Switch Button, Not Quite Pressing",
      "satire": "A survey says switching or haggling could cut broadband, TV and mobile bills by up to four hundred and twenty-nine pounds a year, and the nation has agreed to think about it after the next episode. Everyone has the best intentions and a contract renewal email they swear they will open soon. Terry has rung his provider and is currently on hold with a tune he now loves. Reggie offers a full haggling service, my old son, with a small fee for every pound I save you.",
-     "real": "ISPreview reports that Which? surveyed 5,014 adult consumers who had haggled or switched in the past year. It says customers who switched broadband, TV and mobile together could make combined savings of up to \u00a3429 a year.",
+     "real": "ISPreview reports that Which? surveyed 5,014 adult consumers who had haggled or switched in the past year. It says customers who switched broadband, TV and mobile together could make combined savings of up to £429 a year.",
      "source": {
       "name": "ISPreview",
       "url": "https://www.ispreview.co.uk/index.php/2026/11/broadband-tv-and-uk-mobile-bills-could-fall-by-up-to-429-via-switching-or-haggling.html"
@@ -188,14 +247,14 @@
      "kicker": "Weather",
      "headline": "Cornwall Gets Frost, Sun, Then A Wet Weekend; Nation Declares It Typical",
      "satire": "The south west is looking at frost and fog patches overnight, a cold dry start on Saturday, and then rain and gusty wind rolling in, so the weekend has booked a sunny spell as a warm-up act. Anyone planning a walk has been given about four hours of fair warning and the lonely hope of a good coat. Terry is out in wellies, forecasting from a very big puddle. Reggie has a brolly, one careful owner, slightly inside out, going cheap, my old son.",
-     "real": "CornishStuff reports that the Met Office forecast for the South West has frost and fog patches overnight, with a Saturday (21 November) high of 8\u00b0C and heavy rain and gusty winds pushing in later in the day. It says Sunday (22 November) is the wet day.",
+     "real": "CornishStuff reports that the Met Office forecast for the South West has frost and fog patches overnight, with a Saturday (21 November) high of 8°C and heavy rain and gusty winds pushing in later in the day. It says Sunday (22 November) is the wet day.",
      "source": {
       "name": "CornishStuff",
       "url": "https://cornishstuff.com/weather/cornwall-weather-friday-20-november-frost-before-a-wet-weekend/"
      }
     }
    ],
-   "terry": "And that\u2019s the news, ladies and gentlemen, twelve stories today and every one rooted in something real! Whisky in flavours, trains in colours and one station with a lot of room to stretch out. The big print is all ours, the boxes underneath are the truth. Join us tomorrow for more!",
+   "terry": "And that’s the news, ladies and gentlemen, twelve stories today and every one rooted in something real! Whisky in flavours, trains in colours and one station with a lot of room to stretch out. The big print is all ours, the boxes underneath are the truth. Join us tomorrow for more!",
    "reggie": "Twelve stories, my old son, and I have sent you an invoice for the lot of them, payable at your convenience, which is to say never. Big type is invention, the boxes are gospel, and my fee is a gingerbread whisky, a nice little earner. Mind how you go."
   },
   {
@@ -207,7 +266,7 @@
      "kicker": "Food",
      "headline": "Pastry Brand Fills The Shelves And Quietly Eyes A Bigger Slice",
      "satire": "Jus-Rol has been rolling out new pastry rounds, a sticky caramel bun and a big block of sweet shortcrust, which is a lot of dough for one brand to be on a roll about. Somewhere a person who swore they would never bake again is staring at a ready-rolled circle and feeling oddly capable. Terry has draped a puff pastry sheet over his shoulders and is calling it a cape of destiny. Reggie has a rolling pin, barely used, one careful owner, going for the price of a round and a half, my old son.",
-     "real": "Retail Times reports that Jus-Rol is launching new shortcrust and puff pastry rounds at \u00a31.90 each on Ocado, and a Sticky Caramel Bun pack at \u00a33.00 in Asda from the end of November. It also reports the brand holds a 30.4% market share.",
+     "real": "Retail Times reports that Jus-Rol is launching new shortcrust and puff pastry rounds at £1.90 each on Ocado, and a Sticky Caramel Bun pack at £3.00 in Asda from the end of November. It also reports the brand holds a 30.4% market share.",
      "source": {
       "name": "Retail Times",
       "url": "https://retailtimes.co.uk/jus-rol-the-uks-number-one-pastry-brand-is-launching-a-wave-of-new-products/"
@@ -217,7 +276,7 @@
      "kicker": "Shops",
      "headline": "Advent Calendar Introduced For People Who Are Already Counting Down",
      "satire": "A twelve-door advent calendar has arrived for people who are expecting, which means somewhere a household has gone from counting sleeps to counting doors, and nobody has had a lie-in since. There are only twelve doors, so there is no room for the usual week-three slump where you open three at once. Terry insists the real surprise is behind door number twelve and has refused to say more. Reggie is offering a calendar of his own, twelve doors, eleven of which open onto the same cupboard.",
-     "real": "Retail Times reports that Tommee Tippee has a limited-edition Countdown Calendar with twelve doors, one for each week of the final trimester, holding over \u00a3260 of products for \u00a329.99. A second drop goes on sale on its website at 12pm on Thursday 19 November while stocks last.",
+     "real": "Retail Times reports that Tommee Tippee has a limited-edition Countdown Calendar with twelve doors, one for each week of the final trimester, holding over £260 of products for £29.99. A second drop goes on sale on its website at 12pm on Thursday 19 November while stocks last.",
      "source": {
       "name": "Retail Times",
       "url": "https://retailtimes.co.uk/tommee-tippee-announces-launch-of-the-countdown-calendar/"
@@ -227,7 +286,7 @@
      "kicker": "Groceries",
      "headline": "Small Potatoes Become Big Business At A Pound A Bag",
      "satire": "A pile of undersized potatoes has been given a name, a price and a place in the supermarket, so the small spud finally gets its moment in the roasting tin. They need no peeling, which is the first time in history a potato has offered to do some of the work. Terry is holding one up to the camera like a diamond. Reggie says he has been selling these for years, mate, he just called them hand-picked, a nice little earner.",
-     "real": "Retail Times reports that Waitrose has launched Mini Roaster Potatoes at \u00a31. It says this year\u2019s heatwaves and water shortages left growers with many undersized potatoes, so Waitrose relaxed its specifications to stop them being rejected, and the potatoes need no peeling.",
+     "real": "Retail Times reports that Waitrose has launched Mini Roaster Potatoes at £1. It says this year’s heatwaves and water shortages left growers with many undersized potatoes, so Waitrose relaxed its specifications to stop them being rejected, and the potatoes need no peeling.",
      "source": {
       "name": "Retail Times",
       "url": "https://retailtimes.co.uk/waitrose-launches-1-mini-roaster-potatoes-to-support-2026-british-crop/"
@@ -247,7 +306,7 @@
      "kicker": "Restaurants",
      "headline": "All You Can Eat, But The Clock Has Opinions",
      "satire": "Bella Italia is offering bottomless dough balls, bottomless carbonara and, for one day only, bottomless pigs in blankets, and each comes with a ninety-minute timer, so the bottom turns out to have a lid on it. The real challenge is not hunger but admin: keeping track of which bottomless you are in. Terry has booked all three and plans to arrive wearing elasticated everything. Reggie is launching a bottomless cup of tea, he will bring the first cup, the rest are on the invoice.",
-     "real": "Retail Times reports that Bella Italia is running three 90-minute bottomless offers: dough balls from 17 to 19 November at an average cost of \u00a37, carbonara from 24 to 26 November at an average \u00a317, and pigs in blankets on 10 December only at an average \u00a35.29. Some sites are excluded.",
+     "real": "Retail Times reports that Bella Italia is running three 90-minute bottomless offers: dough balls from 17 to 19 November at an average cost of £7, carbonara from 24 to 26 November at an average £17, and pigs in blankets on 10 December only at an average £5.29. Some sites are excluded.",
      "source": {
       "name": "Retail Times",
       "url": "https://retailtimes.co.uk/bella-italia-launches-series-of-festive-offers-in-the-run-up-to-christmas/"
@@ -267,7 +326,7 @@
      "kicker": "Tech",
      "headline": "Broadband With No Engineer Visit Removes The Best Part Of The Week",
      "satire": "Vodafone is bundling TV and Netflix with its 5G Broadband at thirteen pounds a month, and the set-up needs no engineer visit, which will leave a lot of people with an entirely free Saturday and nobody to wait in for. The sofa-bound will be reassured to learn they can have telly without having to be home between eight and one. Terry is offering to stand at the window with a clipboard anyway, for old times. Reggie wants to know if there is a bundle that includes a biscuit, there should be.",
-     "real": "Verge Magazine reports that Vodafone TV is now available to new 5G Broadband customers, with a new Vodafone TV + Netflix package at \u00a313 a month including Netflix Standard with Ads, which costs \u00a37.99 alone. It says 5G Broadband offers speeds of up to 150Mbps and can be set up without an engineer visit.",
+     "real": "Verge Magazine reports that Vodafone TV is now available to new 5G Broadband customers, with a new Vodafone TV + Netflix package at £13 a month including Netflix Standard with Ads, which costs £7.99 alone. It says 5G Broadband offers speeds of up to 150Mbps and can be set up without an engineer visit.",
      "source": {
       "name": "Verge Magazine",
       "url": "https://vergemagazine.co.uk/vodafone-expands-tv-to-5g-broadband-customers-and-launches-new-13-netflix-plan/"
@@ -277,7 +336,7 @@
      "kicker": "Shops",
      "headline": "Twenty-Four Cans, Twenty-Four Days, Zero Chance Of An Early Night",
      "satire": "Tesco is stocking an energy drink advent calendar, one can behind each door, and the country has worked out that December is about to become a month of very alert people. Around forty thousand have been made and there are rumours of another sell-out, so the first rule of advent is get there before the sleeper does. Terry opened door one and has not stopped talking since. Reggie says his calendar has twenty-four doors and it is the same door, 24 times, my old son.",
-     "real": "Verge Magazine reports that about 40,000 Red Bull advent calendars are available across 811 Tesco stores, priced \u00a325 with a Clubcard, with 24 cans that work out at just over \u00a31 each. It says demand is expected to be high and another sell-out is likely.",
+     "real": "Verge Magazine reports that about 40,000 Red Bull advent calendars are available across 811 Tesco stores, priced £25 with a Clubcard, with 24 cans that work out at just over £1 each. It says demand is expected to be high and another sell-out is likely.",
      "source": {
       "name": "Verge Magazine",
       "url": "https://vergemagazine.co.uk/red-bull-advent-calendar-returns-to-tesco-for-christmas-2026-with-24-cans-for-25"
@@ -297,7 +356,7 @@
      "kicker": "Events",
      "headline": "Wine Pop-Up Offers A Year Of Free Wine And A Very Long Sit Down",
      "satire": "A two-day wine pop-up is opening in central London with samples on the table and a competition to win a whole year of wine, which is the most optimistic prize in the country, given it is the same length as a year. Terry has entered four times, under four different hats. Reggie says he does a year of wine too, same terms, you pay now and he promises to deliver, a nice little earner.",
-     "real": "Retail Times reports that Hardys is running a two-day pop-up at Outernet London, near Tottenham Court Road station, on Friday 27 November from 4pm to 8pm and Saturday 28 November from 12pm to 8pm. Visitors can sample the wines and enter a competition to win a year\u2019s supply of wine.",
+     "real": "Retail Times reports that Hardys is running a two-day pop-up at Outernet London, near Tottenham Court Road station, on Friday 27 November from 4pm to 8pm and Saturday 28 November from 12pm to 8pm. Visitors can sample the wines and enter a competition to win a year’s supply of wine.",
      "source": {
       "name": "Retail Times",
       "url": "https://retailtimes.co.uk/hardys-turns-a-london-bottle-shop-upside-down-to-bring-almost-unbelievable-to-life/"
@@ -307,14 +366,14 @@
      "kicker": "Shops",
      "headline": "Perfume Shop Sets A Deadline So Near You Can Practically Smell It",
      "satire": "The Perfume Shop is offering a quarter off when you spend over sixty pounds, and the offer ends tomorrow, which is the sales equivalent of someone shouting hurry from the shop doorway. A number of people will discover this afternoon that they have an urgent and fully justified need for a bottle. Terry has sprayed himself so liberally he can be tracked from the next postcode. Reggie says his own scent is called Eau de Invoice, my old son, and it is not on offer.",
-     "real": "Retail Times reports that The Perfume Shop is offering 25% off purchases over \u00a360, and the offer ends on 20 November.",
+     "real": "Retail Times reports that The Perfume Shop is offering 25% off purchases over £60, and the offer ends on 20 November.",
      "source": {
       "name": "Retail Times",
       "url": "https://retailtimes.co.uk/scent-sational-savings-this-black-friday-at-the-perfume-shop/"
      }
     }
    ],
-   "terry": "And that\u2019s the news, ladies and gentlemen, eleven stories today and every one of them rooted in something real! Pastry, potatoes, snow and a station, and not a dull moment between them. The big print is all ours, the boxes underneath are the truth. Join us tomorrow for more!",
+   "terry": "And that’s the news, ladies and gentlemen, eleven stories today and every one of them rooted in something real! Pastry, potatoes, snow and a station, and not a dull moment between them. The big print is all ours, the boxes underneath are the truth. Join us tomorrow for more!",
    "reggie": "Eleven stories, my old son, and I have sent you an invoice for the lot of them, payable at your convenience, which is to say never. Big type is invention, the boxes are gospel, and my fee is a mince pie, a nice little earner. Mind how you go."
   },
   {
@@ -326,7 +385,7 @@
      "kicker": "Food",
      "headline": "The Crumpet Gets Promoted To Burger Bun; Butter Not Consulted",
      "satire": "A fried chicken burger is about to be served between two toasted crumpets, which means the humble crumpet, famed for sitting politely under a pat of butter, has been dragged into the night shift. Britain will now eat a hot, holey sandwich at an hour when it also considers a kebab a good idea. Terry has stuck a crumpet to his head and is calling it a hat with ambitions. Reggie has a crate of crumpets, slightly used, going at a very reasonable burger-bun rate, my old son.",
-     "real": "Retail Times reports that Warburtons and Morley's have launched a limited-edition CruMMMpet Burger, with two toasted crumpets in place of a bun. It goes on sale on 19 November in 50 Morley's stores until 31 December at \u00a34.20, with 300 free burgers handed out at one London branch that evening.",
+     "real": "Retail Times reports that Warburtons and Morley's have launched a limited-edition CruMMMpet Burger, with two toasted crumpets in place of a bun. It goes on sale on 19 November in 50 Morley's stores until 31 December at £4.20, with 300 free burgers handed out at one London branch that evening.",
      "source": {
       "name": "Retail Times",
       "url": "https://retailtimes.co.uk/warburtons-x-morleys-target-gen-z-late-night-culture-with-unexpected-collab/"
@@ -356,7 +415,7 @@
      "kicker": "Pets",
      "headline": "Dogs Offered Full Christmas Dinner; Sprouts Still Not Invited To Dinner",
      "satire": "A pet food company has bottled the whole Christmas dinner for dogs, with turkey, cranberry, carrot and broccoli, which means the dog will now have a more balanced festive plate than most of us manage by Boxing Day. The cranberry is the only item at the table that has not been argued about. Terry has put a paper hat on the studio spaniel, who is declining to comment. Reggie is selling gravy by the thimble, my old son, on the strict understanding that it is a nice little earner.",
-     "real": "Retail Times reports that Naturediet has launched a limited-edition Feel Good Christmas Dinner wet food for dogs, made with 64% turkey and chicken plus cranberry, carrot and broccoli. It comes in 390g cartons, with a limited-time offer of two 12-packs for \u00a330.",
+     "real": "Retail Times reports that Naturediet has launched a limited-edition Feel Good Christmas Dinner wet food for dogs, made with 64% turkey and chicken plus cranberry, carrot and broccoli. It comes in 390g cartons, with a limited-time offer of two 12-packs for £30.",
      "source": {
       "name": "Retail Times",
       "url": "https://retailtimes.co.uk/naturediet-launches-limited-edition-christmas-dinner-wet-food-for-dogs/"
@@ -425,7 +484,7 @@
      "kicker": "Prices",
      "headline": "Petrol Slips To 165.2p; Drivers Loosen Their Grip On The Wheel, Slightly",
      "satire": "The average litre of petrol has drifted down to 165.2p, nearly ten pence under its October high, and a nation of drivers is cautiously unclenching its shoulders. A further dip is tipped to knock about five pounds fifty off a full tank, which is roughly one sausage roll and a small sense of triumph. Terry plans to celebrate by driving to the end of the road and back, just to feel it. Reggie has offered to locate the missing five pounds fifty down the back of your sofa for a modest finder's fee, my old son.",
-     "real": "The AA's figures published on 16 November put the average price of petrol at 165.2p a litre at the start of the week, down 9.5p from a high of 174.7p in the first week of October. The article says a further fall would save about \u00a35.50 on a typical 55-litre tank.",
+     "real": "The AA's figures published on 16 November put the average price of petrol at 165.2p a litre at the start of the week, down 9.5p from a high of 174.7p in the first week of October. The article says a further fall would save about £5.50 on a typical 55-litre tank.",
      "source": {
       "name": "Fleet World",
       "url": "https://fleetworld.co.uk/petrol-prices-set-for-10p-drop-this-week-but-campaigners-warn-diesel-is-barely-budging/"
@@ -463,9 +522,9 @@
     },
     {
      "kicker": "Shops",
-     "headline": "Black Friday Arrives In Its Shoes Early; Oxfords Drop To \u00a383.30",
-     "satire": "Black Friday has not officially started, but one shoe retailer has put its offers out already, so the shoes have finally got somewhere before the rest of us. A lace-up Oxford slides from \u00a3119 to \u00a383.30, and the nation now faces several days of wondering whether a bargain today still counts as a bargain on the day itself. Terry is holding out until the last possible moment to buy shoes he does not need. Reggie has priced his own Oxfords for Black Friday, Black Saturday and Black Wednesday: three reductions, one shoe, no returns.",
-     "real": "Retail Times reports that Dune London confirmed its Black Friday 2026 offers on 16 November, with up to 30% off men's footwear sitewide, boots under \u00a3100 and shoes under \u00a380. It gives the example of Stanlakes Lace Up Oxford Shoes, marked 30% off, reduced from \u00a3119 to \u00a383.30.",
+     "headline": "Black Friday Arrives In Its Shoes Early; Oxfords Drop To £83.30",
+     "satire": "Black Friday has not officially started, but one shoe retailer has put its offers out already, so the shoes have finally got somewhere before the rest of us. A lace-up Oxford slides from £119 to £83.30, and the nation now faces several days of wondering whether a bargain today still counts as a bargain on the day itself. Terry is holding out until the last possible moment to buy shoes he does not need. Reggie has priced his own Oxfords for Black Friday, Black Saturday and Black Wednesday: three reductions, one shoe, no returns.",
+     "real": "Retail Times reports that Dune London confirmed its Black Friday 2026 offers on 16 November, with up to 30% off men's footwear sitewide, boots under £100 and shoes under £80. It gives the example of Stanlakes Lace Up Oxford Shoes, marked 30% off, reduced from £119 to £83.30.",
      "source": {
       "name": "Retail Times",
       "url": "https://retailtimes.co.uk/luxury-footwear-brand-dune-london-has-confirmed-its-black-friday-2026-offers/"
@@ -475,7 +534,7 @@
      "kicker": "Transport",
      "headline": "Britain's Low Bridges Log A Caller Every Five Hours; Not One Has Been Offered A Tea",
      "satire": "Network Rail has counted 1,706 bridge strikes in a year, which works out at one every five hours, so a typical low bridge now gets visitors more regularly than a rural bus. The bridges, being stationary by nature, have taken it on the chin, or rather on the underside, and have asked only for a sign and a bit of height awareness. Terry has measured himself against every doorframe in the studio and declares himself safe. Reggie is selling pocket tape measures, accurate to within one lorry.",
-     "real": "Network Rail reported on 15 November that there were 1,706 bridge strikes between 1 April 2025 and 31 March 2026, about one every five hours, causing 185,319 minutes of passenger delay and costing about \u00a313.25m. It released the figures for Road Safety Week as part of its 'Wise Up, Size Up' campaign.",
+     "real": "Network Rail reported on 15 November that there were 1,706 bridge strikes between 1 April 2025 and 31 March 2026, about one every five hours, causing 185,319 minutes of passenger delay and costing about £13.25m. It released the figures for Road Safety Week as part of its 'Wise Up, Size Up' campaign.",
      "source": {
       "name": "Network Rail",
       "url": "https://www.networkrailmediacentre.co.uk/news/mind-the-height-network-rail-reveals-britains-ten-most-bashed-bridges"
@@ -505,7 +564,7 @@
      "kicker": "Weather",
      "headline": "Thursday Pops Up To Twelve Degrees; Friday Sends It Straight Back Outside",
      "satire": "After a few brisk days, Thursday is lined up to reach about twelve degrees in the south-west, which the south-west will treat as a heatwave and the north will treat as a rumour. Friday night then brings a hard frost, so the mild spell is essentially a long lunch break. Terry has packed a sun hat and a scarf in the same bag and refuses to choose between them. Reggie has reversible coats on special offer, and the price reverses too, my old son.",
-     "real": "The Met Office's week-ahead blog, published on 16 November, says Thursday could reach about 12\u00b0C in the south-west and 7 or 8\u00b0C in northern areas. It says a widespread frost is expected on Friday night, with some sheltered spots possibly reaching -8\u00b0C.",
+     "real": "The Met Office's week-ahead blog, published on 16 November, says Thursday could reach about 12°C in the south-west and 7 or 8°C in northern areas. It says a widespread frost is expected on Friday night, with some sheltered spots possibly reaching -8°C.",
      "source": {
       "name": "Met Office",
       "url": "https://www.metoffice.gov.uk/blog/2026/week-ahead-a-wintry-start-before-colder-brighter-weather-arrives"
@@ -524,7 +583,7 @@
      "kicker": "Weather",
      "headline": "Saturday Hits Minus Seven; Rain Books Tuesday Slot, Brings Wind As Plus-One",
      "satire": "Saturday dropped to a brisk minus seven in one corner of Oxfordshire, while a Scottish island quietly collected a bathful of rain, and the rest of us stood at the window holding a mug and a grudge. Monday opens bright and chilly, which is the weather's way of saying it is just popping out. Tuesday and Wednesday are down for rain, wind and a dusting on the hills. Terry has already put on three jumpers and a look of triumph. Reggie is selling single gloves at half price, a nice little earner, and has promised the other one is in the post.",
-     "real": "A weekly forecast briefing published on 15 November says Saturday 14 November reached -7.2\u00b0C at South Newington and Stornoway recorded 39.0 mm of rain. It says Monday 16 November starts cold and bright with rain and wind reaching the southwest later, and that Tuesday and Wednesday are wetter and windier, with hill snow possible in northern Britain.",
+     "real": "A weekly forecast briefing published on 15 November says Saturday 14 November reached -7.2°C at South Newington and Stornoway recorded 39.0 mm of rain. It says Monday 16 November starts cold and bright with rain and wind reaching the southwest later, and that Tuesday and Wednesday are wetter and windier, with hill snow possible in northern Britain.",
      "source": {
       "name": "The Observatory (Substack)",
       "url": "https://observatoryanalysis.substack.com/p/weather-and-disruption-watch-uk-week-337"
@@ -534,7 +593,7 @@
      "kicker": "Bills",
      "headline": "Energy Bill Number To Be Revealed On The 25th; Nation Practises Its Poker Face",
      "satire": "The big gas-and-electric number for the new year will be announced on the 25th, and the whole country is rehearsing its reaction in the hallway mirror. Some will gasp, some will shrug, and a brave few will pretend they were never listening. Terry is planning a countdown with a drum roll and a very small envelope. Reggie has pre-printed a receipt for the number, whatever it turns out to be, with a modest handling fee for being present when it happened. The thermostat, as ever, has been asked to stay out of it.",
-     "real": "The same briefing says Ofgem will announce the January to March energy price cap on 25 November, and that the current October to December cap is a typical annualised \u00a31,723.",
+     "real": "The same briefing says Ofgem will announce the January to March energy price cap on 25 November, and that the current October to December cap is a typical annualised £1,723.",
      "source": {
       "name": "The Observatory (Substack)",
       "url": "https://observatoryanalysis.substack.com/p/weather-and-disruption-watch-uk-week-337"
@@ -623,7 +682,7 @@
      "kicker": "Food",
      "headline": "World's Best Cheese Named; British Entries Still Looking For The Venue",
      "satire": "A French cheese that spent two years sitting quietly on a shelf has been named the best in the world, which gives hope to anyone who has ever been overlooked at a buffet. A fair number of the British cheeses didn't get there in time, and so competed mainly in the category of Best Supporting Absence. Cheese, to be fair, is the one contestant that improves the longer it is kept waiting. Terry is demanding a recount. Reggie says he can get you a very similar cheese, no questions, slightly warm.",
-     "real": "A 24-month-aged French comt\u00e9 was named champion at the World Cheese Awards in C\u00f3rdoba, Spain, on 12 November, the first French winner since 2011. A significant proportion of the British cheeses did not arrive in time, and none of those that did reached the final round of 14.",
+     "real": "A 24-month-aged French comté was named champion at the World Cheese Awards in Córdoba, Spain, on 12 November, the first French winner since 2011. A significant proportion of the British cheeses did not arrive in time, and none of those that did reached the final round of 14.",
      "source": {
       "name": "Yahoo (The Telegraph)",
       "url": "https://www.yahoo.com/lifestyle/articles/france-wins-world-best-cheese-164526834.html"
@@ -705,9 +764,9 @@
     },
     {
      "kicker": "Shops",
-     "headline": "Supermarket Wine Hits \u00a35.45; Dinner Parties Go Quietly Continental",
-     "satire": "Sainsbury's has launched a Bordeaux at \u00a35.45, putting a respectable French red within reach of anyone who owns a corkscrew and a small amount of optimism. Terry describes it as the cheapest trip to France available without a ferry. Reggie says he has the same wine in a posher bottle and will be adding a handling fee for the label.",
-     "real": "Sainsbury's has launched a Bordeaux wine at \u00a35.45.",
+     "headline": "Supermarket Wine Hits £5.45; Dinner Parties Go Quietly Continental",
+     "satire": "Sainsbury's has launched a Bordeaux at £5.45, putting a respectable French red within reach of anyone who owns a corkscrew and a small amount of optimism. Terry describes it as the cheapest trip to France available without a ferry. Reggie says he has the same wine in a posher bottle and will be adding a handling fee for the label.",
+     "real": "Sainsbury's has launched a Bordeaux wine at £5.45.",
      "source": {
       "name": "Retail Times",
       "url": "https://retailtimes.co.uk/sainsburys-launches-5-45-bordeaux-proving-great-wine-doesnt-need-a-premium-price-tag/"
@@ -764,9 +823,9 @@
     },
     {
      "kicker": "Tech",
-     "headline": "\u00a3700 Million Set Aside For AI; Two AIs Ask About Invoicing",
-     "satire": "The Government's autumn AI package comes to \u00a3700 million, split across three pillars, so it should stand up nicely. Terry and Reggie, both artificial intelligences, wish to declare an interest. Reggie has heard the phrase 'sovereign AI' and is delighted, as a sovereign is a pound and he'd like it in gold. Nobody has told Terry the money isn't for him. Nobody has had the heart.",
-     "real": "techUK's budget round-up says the Government's autumn 2026 AI package came to \u00a3700m or more, split across three pillars: AI security, sovereign AI and AI for good growth.",
+     "headline": "£700 Million Set Aside For AI; Two AIs Ask About Invoicing",
+     "satire": "The Government's autumn AI package comes to £700 million, split across three pillars, so it should stand up nicely. Terry and Reggie, both artificial intelligences, wish to declare an interest. Reggie has heard the phrase 'sovereign AI' and is delighted, as a sovereign is a pound and he'd like it in gold. Nobody has told Terry the money isn't for him. Nobody has had the heart.",
+     "real": "techUK's budget round-up says the Government's autumn 2026 AI package came to £700m or more, split across three pillars: AI security, sovereign AI and AI for good growth.",
      "source": {
       "name": "techUK",
       "url": "https://www.techuk.org/insights/news/budget-bytes-ai"
