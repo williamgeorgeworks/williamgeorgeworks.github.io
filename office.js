@@ -1081,6 +1081,25 @@ function idleBob(pr) {
   return 0;
 }
 
+/* Kenneth wears a brown paper bag on his head, as the stories have it. */
+function drawBag(x, top, back, glance) {
+  const kraft = "#c9a46a";
+  box(x - 7, top + 3, 14, 17, kraft, "#141414");
+  p(x - 6, top + 4, 4, 15, lite(kraft, 0.18));
+  p(x + 3, top + 4, 3, 15, dark(kraft, 0.15));
+  /* crinkled, folded top */
+  p(x - 7, top + 1, 3, 3, kraft); p(x - 3, top, 3, 4, dark(kraft, 0.08));
+  p(x + 1, top + 1, 3, 3, kraft); p(x + 4, top, 3, 4, dark(kraft, 0.08));
+  p(x - 7, top + 6, 14, 1, dark(kraft, 0.2));
+  if (back) { p(x - 1, top + 9, 1, 8, dark(kraft, 0.2)); return; }
+  /* two eye holes, and a worried little mouth slit */
+  p(x - 4, top + 9, 3, 3, "#141414");
+  p(x + 2, top + 9, 3, 3, "#141414");
+  p(x - 3, top + 10, 1, 1, "#fff");
+  p(x + 3, top + 10, 1, 1, "#fff");
+  p(x - 1, top + 15, 3, 1, glance ? "#141414" : dark(kraft, 0.35));
+}
+
 function drawPerson(pr) {
   const s = pr.staff;
   if (s.kind === "terry" || s.kind === "reggie") {
@@ -1129,6 +1148,7 @@ function drawPerson(pr) {
       p(x + 6, y - 32, 8, 5, s.accent);
       p(x + 13, y - 31, 3, 2, "#e07a2f");
     }
+    if (s.id === "kenneth") drawBag(x, y - 33, true, false);
     const tap = (!REDUCE && ((pr.typeT * 6 | 0) % 2)) ? 1 : 0;
     p(x - 12, y - 9, 6, 3, s.skin);
     p(x + 6, y - 9 + tap, 6, 3, s.skin);
@@ -1190,6 +1210,7 @@ function drawPerson(pr) {
   } else {
     p(x - 1, y - 26, 4, 1, "#c47a7a");
   }
+  if (s.id === "kenneth") drawBag(x, y - 43, false, pr.glanceT > 0);
   if (s.prop === "cloud") {
     p(x - 8, y - 50, 7, 5, s.accent);
     p(x - 5, y - 54, 11, 6, s.accent);
