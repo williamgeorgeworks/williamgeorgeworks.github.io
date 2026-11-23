@@ -18,7 +18,7 @@ small,.note{color:#cfc9b8}a{color:#ffd9d9}select,input,button{font:inherit;paddi
 <p><button id="me">Don't count my own visits on this device</button> <small id="mesg"></small></p>
 <div id="out">Loading...</div>
 <script>
-var W='https://arcade-scores.benharding75.workers.dev/stats';
+var W='https://arcade-scores.williamgeorgeworks.workers.dev/stats';
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
 function topN(map,n){return Object.keys(map).map(function(k){return[k,map[k]]}).sort(function(a,b){return b[1]-a[1]}).slice(0,n)}
 function render(j){

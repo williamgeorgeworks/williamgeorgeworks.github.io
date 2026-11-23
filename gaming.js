@@ -6,7 +6,7 @@
   var MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
   var DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
   function pretty(d) { var p = d.split("-"), dt = new Date(Date.UTC(+p[0], +p[1] - 1, +p[2])); return DAYS[dt.getUTCDay()] + " " + (+p[2]) + " " + MONTHS[+p[1] - 1] + " " + p[0]; }
-  var WORKER = "https://arcade-scores.benharding75.workers.dev";
+  var WORKER = "https://arcade-scores.williamgeorgeworks.workers.dev";
   var tallyCache = {};
   function getVotes() { try { return JSON.parse(localStorage.getItem("wgw-votes") || "{}") || {}; } catch (e) { return {}; } }
   function setVote(date, i, side) { try { var v = getVotes(); (v[date] = v[date] || {})[i] = side; localStorage.setItem("wgw-votes", JSON.stringify(v)); } catch (e) {} }

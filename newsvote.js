@@ -2,7 +2,7 @@
    Counts live in the Worker; if it isn't there, nothing is drawn. */
 (function () {
   "use strict";
-  var WORKER = "https://arcade-scores.benharding75.workers.dev";
+  var WORKER = "https://arcade-scores.williamgeorgeworks.workers.dev";
   var out = document.getElementById("paper");
   if (!out || !window.fetch) return;
   function el(t, c, x) { var e = document.createElement(t); if (c) e.className = c; if (x != null) e.textContent = x; return e; }

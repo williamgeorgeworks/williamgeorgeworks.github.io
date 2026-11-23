@@ -3,7 +3,7 @@
    automatically by a small Cloudflare Worker (see cloudflare-worker/README.md). While it is empty,
    the form falls back to emailing Formspree and a human adds scores by hand.
    Board length comes from "top" in scores.json (default 3). Game end screens use quickscore.js. */
-var SCORES_WORKER='https://arcade-scores.benharding75.workers.dev';
+var SCORES_WORKER='https://arcade-scores.williamgeorgeworks.workers.dev';
 (function(){
   /* Pre-fill the submission form from ?game=slug&score=123, or when a hall link is clicked. */
   var sel=document.getElementById('sc-game'),scoreBox=document.getElementById('sc-score');
