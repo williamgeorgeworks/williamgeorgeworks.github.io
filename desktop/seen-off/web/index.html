@@ -2071,12 +2071,14 @@ function cardIcon(d){
 }
 var KW=/\b(Block|Invoice|Gusto|Poise|Soggy|Flustered|Energy|Scrumplings|Exhaust|Fleeting|Unplayable|Scribble|Brew)\b/g;
 function cardRich(ci){var d=CARDS[ci.id],v=vals(d,ci.u),b=vals(d,0);return d.tx.replace(KW,'<em>$1</em>').replace(/\$(\d)/g,function(m,i){return '<u'+(ci.u&&v[+i]!==b[+i]?' class="upv"':'')+'>'+v[+i]+'</u>';});}
+/* the type line names the card's owner: ATTACK – SPYRO */
+function cardOwner(d){if(d.type==='X')return '';if(d.h==='c'){for(var k in CATS)if(CATS[k].card===d.id)return ' – '+CATS[k].name;return '';}return HEROES[d.h]?' – '+HEROES[d.h].name:'';}
 function cardHTML(ci,attr,extra){
   var d=CARDS[ci.id],z=B&&S.scr==='combat'&&ci.z,c=z?0:((ci.u&&d.o.uc!=null)?d.o.uc:d.cost),x=extra||{};
   var nw=S.scr==='reward'&&S.rw&&S.rw.neu&&S.rw.neu.indexOf(ci.id)>=0;
   return '<button type="button" class="cd t-'+d.type+' h-'+d.h+' q-'+d.rar+' c-'+d.id+(ci.u?' up':'')+(nw?' so-new':'')+(x.cls?' '+x.cls:'')+'"'+(x.sty?' style="'+x.sty+'"':'')+' '+(attr||'')+'>'+(d.o.unp?'':'<span class="co'+(z?' z':'')+'">'+c+'</span>')+
     (d.h==='s'?'':'<span class="tab">'+(d.h==='c'?ic('paw'):d.h.toUpperCase())+'</span>')+
-    '<b>'+d.name+(ci.u?'+':'')+'</b><span class="art">'+ic(cardIcon(d))+'</span><i>'+TYPE[d.type]+(ci.tmp&&d.type!=='X'?' · fleeting':'')+'</i><span class="tx">'+cardRich(ci)+'</span>'+
+    '<b>'+d.name+(ci.u?'+':'')+'</b><span class="art">'+ic(cardIcon(d))+'</span><i>'+TYPE[d.type]+cardOwner(d)+(ci.tmp&&d.type!=='X'?' · fleeting':'')+'</i><span class="tx">'+cardRich(ci)+'</span>'+
     (x.pr?'<span class="pr">'+ic('coin')+x.pr+'<span class="vh"> Scrumplings</span></span>':'')+(d.rar==='c'||d.rar==='u'||d.rar==='r'?'<span class="gem"></span>':'')+(nw?'<span class="so-newst">NEW!</span>':'')+'</button>';
 }
 var PREV={run:null,hp:0,gold:0,dh:0,dg:0,en:-1,rel:0,br:0,dr:0,db:0,plan:null,pd:-1,pc:-1},LASTKEY='',HSEEN=[];

@@ -49,6 +49,7 @@
     ],
     "resources": {
       "../web/fonts/OFL-Anton.txt": "licences/OFL-Anton.txt",
+      "../web/fonts/OFL-LibreCaslonText.txt": "licences/OFL-LibreCaslonText.txt",
       "../web/fonts/LICENSE-PermanentMarker-Apache-2.0.txt": "licences/LICENSE-PermanentMarker-Apache-2.0.txt",
       "../THIRD_PARTY_NOTICES.md": "licences/THIRD_PARTY_NOTICES.md"
     },

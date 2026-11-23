@@ -459,6 +459,10 @@ async function m2d(browser, port) {
   const art = await ev(() => ['ruling', 'decree', 'ripface', 'requisition', 'boo', 'whome'].map(id => { const a = document.querySelector('#hand .c-' + id + ' .art') || document.querySelector('.c-' + id + ' .art'); return a ? getComputedStyle(a).backgroundImage : 'none'; }));
   ok(`${tag} all six cat cards show their painted art`, art.every((b, i) => new RegExp('cats/(arthur|spyro|tilly|trixie|dexter|daisy)\\.jpg').test(b)), art.join(' '));
   const loaded = await ev(async () => { const r = []; for (const c of ['arthur', 'spyro', 'tilly', 'trixie', 'dexter', 'daisy']) { const im = new Image(); im.src = 'cats/' + c + '.jpg'; await im.decode().catch(() => 0); r.push(im.naturalWidth); } return r; });
+  ok(`${tag} card frame: type line names the owner`, await ev(() => /Attack – Spyro/i.test(document.querySelector('.c-decree i').textContent) && /Skill – Dexter/i.test(document.querySelector('.c-boo i').textContent)));
+  ok(`${tag} card frame: tinted by owner`, await ev(() => getComputedStyle(document.querySelector('.c-boo'), '::before').borderTopColor === 'rgb(36, 86, 230)'));
+  ok(`${tag} card frame: rules text in Libre Caslon Text`, await ev(async () => { await document.fonts.ready; return /Libre Caslon Text/.test(getComputedStyle(document.querySelector('.cd .tx')).fontFamily) && document.fonts.check('12px "Libre Caslon Text"'); }));
+  ok(`${tag} card frame: cat art window is the large one`, await ev(() => document.querySelector('.c-decree .art').getBoundingClientRect().height >= 70));
   ok(`${tag} cat art files load`, loaded.every(w => w >= 300), loaded.join(','));
   ok(`${tag} hand with cat cards fits, nothing clips`, await ev(() => document.documentElement.scrollHeight <= innerHeight));
   await page.screenshot({ path: `${SHOTS}/m2-09-cat-cards.png` });

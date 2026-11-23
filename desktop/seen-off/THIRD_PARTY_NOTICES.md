@@ -7,6 +7,7 @@ William George Works in `mockups/`; if made with AI image tools they must be dec
 | Font | Files | Licence | Copyright |
 |---|---|---|---|
 | Anton | `web/fonts/anton-latin.woff2`, `web/fonts/anton-latin-ext.woff2` | SIL Open Font License 1.1 (`OFL-Anton.txt`) | Copyright 2020 The Anton Project Authors (https://github.com/googlefonts/AntonFont) |
+| Libre Caslon Text | `web/fonts/libre-caslon-text-latin-400-normal.woff2`, `-700-normal`, `-400-italic` | SIL Open Font License 1.1 (`OFL-LibreCaslonText.txt`) | Copyright 2018 The Libre Caslon Text Project Authors (https://github.com/thundernixon/Libre-Caslon) |
 | Permanent Marker | `web/fonts/permanent-marker-latin.woff2` | Apache License 2.0 (`LICENSE-PermanentMarker-Apache-2.0.txt`) | Font Diner |
 
 The woff2 files are the unmodified subsets served by Google Fonts (Anton v27, Permanent Marker v16).

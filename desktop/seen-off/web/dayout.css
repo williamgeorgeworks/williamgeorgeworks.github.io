@@ -118,15 +118,26 @@
 @keyframes sonew{0%{opacity:0;transform:rotate(12deg) scale(2.4)}100%{opacity:1;transform:rotate(12deg) scale(1)}}
 @media (prefers-reduced-motion:reduce){.so-newst{animation:none}}
 
-/* milestone 2: the cats' signature cards carry their painted art (cropped from the card mockups in /mockups) */
-.cd.c-ruling .art,.cd.c-decree .art,.cd.c-ripface .art,.cd.c-requisition .art,.cd.c-boo .art,.cd.c-whome .art{height:52px;background-color:#e9e2d4;background-size:cover;background-repeat:no-repeat}
-.cd.c-ruling .art>*,.cd.c-decree .art>*,.cd.c-ripface .art>*,.cd.c-requisition .art>*,.cd.c-boo .art>*,.cd.c-whome .art>*{display:none}
-.cd.c-ruling .art::before,.cd.c-decree .art::before,.cd.c-ripface .art::before,.cd.c-requisition .art::before,.cd.c-boo .art::before,.cd.c-whome .art::before{display:none}
-.cd.c-ruling .art{background-image:url(cats/arthur.jpg);background-position:30% 22%}
-.cd.c-decree .art{background-image:url(cats/spyro.jpg);background-position:58% 40%}
-.cd.c-ripface .art{background-image:url(cats/tilly.jpg);background-position:62% 30%}
-.cd.c-requisition .art{background-image:url(cats/trixie.jpg);background-position:30% 40%}
-.cd.c-boo .art{background-image:url(cats/dexter.jpg);background-position:50% 45%}
-.cd.c-whome .art{background-image:url(cats/daisy.jpg);background-position:55% 35%}
 /* milestone 2: the Daily Run line on the report */
 .so-daily{margin:.4em 0 0;font-size:.85rem;font-style:italic;color:var(--red,#e3182d)}
+
+/* card frame (Milestone 3, step 1): one shared inked frame tinted by the card's owner, a larger art window,
+   a type line naming the owner, rules text in Libre Caslon Text, and a rarity crest */
+.cd{--own:#6b7183}
+.cd.h-r{--own:#e3182d}.cd.h-t{--own:#2456e6}.cd.h-k{--own:#7a3ff0}
+.cd.c-ruling{--own:#e3182d}.cd.c-decree{--own:#ffb300}.cd.c-ripface{--own:#7a3ff0}.cd.c-requisition{--own:#1fb85a}.cd.c-boo{--own:#2456e6}.cd.c-whome{--own:#ff5fa0}
+.cd::before{content:"";position:absolute;top:0;right:0;bottom:0;left:0;border-radius:6px;border:3px solid var(--own);box-shadow:inset 0 0 0 1.5px var(--ink);pointer-events:none;z-index:2}
+.cd .art{height:48px}
+.cd i{max-width:calc(100% - 10px);overflow:hidden;text-overflow:ellipsis;letter-spacing:.06em}
+.cd .tx{font-family:'Libre Caslon Text',Georgia,serif;font-size:.7rem;line-height:1.16}
+.cd .gem{width:13px;height:15px;margin-left:-8px;bottom:-9px;transform:none;border-radius:2px 2px 50% 50%/2px 2px 75% 75%;z-index:3}
+/* the six cats' signature cards: their painted art, full width (crops of the card mockups in /mockups) */
+.cd.c-ruling .art,.cd.c-decree .art,.cd.c-ripface .art,.cd.c-requisition .art,.cd.c-boo .art,.cd.c-whome .art{height:78px;background:#e9e2d4 center/cover no-repeat}
+.cd.c-ruling .art>*,.cd.c-decree .art>*,.cd.c-ripface .art>*,.cd.c-requisition .art>*,.cd.c-boo .art>*,.cd.c-whome .art>*,
+.cd.c-ruling .art::before,.cd.c-decree .art::before,.cd.c-ripface .art::before,.cd.c-requisition .art::before,.cd.c-boo .art::before,.cd.c-whome .art::before{display:none}
+.cd.c-ruling .art{background-image:url(cats/arthur.jpg)}
+.cd.c-decree .art{background-image:url(cats/spyro.jpg)}
+.cd.c-ripface .art{background-image:url(cats/tilly.jpg)}
+.cd.c-requisition .art{background-image:url(cats/trixie.jpg)}
+.cd.c-boo .art{background-image:url(cats/dexter.jpg)}
+.cd.c-whome .art{background-image:url(cats/daisy.jpg)}

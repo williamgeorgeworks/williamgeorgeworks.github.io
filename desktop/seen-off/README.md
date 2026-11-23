@@ -24,7 +24,7 @@ Steamworks is **not** integrated yet (no sign-ups, no app ID). There is a clean 
 | `web/desktop.css` | Desktop layout (full window, 1280x800 + 1920x1080), menu, focus ring, control hints |
 | `web/desktop.js` | Menu, fullscreen, keyboard + gamepad navigation, canvas fitting, achievement wiring |
 | `web/achievements.js` | `SeenOffAchievements.unlock(id)` stub (localStorage + event) for the Steam hook |
-| `web/fonts/` | Anton + Permanent Marker woff2, with `OFL-Anton.txt` and `LICENSE-PermanentMarker-Apache-2.0.txt` |
+| `web/fonts/` | Anton + Permanent Marker + Libre Caslon Text woff2, with `OFL-Anton.txt`, `LICENSE-PermanentMarker-Apache-2.0.txt` and `OFL-LibreCaslonText.txt` |
 | `THIRD_PARTY_NOTICES.md` | Font licences / attributions (also shipped inside every build under `licences/`) |
 | `src-tauri/` | Tauri 2 app (Rust): window, fullscreen-on-Steam-Deck, `steam_unlock` command stub, icons |
 | `tests/verify.js` | Headless Chromium check (layouts, zero network, keyboard-only + mock-gamepad play, the whole Milestone 1 day out) |
@@ -118,6 +118,26 @@ on real machines (the Windows installer is built and the Linux AppImage smoke-te
 **WebKitGTK note:** `app.security.dangerousDisableAssetCspModification` is `["style-src"]`. Without it Tauri adds hashes to `style-src`,
 which switches off `'unsafe-inline'` and silently drops every inline `style="--var:…"` the game sets (place colours, the rock meter fill,
 animation delays). Scripts keep Tauri's CSP handling; the policy still allows only `'self'`.
+
+## Milestone 3, step 1: the card frame (23 Nov 2026)
+
+* **One shared inked frame for every card, tinted by owner:** Reggie red `#e3182d`, Terry blue `#2456e6`, Kenneth purple `#7a3ff0`,
+  each cat's card in its hat colour, clutter grey `#6b7183` (`.cd::before` in `web/dayout.css`). The title bar keeps its type colour.
+* **Larger art window** (48 px on desktop, was 46; 78 px for the cat cards). **Type line names the owner** (`ATTACK – SPYRO`, `SKILL – REGGIE`; `cardOwner()`).
+* **Rules text in Libre Caslon Text** (old-style serif, SIL Open Font License 1.1, Copyright 2018 The Libre Caslon Text Project Authors;
+  `web/fonts/libre-caslon-text-latin-*.woff2` from @fontsource, licence in `web/fonts/OFL-LibreCaslonText.txt`, shipped under `licences/`).
+* **Rarity crest:** a small shield at the bottom centre (grey common, blue uncommon, gold rare).
+* **The six cats' signature cards show their mockup art full width** (`web/cats/*.jpg`, 480 px crops of `../mockups/card-*.jpg`;
+  `old-card-royal-decree-reggie.jpg` not used).
+
+### Cards still needing real art
+
+Only the six cats' signature cards have painted art. Every other card still shows its ink icon on the coloured panel (placeholder):
+
+- **Reggie (22):** Red Pen, Polite Cough, Imaginary Invoice, Extra Tenner for the Y, Sales Patter, A Nice Little Earner, Fact Check, Line Edit, Itemised Bill, Compound Interest, Kindly Remit, Brave Face, My Old Son, Cartel Pricing, Rounding Up, Proofread, Final Demand, Wounded Dignity, Cash in Hand, VAT Inclusive, Late Payment Charge, The Bailiffs
+- **Terry (23):** Ink Blot, Sketchbook, Splatter, Cross-Hatch, Theatrical Outrage, Wraparound Cover, Big Bold Title, Full Colour, Rough Draft, Frame Rate, Day One Purchase, Ink Wash, Quick Sketch, Splatter Storm, Two-Page Spread, Steady Hand, Reference Photo, Masterpiece, Scribble, Bleed Edge, Spot Colour, Letters to the Editor, Centre Spread
+- **Kenneth (22):** Firm Handshake, Vague Nod, Who Invited Him?, Unexplained Arrival, Says He Knows Terry, Friend of Reggie's, Cousin Once Removed, Nobody Asked, Mysterious Parcel, Turns Up Uninvited, Long Story, Open Invitation, Plus One, Wrong House, Changes the Subject, Coin Toss, Left Without Saying Goodbye, Air of Mystery, Minutes of the Meeting, Reply All, Delegated, Nobody Minuted It
+- **Shared / clutter (6):** Form 27B, Mislaid Sock, Parking Ticket, Writer's Block, Unflattering Photo, Catchphrase
 
 ## What the desktop bundle changes
 
