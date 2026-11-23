@@ -16,7 +16,7 @@
 }
 .office-stage-wrap {
   width: 100%;
-  margin: 0 0 28px;
+  margin: 0 0 16px;
   text-align: center;
   overflow-x: auto;
   overflow-y: hidden;
@@ -129,4 +129,55 @@ html.office-embed .office-stage-wrap {
 html.office-embed .office-stage canvas {
   width: 100%;
   height: auto;
+}
+
+.office-share {
+  max-width: 960px;
+  margin: 0 auto 28px;
+}
+.office-share-label {
+  margin: 0 0 12px;
+}
+.office-share-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+.office-share-btn {
+  font-family: var(--display);
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  font-size: 16px;
+  line-height: 1;
+  text-decoration: none;
+  color: var(--ink);
+  background: var(--card);
+  padding: 9px 14px 8px;
+  border: 3px solid var(--ink);
+  box-shadow: 4px 4px 0 var(--ink);
+  cursor: pointer;
+  display: inline-block;
+  margin: 0;
+  border-radius: 0;
+  appearance: none;
+  -webkit-appearance: none;
+}
+.office-share-btn:hover {
+  color: var(--ink);
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 var(--ink);
+}
+.office-share-btn:focus-visible {
+  outline: 3px solid var(--red);
+  outline-offset: 3px;
+}
+.office-share-copied {
+  font-family: var(--hand);
+  color: var(--red);
+  font-size: 18px;
+  margin: 10px 0 0;
+}
+html.office-embed .office-share {
+  display: none !important;
 }
