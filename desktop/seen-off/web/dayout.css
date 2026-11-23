@@ -147,3 +147,9 @@
 .cd.c-redpen .art{background-image:url(cards/redpen.jpg);background-position:50% 30%}
 .cd.c-cough .art{background-image:url(cards/cough.jpg);background-position:55% 30%}
 .cd.c-invoice .art{background-image:url(cards/invoice.jpg);background-position:55% 30%}
+/* Terry's starter cards: painted art (AI-generated from Terry's portrait on williamgeorgeworks.co.uk; see README) */
+.cd.c-inkblot .art,.cd.c-sketch .art,.cd.c-splatter .art{height:78px;background:#e9e2d4 center/cover no-repeat}
+.cd.c-inkblot .art>*,.cd.c-sketch .art>*,.cd.c-splatter .art>*,.cd.c-inkblot .art::before,.cd.c-sketch .art::before,.cd.c-splatter .art::before{display:none}
+.cd.c-inkblot .art{background-image:url(cards/inkblot.jpg);background-position:45% 30%}
+.cd.c-sketch .art{background-image:url(cards/sketch.jpg);background-position:40% 30%}
+.cd.c-splatter .art{background-image:url(cards/splatter.jpg);background-position:45% 30%}
