@@ -109,11 +109,21 @@ on real machines (the Windows installer is built and the Linux AppImage smoke-te
 
 ### Where to pick up next time
 
-1. Branch `archie/seen-off-dayout` is complete for M2; the working copy is `/workspace/seen-off-steam/desktop` (local git mirrors the pushed
-   commits). Builds: `/workspace/seen-off-steam/dist/m2/`. Screenshots: `/workspace/seen-off-steam/shots/m2-*.png`.
-2. Run the tests: `node tests/verify.js` (about 13 min; `ONLY=m2c` etc. for one section). Playtest: `RUNS=6 node tools/playtest.js out.json`.
-3. Next milestone (M3, proposed, not started): real drawings for the 35 new enemies; the remaining four places (Arcades & Bingo,
-   the Winter Gardens, the B&B, the Old Pier); Daily Rules; legendary cards; a boss-health pass for the later parts of the day.
+State at end of 23 Nov 2026 (branch `archie/seen-off-dayout`, working copy `/workspace/seen-off-steam/desktop`, local git mirrors the pushed commits):
+
+1. **Done:** M2 complete (builds in `/workspace/seen-off-steam/dist/m2/`, not rebuilt since). M3 so far, web only, no desktop rebuild:
+   Dexter recoloured to smoky black with a grey ruff; the shared inked card frame (owner tint, larger art window, owner type line,
+   Libre Caslon rules text, rarity crest); painted art on the six cat cards, Reggie's three starter cards and Terry's three starter cards.
+   Screenshots: `/workspace/seen-off-steam/shots/d1-01` to `d1-05-*.png`.
+2. **Tests:** `node tests/verify.js` (about 6 min; 201/201 passing on 23 Nov; `ONLY=m2d` etc. runs one section).
+   Playtest: `RUNS=6 node tools/playtest.js out.json`.
+3. **Suggested next chunk (small):** Kenneth's three starter cards (Firm Handshake `handshake`, Vague Nod `nod`, Who Invited Him? `whoinv`)
+   done the same way: use his portrait on williamgeorgeworks.co.uk as the reference (check the site for the correct file) and save it as
+   `../refs/kenneth-portrait.jpg`. One generation per card, crop to `web/cards/`, add the CSS block and a verify check, and add the files
+   to the AI content list. After that: the common reward cards each hero sees most, then a desktop rebuild into `dist/m3/` once the art is settled.
+4. **Still open for M3 (from the M2 proposal):** real drawings for the 35 new enemies (still labelled PLACEHOLDER stand-ups); the other
+   four places (Arcades & Bingo, the Winter Gardens, the B&B, the Old Pier); Daily Rules; legendary cards; a boss-health pass for later places.
+5. **Before release:** declare everything in the AI content list below in Steam's Content Survey.
 
 **WebKitGTK note:** `app.security.dangerousDisableAssetCspModification` is `["style-src"]`. Without it Tauri adds hashes to `style-src`,
 which switches off `'unsafe-inline'` and silently drops every inline `style="--var:…"` the game sets (place colours, the rock meter fill,
