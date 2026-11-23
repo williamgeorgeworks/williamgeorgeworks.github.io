@@ -1,6 +1,63 @@
 {
   "editions": [
     {
+      "date": "2026-11-23",
+      "title": "Monday Brings Bargain Bundles, An Evergreen Chart-Topper, Seven Brave Launches And A Very Long Evening",
+      "standfirst": "Terry (PC, Steam Deck, master race, full price on day one) and Reggie (PS5, saving for a Pro, waiting for the sale) read through the latest gaming news and argue about every bit of it. A shorter edition today, because only the stories we could check made the cut. Everything in big type is made up, and so is the arguing. Everything in the boxes is real.",
+      "stories": [
+        {
+          "kicker": "Nintendo",
+          "headline": "Nintendo's Black Friday eShop Sale Arrives And Reggie's Pencil Is Already Sharpened",
+          "satire": "Reggie is reading the discount list aloud with the reverence of a man at a christening, pausing only to murmur \"a nice little earner\". Terry says a true connoisseur never waits, then quietly asks how long a sale like this lasts. Reggie declines to say, on the grounds that information has a price. Terry offers it, in full, at day-one rates. Reggie wins: he has already ticked the box, and the box did not cost him a penny.",
+          "real": "Nintendo Everything reported on 19 November that the Nintendo eShop Black Friday 2026 sale is live, covering Switch 2 and Switch 1 games. It lists Kirby and the Forgotten Land Switch 2 Edition plus Star-Crossed World at $55.99 (was $79.99) and Split Fiction at $29.99 (was $49.99).",
+          "source": {
+            "name": "Nintendo Everything",
+            "url": "https://nintendoeverything.com/nintendo-launches-2026-black-friday-eshop-sale-full-list-of-switch-2-and-switch-deals/"
+          },
+          "link": {
+            "text": "Prefer your bargains free? Have a go on the Arcade.",
+            "url": "arcade.html"
+          }
+        },
+        {
+          "kicker": "Charts",
+          "headline": "A Roguelike Walks Into The Charts At Number Three And Nods Politely At The Veteran In First Place",
+          "satire": "Terry is on his feet, announcing that the newcomer will be on his Steam Deck by teatime, and on the second monitor, and possibly in a dream. Reggie says the veteran at number one has simply been there so long it has started paying council tax. Terry argues that is how loyalty works. Reggie counters that loyalty is only a sale that hasn't come round yet. Terry concedes, mostly because he has forgotten what the argument was about. Reggie wins on points.",
+          "real": "Nintendo Everything reported on 22 November that The Legend of Zelda: Ocarina of Time held the top spot on the Switch 2 eShop charts for the week, while The Binding of Isaac: Repentance+ debuted at number three in its first week.",
+          "source": {
+            "name": "Nintendo Everything",
+            "url": "https://nintendoeverything.com/nintendo-switch-2-eshop-charts-november-22-2026-zelda-stays-winning/"
+          },
+          "link": {
+            "text": "Fancy a card-slinging roguelike of our own? Try Seen Off.",
+            "url": "slay-the-pier.html"
+          }
+        },
+        {
+          "kicker": "PlayStation",
+          "headline": "PS5 Owners Spend An Average Of Eight Hours In One Game And Several Sofas File A Quiet Complaint",
+          "satire": "Reggie reads out the figures with enormous pride, as though he personally supplied the eight hours, the biscuits and the second cushion. Terry says he did his hours on a desk chair with lumbar support, thank you, and at a frame rate Reggie could only dream of. Reggie replies that dreaming is free, and so was most of his evening. Terry demands a recount. They settle it by agreeing the sofa deserves a medal. Draw, with a footstool.",
+          "real": "Push Square reported on 21 November that, according to Circana, 61% of US PS5 owners played GTA 6 on launch day, averaging 8 hours.",
+          "source": {
+            "name": "Push Square",
+            "url": "https://www.pushsquare.com/news/2026/11/61percent-of-all-us-ps5-owners-played-gta-6-on-launch-day-averaging-8-hours"
+          }
+        },
+        {
+          "kicker": "Releases",
+          "headline": "Seven PS5 Games Launch On The Same Day As A Very Large Neighbour And Hold Their Heads High",
+          "satire": "Terry says he bought all seven at full price on the day, in order of alphabet, as an act of solidarity, and will be mentioning it at parties. Reggie raises an eyebrow so high it needs its own invoice, and sends one: services rendered, for doubting. He says he will meet all seven again in the sale, like old friends at a reunion. Terry calls this disloyal. Reggie calls it patience. Terry wins the round, because Reggie has genuinely lost the invoice pad.",
+          "real": "Push Square reported on 20 November that seven PS5 games launched on the same day as GTA 6.",
+          "source": {
+            "name": "Push Square",
+            "url": "https://www.pushsquare.com/news/2026/11/these-7-ps5-games-launched-on-the-same-day-as-gta-6-like-mad-men"
+          }
+        }
+      ],
+      "terry": "And that, ladies and gentlemen, is Monday: bargains, a chart, a long evening and seven brave launches! Everything in the big type is made up, the boxes are real, and I have a day-one queue to join. Back tomorrow, and do bring a spare chair!",
+      "reggie": "Check the boxes, my old son, that is where the facts live, and the rest is pure patter. The Pro stays on the wish-list and the sale stays just round the corner. A short one today, but quality over quantity, and no extra charge. Back tomorrow."
+    },
+    {
       "date": "2026-11-22",
       "title": "Sunday Brings Giant Numbers, Free Maps, A Wasteland Full Of Cats And A Queue For A Machine",
       "standfirst": "Terry (PC, Steam Deck, master race, full price on day one) and Reggie (PS5, saving for a Pro, waiting for the sale) read through the latest gaming news and argue about every bit of it. Everything in big type is made up, and so is the arguing. Everything in the boxes is real.",
