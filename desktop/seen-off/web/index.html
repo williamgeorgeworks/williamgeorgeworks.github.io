@@ -423,7 +423,7 @@ var CATS={
  spyro:{name:'Spyro',card:'decree',perk:'The true king: at the end of your turn, 3 damage to a random enemy.',body:'#ffffff',head:'#ffffff',spot:'#e08a3a',sx:2.5,sy:-9.5,sr:2.6,tail:'#e8913c',ring:'#b9621f',ear:'#ffffff',eye:'#a9b63c',fluff:0,hat:'#ffb300'},
  tilly:{name:'Tilly',card:'ripface',perk:'Shy and quiet: anything that hits you gets 3 damage back.',body:'#efe6d6',head:'#e4dccf',face:'#b9b2a8',ear:'#9a948c',eye:'#5a9bd8',fluff:1,hat:'#7a3ff0'},
  trixie:{name:'Trixie',card:'requisition',perk:'A tight operation: 1 extra Energy on the first turn of every fight.',body:'#eadfcd',head:'#6a564b',face:'#3f322c',ear:'#3f322c',eye:'#6aa6ee',fluff:1,whisk:'#ffffff',hat:'#1fb85a'},
- dexter:{name:'Dexter',card:'boo',perk:'The grey wolf: nervous, so you draw 2 extra cards on the first turn.',body:'#4a4a52',head:'#3c3c44',ear:'#2c2c33',ruff:'#9a9aa3',eye:'#e9a400',fluff:1,whisk:'#ffffff',hat:'#2456e6'},
+ dexter:{name:'Dexter',card:'boo',perk:'The grey wolf: nervous, so you draw 2 extra cards on the first turn.',body:'#2b272a',head:'#221f22',ear:'#1a171a',ruff:'#c4beb8',eye:'#e8b22a',fluff:1,whisk:'#ffffff',hat:'#2456e6'},
  daisy:{name:'Daisy',card:'whome',perk:'Butter would not melt: heal 4 after every fight.',body:'#f6e2c4',head:'#f8ecd9',face:'#ffffff',ear:'#e9c08f',eye:'#5a9bd8',fluff:1,hat:'#ff5fa0'}
 };
 var CATIDS=Object.keys(CATS);
@@ -1109,6 +1109,7 @@ function catHead(c,r){
 function drawCat(id,r,t){var c=CATS[id];ctx.fillStyle='rgba(20,20,20,.13)';ell(0,2,22,4);ctx.fill();
   ctx.save();ctx.translate(14,-14);ctx.rotate(.5+Math.sin(t*3+id.length)*.2);if(c.fluff)fur(0,-14,6,17,12,.3,r);else ell(0,-14,3.5,16);ink(c.tail||c.ear,1.8);if(c.ring){[-24,-17,-10].forEach(function(y){line([-3.2,y,3.2,y-1.5],2.2,c.ring);});}ctx.restore();
   if(c.fluff)fur(0,-13,16,15,18,.14,r);else smooth(blob(0,-13,14,14,9,.05,r));ink(c.body,2);
+  if(c.ruff){fur(0,-16,11,10,14,.22,r);ink(c.ruff,1.4);} /* Dexter's silver chest ruff, as in his photos */
   ctx.save();ctx.translate(-1,-36+Math.sin(t*2.6+id.length)*1.2);ctx.scale(.72,.72);catHead(c,r);ctx.restore();}
 /* the opposition */
 var ART={

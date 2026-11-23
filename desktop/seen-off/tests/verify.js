@@ -202,7 +202,7 @@ async function dayOut(browser, port) {
   ok(`${tag} Prom postcard: visited + seen off`, await ev(() => !!(__SO.DAY.album.prom.v && __SO.DAY.album.prom.s)));
   ok(`${tag} rock banked after the stage`, (await ev(() => __SO.DAY.rock)) > 0, String(await ev(() => __SO.DAY.rock)));
   await fits('afternoon picker');
-  ok(`${tag} played through to the Day Out Report`, await auto(s => s === 'report', { cheat: true }));
+  const okr = await auto(s => s === 'report', { cheat: true }); ok(`${tag} played through to the Day Out Report`, okr, okr ? '' : await ev(() => JSON.stringify({ scr: __SO.S.scr, mode: __SO.S.mode, row: __SO.run() && __SO.run().row, stage: __SO.run() && __SO.run().stage, view: document.getElementById('view').textContent.slice(0, 160) })));
   await sleep(3200);
   const rep = await ev(() => __SO.S.end.rep);
   ok(`${tag} report: a won day, four places`, rep.won && rep.places.join(',') === 'prom,south,central,north', rep.places.join(','));

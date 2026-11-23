@@ -99,8 +99,8 @@ with its name on it (`ART.standee`), and the place scenery is a few simple ink p
 AI image tools, they must be declared in Steam's Content Survey (see the Content Survey notes in `content-plan.md`). Nothing else in M2 is an image file.
 
 **Cat colours check:** the in-game cats were compared with the photos in `/workspace/cats/` (from williamgeorgeworks.co.uk). Spyro was fixed
-in M1. Dexter is drawn dark grey with a grey ruff and amber eyes; the photos show a *smoky black* cat with a grey chest ruff, so his body
-could be a shade darker (not changed; the live website file is untouched either way).
+in M1. Dexter was fixed on 23 Nov 2026: he is now smoky black (near-black head, ears and body) with a silver-grey chest ruff and amber eyes,
+as in his photos (he was drawn dark grey, and his ruff colour was never drawn). The live website file is untouched.
 
 **Not done / untested in M2:** Daily Rules (the plan's one rule per day) and Steam leaderboards (no Steamworks); Rainy Day tokens; the
 legendary cards; Arcades & Bingo, the Winter Gardens, the B&B and the Old Pier still borrow pier crowds ("Coming soon"); the Daily's seed
