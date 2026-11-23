@@ -1,6 +1,7 @@
 /* The William George Works trailer: an original spy-thriller title sequence that turns into a tour of the
    whole site, drawn on a canvas and cut to the beat. A minute and a half, sixty-eight bars at 174 a minute.
    22 November 2026: recut for nine games, with the two new ones featured, and cinema bars on the opening.
+   23 November 2026: recut with Dead Air FM leading the arcade, and no counts, so new games need no re-edit.
    Pictures: Terrance Quill. Animation and tune: Reginald Quill. No film was harmed or copied.
    The music is promo-theme.mp3, built by tools/make-trailer-music.js. Its bar numbers are the B(n) used here. */
 (function () {
@@ -23,7 +24,7 @@
     c1: "cover-great-british-disagreement.jpg", c2: "cover-last-of-the-unemployable.jpg", c3: "cover-man-who-wanted-to-sue-god.jpg",
     c4: "cover-lancashire-ghost-stories.jpg", c5: "cover-haunted-lancashire.jpg", c6: "cover-small-stove-cookbook.jpg",
     g1: "thumb-grand-theft-kitty.jpg", g2: "thumb-red-light-green-light.jpg", g3: "thumb-arthurs-tribunal.jpg", g4: "thumb-ferrets-ditch.jpg",
-    g5: "thumb-moulding-museum.jpg", g6: "thumb-unemployable-arcade.jpg", g7: "thumb-lion-and-albert.jpg", g8: "thumb-kitty-grand-prix.jpg", g9: "thumb-slay-the-pier.jpg"
+    g5: "thumb-moulding-museum.jpg", g6: "thumb-unemployable-arcade.jpg", g7: "thumb-lion-and-albert.jpg", g8: "thumb-kitty-grand-prix.jpg", g9: "thumb-slay-the-pier.jpg", g10: "games/dead-air-fm/arcade.webp"
   };
   var CAST = ["ferret", "jo", "terry", "reggie", "arthur", "spyro", "tilly", "trixie", "dexter", "daisy"];   // the order they stand in the collage
   CAST.forEach(function (n) { FILES["p_" + n] = "portraits/" + n + ".jpg"; });
@@ -184,11 +185,11 @@
     else { g.fillStyle = "rgba(20,20,20,0.8)"; g.fillRect(0, 532, W, 188); typed("A CAT IS ASLEEP ON THE EVIDENCE.", 70, 588, 34, PAPER, t, B(5) + 0.7, 26); typed("HE WILL NOT BE RUSHED.", 70, 638, 34, YEL, t, B(7), 24); }
     var p = span(t, B(9) - 0.1, B(9)); if (p > 0) { g.fillStyle = "rgba(246,242,231," + p + ")"; g.fillRect(0, 0, W, H); }
   }
-  function cards(lt, dur, t) {                                 // 2. one human, two machines, six cats
+  function cards(lt, dur, t) {                                 // 2. one human, a few machines, six cats
     fill(PAPER);
     blot(1185, 105, 100, 7, INK, span(t, B(9), B(9) + 0.3)); blot(95, 640, 85, 21, RED, span(t, B(10), B(10) + 0.3)); blot(1200, 650, 62, 33, BLUE, span(t, B(11), B(11) + 0.3));
     text("WILLIAM GEORGE WORKS PRESENTS", 560, 96, 30, INK, DISP, "center", 4, 820);
-    slam("ONE HUMAN.", 640, 280, 150, INK, t, B(9), 0, 900); slam("TWO MACHINES.", 640, 430, 150, RED, t, B(10), 0, 900); slam("SIX CATS.", 640, 580, 150, INK, t, B(11), 0, 900);
+    slam("ONE HUMAN.", 640, 280, 150, INK, t, B(9), 0, 900); slam("A FEW MACHINES.", 640, 430, 150, RED, t, B(10), 0, 900); slam("SIX CATS.", 640, 580, 150, INK, t, B(11), 0, 900);
     hand("and not one of them in charge", 640, 668, 40, BLUE, span(t, B(12), B(12) + 0.25), -0.02, 800);
     var p = span(t, B(12, 3), B(12, 3) + 0.12); if (p > 0) { g.save(); g.translate(1066, 552); g.rotate(0.1 + (calm ? 0 : 0.03 * Math.sin(t * 40))); label("MIAOW.", 0, 0, 62, INK, PAPER, 0, p, 300); g.restore(); }
   }
@@ -224,8 +225,8 @@
     fill(PAPER); blot(90, 96, 78, 52, BLUE, span(lt, 0, 0.3)); blot(1200, 92, 78, 88, RED, span(lt, 0.15, 0.45));
     text("THE FILES", 640, 92, 60, INK, DISP, "center", 3);
     for (var i = 0; i < 6; i++) { var p = ease((lt - i * 0.05) / 0.3); if (p > 0) card("c" + (i + 1), 140 + i * 200, 300 + (1 - p) * 520, 172, 258, [-0.05, 0.035, -0.025, 0.05, -0.035, 0.03][i] * p, { sh: 8, lw: 4 }); }
-    slam("SIX BOOKS. OUT NOW.", 640, 572, 120, INK, lt, 0.28, 0, 1100);
-    hand("written with two machines. We say so on the cover.", 640, 640, 36, BLUE, span(t, B(28), B(28) + 0.25), -0.012, 1100);
+    slam("THE BOOKS. OUT NOW.", 640, 572, 120, INK, lt, 0.28, 0, 1100);
+    hand("written with AI. We say so on the cover.", 640, 640, 36, BLUE, span(t, B(28), B(28) + 0.25), -0.012, 1100);
     stamp("FREE TO READ IN KINDLE UNLIMITED", 640, 690, t, B(28, 3), RED, 30, -0.02);
   }
   function accord(lt, dur, t) {                                // 3. the paperwork
@@ -274,12 +275,12 @@
     for (i = 0; i < 24; i++) { var a = i / 24 * 6.283, r = i % 2 ? 78 : 104; g.lineTo(Math.cos(a) * r, Math.sin(a) * r); }
     g.closePath(); g.fill(); g.stroke(); g.restore(); g.rotate(-0.14); text("NEW", 0, 26, 72, RED, DISP, "center", 0, 150); g.restore();
   }
-  function arcadeHead(n) { text("THE ARCADE", 60, 66, 40, LIME, DISP, "left"); text("GAME " + n + " OF 9", W - 60, 66, 40, PINK, DISP, "right", 0, 400); }
-  function arcade(lt) {                                         // 4. the arcade: nine screens light up, then the sign
+  function arcadeHead(n) { text("THE ARCADE", 60, 66, 40, LIME, DISP, "left"); text("FREE TO PLAY", W - 60, 66, 40, PINK, DISP, "right", 0, 400); }
+  function arcade(lt) {                                         // 4. the arcade: the screens light up, then the sign
     nightSky(lt); var i, order = [4, 0, 7, 2, 8, 5, 1, 6, 3], tilt = [-0.02, 0.015, -0.01, 0.02, -0.015, 0.012, -0.012, 0.018, -0.02];
     for (i = 0; i < 9; i++) { var q = back((lt - 0.02 - order[i] * 0.03) / 0.14); if (q > 0) card("g" + (i + 1), 216 + (i % 3) * 424, 124 + Math.floor(i / 3) * 236, 400 * q, 222 * q, tilt[i], { shadow: PINK, line: LIME, lw: 4, sh: 8 }); }
     g.fillStyle = "rgba(19,10,53,.6)"; g.fillRect(0, 0, W, H); rays(640, 360, PURPLE, 0.22, lt * 0.5, 14);
-    glow("THE ARCADE", 640, 380, 250, lt, 0, 1100); var p = span(lt, 0.1, 0.22); if (p > 0) { g.globalAlpha = p; text("NINE GAMES. FREE. NO SIGN-UP.", 640, 476, 46, "#e9e4ff", DISP, "center", 3, 1000); g.globalAlpha = 1; }
+    glow("THE ARCADE", 640, 380, 250, lt, 0, 1100); var p = span(lt, 0.1, 0.22); if (p > 0) { g.globalAlpha = p; text("FREE GAMES. NO SIGN-UP.", 640, 476, 46, "#e9e4ff", DISP, "center", 3, 1000); g.globalAlpha = 1; }
   }
   var KARTS = [[RED, "#f3e9d8", "#8a8c99"], ["#e9a400", "#ffffff", "#d98a3a"], ["#8a5aa8", "#e4dccf", "#b9b2a8"], ["#3d9a52", "#6a564b", "#3f322c"], [BLUE, "#3c3c44", "#9a9aa3"], ["#e8799a", "#f8ecd9", "#ffffff"]];   // kart, fur, face
   function kart(x, y, K, t) {                                   // a cat in a kart, from the side, in a hurry
@@ -298,13 +299,24 @@
     [-36, 38].forEach(function (wx) { g.fillStyle = "#2c2c33"; g.strokeStyle = INK; g.lineWidth = 3; g.beginPath(); g.arc(wx, -4, 15, 0, 6.3); g.fill(); g.stroke(); g.strokeStyle = PAPER; g.lineWidth = 2.5; g.beginPath(); g.moveTo(wx + Math.cos(spin) * 9, -4 + Math.sin(spin) * 9); g.lineTo(wx - Math.cos(spin) * 9, -4 - Math.sin(spin) * 9); g.stroke(); });
     g.restore();
   }
-  function featKart(lt, dur, t) {                               // new: The Kitty Grand Prix, with the field going past
-    var p = glide(lt / 0.16), i, off = (lt * 900) % 96;
+  function featRadio(lt, dur, t) {                              // newest: Dead Air FM, on air
+    var p = glide(lt / 0.16), i;
     nightSky(lt); gridFloor(t); arcadeHead(1);
+    for (i = 0; i < 4; i++) {                                   // the broadcast, rippling out over the booth
+      var r = ((calm ? 0.5 : lt * 0.9) + i / 4) % 1;
+      g.save(); g.globalAlpha = (1 - r) * 0.8 * span(lt, 0.05, 0.2); g.strokeStyle = i % 2 ? CYAN : LIME; g.lineWidth = 6;
+      g.beginPath(); g.arc(640, 292, 240 + r * 420, Math.PI * 1.08, Math.PI * 1.92); g.stroke(); g.restore();
+    }
+    card("g10", 640, 292 + (1 - p) * 520, 640, 400, -0.012 * p, { shadow: PINK, line: LIME, lw: 6, sh: 12, zoom: 1 + 0.07 * lt / dur });
+    newBurst(1016, 178, lt, 0.1);
+    label("DEAD AIR FM", 640, 634, 56, LIME, NIGHT, -0.015, span(lt, 0.08, 0.22), 1000); hand("pirate-radio pinball. Arthur has the bass fader", 640, 698, 36, CYAN, span(lt, 0.2, 0.36), -0.012, 1100);
+  }
+  function featKart(lt, dur, t) {                               // The Kitty Grand Prix, with the field going past
+    var p = glide(lt / 0.16), i, off = (lt * 900) % 96;
+    nightSky(lt); gridFloor(t); arcadeHead(2);
     card("g8", 640 - (1 - p) * 900, 292, 640, 400, 0.016 * p, { shadow: PINK, line: LIME, lw: 6, sh: 12, zoom: 1 + 0.07 * lt / dur });
     for (i = -2; i < 30; i++) { g.fillStyle = i % 2 ? PAPER : INK; g.fillRect(i * 48 - off, 566, 48, 12); }
     for (i = 0; i < 6; i++) { var x = -140 + (lt - 0.08) * 1750 - i * 220; if (x > -260 && x < W + 300) kart(x, 564, KARTS[i], t); }
-    newBurst(1016, 178, lt, 0.1);
     label("THE KITTY GRAND PRIX", 640, 634, 56, LIME, NIGHT, -0.015, span(lt, 0.08, 0.22), 1000); hand("six cats, six karts, nobody has read the rules", 640, 698, 36, CYAN, span(lt, 0.2, 0.36), -0.012, 1100);
   }
   var DEALT = [["#e3182d", "1", "RED PEN", "", "#ffb53d"], ["#2456e6", "1", "POLITE", "COUGH", "#5fd9e6"], ["#7a3ff0", "1", "THEATRICAL", "OUTRAGE", "#ff7ab8"], ["#e3182d", "1", "ROYAL", "DECREE", "#ffb53d"], ["#2456e6", "0", "WHO INVITED", "HIM?", "#5fd9e6"]];
@@ -319,17 +331,16 @@
     text(c[2], 8, c[3] ? -53 : -45, 15, "#fff", DISP, "center", 0, 74); if (c[3]) text(c[3], 8, -39, 15, "#fff", DISP, "center", 0, 74);
     g.beginPath(); g.arc(-44, -63, 16, 0, 6.3); g.fillStyle = "#ffc61a"; g.fill(); g.strokeStyle = INK; g.lineWidth = 3.5; g.stroke(); text(c[1], -44, -54, 24, INK, DISP, "center", 0, 28);
   }
-  function featPier(lt, dur, t) {                               // new: Seen Off, with a hand dealt
+  function featPier(lt, dur, t) {                               // Seen Off, with a hand dealt
     var p = glide(lt / 0.16), i;
-    nightSky(lt); gridFloor(t); arcadeHead(2);
+    nightSky(lt); gridFloor(t); arcadeHead(3);
     card("g9", 640 + (1 - p) * 900, 292, 640, 400, -0.016 * p, { shadow: PINK, line: LIME, lw: 6, sh: 12, zoom: 1 + 0.07 * lt / dur });
     for (i = 0; i < 5; i++) { var q = back((lt - 0.12 - i * 0.05) / 0.2); if (q <= 0) continue; g.save(); g.translate(640, 1400); g.rotate((i - 2) * 0.13 * q + (calm ? 0 : Math.sin(t * 6 + i) * 0.006)); g.translate(0, -901 + (1 - q) * 320); playingCard(DEALT[i]); g.restore(); }
-    newBurst(264, 178, lt, 0.1);
     label("SEEN OFF", 640, 634, 56, LIME, NIGHT, -0.015, span(lt, 0.08, 0.22), 1000); hand("a card game of doubtful magic. The cats wear hats", 640, 698, 36, CYAN, span(lt, 0.2, 0.36), -0.012, 1100);
   }
   function game(i) { return function (lt, dur, t) {             // the other seven, two beats each
     var G = GAMES[i], p = glide(lt / 0.16), dir = i % 2 ? 1 : -1;
-    nightSky(lt); gridFloor(t); arcadeHead(i + 3);
+    nightSky(lt); gridFloor(t); arcadeHead(i + 4);
     card(G[0], 640 + dir * (1 - p) * 900, 338, 784, 490, dir * -0.018 * p, { shadow: PINK, line: LIME, lw: 6, sh: 12, zoom: 1 + 0.06 * lt / dur });
     label(G[1], 640, 606, 56, LIME, NIGHT, -0.015, span(lt, 0.08, 0.22), 1000); hand(G[2], 640, 682, 38, CYAN, span(lt, 0.18, 0.32), -0.012, 1100);
   }; }
@@ -465,7 +476,7 @@
   for (i = 0; i < 6; i++) cut(21 + i, 1, book(i), i ? 1 : 2);
   cut(27, 1, shelf, 1); cut(29, 1, accord, 2);
   cut(33, 1, word("HONESTY.", PAPER, INK, 1), 2); cut(34, 1, word("INTEGRITY.", INK, PAPER, 2), 2); cut(35, 1, word("KINDNESS.", BLUE, PAPER, 3), 2); cut(36, 1, word("NONSENSE.", RED, PAPER, 4, true), 2);
-  cut(37, 1, arcade, 2); cut(37, 3, featKart, 1); cut(38, 3, featPier, 1);                    // nine games in six bars: the sign, the two new ones, then seven at two beats each
+  cut(37, 1, arcade, 2); cut(37, 3, featRadio, 1); cut(38, 3, featKart, 1); cut(39, 1, featPier, 1);   // the arcade in six bars: the sign, a bar of Dead Air FM, two beats each for the karts and the pier, then seven more
   for (i = 0; i < 7; i++) cut(39 + Math.floor((2 + 2 * i) / 4), (2 + 2 * i) % 4 + 1, game(i), 1);
   cut(43, 1, dailyRow, 1); cut(45, 1, gamingRow, 2); cut(46, 1, weather, 1); cut(47, 1, tribunal, 1);
   cut(49, 1, person({ key: "p_terry", acc: BLUE, head: ["DEAR TERRY"], hs: 160, hc: [RED], sub: "YOUR PROBLEMS, SOLVED", quip: ["with total confidence. He has", "never had one in his life"], stamp: "AGONY UNCLE" }), 1);
