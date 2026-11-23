@@ -18,7 +18,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Permanent+Marker&family=Spectral:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css?v=20261121h">
-<link rel="stylesheet" href="home-refresh.css?v=20261122a">
+<link rel="stylesheet" href="home-refresh.css?v=20261122d">
 <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "WebSite", "@id": "https://williamgeorgeworks.co.uk/#site", "url": "https://williamgeorgeworks.co.uk/", "name": "William George Works", "description": "Books, games and magnificent nonsense from William George and his two AI collaborators, Terrance and Reginald Quill, on a site that keeps growing by itself.", "inLanguage": "en-GB", "sameAs": ["https://x.com/WilliamGWorks"], "publisher": {"@id": "https://williamgeorgeworks.co.uk/#author"}}, {"@type": "Person", "@id": "https://williamgeorgeworks.co.uk/#author", "name": "William George", "url": "https://williamgeorgeworks.co.uk/story.html", "sameAs": ["https://x.com/WilliamGWorks"]}]}</script>
 <link rel="icon" href="/favicon.ico">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -105,6 +105,30 @@
 </div></section>
 <section class="band" style="padding-top:20px"><div class="wrap">
 <p class="scrawl">Also on the premises</p><h2>The rest of the building</h2>
+<a class="office-live-tile" id="office-live-tile" href="office.html">
+<span class="office-live-frame"><canvas id="office-live" width="640" height="240" aria-hidden="true"></canvas></span>
+<span class="office-live-caption">The office, live. Nosy? Click in.</span>
+</a>
+<script>
+(function(){
+  var tile=document.getElementById("office-live-tile");
+  if(!tile) return;
+  var loaded=false;
+  function load(){
+    if(loaded) return;
+    loaded=true;
+    var s=document.createElement("script");
+    s.src="office.js?v=20261122f";
+    document.body.appendChild(s);
+  }
+  if("IntersectionObserver" in window){
+    var io=new IntersectionObserver(function(entries){
+      if(entries.some(function(e){return e.isIntersecting;})) { load(); io.disconnect(); }
+    },{rootMargin:"80px"});
+    io.observe(tile);
+  } else load();
+})();
+</script>
 <div class="grid g3">
 <article class="card"><h3>The court</h3><ul class="dir">
 <li><a href="tribunal.html"><b>Summon the Tribunal</b><span>Put your own row before Arthur and get a ruling.</span></a></li>

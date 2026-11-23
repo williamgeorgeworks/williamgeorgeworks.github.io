@@ -71,3 +71,49 @@ a.tile:nth-child(even):hover,a.tile:nth-child(even):focus-visible{transform:rota
 .tip-cat .btn{text-align:center;box-sizing:border-box;width:100%}
 .tip-cat:hover img,.tip-cat:focus-visible img{outline:3px solid var(--red);outline-offset:0}
 @media (max-width:720px){.tip-cats{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.tip-cat-name{font-size:16px}.tip-cat .btn.small{font-size:14px;padding:8px 10px 7px}}
+
+/* Compact live peek of the virtual office. Modest height; not a new full-width band. */
+.office-live-tile{
+  display:block;
+  max-width:420px;
+  margin:4px 0 22px;
+  text-decoration:none;
+  color:inherit;
+  background:var(--card);
+  border:3px solid var(--ink);
+  box-shadow:5px 5px 0 var(--ink);
+}
+.office-live-tile .office-live-frame{
+  display:block;
+  background:#3d2a1c;
+  line-height:0;
+  overflow:hidden;
+}
+.office-live-tile canvas{
+  display:block;
+  width:100%;
+  height:auto;
+  image-rendering:pixelated;
+  image-rendering:crisp-edges;
+  background:#3d2a1c;
+}
+.office-live-caption{
+  display:block;
+  font-family:var(--hand);
+  font-size:18px;
+  line-height:1.3;
+  padding:8px 12px 10px;
+}
+.office-live-tile:hover,
+.office-live-tile:focus-visible{
+  color:var(--red);
+  outline:3px solid var(--red);
+  outline-offset:2px;
+}
+@media (max-width:520px){
+  .office-live-tile{max-width:100%;margin:0 0 18px}
+  .office-live-caption{font-size:16px;padding:7px 10px 9px}
+}
+@media (prefers-reduced-motion:reduce){
+  .office-live-tile{box-shadow:5px 5px 0 var(--ink)}
+}
