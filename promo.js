@@ -26,7 +26,7 @@
     g1: "thumb-grand-theft-kitty.jpg", g2: "thumb-red-light-green-light.jpg", g3: "thumb-arthurs-tribunal.jpg", g4: "thumb-ferrets-ditch.jpg",
     g5: "thumb-moulding-museum.jpg", g6: "thumb-unemployable-arcade.jpg", g7: "thumb-lion-and-albert.jpg", g8: "thumb-kitty-grand-prix.jpg", g9: "thumb-slay-the-pier.jpg", g10: "games/dead-air-fm/arcade.webp"
   };
-  var CAST = ["ferret", "jo", "terry", "reggie", "arthur", "spyro", "tilly", "trixie", "dexter", "daisy"];   // the order they stand in the collage
+  var CAST = ["ferret", "jo", "terry", "reggie", "kenneth", "arthur", "spyro", "tilly", "trixie", "dexter", "daisy"];   // people, then the bench; used for files and the finale
   CAST.forEach(function (n) { FILES["p_" + n] = "portraits/" + n + ".jpg"; });
   function fetchPic(k, done) {
     if (pics[k] || waiting[k] === false) { if (done) done(); return; }
@@ -209,7 +209,7 @@
   ];
   function bench(lt) {                                          // all six, for the half-second they will sit still
     fill(PAPER); rays(640, 330, RED, 0.1, lt * 0.3, 16);
-    for (var i = 0; i < 6; i++) { var p = back((lt - i * 0.035) / 0.16); if (p > 0) card("p_" + CAST[4 + i], 115 + i * 210, 300 + (1 - p) * 500, 196, 196, (i % 2 ? 0.03 : -0.03) * p, { sh: 7, lw: 4 }); }
+    var CATS = CAST.slice(6); for (var i = 0; i < 6; i++) { var p = back((lt - i * 0.035) / 0.16); if (p > 0) card("p_" + CATS[i], 115 + i * 210, 300 + (1 - p) * 500, 196, 196, (i % 2 ? 0.03 : -0.03) * p, { sh: 7, lw: 4 }); }
     slam("SIX CATS SIT IN JUDGMENT.", 640, 560, 104, INK, lt, 0.06, 0, 1150); stamp("FINDINGS ADVISORY", 640, 648, lt, 0.3, RED, 40, -0.04);
   }
   var BOOKS = [
@@ -440,7 +440,7 @@
   }; }
   function faces(lt, dur, t) {                                 // everybody, twice a beat
     fill(PAPER); rays(640, 300, RED, 0.1, t, 14);
-    var n = Math.min(7, Math.floor(lt / (BEAT / 2))), k = ["ferret", "jo", "terry", "reggie", "arthur", "tilly", "trixie", "dexter"][n];
+    var n = Math.min(7, Math.floor(lt / (BEAT / 2))), k = ["ferret", "jo", "terry", "reggie", "kenneth", "arthur", "tilly", "trixie"][n];
     card("p_" + k, 640, 262, 392, 392, n % 2 ? 0.03 : -0.03, {});
     typed("AND MOST OF IT RUNS ITSELF.", 640, 536, 36, INK, lt, 0, 60, "center"); stamp("UNSUPERVISED", 640, 640, lt, 0.2, RED, 84, -0.04);
   }
@@ -459,7 +459,7 @@
     blot(1196, 92, 92, 140, INK, span(t, B(62), B(62) + 0.3)); blot(84, 150, 70, 175, RED, span(t, B(62, 3), B(62, 3) + 0.3)); blot(1208, 640, 56, 101, BLUE, span(t, B(66), B(66) + 0.25)); blot(70, 650, 64, 207, INK, span(t, B(66, 2.5), B(66, 2.5) + 0.25));
     slam("WILLIAM GEORGE", 640, 150, 120, INK, t, B(62), 0, 900); slam("WORKS", 640, 345, 215, RED, t, B(62, 3), 0, 900);
     var p = span(t, B(63), B(63) + 0.3); if (p > 0) { g.globalAlpha = p; text("BOOKS, GAMES & MAGNIFICENT NONSENSE", 640, 398, 34, INK, DISP, "center", 3, 900); g.globalAlpha = 1; }
-    for (var i = 0; i < 10; i++) { p = back((t - B(64) - i * 0.045) / 0.18); if (p > 0) card("cast", 104 + i * 119.2, 484 + (1 - p) * 320, 108, 108, (i % 2 ? 0.035 : -0.035) * p, { src: [(i % 5) * 200, Math.floor(i / 5) * 200, 200, 200], sh: 5, lw: 3 }); }
+    for (var i = 0; i < CAST.length; i++) { p = back((t - B(64) - i * 0.04) / 0.18); if (p > 0) card("p_" + CAST[i], 70 + i * 104, 484 + (1 - p) * 320, 96, 96, (i % 2 ? 0.035 : -0.035) * p, { sh: 5, lw: 3 }); }
     label("WILLIAMGEORGEWORKS.CO.UK", 640, 608, 46, INK, PAPER, -0.008, span(t, B(65), B(65) + 0.16), 760);
     hand("The Chief Justice was not consulted.", 640, 676, 34, BLUE, span(t, B(66, 2.5), B(66, 2.5) + 0.3), -0.012, 800);
     typed("NO CATS WERE RUSHED IN THE MAKING OF THIS FILM.", 640, 708, 15, "#5f5a4e", t, B(67, 3), 60, "center");

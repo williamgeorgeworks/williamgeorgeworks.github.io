@@ -291,6 +291,7 @@ header.site.js-nav nav.main .morelist a[aria-current=page]{border-bottom:3px sol
 @media (max-width:520px){.duo{grid-template-columns:1fr}}
 .cast{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px;margin:0 0 28px}
 .cast.nine{grid-template-columns:repeat(3,minmax(0,1fr));max-width:760px;margin-left:auto;margin-right:auto}
+.cast.ten{grid-template-columns:repeat(5,minmax(0,1fr));max-width:900px;margin-left:auto;margin-right:auto}
 .cast figure{margin:0}
 .cast a{display:block;border:3px solid var(--ink);overflow:hidden;background:var(--ink)}
 .cast img{display:block;width:100%;height:auto;aspect-ratio:1/1;object-fit:cover;transition:transform .2s}
@@ -300,7 +301,7 @@ header.site.js-nav nav.main .morelist a[aria-current=page]{border-bottom:3px sol
 .cast figcaption span{display:block;font-size:14px}
 .solo{max-width:280px;margin:0 0 18px}
 .solo img{display:block;width:100%;height:auto;aspect-ratio:1/1;object-fit:cover;border:3px solid var(--ink)}
-@media (max-width:520px){.cast.nine figcaption strong{font-size:17px}.cast.nine figcaption span{font-size:11px}}
+@media (max-width:520px){.cast.nine figcaption strong,.cast.ten figcaption strong{font-size:17px}.cast.nine figcaption span,.cast.ten figcaption span{font-size:11px}.cast.ten{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (prefers-reduced-motion:reduce){.cast img{transition:none}}
 /* Employee of the Month badge */
 .has-eotm{position:relative}
