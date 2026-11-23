@@ -10,9 +10,9 @@ const POLL_MS = 60000;
 /* Single list of everyone with a desk. Remove or comment out an entry to take
    that person off this page — the layout, board and feed mapping all follow. */
 const STAFF = [
-  { id: "kenneth", name: "Kenneth Quill", tag: "Ken", role: "Chief of Staff", prop: "clipboard", office: true,
+  { id: "kenneth", name: "Kenneth Quill", tag: "Ken", role: "Chief of Staff", prop: "clipboard", office: true, kind: "kenneth",
     plate: ["KENNETH QUILL", "CHIEF OF STAFF"],
-    body: "#6b5344", skin: "#f0c9a0", hair: "#2a2420", accent: "#c4a574" },
+    body: "#1a1a1a", skin: "#e8dcc8", hair: "#1a1a1a", accent: "#c4a574" },
   { id: "terry", name: "Terrance Quill", tag: "Terry", role: "The Machine", prop: "quill", office: true, kind: "terry",
     plate: ["TERRANCE QUILL"],
     body: "#b81c24", skin: "#d8d4c8", hair: "#b0aaa0", accent: "#d1202f" },
@@ -1020,8 +1020,24 @@ function drawDesk(d) {
   p(d.cx - 7, y - 1, 6, 4, lite(glow, 0.45));
   if (!REDUCE && ((animT * 3 + d.cx) % 1) < 0.08) p(d.cx - 4, y + 2, 8, 1, "#ffffff55");
   p(d.cx - 2, y + 12, 4, 5, "#3d2a1c");
-  /* mug on a few desks, not all */
-  if (d.id === "percy" || d.id === "george" || d.id === "kenneth") {
+  /* mug on a few desks, not all. Kenneth has his black-cat mug and a red quill. */
+  if (d.id === "kenneth") {
+    const mx = d.x + 8;
+    box(mx, y + 9, 7, 8, "#f4f0e4", "#141414");
+    p(mx + 1, y + 8, 2, 2, "#141414");
+    p(mx + 4, y + 8, 2, 2, "#141414");
+    p(mx + 2, y + 11, 1, 1, "#141414");
+    p(mx + 4, y + 11, 1, 1, "#141414");
+    p(mx + 3, y + 12, 1, 1, "#141414");
+    p(mx + 2, y + 14, 3, 2, "#d1202f");
+    p(mx + 7, y + 11, 2, 3, "#f4f0e4");
+    /* red quill on the other side of the desk */
+    const qx = d.x + d.w - 16;
+    p(qx + 3, y + 2, 3, 5, "#d1202f");
+    p(qx + 2, y + 3, 2, 3, lite("#d1202f", 0.25));
+    p(qx + 4, y + 6, 2, 8, "#f4f0e4");
+    p(qx + 4, y + 13, 1, 3, "#3d2a1c");
+  } else if (d.id === "percy" || d.id === "george") {
     const mx = d.x + 8;
     box(mx, y + 10, 6, 6, "#f4f0e4", "#141414");
     p(mx + 1, y + 11, 4, 2, "#d1202f");
@@ -1081,29 +1097,14 @@ function idleBob(pr) {
   return 0;
 }
 
-/* Kenneth wears a brown paper bag on his head, as the stories have it. */
-function drawBag(x, top, back, glance) {
-  const kraft = "#c9a46a";
-  box(x - 7, top + 3, 14, 17, kraft, "#141414");
-  p(x - 6, top + 4, 4, 15, lite(kraft, 0.18));
-  p(x + 3, top + 4, 3, 15, dark(kraft, 0.15));
-  /* crinkled, folded top */
-  p(x - 7, top + 1, 3, 3, kraft); p(x - 3, top, 3, 4, dark(kraft, 0.08));
-  p(x + 1, top + 1, 3, 3, kraft); p(x + 4, top, 3, 4, dark(kraft, 0.08));
-  p(x - 7, top + 6, 14, 1, dark(kraft, 0.2));
-  if (back) { p(x - 1, top + 9, 1, 8, dark(kraft, 0.2)); return; }
-  /* two eye holes, and a worried little mouth slit */
-  p(x - 4, top + 9, 3, 3, "#141414");
-  p(x + 2, top + 9, 3, 3, "#141414");
-  p(x - 3, top + 10, 1, 1, "#fff");
-  p(x + 3, top + 10, 1, 1, "#fff");
-  p(x - 1, top + 15, 3, 1, glance ? "#141414" : dark(kraft, 0.35));
-}
-
 function drawPerson(pr) {
   const s = pr.staff;
   if (s.kind === "terry" || s.kind === "reggie") {
     drawRobot(pr);
+    return;
+  }
+  if (s.kind === "kenneth") {
+    drawKenneth(pr);
     return;
   }
   const cele = pr.phase === "celebrating";
@@ -1148,7 +1149,6 @@ function drawPerson(pr) {
       p(x + 6, y - 32, 8, 5, s.accent);
       p(x + 13, y - 31, 3, 2, "#e07a2f");
     }
-    if (s.id === "kenneth") drawBag(x, y - 33, true, false);
     const tap = (!REDUCE && ((pr.typeT * 6 | 0) % 2)) ? 1 : 0;
     p(x - 12, y - 9, 6, 3, s.skin);
     p(x + 6, y - 9 + tap, 6, 3, s.skin);
@@ -1210,7 +1210,6 @@ function drawPerson(pr) {
   } else {
     p(x - 1, y - 26, 4, 1, "#c47a7a");
   }
-  if (s.id === "kenneth") drawBag(x, y - 43, false, pr.glanceT > 0);
   if (s.prop === "cloud") {
     p(x - 8, y - 50, 7, 5, s.accent);
     p(x - 5, y - 54, 11, 6, s.accent);
@@ -1229,6 +1228,119 @@ function drawPerson(pr) {
   if (cele) {
     p(x - 12, y - 36 - Math.min(jump, 4), 4, 8, s.skin);
     p(x + 8, y - 38 - Math.min(jump, 4), 4, 8, s.skin);
+  }
+}
+
+function drawKenneth(pr) {
+  const cele = pr.phase === "celebrating";
+  const walk = pr.phase === "idle" || pr.phase === "to-desk";
+  const work = pr.phase === "working";
+  const moving = !REDUCE && walk && pr.target;
+  const frame = moving ? walkFrame(pr) : 0;
+  const jump = (!REDUCE && cele) ? Math.round(Math.abs(Math.sin(pr.celeT * 10)) * 8) : 0;
+  const bob = moving ? (frame === 1 ? 0 : 1) : idleBob(pr);
+  const x = Math.round(pr.x);
+  const y = Math.round(pr.y - jump + bob);
+  const left = pr.facing === "l";
+  const metal = "#e8dcc8";
+  const vest = "#1a1a1a";
+  const shirt = "#f4f0e4";
+  const cap = "#1a1a1a";
+  const red = "#d1202f";
+  const silver = "#9a968c";
+  shadow(x - 8, Math.round(pr.y) + 2, 16, 5);
+
+  if (work) {
+    /* Seated, back to us: black vest, cream collar, cap and a side-feather. */
+    box(x - 8, y - 14, 16, 14, vest, "#141414");
+    p(x - 4, y - 14, 8, 4, shirt);
+    p(x - 1, y - 14, 2, 7, red);
+    box(x - 6, y - 28, 12, 14, metal, "#141414");
+    p(x - 5, y - 27, 5, 5, lite(metal, 0.22));
+    p(x - 9, y - 22, 3, 6, "#2a2a2a");
+    p(x + 6, y - 22, 3, 6, "#2a2a2a");
+    /* flat cap from behind, 1px red brim, feather off to the left */
+    p(x - 6, y - 34, 12, 3, cap);
+    box(x - 8, y - 32, 16, 5, cap, "#141414");
+    p(x - 7, y - 28, 14, 1, red);
+    p(x - 11, y - 42, 2, 10, red);
+    p(x - 10, y - 40, 1, 4, lite(red, 0.25));
+    p(x - 12, y - 38, 1, 3, dark(red, 0.15));
+    const tap = (!REDUCE && ((pr.typeT * 6 | 0) % 2)) ? 1 : 0;
+    p(x - 12, y - 9, 6, 3, silver);
+    p(x + 6, y - 9 + tap, 6, 3, silver);
+    return;
+  }
+
+  const shoe = "#2a1c14";
+  const trouser = "#2a2a2a";
+  if (frame === 1) {
+    p(x - 5, y - 10, 5, 10, trouser);
+    p(x + 1, y - 10, 5, 10, trouser);
+    p(x - 5, y, 5, 3, shoe);
+    p(x + 1, y, 5, 3, shoe);
+  } else if (frame === 2) {
+    p(x - 6, y - 8, 5, 8, trouser);
+    p(x + 2, y - 12, 5, 12, trouser);
+    p(x - 7, y, 6, 3, shoe);
+    p(x + 2, y, 5, 3, shoe);
+  } else {
+    p(x - 6, y - 12, 5, 12, trouser);
+    p(x + 2, y - 8, 5, 8, trouser);
+    p(x - 6, y, 5, 3, shoe);
+    p(x + 3, y, 6, 3, shoe);
+  }
+
+  /* black waistcoat over a cream shirt, red tie, Q badge */
+  box(x - 7, y - 24, 14, 15, vest, "#141414");
+  p(x - 2, y - 24, 4, 5, shirt);
+  p(x - 1, y - 24, 2, 9, red);
+  p(x, y - 23, 1, 3, lite(red, 0.25));
+  p(x + 3, y - 16, 3, 3, red);
+  p(x + 4, y - 15, 1, 1, "#f4f0e4");
+
+  /* cream robot head, panel line, ear-cups with a red centre */
+  box(x - 6, y - 38, 12, 14, metal, "#141414");
+  p(x - 5, y - 37, 5, 5, lite(metal, 0.25));
+  p(x - 5, y - 31, 10, 1, dark(metal, 0.18));
+  p(x - 9, y - 32, 3, 6, "#2a2a2a");
+  p(x + 6, y - 32, 3, 6, "#2a2a2a");
+  p(x - 8, y - 30, 2, 2, red);
+  p(x + 7, y - 30, 2, 2, red);
+
+  /* thin round glasses, pupils follow facing / a glance at the machine */
+  const glance = pr.glanceT > 0;
+  p(x - 4, y - 32, 4, 3, "#fff");
+  p(x + 1, y - 32, 4, 3, "#fff");
+  p(x - 5, y - 33, 6, 1, "#141414");
+  p(x - 5, y - 29, 6, 1, "#141414");
+  p(x - 5, y - 33, 1, 5, "#141414");
+  p(x, y - 33, 1, 5, "#141414");
+  p(x, y - 33, 6, 1, "#141414");
+  p(x, y - 29, 6, 1, "#141414");
+  p(x + 5, y - 33, 1, 5, "#141414");
+  const px1 = x + (left ? -3 : -2) + (glance && !left ? 1 : 0);
+  const px2 = x + (left ? 2 : 3) + (glance && !left ? 1 : 0);
+  p(px1, y - 31, 2, 2, "#141414");
+  p(px2, y - 31, 2, 2, "#141414");
+  p(x - 1, y - 26, 3, 1, "#141414");
+
+  /* black flat cap, one-pixel red brim, feather off to the left */
+  p(x - 6, y - 44, 12, 3, cap);
+  p(x - 5, y - 43, 4, 2, "#2e2e2e");
+  box(x - 8, y - 42, 16, 5, cap, "#141414");
+  p(x - 7, y - 38, 14, 1, red);
+  p(x - 11, y - 52, 2, 11, red);
+  p(x - 10, y - 50, 1, 4, lite(red, 0.25));
+  p(x - 12, y - 48, 1, 4, dark(red, 0.15));
+
+  if (glance) p(x + (left ? -10 : 8), y - 48, 2, 4, "#8ec8e6");
+  const armX = left ? x - 11 : x + 7;
+  p(armX, y - 22, 4, 10, silver);
+  drawProp(left ? x - 16 : x + 9, y - 20, "clipboard", pr.facing);
+  if (cele) {
+    p(x - 12, y - 36 - Math.min(jump, 4), 4, 8, silver);
+    p(x + 8, y - 38 - Math.min(jump, 4), 4, 8, silver);
   }
 }
 
@@ -1561,11 +1673,13 @@ function applyDemo(now) {
   if (!george) return;
   if (DEMO === "working") {
     if (!demoAppliedWorking) {
-      people.forEach(p => { if (p.id !== "george") setWant(p, "idle"); });
-      setWant(george, "working");
-      george.x = george.desk.chairX;
-      george.y = george.desk.chairY;
-      george.phase = "working";
+      const k = people.find(p => p.id === "kenneth") || george;
+      people.forEach(p => { if (p.id !== k.id) setWant(p, "idle"); });
+      setWant(k, "working");
+      k.x = k.desk.chairX;
+      k.y = k.desk.chairY;
+      k.phase = "working";
+      k.facing = "r";
       demoAppliedWorking = true;
     }
     return;
@@ -1584,12 +1698,20 @@ function applyDemo(now) {
     return;
   }
   if (DEMO === "1") {
-    if (!demoAppliedWorking && now > 0.7) {
-      setWant(george, "working");
-      demoAppliedWorking = true;
-    }
-    if (!demoAppliedIdle && now > 6) {
-      setWant(george, "idle");
+    /* Pose Kenneth idle, facing us, in his office, so the new portrait can be checked. */
+    if (!demoAppliedIdle) {
+      const k = people.find(p => p.id === "kenneth") || george;
+      people.forEach(p => { if (p.id !== k.id) setWant(p, "idle"); });
+      setWant(k, "idle");
+      k.target = null;
+      k.waypoints = [];
+      k.pendingDest = null;
+      k.x = k.desk.chairX;
+      k.y = k.desk.chairY + 6;
+      k.phase = "idle";
+      k.facing = "r";
+      k.wait = 9999;
+      k.glanceT = 0;
       demoAppliedIdle = true;
     }
   }
