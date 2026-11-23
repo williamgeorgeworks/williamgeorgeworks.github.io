@@ -1,6 +1,55 @@
 {
  "editions": [
   {
+   "date": "2026-11-23",
+   "title": "A Tin Of Beans In Every Basket, A Bear For Nine Pounds And Paint That Arrives Before The Kettle Boils",
+   "standfirst": "Four stories from Terry and Reggie, all drawn from real news of the last few days. Everything in big type is made up. Everything in the boxes is real.",
+   "stories": [
+    {
+     "kicker": "Shopping",
+     "headline": "Nation Buys More Tins And Long-Life Milk; Cupboards Quietly Enter Their Golden Age",
+     "satire": "Shops sold more of everything in October, and food stores in particular sold a lot of tins and cartons of milk that can outlast a sofa. Somewhere a cupboard that has been stuck behind the colander since spring is finally being asked to carry its weight. Terry has counted his tins twice and named three of them. Reggie is selling shelf-stable milk with a lifetime guarantee, my old son, and an invoice that will keep until the next decade.",
+     "real": "The Office for National Statistics says retail sales volumes rose 0.7% in October 2026, after a 0.6% fall in September. It reports that food stores sold more long-life items such as tinned goods and UHT milk, and non-food stores rose 1.1% on the month.",
+     "source": {
+      "name": "Office for National Statistics",
+      "url": "https://www.ons.gov.uk/businessindustryandtrade/retailindustry/bulletins/retailsales/october2026"
+     }
+    },
+    {
+     "kicker": "Tech",
+     "headline": "Chocolate Shop Hires A Robot To Pick Presents; Nation's Aunties Brace For Competition",
+     "satire": "Hotel Chocolat has built an AI gift finder that listens to a description of the lucky recipient and puts something in the basket. This is bad news for the person who has bought the same bath set for eleven years and called it a tradition. Terry has described his own father to it and been offered a very large box of apology. Reggie has built a gift finder of his own, my old son, and it only recommends whatever is on the van.",
+     "real": "Retail Rewired reports that Hotel Chocolat has launched an AI Gift Finder Agent, built with Astound Digital and Salesforce. The shopper describes the recipient, the agent recommends products and it adds the chosen gift to the online basket. The project took 11 weeks.",
+     "source": {
+      "name": "Retail Rewired",
+      "url": "https://retailrewired.co.uk/2026/11/19/hotel-chocolat-launches-ai-powered-gift-finder-with-astound-digital-and-salesforce/"
+     }
+    },
+    {
+     "kicker": "Christmas",
+     "headline": "Supermarket Sells Plush Bear For Nine Pounds; Porridge Industry Declines To Comment",
+     "satire": "A supermarket advert about a famous family of three bears has been turned into a soft toy, which means the bears have gone from the cottage to the shelf and are now lining up beside the tinsel. Somewhere a child is already planning to put it in the middle chair and see who complains. Terry has bought a bear and a second smaller bear for the first bear. Reggie is offering an extra-medium bear, my old son, which is neither too hot nor too cold and always sold out.",
+     "real": "Retail Times reports that Morrisons is selling a £9 Plush Bear inspired by its Christmas advert, which retells Goldilocks and the Three Bears with a bear cast. It says the bear is available in stores nationwide now.",
+     "source": {
+      "name": "Retail Times",
+      "url": "https://retailtimes.co.uk/morrisons-christmas-advert-bear-is-here-and-its-just-9-00/"
+     }
+    },
+    {
+     "kicker": "Home",
+     "headline": "Takeaway App Now Delivers Paint In Half An Hour; Spare Room Gets Its Excuses Ready",
+     "satire": "Just Eat has added a decorating shop to its app, so a tin of paint can now arrive in as little as 30 minutes, which is roughly the time it takes to say you will do the hallway at the weekend. Somewhere a person has ordered a roller at ten past the moment they got the idea and will be done by the time the idea fades. Terry has ordered one colour in four shades to be fair to all of them. Reggie is selling a thirty-minute guarantee on the paint, my old son, and a much longer one on the drying.",
+     "real": "Retail Times reports that Dulux Decorator Centre has joined Just Eat as its first paint and decorating partner, with delivery from 25 stores across the UK. It says the stores can deliver in as little as 30 minutes and that the initial range is 145 products.",
+     "source": {
+      "name": "Retail Times",
+      "url": "https://retailtimes.co.uk/just-eat-announces-dulux-decorator-centre-as-its-first-paint-decorating-partner/"
+     }
+    }
+   ],
+   "terry": "And that's the news, ladies and gentlemen, four stories today, every one rooted in something real! Tins and cartons by the trolley-load, a robot with a gift list, a bear that is just right and paint at your door before you have found the lid-opener. The big print is all ours, the boxes underneath are the truth. Join us tomorrow for more!",
+   "reggie": "Four stories, my old son, and I have invoiced you for each of them, payable in one medium bear and a tin of something that keeps. Big type is invention, the boxes are gospel, and my fee is thirty minutes' notice, a nice little earner. Mind how you go."
+  },
+  {
    "date": "2026-11-22",
    "title": "A Maybe-Freeze, Breakfast In A Bag And A Gingerbread Latte With A Waiting List Of Zero",
    "standfirst": "Five stories from Terry and Reggie, all drawn from real news of the last few days. Everything in big type is made up. Everything in the boxes is real.",
