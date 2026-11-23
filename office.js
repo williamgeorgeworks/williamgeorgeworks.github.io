@@ -1820,7 +1820,7 @@ function setupOfficeShare() {
   if (!root) return;
   const pageUrl = "https://williamgeorgeworks.co.uk/office.html";
   const title = "The virtual office | William George Works";
-  const text = "Have a nosy round the William George Works office: one human, two machines, six cats and a lot of bots.";
+  const text = "Have a nosy round the William George Works office: one human, three machines, six cats and a lot of bots.";
   const message = text + " " + pageUrl;
   const wa = document.getElementById("office-share-wa");
   const x = document.getElementById("office-share-x");

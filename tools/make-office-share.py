@@ -350,7 +350,7 @@ def compose(office):
         draw.text((left, y), line, font=sub_font, fill=RED)
         y += 36
     y += 18
-    tag_lines = wrap_text(draw, "One human, two machines, six cats and a lot of bots.", tag_font, text_w)
+    tag_lines = wrap_text(draw, "One human, three machines, six cats and a lot of bots.", tag_font, text_w)
     for line in tag_lines:
         draw.text((left, y), line, font=tag_font, fill=CREAM)
         y += 32
