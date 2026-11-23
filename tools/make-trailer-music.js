@@ -325,7 +325,7 @@ function halfTime(bar, g = 1, o = {}) { kick(S(bar, 0), g); if (o.push) kick(S(b
   [[72, 0, 2], [69, 2, 2], [65, 4, 3]].forEach((e, k) => lead(twang(e[0], e[2] * BEAT, { seed: 50 + k, trem: 0.25 }), T(7) + e[1] * BEAT, 1.35, 0.1, 1.3));
   put2(B.fx, REVC, T(9) - 1.5, 0.2);
 })();
-// 9 to 12: one human, two machines, six cats. Three slams, a roll, and a gap for the cat.
+// 9 to 12: one human, three machines, six cats. Three slams, a roll, and a gap for the cat.
 (function build1() {
   [[9, [62, 65, 69, 74], 50], [10, [65, 69, 72, 77], 53], [11, [64, 67, 70, 73, 76], 45]].forEach(e => { impact(T(e[0]), 0.95); brass(e[1], T(e[0]), 0.5, 0.95); brass([e[2], e[2] - 12], T(e[0]), 0.55, 0.9); kick(T(e[0]), 1, false); crash(T(e[0]), 0.55, SPLASH); });
   snare(T(9, 3), 0.5); for (let b = 2; b <= 4; b++) snare(T(10, b), 0.5 + 0.03 * b);

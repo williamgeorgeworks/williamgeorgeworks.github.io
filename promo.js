@@ -185,11 +185,11 @@
     else { g.fillStyle = "rgba(20,20,20,0.8)"; g.fillRect(0, 532, W, 188); typed("A CAT IS ASLEEP ON THE EVIDENCE.", 70, 588, 34, PAPER, t, B(5) + 0.7, 26); typed("HE WILL NOT BE RUSHED.", 70, 638, 34, YEL, t, B(7), 24); }
     var p = span(t, B(9) - 0.1, B(9)); if (p > 0) { g.fillStyle = "rgba(246,242,231," + p + ")"; g.fillRect(0, 0, W, H); }
   }
-  function cards(lt, dur, t) {                                 // 2. one human, a few machines, six cats
+  function cards(lt, dur, t) {                                 // 2. one human, three machines, six cats
     fill(PAPER);
     blot(1185, 105, 100, 7, INK, span(t, B(9), B(9) + 0.3)); blot(95, 640, 85, 21, RED, span(t, B(10), B(10) + 0.3)); blot(1200, 650, 62, 33, BLUE, span(t, B(11), B(11) + 0.3));
     text("WILLIAM GEORGE WORKS PRESENTS", 560, 96, 30, INK, DISP, "center", 4, 820);
-    slam("ONE HUMAN.", 640, 280, 150, INK, t, B(9), 0, 900); slam("A FEW MACHINES.", 640, 430, 150, RED, t, B(10), 0, 900); slam("SIX CATS.", 640, 580, 150, INK, t, B(11), 0, 900);
+    slam("ONE HUMAN.", 640, 280, 150, INK, t, B(9), 0, 900); slam("THREE MACHINES.", 640, 430, 150, RED, t, B(10), 0, 900); slam("SIX CATS.", 640, 580, 150, INK, t, B(11), 0, 900);
     hand("and not one of them in charge", 640, 668, 40, BLUE, span(t, B(12), B(12) + 0.25), -0.02, 800);
     var p = span(t, B(12, 3), B(12, 3) + 0.12); if (p > 0) { g.save(); g.translate(1066, 552); g.rotate(0.1 + (calm ? 0 : 0.03 * Math.sin(t * 40))); label("MIAOW.", 0, 0, 62, INK, PAPER, 0, p, 300); g.restore(); }
   }
