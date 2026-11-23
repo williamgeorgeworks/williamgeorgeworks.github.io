@@ -1510,7 +1510,53 @@ function drawFrame() {
   if (EMBED) ctx.restore();
 }
 
+function applyShareDemo() {
+  if (demoAppliedWorking) return;
+  const working = ["kenneth", "terry", "george", "percy", "tweety", "archie", "filament"];
+  const places = {
+    reggie: { x: 54, y: FLOOR_Y + 32, facing: "r", flavour: "Off to the kettle, diplomatically" },
+    frank: { x: 142, y: 592, facing: "l", flavour: "Frank's domain, the canteen" },
+    boris: { x: 222, y: 592, facing: "r", flavour: "Lunch, or the idea of lunch" },
+    oddly: { x: 174, y: 610, facing: "l", flavour: "A diplomatic bacon sandwich" },
+    brian: { x: 400, y: 580, facing: "r", flavour: "Brian's natural haunt" },
+    clive: { x: 510, y: 604, facing: "l", flavour: "Having a listen" }
+  };
+  people.forEach(p => {
+    p.target = null;
+    p.waypoints = [];
+    p.pendingDest = null;
+    if (working.includes(p.id)) {
+      setWant(p, "working");
+      p.x = p.desk.chairX;
+      p.y = p.desk.chairY;
+      p.phase = "working";
+      p.facing = "r";
+    } else {
+      setWant(p, "idle");
+      const spot = places[p.id];
+      if (spot) {
+        p.x = spot.x;
+        p.y = spot.y;
+        p.facing = spot.facing;
+        p.phase = "idle";
+        p.wait = 9999;
+        p.flavour = spot.flavour;
+      }
+    }
+  });
+  cats.forEach(c => {
+    c.target = null;
+    c.wait = 9999;
+  });
+  paintBoard();
+  demoAppliedWorking = true;
+}
+
 function applyDemo(now) {
+  if (DEMO === "share") {
+    applyShareDemo();
+    return;
+  }
   const george = people.find(p => p.id === "george");
   if (!george) return;
   if (DEMO === "working") {
@@ -1633,9 +1679,12 @@ function boot() {
   if (DEMO && demoNote) {
     demoNote.hidden = false;
     feedOffline = false;
+    if (DEMO === "share") {
+      demoNote.textContent = "Demo mode — a posed snapshot of the floor, for the share picture.";
+    }
   }
   buildBoard();
-  if (DEMO === "working" || DEMO === "celebrating" || DEMO === "1") applyDemo(DEMO === "1" ? 0 : 10);
+  if (DEMO === "working" || DEMO === "celebrating" || DEMO === "1" || DEMO === "share") applyDemo(DEMO === "1" ? 0 : 10);
   drawFrame();
   if (!DEMO) pullFeed();
   watchEmbedVisibility();
@@ -1643,3 +1692,71 @@ function boot() {
 }
 
 boot();
+
+function setupOfficeShare() {
+  const root = document.getElementById("office-share");
+  if (!root) return;
+  const pageUrl = "https://williamgeorgeworks.co.uk/office.html";
+  const title = "The virtual office | William George Works";
+  const text = "Have a nosy round the William George Works office: one human, two machines, six cats and a lot of bots.";
+  const message = text + " " + pageUrl;
+  const wa = document.getElementById("office-share-wa");
+  const x = document.getElementById("office-share-x");
+  const native = document.getElementById("office-share-native");
+  const copy = document.getElementById("office-share-copy");
+  const copied = document.getElementById("office-share-copied");
+  if (wa) {
+    wa.href = "https://wa.me/?text=" + encodeURIComponent(message);
+    wa.setAttribute("aria-label", "Share the office on WhatsApp");
+  }
+  if (x) {
+    x.href = "https://x.com/intent/post?text=" + encodeURIComponent(text) + "&url=" + encodeURIComponent(pageUrl);
+    x.setAttribute("aria-label", "Share the office on X");
+  }
+  const img = document.getElementById("office-share-image");
+  if (img) img.setAttribute("aria-label", "Open the office snapshot image");
+  if (native && typeof navigator.share === "function") {
+    native.hidden = false;
+    native.setAttribute("aria-label", "Share the office with this device");
+    native.addEventListener("click", function () {
+      navigator.share({ title: title, text: text, url: pageUrl }).catch(function () {});
+    });
+  }
+  if (copy) {
+    copy.setAttribute("aria-label", "Copy the link to the office");
+    copy.addEventListener("click", function () {
+      function done(ok) {
+        const label = ok ? "Copied!" : "Copy failed";
+        copy.textContent = label;
+        if (copied) {
+          copied.hidden = !ok;
+          copied.textContent = label;
+        }
+        setTimeout(function () {
+          copy.textContent = "Copy link";
+          if (copied) copied.hidden = true;
+        }, 1800);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(pageUrl).then(function () { done(true); }, function () { done(false); });
+        return;
+      }
+      try {
+        const t = document.createElement("textarea");
+        t.value = pageUrl;
+        t.setAttribute("readonly", "");
+        t.style.position = "fixed";
+        t.style.opacity = "0";
+        document.body.appendChild(t);
+        t.select();
+        const ok = document.execCommand("copy");
+        t.remove();
+        done(ok);
+      } catch (err) {
+        done(false);
+      }
+    });
+  }
+}
+
+setupOfficeShare();
