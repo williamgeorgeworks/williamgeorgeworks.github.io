@@ -153,3 +153,9 @@
 .cd.c-inkblot .art{background-image:url(cards/inkblot.jpg);background-position:45% 30%}
 .cd.c-sketch .art{background-image:url(cards/sketch.jpg);background-position:40% 30%}
 .cd.c-splatter .art{background-image:url(cards/splatter.jpg);background-position:45% 30%}
+/* Kenneth's starter cards: painted art (AI-generated from Kenneth's picture on williamgeorgeworks.co.uk; see README) */
+.cd.c-handshake .art,.cd.c-nod .art,.cd.c-whoinv .art{height:78px;background:#e9e2d4 center/cover no-repeat}
+.cd.c-handshake .art>*,.cd.c-nod .art>*,.cd.c-whoinv .art>*,.cd.c-handshake .art::before,.cd.c-nod .art::before,.cd.c-whoinv .art::before{display:none}
+.cd.c-handshake .art{background-image:url(cards/handshake.jpg);background-position:50% 30%}
+.cd.c-nod .art{background-image:url(cards/nod.jpg);background-position:45% 30%}
+.cd.c-whoinv .art{background-image:url(cards/whoinv.jpg);background-position:50% 30%}

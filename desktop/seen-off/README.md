@@ -113,14 +113,13 @@ State at end of 23 Nov 2026 (branch `archie/seen-off-dayout`, working copy `/wor
 
 1. **Done:** M2 complete (builds in `/workspace/seen-off-steam/dist/m2/`, not rebuilt since). M3 so far, web only, no desktop rebuild:
    Dexter recoloured to smoky black with a grey ruff; the shared inked card frame (owner tint, larger art window, owner type line,
-   Libre Caslon rules text, rarity crest); painted art on the six cat cards, Reggie's three starter cards and Terry's three starter cards.
-   Screenshots: `/workspace/seen-off-steam/shots/d1-01` to `d1-05-*.png`.
-2. **Tests:** `node tests/verify.js` (about 6 min; 201/201 passing on 23 Nov; `ONLY=m2d` etc. runs one section).
+   Libre Caslon rules text, rarity crest); painted art on the six cat cards and all three heroes' starter cards (Reggie, Terry, Kenneth;
+   nine cards). Screenshots: `/workspace/seen-off-steam/shots/d1-01` to `d1-06-*.png`.
+2. **Tests:** `node tests/verify.js` (about 6 min; 202/202 passing on 23 Nov; `ONLY=m2d` etc. runs one section).
    Playtest: `RUNS=6 node tools/playtest.js out.json`.
-3. **Suggested next chunk (small):** Kenneth's three starter cards (Firm Handshake `handshake`, Vague Nod `nod`, Who Invited Him? `whoinv`)
-   done the same way: use his portrait on williamgeorgeworks.co.uk as the reference (check the site for the correct file) and save it as
-   `../refs/kenneth-portrait.jpg`. One generation per card, crop to `web/cards/`, add the CSS block and a verify check, and add the files
-   to the AI content list. After that: the common reward cards each hero sees most, then a desktop rebuild into `dist/m3/` once the art is settled.
+3. **Suggested next chunk (small):** the most-seen common reward cards, three per hero per session, same method (refs in `../refs/`,
+   one generation each, crop to `web/cards/`, CSS block, verify check, add to the AI content list). Ask Ben whether a proper
+   `portraits/kenneth.jpg` is coming; if so, check the three Kenneth cards against it. Then a desktop rebuild into `dist/m3/` once the art settles.
 4. **Still open for M3 (from the M2 proposal):** real drawings for the 35 new enemies (still labelled PLACEHOLDER stand-ups); the other
    four places (Arcades & Bingo, the Winter Gardens, the B&B, the Old Pier); Daily Rules; legendary cards; a boss-health pass for later places.
 5. **Before release:** declare everything in the AI content list below in Steam's Content Survey.
@@ -155,20 +154,30 @@ head, red knob aerial, round bolt ears, red knitted waistcoat with watch chain, 
 and Reggie's Red Pen. Full images: `../mockups/card-ink-blot.jpg`, `card-sketchbook.jpg`, `card-splatter.jpg`; in-game crops:
 `web/cards/inkblot.jpg`, `sketch.jpg`, `splatter.jpg`. Generic unnamed tower and prom backdrop (tower sign is unreadable scribble). One generation each, no retries.
 
+### Kenneth's starter cards (23 Nov 2026)
+
+Firm Handshake, Vague Nod and Who Invited Him? (Kenneth's starter deck: 4 + 4 + 1) have painted art in the same style. The site has no
+`portraits/kenneth.*`; his only published picture is the Dead Air FM crew portrait (`games/dead-air-fm/art/crew/kenneth.webp`, 200 px),
+saved as `../refs/kenneth-portrait.jpg`: robot with a brown paper bag over his head (question mark and dot eyes drawn on), wire aerial
+with a brass tip, purple waistcoat with gold buttons, white shirt, dark tie, pocket square. It matches the in-game Kenneth. Style references:
+the Spyro card art and Terry's Ink Blot. Full images: `../mockups/card-firm-handshake.jpg`, `card-vague-nod.jpg`, `card-who-invited-him.jpg`;
+in-game crops: `web/cards/handshake.jpg`, `nod.jpg`, `whoinv.jpg`. Generic unnamed tower and prom (sign is scribble). One generation each, no retries.
+
 **Steam Content Survey, pre-generated AI content (definite; keep this list up to date):**
 - `web/cards/redpen.jpg`, `web/cards/cough.jpg`, `web/cards/invoice.jpg`: AI-generated (23 Nov 2026) from Reggie's portrait and our card style.
 - `web/cards/inkblot.jpg`, `web/cards/sketch.jpg`, `web/cards/splatter.jpg`: AI-generated (23 Nov 2026) from Terry's portrait and our card style.
+- `web/cards/handshake.jpg`, `web/cards/nod.jpg`, `web/cards/whoinv.jpg`: AI-generated (23 Nov 2026) from Kenneth's crew portrait and our card style.
 - `web/cats/*.jpg` (all six cat signature cards): crops of the cat card mockups in `../mockups/card-*.jpg`, which **were AI-generated**
   (from the cats' real photos). Declare them as pre-generated AI content.
 - The full-size sources of all of the above in `../mockups/`.
 
 ### Cards still needing real art
 
-Only the six cats' signature cards, Reggie's three starter cards (Red Pen, Polite Cough, Imaginary Invoice) and Terry's three (Ink Blot, Sketchbook, Splatter) have painted art. Every other card still shows its ink icon on the coloured panel (placeholder):
+Only the six cats' signature cards, Reggie's three starter cards (Red Pen, Polite Cough, Imaginary Invoice), Terry's three (Ink Blot, Sketchbook, Splatter) and Kenneth's three (Firm Handshake, Vague Nod, Who Invited Him?) have painted art. Every other card still shows its ink icon on the coloured panel (placeholder):
 
 - **Reggie (19):** Extra Tenner for the Y, Sales Patter, A Nice Little Earner, Fact Check, Line Edit, Itemised Bill, Compound Interest, Kindly Remit, Brave Face, My Old Son, Cartel Pricing, Rounding Up, Proofread, Final Demand, Wounded Dignity, Cash in Hand, VAT Inclusive, Late Payment Charge, The Bailiffs
 - **Terry (20):** Cross-Hatch, Theatrical Outrage, Wraparound Cover, Big Bold Title, Full Colour, Rough Draft, Frame Rate, Day One Purchase, Ink Wash, Quick Sketch, Splatter Storm, Two-Page Spread, Steady Hand, Reference Photo, Masterpiece, Scribble, Bleed Edge, Spot Colour, Letters to the Editor, Centre Spread
-- **Kenneth (22):** Firm Handshake, Vague Nod, Who Invited Him?, Unexplained Arrival, Says He Knows Terry, Friend of Reggie's, Cousin Once Removed, Nobody Asked, Mysterious Parcel, Turns Up Uninvited, Long Story, Open Invitation, Plus One, Wrong House, Changes the Subject, Coin Toss, Left Without Saying Goodbye, Air of Mystery, Minutes of the Meeting, Reply All, Delegated, Nobody Minuted It
+- **Kenneth (19):** Unexplained Arrival, Says He Knows Terry, Friend of Reggie's, Cousin Once Removed, Nobody Asked, Mysterious Parcel, Turns Up Uninvited, Long Story, Open Invitation, Plus One, Wrong House, Changes the Subject, Coin Toss, Left Without Saying Goodbye, Air of Mystery, Minutes of the Meeting, Reply All, Delegated, Nobody Minuted It
 - **Shared / clutter (6):** Form 27B, Mislaid Sock, Parking Ticket, Writer's Block, Unflattering Photo, Catchphrase
 
 ## What the desktop bundle changes
