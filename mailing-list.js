@@ -34,7 +34,9 @@
   f.appendChild(btn);
   var fine = document.createElement("p");
   fine.style.cssText = "font-size:16px;color:#5f5a4e;margin:14px 0 0";
-  fine.textContent = "Your address goes to our mailing service and is used only for news from William George Works. Signing up opens a confirmation page in a new tab, and every email has an unsubscribe link.";
+  fine.appendChild(document.createTextNode("Your address goes to our mailing service and is used only for news from William George Works. Signing up opens a confirmation page in a new tab, and every email has an unsubscribe link. The "));
+  var pl = document.createElement("a"); pl.href = "privacy.html"; pl.textContent = "privacy page"; fine.appendChild(pl);
+  fine.appendChild(document.createTextNode(" has the rest."));
   card.appendChild(f); card.appendChild(fine);
   wrap.appendChild(card); sec.appendChild(wrap); host.appendChild(sec);
 })();
