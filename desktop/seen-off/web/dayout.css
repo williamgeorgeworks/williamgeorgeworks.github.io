@@ -141,3 +141,9 @@
 .cd.c-requisition .art{background-image:url(cats/trixie.jpg)}
 .cd.c-boo .art{background-image:url(cats/dexter.jpg)}
 .cd.c-whome .art{background-image:url(cats/daisy.jpg)}
+/* Reggie's starter cards: painted art (AI-generated from Reggie's portrait on williamgeorgeworks.co.uk; see README) */
+.cd.c-redpen .art,.cd.c-cough .art,.cd.c-invoice .art{height:78px;background:#e9e2d4 center/cover no-repeat}
+.cd.c-redpen .art>*,.cd.c-cough .art>*,.cd.c-invoice .art>*,.cd.c-redpen .art::before,.cd.c-cough .art::before,.cd.c-invoice .art::before{display:none}
+.cd.c-redpen .art{background-image:url(cards/redpen.jpg);background-position:50% 30%}
+.cd.c-cough .art{background-image:url(cards/cough.jpg);background-position:55% 30%}
+.cd.c-invoice .art{background-image:url(cards/invoice.jpg);background-position:55% 30%}

@@ -130,11 +130,22 @@ animation delays). Scripts keep Tauri's CSP handling; the policy still allows on
 * **The six cats' signature cards show their mockup art full width** (`web/cats/*.jpg`, 480 px crops of `../mockups/card-*.jpg`;
   `old-card-royal-decree-reggie.jpg` not used).
 
+### Reggie's starter cards (23 Nov 2026)
+
+Red Pen, Polite Cough and Imaginary Invoice (the three cards in Reggie's starter deck: 4 + 4 + 1) have painted art in the cat-card style.
+Reggie was drawn from his portrait on williamgeorgeworks.co.uk (`portraits/reggie.jpg`, saved as `../refs/reggie-portrait.jpg`),
+passed as a reference image along with the Spyro card art for style. Full images: `../mockups/card-red-pen.jpg`, `card-polite-cough.jpg`,
+`card-imaginary-invoice.jpg`; in-game crops: `web/cards/*.jpg`. The backdrop tower is generic and unnamed (its sign is unreadable scribble).
+
+**Steam Content Survey, pre-generated AI content (keep this list up to date):**
+- `web/cards/redpen.jpg`, `web/cards/cough.jpg`, `web/cards/invoice.jpg`: AI-generated (23 Nov 2026) from Reggie's portrait and our card style.
+- `web/cats/*.jpg`: crops of the cat card mockups in `../mockups/`; declare them too if they were made with AI image tools.
+
 ### Cards still needing real art
 
-Only the six cats' signature cards have painted art. Every other card still shows its ink icon on the coloured panel (placeholder):
+Only the six cats' signature cards and Reggie's three starter cards (Red Pen, Polite Cough, Imaginary Invoice) have painted art. Every other card still shows its ink icon on the coloured panel (placeholder):
 
-- **Reggie (22):** Red Pen, Polite Cough, Imaginary Invoice, Extra Tenner for the Y, Sales Patter, A Nice Little Earner, Fact Check, Line Edit, Itemised Bill, Compound Interest, Kindly Remit, Brave Face, My Old Son, Cartel Pricing, Rounding Up, Proofread, Final Demand, Wounded Dignity, Cash in Hand, VAT Inclusive, Late Payment Charge, The Bailiffs
+- **Reggie (19):** Extra Tenner for the Y, Sales Patter, A Nice Little Earner, Fact Check, Line Edit, Itemised Bill, Compound Interest, Kindly Remit, Brave Face, My Old Son, Cartel Pricing, Rounding Up, Proofread, Final Demand, Wounded Dignity, Cash in Hand, VAT Inclusive, Late Payment Charge, The Bailiffs
 - **Terry (23):** Ink Blot, Sketchbook, Splatter, Cross-Hatch, Theatrical Outrage, Wraparound Cover, Big Bold Title, Full Colour, Rough Draft, Frame Rate, Day One Purchase, Ink Wash, Quick Sketch, Splatter Storm, Two-Page Spread, Steady Hand, Reference Photo, Masterpiece, Scribble, Bleed Edge, Spot Colour, Letters to the Editor, Centre Spread
 - **Kenneth (22):** Firm Handshake, Vague Nod, Who Invited Him?, Unexplained Arrival, Says He Knows Terry, Friend of Reggie's, Cousin Once Removed, Nobody Asked, Mysterious Parcel, Turns Up Uninvited, Long Story, Open Invitation, Plus One, Wrong House, Changes the Subject, Coin Toss, Left Without Saying Goodbye, Air of Mystery, Minutes of the Meeting, Reply All, Delegated, Nobody Minuted It
 - **Shared / clutter (6):** Form 27B, Mislaid Sock, Parking Ticket, Writer's Block, Unflattering Photo, Catchphrase

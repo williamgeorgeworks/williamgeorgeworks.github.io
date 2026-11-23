@@ -302,7 +302,7 @@ async function m2a(browser, port) {
   const bill = await ev(() => { const b = document.querySelector('.so-bill'); return b ? b.textContent : ''; });
   ok(`${tag} TONIGHT ONLY bill before the boss`, /Tonight only/i.test(bill) && /Last Tram/i.test(bill), bill);
   await page.screenshot({ path: `${SHOTS}/m2-01-boss-bill.png` });
-  await ev(() => { const B = __SO.B(); B.energy = 99; B.en.forEach(e => { e.hp = 1; e.block = 0; }); const i = B.hand.findIndex(c => __SO.playable(c) && __SO.CARDS[c.id].type === 'A'); __SO.act('card', i); if (__SO.CARDS[B.hand[i].id].o.t) __SO.act('enemy', 0); else __SO.act('card', i); });
+  await ev(() => { const B = __SO.B(); B.energy = 99; B.en.forEach(e => { e.hp = 1; e.block = 0; }); if (!B.hand.some(c => __SO.playable(c) && __SO.CARDS[c.id].type === 'A')) B.hand.push({ id: 'redpen', u: 0 }); const i = B.hand.findIndex(c => __SO.playable(c) && __SO.CARDS[c.id].type === 'A'); __SO.act('card', i); if (__SO.CARDS[B.hand[i].id].o.t) __SO.act('enemy', 0); else __SO.act('card', i); });
   for (let i = 0; i < 60 && !(await ev(() => __SO.S.scr === 'reward' && !__SO.beating())); i++) await sleep(100);
   await sleep(1200);
   ok(`${tag} boss reward heading names the place`, /The Prom is yours/.test(await ev(() => document.querySelector('.panel h2').textContent)));
@@ -463,6 +463,7 @@ async function m2d(browser, port) {
   ok(`${tag} card frame: tinted by owner`, await ev(() => getComputedStyle(document.querySelector('.c-boo'), '::before').borderTopColor === 'rgb(36, 86, 230)'));
   ok(`${tag} card frame: rules text in Libre Caslon Text`, await ev(async () => { await document.fonts.ready; return /Libre Caslon Text/.test(getComputedStyle(document.querySelector('.cd .tx')).fontFamily) && document.fonts.check('12px "Libre Caslon Text"'); }));
   ok(`${tag} card frame: cat art window is the large one`, await ev(() => document.querySelector('.c-decree .art').getBoundingClientRect().height >= 70));
+  ok(`${tag} Reggie's starter cards show their painted art`, await ev(async () => { const B = __SO.B(); B.hand = ['redpen', 'cough', 'invoice'].map(id => ({ id, u: 0 })); __SO.render(); await new Promise(r => setTimeout(r, 900)); return ['redpen', 'cough', 'invoice'].every(id => /cards\/(redpen|cough|invoice)\.jpg/.test(getComputedStyle(document.querySelector('.c-' + id + ' .art')).backgroundImage)); }));
   ok(`${tag} cat art files load`, loaded.every(w => w >= 300), loaded.join(','));
   ok(`${tag} hand with cat cards fits, nothing clips`, await ev(() => document.documentElement.scrollHeight <= innerHeight));
   await page.screenshot({ path: `${SHOTS}/m2-09-cat-cards.png` });
