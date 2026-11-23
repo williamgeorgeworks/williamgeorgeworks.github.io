@@ -4,7 +4,7 @@
   var box = document.getElementById("weekbest");
   if (!box || !window.fetch) return;
   var gaming = /gaming\.html/.test(location.pathname);
-  var WORKER = "https://arcade-scores.benharding75.workers.dev";
+  var WORKER = "https://arcade-scores.williamgeorgeworks.workers.dev";
   function el(t, c, x) { var e = document.createElement(t); if (c) e.className = c; if (x != null) e.textContent = x; return e; }
   function ukDate(d) { try { return new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/London" }).format(d); } catch (e) { return d.toISOString().slice(0, 10); } }
   var cutoff = ukDate(new Date(Date.now() - 6 * 86400000));

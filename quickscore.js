@@ -2,7 +2,7 @@
    arcade.html?game=SLUG&score=N) and puts a small name box and button under it, so a player
    can lodge a score without leaving the game. The arcade form remains as the fallback. */
 (function(){
-  var WORKER='https://arcade-scores.benharding75.workers.dev';
+  var WORKER='https://arcade-scores.williamgeorgeworks.workers.dev';
   if(!window.fetch||!window.MutationObserver)return;
   var css=document.createElement('style');
   css.textContent='.wgw-qs{display:block;box-sizing:border-box;max-width:380px;margin:12px auto;padding:10px 12px;background:#fff;color:#141414;border:3px solid #141414;font:16px/1.35 system-ui,sans-serif;text-align:left}'+

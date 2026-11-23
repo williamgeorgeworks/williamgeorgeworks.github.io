@@ -1,7 +1,7 @@
 /* Reggie's message board: shows board.json, and sends new messages to the Worker. All text goes in as text. */
 (function () {
   "use strict";
-  var WORKER = "https://arcade-scores.benharding75.workers.dev";
+  var WORKER = "https://arcade-scores.williamgeorgeworks.workers.dev";
   var list = document.getElementById("bd-list");
   function el(t, c, x) { var e = document.createElement(t); if (c) e.className = c; if (x != null) e.textContent = x; return e; }
   var MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];

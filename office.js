@@ -3,7 +3,7 @@
 
 /* Paste the Worker address here after Kenneth deploys it, then open a follow-up PR
    (or tell George the address). Leave it empty to stay in friendly offline mode. */
-const OFFICE_FEED_URL = "https://wgw-office-feed.benharding75.workers.dev";
+const OFFICE_FEED_URL = "https://wgw-office-feed.williamgeorgeworks.workers.dev";
 
 const POLL_MS = 60000;
 
