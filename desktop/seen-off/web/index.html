@@ -287,7 +287,7 @@ button{font:inherit;cursor:pointer}
       </div>
     </section>
   </div>
-  <p class="foot" id="dkFoot">The tune is a new one, a waltz for the end of the pier. Everything is drawn in code, in the ink of our books, with the Lights switched on. Reggie and Terry appear as themselves. Kenneth is the third Quill: he comes from the Cloud, where he is the Ferret&rsquo;s chief of staff. He appears with a bag on his head because nobody has drawn him yet. The game has nothing to do with any other card game. No seagulls were slain. They were seen off, and they will be back.</p>
+  <p class="foot" id="dkFoot">The tune is a new one, a waltz for the end of the pier. Everything is drawn in code, in the ink of our books, with the Lights switched on. Reggie and Terry appear as themselves. Kenneth is the third Quill: he comes from the Cloud, where he is the Ferret&rsquo;s chief of staff. He has finally been drawn, cap, feather, glasses and all, and has asked for it to be minuted. The game has nothing to do with any other card game. No seagulls were slain. They were seen off, and they will be back.</p>
 </div>
 
 <script>
@@ -677,7 +677,7 @@ function dayReport(won,pts){
   var c=RUN.cats[0]?CATS[RUN.cats[0]].name:'Nobody',pl=RUN.stage?STAGES[RUN.stage].n:'the Prom',by=B&&!won?(B.en.filter(function(e){return !e.dead;}).map(function(e){return e.name;})[0]||'Something'):'';
   var note={r:won?'Weather fair. Invoiced '+RUN.stats.kills+' of them. '+c+' ruled against the milk. Wish you were here, but not on my account.':'Got as far as '+pl+'. '+by+' saw me off, and will be hearing from me. '+c+' has kept the receipts.',
     t:won?'Hit everything. Most of it deserved it. '+c+' said nothing all day, which I respect. Back next week.':'Got as far as '+pl+'. '+by+' had the better of it. '+c+' looked away. I will be back. They always say that.',
-    k:won?'Day out logged. '+RUN.stats.kills+' incidents, all resolved. '+c+' has been added to the org chart. The bag is staying on.':'Day out paused at '+pl+'. '+by+' has been escalated. '+c+' is drafting the minutes.'}[RUN.hero];
+    k:won?'Day out logged. '+RUN.stats.kills+' incidents, all resolved. '+c+' has been added to the org chart. The feather is staying in.':'Day out paused at '+pl+'. '+by+' has been escalated. '+c+' is drafting the minutes.'}[RUN.hero];
   return {won:won,firstWin:firstWin,first:first,note:note,places:RUN.day.slice(),kills:RUN.stats.kills,combo:RUN.stats.combo,spent:RUN.stats.spent,cards:RUN.stats.cards,fights:RUN.stats.fights,
     left:RUN.gold,newp:RUN.stats.newp,daily:dly,rock0:before,rock1:DAY.rock,s0:s0,got:got,bonus:bonus,why:why,whole:RUN.part>=5};
 }
@@ -1062,12 +1062,15 @@ function drawQuill(kind,r,t){
   if(kind==='r')quill(hx+2,hy-2,.5+hr);
   else{ctx.save();ctx.translate(hx,hy);ctx.rotate(hr);
     if(kind==='t'){line([0,4,10,-30],4,COL.ink);line([0,4,10,-30],1.8,'#b98a4e');smooth(blob(12,-36,6,7,7,.5,r));ctx.fillStyle=COL.ink;ctx.fill();}
-    else if(!(POSEON&&TNOW>=KREL&&TNOW<KHIDE)){rect(-9,-16,20,16,'#c9a36b',2);line([1,-16,1,0],1.4);line([-9,-8,11,-8],1.4);}
+    else{/* Kenneth: a red quill (the parcel he lobs is drawn by the attack animation) */
+      ctx.beginPath();ctx.moveTo(0,4);ctx.quadraticCurveTo(-12,-20,-2,-44);ctx.quadraticCurveTo(12,-22,0,4);ink(COL.red,1.8);line([0,6,-1,-40],1.4,COL.ink);
+      [-30,-22,-14].forEach(function(y){line([-1,y,-7,y+5],1,COL.ink);});}
     ctx.restore();}
-  poly([-22,-76,22,-76,18,-33,-18,-33],kind==='k'?COL.purple:COL.red,2.4);
+  poly([-22,-76,22,-76,18,-33,-18,-33],kind==='k'?'#24232a':COL.red,2.4);
   poly([-7,-76,7,-76,0,-52],'#fff',1.8);
-  if(kind==='r')poly([-8,-74,8,-68,8,-74,-8,-68],COL.ink,1.2);else poly([-3,-74,3,-74,4,-58,0,-53,-4,-58],kind==='k'?'#2c2c33':COL.ink,1.2);
+  if(kind==='r')poly([-8,-74,8,-68,8,-74,-8,-68],COL.ink,1.2);else poly([-3,-74,3,-74,4,-58,0,-53,-4,-58],kind==='k'?COL.red:COL.ink,1.2);
   ctx.fillStyle=COL.gold;[-46,-39].forEach(function(y){ell(0,y,1.9,1.9);ctx.fill();});
+  if(kind==='k'){ell(11,-62,4.2,4.2);ink(COL.red,1.4);ctx.fillStyle='#fff';ctx.font='bold 6px '+FONT_D;ctx.textAlign='center';ctx.fillText('Q',11,-59.8);}
   rect(-4,-84,8,9,COL.steel,2);
   if(kind==='r'){
     line([-6,-124,-9,-136],2);line([6,-124,9,-136],2);ell(-9,-138,2.6,2.6);ink(COL.metal,1.6);ell(9,-138,2.6,2.6);ink(COL.metal,1.6);
@@ -1082,10 +1085,17 @@ function drawQuill(kind,r,t){
     ell(-21,-106,3.5,5);ink(COL.steel,1.8);ell(21,-106,3.5,5);ink(COL.steel,1.8);
     eyes(0,-109,8,6.5);ctx.beginPath();ctx.arc(0,-99,8,.15,Math.PI-.15);ctx.strokeStyle=COL.ink;ctx.lineWidth=2;ctx.stroke();
   }else{
-    line([5,-124,12,-136,20,-134],2);ell(21,-134,2.6,2.6);ink(COL.metal,1.6);
-    poly([-17,-86,17,-86,19,-126,13,-122,8,-127,2,-122,-4,-127,-10,-122,-19,-126],'#c9a36b',2.4);
-    if(blink()){line([-10,-107,-4,-107],2.2);line([4,-107,10,-107],2.2);}else{ell(-7,-108,3,4);ctx.fillStyle=COL.ink;ctx.fill();ell(7,-108,3,4);ctx.fill();}
-    ctx.fillStyle=COL.ink;ctx.font='16px '+FONT_M;ctx.textAlign='center';ctx.fillText('?',0,-91);
+    /* Kenneth, from his portrait: boxy cream head, round glasses, black cap with a red feather, ear-pieces with a red Q */
+    ctx.beginPath();if(ctx.roundRect)ctx.roundRect(-18,-122,36,36,5);else ctx.rect(-18,-122,36,36);ink('#f1ead6',2.4);
+    ctx.fillStyle=COL.ink;[[-13,-91],[13,-91],[-13,-117],[13,-117]].forEach(function(q){ell(q[0],q[1],1.1,1.1);ctx.fill();});
+    [-1,1].forEach(function(sd){ell(sd*21,-104,4.5,6);ink(COL.steel,1.8);ell(sd*21,-104,2.4,3.2);ink(COL.red,1);});
+    [-1,1].forEach(function(sd){ell(sd*7.5,-106,6,6);ink('#fff',2);});line([-1.5,-106,1.5,-106],1.6);
+    if(blink()){line([-10,-105.5,-5,-105.5],2);line([5,-105.5,10,-105.5],2);}else{ctx.fillStyle=COL.ink;ell(-6.5,-105,2,2.4);ctx.fill();ell(8.5,-105,2,2.4);ctx.fill();}
+    line([-12,-115,-4,-113],1.8);line([4,-114,12,-116],1.8);
+    ctx.beginPath();ctx.moveTo(-6,-95);ctx.quadraticCurveTo(1,-90,8,-96);ctx.strokeStyle=COL.ink;ctx.lineWidth=1.8;ctx.stroke();
+    ctx.beginPath();ctx.moveTo(-22,-119);ctx.quadraticCurveTo(-20,-136,0,-137);ctx.quadraticCurveTo(22,-136,24,-121);ctx.closePath();ink('#24232a',2.2);
+    ctx.beginPath();ctx.ellipse(1,-120,25,4,0,0,Math.PI*2);ink('#1a1a1f',2);line([-12,-131,10,-133],1.2,COL.red);
+    ctx.save();ctx.translate(-15,-128);ctx.rotate(-.9);ctx.beginPath();ctx.moveTo(0,0);ctx.quadraticCurveTo(-6,-12,0,-24);ctx.quadraticCurveTo(7,-12,0,0);ink(COL.red,1.6);line([0,1,0,-21],1.1);ctx.restore();
   }
   ctx.restore();
 }

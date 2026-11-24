@@ -169,8 +169,9 @@ Full images: `../mockups/card-firm-handshake.jpg`, `card-vague-nod.jpg`, `card-w
 These replace the 23 Nov versions drawn from the Dead Air FM paper-bag crew picture (kept for the record in
 `../mockups/old-kenneth-paperbag/`, not shipped).
 
-**Kenneth's in-game sprite** (`drawQuill()` in `web/index.html`, the `else` branch) is still the paper-bag robot in a purple waistcoat
-and is now out of step with his portrait and cards; see "Where to pick up next time".
+**Kenneth's in-game sprite** (`drawQuill()` in `web/index.html`, the `else` branch) was redrawn on 24 Nov to match the portrait:
+boxy cream head, round glasses, black cap with a red feather, red-Q ear-pieces, black waistcoat with a red Q badge, red tie, red quill in
+hand (his attack still lobs a parcel). His UI colour stays purple `#7a3ff0` until Ben decides. Credits and report lines rewritten to suit.
 
 **Steam Content Survey, pre-generated AI content (definite; keep this list up to date):**
 - `web/cards/redpen.jpg`, `web/cards/cough.jpg`, `web/cards/invoice.jpg`: AI-generated (23 Nov 2026) from Reggie's portrait and our card style.
