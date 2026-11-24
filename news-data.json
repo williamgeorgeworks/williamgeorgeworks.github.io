@@ -1,6 +1,65 @@
 {
  "editions": [
   {
+   "date": "2026-11-24",
+   "title": "A Black Friday That Is Nearly Normal, A Nation Rated Minus Twenty-Two, A Tart Shaped Like Tradition And A Soap Opera On A Train",
+   "standfirst": "Five stories from Terry and Reggie, all drawn from real news of the last few days. Everything in big type is made up. Everything in the boxes is real.",
+   "stories": [
+    {
+     "kicker": "Shopping",
+     "headline": "Black Friday Forecast To Be Back On Form; Wallets Told To Stretch Before The Big Day",
+     "satire": "A forecast says the nation is about to spend a great deal on a Friday that already has its own name, which is a lot of faith to place in a day that began as a piece of advice to stay at home. Somewhere a basket has been quietly filled in October and left to marinate. Terry has sworn he is only looking, in the voice of a man who has already pressed the button. Reggie is offering a doorstep Black Friday that runs all year, my old son, with prices that go down just before you do.",
+     "real": "PwC forecasts that UK consumers will spend £6.6bn on Black Friday, up 40% on last year's £4.6bn and below the 2019 record of £7.9bn. It says interest in the event has risen to 53% from 46% last year, with average planned spend of £235 per person.",
+     "source": {
+      "name": "PwC UK",
+      "url": "https://www.pwc.co.uk/press-room/press-releases/research-commentary/2026/uk-consumers-forecast-to-spend-p6-6bn-this-black-friday-as-shopp.html"
+     }
+    },
+    {
+     "kicker": "Mood",
+     "headline": "National Mood Rated Minus Twenty-Two; Index Gives It Two Points And A Pat On The Back",
+     "satire": "The country's confidence has gone up by two points, which is the sort of improvement a person might notice only if they were checking the dial very closely and holding a lamp. The number is still below zero, so the nation has risen from a deep puddle to a slightly shallower puddle. Terry has declared this a triumph and held a small parade for the two points. Reggie is selling single points in jars, my old son, with a certificate, and a second jar free if you promise not to count them.",
+     "real": "GfK's UK Consumer Confidence Index rose two points to -22 in November, after a reading of -24 in October. The survey of 2,009 adults aged 16 and over was carried out in the first half of the month.",
+     "source": {
+      "name": "NIQ / GfK",
+      "url": "https://nielseniq.com/global/en/news-center/2026/consumer-confidence-up-two-points-to-22-in-november/"
+     }
+    },
+    {
+     "kicker": "Food",
+     "headline": "Festive Tart Costs Two Pounds Fifty; Biscuit Tin Industry Eyes The Calendar Nervously",
+     "satire": "The Christmas food launches have arrived in force, and they come with novelty tarts, sharing cake bites and yule logs priced like small pieces of furniture. Somewhere a person has decided that a log is a log and has been told, gently, that this one has a luxury finish. Terry has bought a tart and a second tart to check the first one. Reggie is selling a yule log you may sit on, my old son, and a mince pie with its own invoice.",
+     "real": "Bakery and Snacks reports that Mr Kipling has launched festive novelty tarts at £2.50 each and sharing cake bites at £3.90. It says Paul is selling premium yule logs from £23.95 and that American Pecans has 150g caramelised pecan packs at Tesco for £3.",
+     "source": {
+      "name": "Bakery and Snacks",
+      "url": "https://www.bakeryandsnacks.com/Article/2026/11/23/christmas-2026-npd-mr-kipling-american-pecans-paul-and-more/"
+     }
+    },
+    {
+     "kicker": "Culture",
+     "headline": "Chemist Launches Soap Opera On A Festive Train; Nation Braces For Cliffhanger At The Next Station",
+     "satire": "A high street chemist has made a drama in six short parts, set on a train, and the plot is expected to rattle along at the speed of a thumb. Somewhere a commuter has already worked out who dunnit and is unable to tell anybody because the train has no signal. Terry has watched episode one standing up and wept at the carriage doors. Reggie has written a pilot of his own, my old son, set on a bus, with a cliffhanger that depends on the fare.",
+     "real": "Retail Times reports that Superdrug has launched a six-part Christmas microdrama series on Instagram Reels and TikTok, set on a festive train. It says two episodes will be released each week and that the series is a first for UK health and beauty retail.",
+     "source": {
+      "name": "Retail Times",
+      "url": "https://retailtimes.co.uk/superdrug-launches-microdrama-series/"
+     }
+    },
+    {
+     "kicker": "Daft",
+     "headline": "Supermarket Promises Up To A Hundred Pounds Back Every Day In December; Postman Eyes The Envelopes",
+     "satire": "A supermarket is giving one lucky shopper up to £100 towards the Christmas shop on each day of the countdown, which turns a crumpled receipt from the bottom of a bag into a lottery ticket with a pudding on it. Somewhere a person is already smoothing out a receipt under a heavy book. Terry has kept every receipt since August in a shoebox that is now a small archive. Reggie is offering to store yours for a modest fee, my old son, and to find it again just after the closing date.",
+     "real": "Retail Times reports that Aldi's Advent Giveaway runs from 1 December until Christmas Eve, with one random winner each day winning up to £100 towards their Christmas shop. It says entrants email their name, county and an Aldi receipt.",
+     "source": {
+      "name": "Retail Times",
+      "url": "https://retailtimes.co.uk/aldi-to-give-shoppers-the-chance-to-win-back-their-christmas-food-shop/"
+     }
+    }
+   ],
+   "terry": "And that's the news, ladies and gentlemen, five stories today, each one rooted in something real! A Friday that is nearly back to normal, a nation up two points, a tart with ambitions, a soap opera on rails and a receipt worth keeping. The big print is all ours, the boxes underneath are the truth. Join us tomorrow for more!",
+   "reggie": "Five stories, my old son, and I have invoiced you for every one, payable in jars of single points and one yule log you may sit on. Big type is invention, the boxes are gospel, and my fee is one smoothed-out receipt, a nice little earner. Mind how you go."
+  },
+  {
    "date": "2026-11-23",
    "title": "A Tin Of Beans In Every Basket, A Bear For Nine Pounds And Paint That Arrives Before The Kettle Boils",
    "standfirst": "Four stories from Terry and Reggie, all drawn from real news of the last few days. Everything in big type is made up. Everything in the boxes is real.",
