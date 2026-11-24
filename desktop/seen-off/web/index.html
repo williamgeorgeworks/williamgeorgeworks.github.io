@@ -1063,8 +1063,9 @@ function drawQuill(kind,r,t){
   else{ctx.save();ctx.translate(hx,hy);ctx.rotate(hr);
     if(kind==='t'){line([0,4,10,-30],4,COL.ink);line([0,4,10,-30],1.8,'#b98a4e');smooth(blob(12,-36,6,7,7,.5,r));ctx.fillStyle=COL.ink;ctx.fill();}
     else{/* Kenneth: a red quill (the parcel he lobs is drawn by the attack animation) */
-      ctx.beginPath();ctx.moveTo(0,4);ctx.quadraticCurveTo(-12,-20,-2,-44);ctx.quadraticCurveTo(12,-22,0,4);ink(COL.red,1.8);line([0,6,-1,-40],1.4,COL.ink);
-      [-30,-22,-14].forEach(function(y){line([-1,y,-7,y+5],1,COL.ink);});}
+      ctx.beginPath();ctx.moveTo(0,-4);ctx.quadraticCurveTo(-6,-24,-1,-46);ctx.quadraticCurveTo(6,-26,0,-4);ink('#f5ecd2',1.5);
+      line([0,0,-.6,-42],1.1,COL.ink);[-34,-27,-20].forEach(function(y){line([-.5,y,-4,y+4],.8,COL.ink);line([-.3,y,3,y+4],.8,COL.ink);});
+      poly([-1.6,-4,1.6,-4,0,6],COL.ink,1);}
     ctx.restore();}
   poly([-22,-76,22,-76,18,-33,-18,-33],kind==='k'?'#24232a':COL.red,2.4);
   poly([-7,-76,7,-76,0,-52],'#fff',1.8);
@@ -1093,9 +1094,11 @@ function drawQuill(kind,r,t){
     if(blink()){line([-10,-105.5,-5,-105.5],2);line([5,-105.5,10,-105.5],2);}else{ctx.fillStyle=COL.ink;ell(-6.5,-105,2,2.4);ctx.fill();ell(8.5,-105,2,2.4);ctx.fill();}
     line([-12,-115,-4,-113],1.8);line([4,-114,12,-116],1.8);
     ctx.beginPath();ctx.moveTo(-6,-95);ctx.quadraticCurveTo(1,-90,8,-96);ctx.strokeStyle=COL.ink;ctx.lineWidth=1.8;ctx.stroke();
-    ctx.beginPath();ctx.moveTo(-22,-119);ctx.quadraticCurveTo(-20,-136,0,-137);ctx.quadraticCurveTo(22,-136,24,-121);ctx.closePath();ink('#24232a',2.2);
-    ctx.beginPath();ctx.ellipse(1,-120,25,4,0,0,Math.PI*2);ink('#1a1a1f',2);line([-12,-131,10,-133],1.2,COL.red);
-    ctx.save();ctx.translate(-15,-128);ctx.rotate(-.9);ctx.beginPath();ctx.moveTo(0,0);ctx.quadraticCurveTo(-6,-12,0,-24);ctx.quadraticCurveTo(7,-12,0,0);ink(COL.red,1.6);line([0,1,0,-21],1.1);ctx.restore();
+    /* flat cap: low, wide, flat-topped crown with a short peak over the brow */
+    ctx.beginPath();ctx.moveTo(-23,-119);ctx.quadraticCurveTo(-24,-128,-17,-130);ctx.lineTo(19,-131);ctx.quadraticCurveTo(26,-129,24,-119);ctx.closePath();ink('#24232a',2.2);
+    line([-2,-130,0,-121],1,'#4a4852');
+    ctx.beginPath();ctx.moveTo(-15,-120);ctx.quadraticCurveTo(2,-111,19,-120);ctx.closePath();ink('#1a1a1f',1.8);line([-14,-127,16,-128],1.2,COL.red);
+    ctx.save();ctx.translate(-16,-126);ctx.rotate(-1.1);ctx.beginPath();ctx.moveTo(0,0);ctx.quadraticCurveTo(-6,-12,0,-24);ctx.quadraticCurveTo(7,-12,0,0);ink(COL.red,1.6);line([0,1,0,-21],1.1);ctx.restore();
   }
   ctx.restore();
 }

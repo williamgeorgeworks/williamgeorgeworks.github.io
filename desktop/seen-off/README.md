@@ -113,13 +113,14 @@ State at end of 23 Nov 2026 (branch `archie/seen-off-dayout`, working copy `/wor
 
 1. **Done:** M2 complete (builds in `/workspace/seen-off-steam/dist/m2/`, not rebuilt since). M3 so far, web only, no desktop rebuild:
    Dexter recoloured; the shared inked card frame (owner tint, larger art window, owner type line, Libre Caslon rules text, rarity crest);
-   painted art on 21 cards: the six cat cards, all nine hero starter cards (Kenneth's redone 24 Nov from his portrait) and six reward
-   commons (two per hero). Kenneth's sprite redrawn to match his portrait (UI colour still purple). Screenshots: `shots/d1-*`, `d2-*.png`.
-2. **Tests:** `node tests/verify.js` (about 6 min; 203/203 passing on 24 Nov; `ONLY=m2d` etc. runs one section).
+   painted art on 27 cards: the six cat cards, all nine hero starter cards (Kenneth's redone 24 Nov from his portrait) and twelve base
+   commons (four per hero). Kenneth's sprite redrawn to match his portrait (flat cap, glasses, quill; UI colour still purple).
+   Screenshots: `shots/d1-*`, `d2-*.png`.
+2. **Tests:** `node tests/verify.js` (about 6 min; 204/204 passing on 24 Nov; `ONLY=m2d` etc. runs one section).
    Playtest: `RUNS=6 node tools/playtest.js out.json`.
-3. **Suggested next chunk (small):** the remaining base commons, two per hero again (Reggie: Sales Patter, Line Edit; Terry: Full Colour,
-   Big Bold Title; Kenneth: Nobody Asked, Says He Knows Terry), same method. Ben to decide Kenneth's UI colour (purple or black).
-   Then the uncommons, and a desktop rebuild into `dist/m3/` once the art settles.
+3. **Suggested next chunk (small):** the last base commons: Reggie Extra Tenner for the Y, Brave Face, Proofread; Terry Wraparound Cover,
+   Ink Wash, Quick Sketch, Reference Photo; Kenneth Friend of Reggie's, Cousin Once Removed, Turns Up Uninvited (10 cards, or split in two).
+   Ben to decide Kenneth's UI colour (purple or black). Then the uncommons, and a desktop rebuild into `dist/m3/` once the art settles.
 4. **Still open for M3 (from the M2 proposal):** real drawings for the 35 new enemies (still labelled PLACEHOLDER stand-ups); the other
    four places (Arcades & Bingo, the Winter Gardens, the B&B, the Old Pier); Daily Rules; legendary cards; a boss-health pass for later places.
 5. **Before release:** declare everything in the AI content list below in Steam's Content Survey.
@@ -180,22 +181,32 @@ One generation each, no retries. Full images `../mockups/card-kindly-remit.jpg`,
 `card-rough-draft.jpg`, `card-unexplained-arrival.jpg`, `card-changes-the-subject.jpg`; crops in `web/cards/` (`remit`, `factcheck`,
 `crosshatch`, `roughdraft`, `arrival`, `subject`).
 
+### Second batch of base commons (24 Nov 2026)
+
+Same method, two more base-pool commons per hero: **Reggie** Sales Patter, Line Edit; **Terry** Full Colour, Big Bold Title;
+**Kenneth** Nobody Asked, Says He Knows Terry (Kenneth with Terry, both from their portraits). One generation each, no retries.
+Generic prom, unnamed tower, no trade marks (Big Bold Title's block is a plain giant ink letter shape, no word). Full images
+`../mockups/card-sales-patter.jpg`, `card-line-edit.jpg`, `card-full-colour.jpg`, `card-big-bold-title.jpg`, `card-nobody-asked.jpg`,
+`card-says-he-knows-terry.jpg`; crops in `web/cards/` (`patter`, `lineedit`, `fullcolour`, `bigtitle`, `nobody`, `knowsterry`).
+Same chunk: Kenneth's sprite cap redrawn as a flat cap (low flat crown, short peak) and his quill as a thin cream feather with a nib.
+
 **Steam Content Survey, pre-generated AI content (definite; keep this list up to date):**
 - `web/cards/redpen.jpg`, `web/cards/cough.jpg`, `web/cards/invoice.jpg`: AI-generated (23 Nov 2026) from Reggie's portrait and our card style.
 - `web/cards/inkblot.jpg`, `web/cards/sketch.jpg`, `web/cards/splatter.jpg`: AI-generated (23 Nov 2026) from Terry's portrait and our card style.
 - `web/cards/handshake.jpg`, `web/cards/nod.jpg`, `web/cards/whoinv.jpg`: AI-generated (24 Nov 2026) from Kenneth's portrait (sent by Ben) and our card style.
 - `web/cards/remit.jpg`, `factcheck.jpg`, `crosshatch.jpg`, `roughdraft.jpg`, `arrival.jpg`, `subject.jpg`: AI-generated (24 Nov 2026) from the three heroes' portraits and our card style.
+- `web/cards/patter.jpg`, `lineedit.jpg`, `fullcolour.jpg`, `bigtitle.jpg`, `nobody.jpg`, `knowsterry.jpg`: AI-generated (24 Nov 2026) from the three heroes' portraits and our card style.
 - `web/cats/*.jpg` (all six cat signature cards): crops of the cat card mockups in `../mockups/card-*.jpg`, which **were AI-generated**
   (from the cats' real photos). Declare them as pre-generated AI content.
 - The full-size sources of all of the above in `../mockups/`.
 
 ### Cards still needing real art
 
-Only the six cats' signature cards, Reggie's three starter cards (Red Pen, Polite Cough, Imaginary Invoice), Terry's three (Ink Blot, Sketchbook, Splatter), Kenneth's three (Firm Handshake, Vague Nod, Who Invited Him?) and six reward commons (Kindly Remit, Fact Check, Cross-Hatch, Rough Draft, Unexplained Arrival, Changes the Subject) have painted art. Every other card still shows its ink icon on the coloured panel (placeholder):
+Only the six cats' signature cards, Reggie's three starter cards (Red Pen, Polite Cough, Imaginary Invoice), Terry's three (Ink Blot, Sketchbook, Splatter), Kenneth's three (Firm Handshake, Vague Nod, Who Invited Him?) and twelve base commons (Kindly Remit, Fact Check, Sales Patter, Line Edit, Cross-Hatch, Rough Draft, Full Colour, Big Bold Title, Unexplained Arrival, Changes the Subject, Nobody Asked, Says He Knows Terry) have painted art. Every other card still shows its ink icon on the coloured panel (placeholder):
 
-- **Reggie (17):** Extra Tenner for the Y, Sales Patter, A Nice Little Earner, Line Edit, Itemised Bill, Compound Interest, Brave Face, My Old Son, Cartel Pricing, Rounding Up, Proofread, Final Demand, Wounded Dignity, Cash in Hand, VAT Inclusive, Late Payment Charge, The Bailiffs
-- **Terry (18):** Theatrical Outrage, Wraparound Cover, Big Bold Title, Full Colour, Frame Rate, Day One Purchase, Ink Wash, Quick Sketch, Splatter Storm, Two-Page Spread, Steady Hand, Reference Photo, Masterpiece, Scribble, Bleed Edge, Spot Colour, Letters to the Editor, Centre Spread
-- **Kenneth (17):** Says He Knows Terry, Friend of Reggie's, Cousin Once Removed, Nobody Asked, Mysterious Parcel, Turns Up Uninvited, Long Story, Open Invitation, Plus One, Wrong House, Coin Toss, Left Without Saying Goodbye, Air of Mystery, Minutes of the Meeting, Reply All, Delegated, Nobody Minuted It
+- **Reggie (15):** Extra Tenner for the Y, A Nice Little Earner, Itemised Bill, Compound Interest, Brave Face, My Old Son, Cartel Pricing, Rounding Up, Proofread, Final Demand, Wounded Dignity, Cash in Hand, VAT Inclusive, Late Payment Charge, The Bailiffs
+- **Terry (16):** Theatrical Outrage, Wraparound Cover, Frame Rate, Day One Purchase, Ink Wash, Quick Sketch, Splatter Storm, Two-Page Spread, Steady Hand, Reference Photo, Masterpiece, Scribble, Bleed Edge, Spot Colour, Letters to the Editor, Centre Spread
+- **Kenneth (15):** Friend of Reggie's, Cousin Once Removed, Mysterious Parcel, Turns Up Uninvited, Long Story, Open Invitation, Plus One, Wrong House, Coin Toss, Left Without Saying Goodbye, Air of Mystery, Minutes of the Meeting, Reply All, Delegated, Nobody Minuted It
 - **Shared / clutter (6):** Form 27B, Mislaid Sock, Parking Ticket, Writer's Block, Unflattering Photo, Catchphrase
 
 ## What the desktop bundle changes

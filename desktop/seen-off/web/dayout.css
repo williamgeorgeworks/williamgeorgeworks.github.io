@@ -169,3 +169,13 @@
 .cd.c-roughdraft .art{background-image:url(cards/roughdraft.jpg);background-position:45% 35%}
 .cd.c-arrival .art{background-image:url(cards/arrival.jpg);background-position:45% 25%}
 .cd.c-subject .art{background-image:url(cards/subject.jpg);background-position:40% 30%}
+
+/* second batch of base commons (2 per hero): painted art, AI-generated from the heroes' portraits (24 Nov 2026; see README) */
+.cd.c-patter .art,.cd.c-lineedit .art,.cd.c-fullcolour .art,.cd.c-bigtitle .art,.cd.c-nobody .art,.cd.c-knowsterry .art{height:78px;background:#e9e2d4 center/cover no-repeat}
+.cd.c-patter .art>*,.cd.c-patter .art::before,.cd.c-lineedit .art>*,.cd.c-lineedit .art::before,.cd.c-fullcolour .art>*,.cd.c-fullcolour .art::before,.cd.c-bigtitle .art>*,.cd.c-bigtitle .art::before,.cd.c-nobody .art>*,.cd.c-nobody .art::before,.cd.c-knowsterry .art>*,.cd.c-knowsterry .art::before{display:none}
+.cd.c-patter .art{background-image:url(cards/patter.jpg);background-position:45% 30%}
+.cd.c-lineedit .art{background-image:url(cards/lineedit.jpg);background-position:45% 30%}
+.cd.c-fullcolour .art{background-image:url(cards/fullcolour.jpg);background-position:50% 35%}
+.cd.c-bigtitle .art{background-image:url(cards/bigtitle.jpg);background-position:40% 30%}
+.cd.c-nobody .art{background-image:url(cards/nobody.jpg);background-position:45% 30%}
+.cd.c-knowsterry .art{background-image:url(cards/knowsterry.jpg);background-position:50% 30%}
