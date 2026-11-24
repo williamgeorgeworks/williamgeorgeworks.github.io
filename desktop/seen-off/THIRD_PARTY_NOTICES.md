@@ -2,7 +2,7 @@
 
 Everything in the game (art, music, sound, text) is drawn or generated in code by William George Works,
 except the bundled fonts below and the painted card art: Reggie's, Terry's and Kenneth's starter-card art in `web/cards/` (AI-generated
-pre-release from their portraits) and the six cat card images in `web/cats/` (crops of the cat card mockups in `mockups/`, also AI-generated from the
+pre-release from their portraits; Kenneth's redone 24 Nov 2026 from the portrait Ben supplied) and the six cat card images in `web/cats/` (crops of the cat card mockups in `mockups/`, also AI-generated from the
 cats' real photos). All of it is pre-generated AI content and must be declared in Steam's Content Survey:
 
 | Font | Files | Licence | Copyright |

@@ -114,12 +114,16 @@ State at end of 23 Nov 2026 (branch `archie/seen-off-dayout`, working copy `/wor
 1. **Done:** M2 complete (builds in `/workspace/seen-off-steam/dist/m2/`, not rebuilt since). M3 so far, web only, no desktop rebuild:
    Dexter recoloured to smoky black with a grey ruff; the shared inked card frame (owner tint, larger art window, owner type line,
    Libre Caslon rules text, rarity crest); painted art on the six cat cards and all three heroes' starter cards (Reggie, Terry, Kenneth;
-   nine cards). Screenshots: `/workspace/seen-off-steam/shots/d1-01` to `d1-06-*.png`.
-2. **Tests:** `node tests/verify.js` (about 6 min; 202/202 passing on 23 Nov; `ONLY=m2d` etc. runs one section).
+   nine cards). Kenneth's three were redone on 24 Nov from his proper portrait. Screenshots: `/workspace/seen-off-steam/shots/d1-*` and `d2-*.png`.
+2. **Tests:** `node tests/verify.js` (about 6 min; 202/202 passing on 24 Nov; `ONLY=m2d` etc. runs one section).
    Playtest: `RUNS=6 node tools/playtest.js out.json`.
-3. **Suggested next chunk (small):** the most-seen common reward cards, three per hero per session, same method (refs in `../refs/`,
-   one generation each, crop to `web/cards/`, CSS block, verify check, add to the AI content list). Ask Ben whether a proper
-   `portraits/kenneth.jpg` is coming; if so, check the three Kenneth cards against it. Then a desktop rebuild into `dist/m3/` once the art settles.
+3. **Suggested next chunk (small): Kenneth's sprite to match his portrait.** In `drawQuill()` (`web/index.html`, `kind==='k'`):
+   swap the paper-bag head for a boxy cream head with round glasses, a black cap with a red feather and round ear-pieces with a red Q;
+   waistcoat purple to black with a small red Q badge; tie dark to red; hand prop parcel to a quill (the thrown parcel in his attack
+   animation can stay). Also the text: the Credits line "He appears with a bag on his head because nobody has drawn him yet" and the
+   report line "The bag is staying on." Decide with Ben whether his owner colour stays purple (`#7a3ff0`: card frame, HUD, title) or moves
+   to black/red (red is Reggie's). Re-run tests and refresh the Kenneth title/fight screenshots. After that: the most-seen common reward
+   cards, three per hero per session, then a desktop rebuild into `dist/m3/` once the art settles.
 4. **Still open for M3 (from the M2 proposal):** real drawings for the 35 new enemies (still labelled PLACEHOLDER stand-ups); the other
    four places (Arcades & Bingo, the Winter Gardens, the B&B, the Old Pier); Daily Rules; legendary cards; a boss-health pass for later places.
 5. **Before release:** declare everything in the AI content list below in Steam's Content Survey.
@@ -154,19 +158,24 @@ head, red knob aerial, round bolt ears, red knitted waistcoat with watch chain, 
 and Reggie's Red Pen. Full images: `../mockups/card-ink-blot.jpg`, `card-sketchbook.jpg`, `card-splatter.jpg`; in-game crops:
 `web/cards/inkblot.jpg`, `sketch.jpg`, `splatter.jpg`. Generic unnamed tower and prom backdrop (tower sign is unreadable scribble). One generation each, no retries.
 
-### Kenneth's starter cards (23 Nov 2026)
+### Kenneth's starter cards (redone 24 Nov 2026)
 
-Firm Handshake, Vague Nod and Who Invited Him? (Kenneth's starter deck: 4 + 4 + 1) have painted art in the same style. The site has no
-`portraits/kenneth.*`; his only published picture is the Dead Air FM crew portrait (`games/dead-air-fm/art/crew/kenneth.webp`, 200 px),
-saved as `../refs/kenneth-portrait.jpg`: robot with a brown paper bag over his head (question mark and dot eyes drawn on), wire aerial
-with a brass tip, purple waistcoat with gold buttons, white shirt, dark tie, pocket square. It matches the in-game Kenneth. Style references:
-the Spyro card art and Terry's Ink Blot. Full images: `../mockups/card-firm-handshake.jpg`, `card-vague-nod.jpg`, `card-who-invited-him.jpg`;
-in-game crops: `web/cards/handshake.jpg`, `nod.jpg`, `whoinv.jpg`. Generic unnamed tower and prom (sign is scribble). One generation each, no retries.
+Firm Handshake, Vague Nod and Who Invited Him? (Kenneth's starter deck: 4 + 4 + 1) have painted art in the same style.
+**Likeness source:** Kenneth's proper portrait, sent by Ben on 23 Nov 2026 (`/workspace/seen-off-steam/reference/kenneth-portrait.jpg`,
+copied to `../refs/kenneth-portrait.jpg`): boxy cream riveted robot head, round glasses, black cap with a red feather, ear-pieces with a
+red Q, white shirt, red tie, black waistcoat with a red Q badge. Style references: the Spyro card art and Terry's Ink Blot.
+Full images: `../mockups/card-firm-handshake.jpg`, `card-vague-nod.jpg`, `card-who-invited-him.jpg`; in-game crops: `web/cards/handshake.jpg`,
+`nod.jpg`, `whoinv.jpg`. Generic unnamed tower and prom (sign is scribble), plain red chip carton with no brand. One generation each, no retries.
+These replace the 23 Nov versions drawn from the Dead Air FM paper-bag crew picture (kept for the record in
+`../mockups/old-kenneth-paperbag/`, not shipped).
+
+**Kenneth's in-game sprite** (`drawQuill()` in `web/index.html`, the `else` branch) is still the paper-bag robot in a purple waistcoat
+and is now out of step with his portrait and cards; see "Where to pick up next time".
 
 **Steam Content Survey, pre-generated AI content (definite; keep this list up to date):**
 - `web/cards/redpen.jpg`, `web/cards/cough.jpg`, `web/cards/invoice.jpg`: AI-generated (23 Nov 2026) from Reggie's portrait and our card style.
 - `web/cards/inkblot.jpg`, `web/cards/sketch.jpg`, `web/cards/splatter.jpg`: AI-generated (23 Nov 2026) from Terry's portrait and our card style.
-- `web/cards/handshake.jpg`, `web/cards/nod.jpg`, `web/cards/whoinv.jpg`: AI-generated (23 Nov 2026) from Kenneth's crew portrait and our card style.
+- `web/cards/handshake.jpg`, `web/cards/nod.jpg`, `web/cards/whoinv.jpg`: AI-generated (24 Nov 2026) from Kenneth's portrait (sent by Ben) and our card style.
 - `web/cats/*.jpg` (all six cat signature cards): crops of the cat card mockups in `../mockups/card-*.jpg`, which **were AI-generated**
   (from the cats' real photos). Declare them as pre-generated AI content.
 - The full-size sources of all of the above in `../mockups/`.
