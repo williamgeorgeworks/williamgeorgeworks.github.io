@@ -21,7 +21,13 @@ module.exports = {
       }
       case 'reward': return click('#view [data-a="boss"]') || click('#view [data-a="take"]') || click('#view [data-a="leave"]') ? 'reward' : 'reward?';
       case 'report': case 'title': return 'stop';
-      default: return click('#view [data-a="opt"]') || click('#view [data-a="rest"]') || click('#view [data-a="leave"]') || click('#view .btn.go') || click('#view [data-a]') ? S.scr : S.scr + '?';
+      default: {
+        /* an event option can refuse (e.g. "Pay it (40 Scrumplings)" when short): if the first option did nothing last time, take the last one */
+        const os = document.querySelectorAll('#view [data-a="opt"]');
+        if (os.length && S.scr === 'event' && S.ev && !S.ev.res && window.__drvEv === S.ev) { os[os.length - 1].click(); return 'event-last'; }
+        if (os.length && S.scr === 'event') window.__drvEv = S.ev;
+      }
+      return click('#view [data-a="opt"]') || click('#view [data-a="rest"]') || click('#view [data-a="leave"]') || click('#view .btn.go') || click('#view [data-a]') ? S.scr : S.scr + '?';
     }
   },
   // no scrolling and nothing clipped inside the panel at this size

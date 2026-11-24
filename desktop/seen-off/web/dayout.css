@@ -124,7 +124,7 @@
 /* card frame (Milestone 3, step 1): one shared inked frame tinted by the card's owner, a larger art window,
    a type line naming the owner, rules text in Libre Caslon Text, and a rarity crest */
 .cd{--own:#6b7183}
-.cd.h-r{--own:#e3182d}.cd.h-t{--own:#2456e6}.cd.h-k{--own:#7a3ff0}
+.cd.h-r{--own:#e3182d}.cd.h-t{--own:#2456e6}.cd.h-k{--own:#1d1c24}.cd.h-k::before{box-shadow:inset 0 0 0 1.5px var(--ink),inset 0 0 0 3px rgba(255,255,255,.6)}
 .cd.c-ruling{--own:#e3182d}.cd.c-decree{--own:#ffb300}.cd.c-ripface{--own:#7a3ff0}.cd.c-requisition{--own:#1fb85a}.cd.c-boo{--own:#2456e6}.cd.c-whome{--own:#ff5fa0}
 .cd::before{content:"";position:absolute;top:0;right:0;bottom:0;left:0;border-radius:6px;border:3px solid var(--own);box-shadow:inset 0 0 0 1.5px var(--ink);pointer-events:none;z-index:2}
 .cd .art{height:48px}
@@ -179,3 +179,17 @@
 .cd.c-bigtitle .art{background-image:url(cards/bigtitle.jpg);background-position:40% 30%}
 .cd.c-nobody .art{background-image:url(cards/nobody.jpg);background-position:45% 30%}
 .cd.c-knowsterry .art{background-image:url(cards/knowsterry.jpg);background-position:50% 30%}
+
+/* last ten base commons: painted art, AI-generated from the heroes' portraits (24 Nov 2026; see README) */
+.cd.c-tenner .art,.cd.c-braveface .art,.cd.c-proofread .art,.cd.c-wraparound .art,.cd.c-inkwash .art,.cd.c-quick .art,.cd.c-refphoto .art,.cd.c-friendreg .art,.cd.c-cousin .art,.cd.c-uninvited .art{height:78px;background:#e9e2d4 center/cover no-repeat}
+.cd.c-tenner .art>*,.cd.c-tenner .art::before,.cd.c-braveface .art>*,.cd.c-braveface .art::before,.cd.c-proofread .art>*,.cd.c-proofread .art::before,.cd.c-wraparound .art>*,.cd.c-wraparound .art::before,.cd.c-inkwash .art>*,.cd.c-inkwash .art::before,.cd.c-quick .art>*,.cd.c-quick .art::before,.cd.c-refphoto .art>*,.cd.c-refphoto .art::before,.cd.c-friendreg .art>*,.cd.c-friendreg .art::before,.cd.c-cousin .art>*,.cd.c-cousin .art::before,.cd.c-uninvited .art>*,.cd.c-uninvited .art::before{display:none}
+.cd.c-tenner .art{background-image:url(cards/tenner.jpg);background-position:40% 30%}
+.cd.c-braveface .art{background-image:url(cards/braveface.jpg);background-position:50% 30%}
+.cd.c-proofread .art{background-image:url(cards/proofread.jpg);background-position:50% 30%}
+.cd.c-wraparound .art{background-image:url(cards/wraparound.jpg);background-position:45% 30%}
+.cd.c-inkwash .art{background-image:url(cards/inkwash.jpg);background-position:45% 30%}
+.cd.c-quick .art{background-image:url(cards/quick.jpg);background-position:45% 30%}
+.cd.c-refphoto .art{background-image:url(cards/refphoto.jpg);background-position:50% 30%}
+.cd.c-friendreg .art{background-image:url(cards/friendreg.jpg);background-position:50% 30%}
+.cd.c-cousin .art{background-image:url(cards/cousin.jpg);background-position:50% 30%}
+.cd.c-uninvited .art{background-image:url(cards/uninvited.jpg);background-position:45% 30%}

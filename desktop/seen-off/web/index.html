@@ -9,7 +9,7 @@
 <link rel="stylesheet" href="fonts/fonts.css">
 <link rel="icon" href="data:,">
 <style>
-:root{--navy:#16244a;--navy-deep:#0b1230;--paper:#fffdf7;--ink:#141414;--red:#e3182d;--blue:#2456e6;--mist:#d3dbf3;--purple:#7a3ff0;--gold:#ffc61a;--green:#14a84b;--pink:#ff4f9a;--orange:#ff8a1f;--teal:#0fb8a9;--sky:#37c8ff;--lime:#b6f23c;--cream:#fff3d1;
+:root{--navy:#16244a;--navy-deep:#0b1230;--paper:#fffdf7;--ink:#141414;--red:#e3182d;--blue:#2456e6;--mist:#d3dbf3;--purple:#7a3ff0;--kenneth:#1d1c24;--gold:#ffc61a;--green:#14a84b;--pink:#ff4f9a;--orange:#ff8a1f;--teal:#0fb8a9;--sky:#37c8ff;--lime:#b6f23c;--cream:#fff3d1;
   --display:'Anton','Arial Narrow','Haettenschweiler',Impact,sans-serif;--marker:'Permanent Marker','Comic Sans MS','Chalkboard SE',cursive;--body:Georgia,'Times New Roman',serif;color-scheme:dark}
 body{margin:0;background:radial-gradient(1000px 520px at 8% -6%,#5a23c8 0,rgba(90,35,200,0) 64%),radial-gradient(900px 500px at 104% 4%,#8a1050 0,rgba(138,16,80,0) 60%),var(--navy);background-repeat:no-repeat;background-color:var(--navy);color:#fff;font-family:var(--body);font-size:16px;line-height:1.5}
 [hidden]{display:none!important}
@@ -37,7 +37,7 @@ h1{font-family:var(--display);font-weight:400;font-size:clamp(2.6rem,10vw,4.4rem
 .hud{display:flex;flex-wrap:wrap;gap:5px 7px;align-items:center;padding:7px 9px;background:var(--ink);color:#fff;font-family:var(--display);letter-spacing:.04em;font-size:.86rem;text-transform:uppercase;min-height:26px}
 .hud .sp{flex:1}
 .pill{display:inline-flex;align-items:center;gap:5px;padding:2px 10px 2px 8px;border-radius:999px;border:2px solid rgba(255,255,255,.35);line-height:1.55;white-space:nowrap}
-.pill.who{background:var(--c,var(--red));padding-left:10px}.pill.hp{background:var(--red)}.pill.hp .ic{color:#ffb3bd}.pill.gold{background:var(--gold);color:var(--ink);border-color:#fff3a8}.pill.gold .ic{color:#fff3a8}.pill.act{background:var(--blue)}.pill.ttl{background:var(--red);font-size:.95rem}
+.pill.who{background:var(--c,var(--red));padding-left:10px}.pill.who.h-k{border-color:rgba(255,255,255,.85)}.pill.hp{background:var(--red)}.pill.hp .ic{color:#ffb3bd}.pill.gold{background:var(--gold);color:var(--ink);border-color:#fff3a8}.pill.gold .ic{color:#fff3a8}.pill.act{background:var(--blue)}.pill.ttl{background:var(--red);font-size:.95rem}
 .pill.hp.low{animation:low .9s ease-in-out infinite}.pill.up,.pill.hp.low.up{animation:pillup .5s cubic-bezier(.2,.9,.3,1.5)}.pill.down,.pill.hp.low.down{animation:pilldown .45s}
 .chip{display:inline-flex;align-items:center;gap:4px;font:inherit;background:#fff;color:var(--ink);border:2px solid var(--ink);border-radius:999px;padding:2px 10px;cursor:pointer;text-transform:uppercase;letter-spacing:.04em;font-size:.76rem;line-height:1.5;box-shadow:0 2px 0 rgba(255,255,255,.35);transition:transform .08s}
 .chip:hover:not(:disabled){transform:translateY(-1px)}.chip:active:not(:disabled){transform:translateY(1px)}
@@ -77,7 +77,7 @@ canvas#scene{display:block;width:100%;background:#37c8ff;touch-action:manipulati
 .cd .tx u.upv,.detail .tx u.upv{color:var(--green)}
 .cd .tx em,.detail .tx em{font-style:normal;font-weight:700;color:inherit}
 .cd .tab{position:absolute;right:-8px;top:-9px;min-width:21px;height:21px;box-sizing:border-box;padding:0 3px;border-radius:999px;background:var(--hc,#fff);color:#fff;border:2.5px solid var(--ink);font-family:var(--display);font-size:.68rem;line-height:1;display:grid;place-items:center;z-index:2}
-.cd.h-r{--hc:var(--red)}.cd.h-t{--hc:var(--blue)}.cd.h-k{--hc:var(--purple)}.cd.h-c{--hc:var(--gold)}.cd.h-c .tab{color:var(--ink)}
+.cd.h-r{--hc:var(--red)}.cd.h-t{--hc:var(--blue)}.cd.h-k{--hc:var(--kenneth)}.cd.h-c{--hc:var(--gold)}.cd.h-c .tab{color:var(--ink)}
 .cd .tab .ic{width:13px;height:13px;stroke-width:0}
 .cd .gem{position:absolute;left:50%;bottom:-7px;width:11px;height:11px;margin-left:-6px;transform:rotate(45deg);background:#c9c9c9;border:2.5px solid var(--ink)}
 .cd.q-u .gem{background:#37a0ff}.cd.q-r .gem{background:var(--gold);box-shadow:0 0 8px 2px rgba(255,198,26,.9)}
@@ -300,7 +300,7 @@ function pick(a){return a[(Math.random()*a.length)|0];}
 function shuffle(a){for(var i=a.length-1;i>0;i--){var j=(Math.random()*(i+1))|0,t=a[i];a[i]=a[j];a[j]=t;}return a;}
 function clamp(v,a,b){return v<a?a:v>b?b:v;}
 var ON_SITE=false; /* desktop build: no score wall, no fetch, no send-in */
-var COL={ink:'#141414',red:'#e3182d',blue:'#2456e6',white:'#ffffff',pink:'#ff8fa6',skin:'#f6c9ae',gold:'#ffc61a',green:'#14a84b',purple:'#7a3ff0',metal:'#d3dae2',steel:'#a3adb8'};
+var COL={ink:'#141414',red:'#e3182d',blue:'#2456e6',white:'#ffffff',pink:'#ff8fa6',skin:'#f6c9ae',gold:'#ffc61a',green:'#14a84b',purple:'#7a3ff0',kenneth:'#1d1c24',metal:'#d3dae2',steel:'#a3adb8'};
 
 /* ================= the cards ================= */
 var CARDS={},POOL={r:[],t:[],k:[]};
@@ -416,7 +416,7 @@ var HEROES={
  t:{id:'t',name:'Terry',title:'The Mechanical Editor',hp:78,deck:['inkblot','inkblot','inkblot','inkblot','sketch','sketch','sketch','sketch','splatter'],
    blurb:'Ink, outrage and big lettering. Hits everything, often.'},
  k:{id:'k',name:'Kenneth',title:'Chief of Staff, by way of the Cloud',hp:66,deck:['handshake','handshake','handshake','handshake','nod','nod','nod','nod','whoinv'],
-   blurb:'The third Quill, from the Cloud, where he is the Ferret’s chief of staff. Nobody has drawn him yet, and his magic is anybody’s guess.'}
+   blurb:'The third Quill, from the Cloud, where he is the Ferret’s chief of staff. He has finally been drawn; his magic is still anybody’s guess.'}
 };
 var CATS={
  arthur:{name:'Arthur',card:'ruling',perk:'Diplomatic immunity: start every fight with 8 Block.',body:'#f3e9d8',head:'#f3e9d8',face:'#8a8c99',ear:'#5d6070',eye:'#3f7fd6',fluff:1,hat:'#e3182d'},
@@ -1224,7 +1224,7 @@ var ART={
   ctx.globalAlpha*=.35;eyes(0,-66,11,5);line([-9,-46,9,-46],2);ctx.globalAlpha/=.35;if(Math.floor(t*2)%2)rect(-26,-94,2.5,13,COL.ink,1);
   if(e.blink){ctx.strokeStyle=COL.red;ctx.lineWidth=2;ctx.beginPath();for(var i=0;i<5;i++){ctx.moveTo(-24,-30+i*6);ctx.lineTo(24+r()*3,-30+i*6+r()*2);}ctx.stroke();}}
 };
-var HCOL={r:COL.red,t:COL.blue,k:COL.purple},HTINT={r:'#ffd0d6',t:'#cfdcff',k:'#e4d3ff'},HINK={r:COL.red,t:COL.ink,k:COL.purple};
+var HCOL={r:COL.red,t:COL.blue,k:COL.kenneth},HTINT={r:'#ffd0d6',t:'#cfdcff',k:'#dcdbe2'},HINK={r:COL.red,t:COL.ink,k:COL.kenneth};/* Kenneth went black on 24 Nov 2026 (was purple) */
 var NEON=['#ff4f9a','#29e0ff','#ffe14d','#b6f23c','#ff8a1f','#ffffff'];
 var RM=!!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches),RM0=RM;if(FXL===0)RM=true;
 function setFx(n){FXL=n;try{localStorage.setItem('so-fx',String(n));}catch(e){}RM=RM0||n===0;}
@@ -2107,7 +2107,7 @@ function hudHTML(){
     else if(dg<0)GLAG={from:lagVal(GLAG,RUN.gold-dg),t0:now(),d:280};
     if(!fight&&dh>0)HLAG={from:RUN.hp-dh,t0:now()+330,d:480};
   }
-  var h='<span class="pill who" style="--c:'+HCOL[RUN.hero]+'">'+HEROES[RUN.hero].name+'</span><span class="pill hp'+(RUN.hp>0&&RUN.hp<=RUN.max*.25?' low':'')+(dh>0?' up':dh<0?' down':'')+'" id="hpPill" title="Health">'+ic('heart')+'<span class="vh">Health </span><span id="hpN">'+Math.max(0,lagVal(HLAG,RUN.hp))+'</span>/'+RUN.max+'</span><span class="pill gold'+(dg>0?(PREV.plan?'':' up'):dg<0?' down':'')+'" id="goldPill" title="Scrumplings">'+ic('coin')+'<span id="goldN">'+lagVal(GLAG,RUN.gold)+'</span><span class="w">&nbsp;Scrumplings</span></span><span class="pill act">'+(function(){var sg=S.scr==='stage'?null:STGD(),pp=PARTS[Math.min(RUN.part||0,4)];return sg?ic(sg.ic)+sg.n+' '+(RUN.row+1)+'/5':ic(pp.ic)+pp.n;})()+'</span><span class="sp"></span>';
+  var h='<span class="pill who h-'+RUN.hero+'" style="--c:'+HCOL[RUN.hero]+'">'+HEROES[RUN.hero].name+'</span><span class="pill hp'+(RUN.hp>0&&RUN.hp<=RUN.max*.25?' low':'')+(dh>0?' up':dh<0?' down':'')+'" id="hpPill" title="Health">'+ic('heart')+'<span class="vh">Health </span><span id="hpN">'+Math.max(0,lagVal(HLAG,RUN.hp))+'</span>/'+RUN.max+'</span><span class="pill gold'+(dg>0?(PREV.plan?'':' up'):dg<0?' down':'')+'" id="goldPill" title="Scrumplings">'+ic('coin')+'<span id="goldN">'+lagVal(GLAG,RUN.gold)+'</span><span class="w">&nbsp;Scrumplings</span></span><span class="pill act">'+(function(){var sg=S.scr==='stage'?null:STGD(),pp=PARTS[Math.min(RUN.part||0,4)];return sg?ic(sg.ic)+sg.n+' '+(RUN.row+1)+'/5':ic(pp.ic)+pp.n;})()+'</span><span class="sp"></span>';
   RUN.brews.forEach(function(b,i){h+='<button type="button" class="chip brew'+(S.brewSel===i?' on':'')+'" data-a="brew" data-i="'+i+'" title="'+BREWS[b][1]+'">'+ic('cup')+BREWS[b][0]+'</button>';});
   h+='<button type="button" class="chip dk" data-a="deck" aria-label="Deck, '+RUN.deck.length+' cards" title="Your deck">'+ic('cards')+'<span class="w">Deck</span>'+RUN.deck.length+'</button>';
   if(RUN.relics.length)h+='<button type="button" class="chip rel" data-a="relics" aria-label="Keepsakes, '+RUN.relics.length+'" title="Keepsakes">'+ic('star')+'<span class="w">Keepsakes</span>'+RUN.relics.length+'</button>';
