@@ -112,18 +112,14 @@ on real machines (the Windows installer is built and the Linux AppImage smoke-te
 State at end of 23 Nov 2026 (branch `archie/seen-off-dayout`, working copy `/workspace/seen-off-steam/desktop`, local git mirrors the pushed commits):
 
 1. **Done:** M2 complete (builds in `/workspace/seen-off-steam/dist/m2/`, not rebuilt since). M3 so far, web only, no desktop rebuild:
-   Dexter recoloured to smoky black with a grey ruff; the shared inked card frame (owner tint, larger art window, owner type line,
-   Libre Caslon rules text, rarity crest); painted art on the six cat cards and all three heroes' starter cards (Reggie, Terry, Kenneth;
-   nine cards). Kenneth's three were redone on 24 Nov from his proper portrait. Screenshots: `/workspace/seen-off-steam/shots/d1-*` and `d2-*.png`.
-2. **Tests:** `node tests/verify.js` (about 6 min; 202/202 passing on 24 Nov; `ONLY=m2d` etc. runs one section).
+   Dexter recoloured; the shared inked card frame (owner tint, larger art window, owner type line, Libre Caslon rules text, rarity crest);
+   painted art on 21 cards: the six cat cards, all nine hero starter cards (Kenneth's redone 24 Nov from his portrait) and six reward
+   commons (two per hero). Kenneth's sprite redrawn to match his portrait (UI colour still purple). Screenshots: `shots/d1-*`, `d2-*.png`.
+2. **Tests:** `node tests/verify.js` (about 6 min; 203/203 passing on 24 Nov; `ONLY=m2d` etc. runs one section).
    Playtest: `RUNS=6 node tools/playtest.js out.json`.
-3. **Suggested next chunk (small): Kenneth's sprite to match his portrait.** In `drawQuill()` (`web/index.html`, `kind==='k'`):
-   swap the paper-bag head for a boxy cream head with round glasses, a black cap with a red feather and round ear-pieces with a red Q;
-   waistcoat purple to black with a small red Q badge; tie dark to red; hand prop parcel to a quill (the thrown parcel in his attack
-   animation can stay). Also the text: the Credits line "He appears with a bag on his head because nobody has drawn him yet" and the
-   report line "The bag is staying on." Decide with Ben whether his owner colour stays purple (`#7a3ff0`: card frame, HUD, title) or moves
-   to black/red (red is Reggie's). Re-run tests and refresh the Kenneth title/fight screenshots. After that: the most-seen common reward
-   cards, three per hero per session, then a desktop rebuild into `dist/m3/` once the art settles.
+3. **Suggested next chunk (small):** the remaining base commons, two per hero again (Reggie: Sales Patter, Line Edit; Terry: Full Colour,
+   Big Bold Title; Kenneth: Nobody Asked, Says He Knows Terry), same method. Ben to decide Kenneth's UI colour (purple or black).
+   Then the uncommons, and a desktop rebuild into `dist/m3/` once the art settles.
 4. **Still open for M3 (from the M2 proposal):** real drawings for the 35 new enemies (still labelled PLACEHOLDER stand-ups); the other
    four places (Arcades & Bingo, the Winter Gardens, the B&B, the Old Pier); Daily Rules; legendary cards; a boss-health pass for later places.
 5. **Before release:** declare everything in the AI content list below in Steam's Content Survey.
@@ -173,21 +169,33 @@ These replace the 23 Nov versions drawn from the Dead Air FM paper-bag crew pict
 boxy cream head, round glasses, black cap with a red feather, red-Q ear-pieces, black waistcoat with a red Q badge, red tie, red quill in
 hand (his attack still lobs a parcel). His UI colour stays purple `#7a3ff0` until Ben decides. Credits and report lines rewritten to suit.
 
+### Most-offered reward cards (24 Nov 2026)
+
+`rollCards()` picks a rarity per slot (58% common, 34% uncommon, 8% rare), then a card uniformly from that hero's pool, so every
+base-pool common is offered equally and more often than anything else (the milestone-2 unlock commons only appear after their stick).
+Two base commons per hero were painted, one attack and one skill: **Reggie** Kindly Remit, Fact Check; **Terry** Cross-Hatch, Rough Draft;
+**Kenneth** Unexplained Arrival, Changes the Subject. Likeness from `../refs/reggie-portrait.jpg`, `terry-portrait.jpg`,
+`kenneth-portrait.jpg`; style from the existing starter-card art and the Spyro card. Generic prom, unnamed tower, no trade marks.
+One generation each, no retries. Full images `../mockups/card-kindly-remit.jpg`, `card-fact-check.jpg`, `card-cross-hatch.jpg`,
+`card-rough-draft.jpg`, `card-unexplained-arrival.jpg`, `card-changes-the-subject.jpg`; crops in `web/cards/` (`remit`, `factcheck`,
+`crosshatch`, `roughdraft`, `arrival`, `subject`).
+
 **Steam Content Survey, pre-generated AI content (definite; keep this list up to date):**
 - `web/cards/redpen.jpg`, `web/cards/cough.jpg`, `web/cards/invoice.jpg`: AI-generated (23 Nov 2026) from Reggie's portrait and our card style.
 - `web/cards/inkblot.jpg`, `web/cards/sketch.jpg`, `web/cards/splatter.jpg`: AI-generated (23 Nov 2026) from Terry's portrait and our card style.
 - `web/cards/handshake.jpg`, `web/cards/nod.jpg`, `web/cards/whoinv.jpg`: AI-generated (24 Nov 2026) from Kenneth's portrait (sent by Ben) and our card style.
+- `web/cards/remit.jpg`, `factcheck.jpg`, `crosshatch.jpg`, `roughdraft.jpg`, `arrival.jpg`, `subject.jpg`: AI-generated (24 Nov 2026) from the three heroes' portraits and our card style.
 - `web/cats/*.jpg` (all six cat signature cards): crops of the cat card mockups in `../mockups/card-*.jpg`, which **were AI-generated**
   (from the cats' real photos). Declare them as pre-generated AI content.
 - The full-size sources of all of the above in `../mockups/`.
 
 ### Cards still needing real art
 
-Only the six cats' signature cards, Reggie's three starter cards (Red Pen, Polite Cough, Imaginary Invoice), Terry's three (Ink Blot, Sketchbook, Splatter) and Kenneth's three (Firm Handshake, Vague Nod, Who Invited Him?) have painted art. Every other card still shows its ink icon on the coloured panel (placeholder):
+Only the six cats' signature cards, Reggie's three starter cards (Red Pen, Polite Cough, Imaginary Invoice), Terry's three (Ink Blot, Sketchbook, Splatter), Kenneth's three (Firm Handshake, Vague Nod, Who Invited Him?) and six reward commons (Kindly Remit, Fact Check, Cross-Hatch, Rough Draft, Unexplained Arrival, Changes the Subject) have painted art. Every other card still shows its ink icon on the coloured panel (placeholder):
 
-- **Reggie (19):** Extra Tenner for the Y, Sales Patter, A Nice Little Earner, Fact Check, Line Edit, Itemised Bill, Compound Interest, Kindly Remit, Brave Face, My Old Son, Cartel Pricing, Rounding Up, Proofread, Final Demand, Wounded Dignity, Cash in Hand, VAT Inclusive, Late Payment Charge, The Bailiffs
-- **Terry (20):** Cross-Hatch, Theatrical Outrage, Wraparound Cover, Big Bold Title, Full Colour, Rough Draft, Frame Rate, Day One Purchase, Ink Wash, Quick Sketch, Splatter Storm, Two-Page Spread, Steady Hand, Reference Photo, Masterpiece, Scribble, Bleed Edge, Spot Colour, Letters to the Editor, Centre Spread
-- **Kenneth (19):** Unexplained Arrival, Says He Knows Terry, Friend of Reggie's, Cousin Once Removed, Nobody Asked, Mysterious Parcel, Turns Up Uninvited, Long Story, Open Invitation, Plus One, Wrong House, Changes the Subject, Coin Toss, Left Without Saying Goodbye, Air of Mystery, Minutes of the Meeting, Reply All, Delegated, Nobody Minuted It
+- **Reggie (17):** Extra Tenner for the Y, Sales Patter, A Nice Little Earner, Line Edit, Itemised Bill, Compound Interest, Brave Face, My Old Son, Cartel Pricing, Rounding Up, Proofread, Final Demand, Wounded Dignity, Cash in Hand, VAT Inclusive, Late Payment Charge, The Bailiffs
+- **Terry (18):** Theatrical Outrage, Wraparound Cover, Big Bold Title, Full Colour, Frame Rate, Day One Purchase, Ink Wash, Quick Sketch, Splatter Storm, Two-Page Spread, Steady Hand, Reference Photo, Masterpiece, Scribble, Bleed Edge, Spot Colour, Letters to the Editor, Centre Spread
+- **Kenneth (17):** Says He Knows Terry, Friend of Reggie's, Cousin Once Removed, Nobody Asked, Mysterious Parcel, Turns Up Uninvited, Long Story, Open Invitation, Plus One, Wrong House, Coin Toss, Left Without Saying Goodbye, Air of Mystery, Minutes of the Meeting, Reply All, Delegated, Nobody Minuted It
 - **Shared / clutter (6):** Form 27B, Mislaid Sock, Parking Ticket, Writer's Block, Unflattering Photo, Catchphrase
 
 ## What the desktop bundle changes

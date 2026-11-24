@@ -159,3 +159,13 @@
 .cd.c-handshake .art{background-image:url(cards/handshake.jpg);background-position:40% 25%}
 .cd.c-nod .art{background-image:url(cards/nod.jpg);background-position:45% 30%}
 .cd.c-whoinv .art{background-image:url(cards/whoinv.jpg);background-position:50% 25%}
+
+/* most-offered reward cards (2 per hero): painted art, AI-generated from the heroes' portraits (24 Nov 2026; see README) */
+.cd.c-remit .art,.cd.c-factcheck .art,.cd.c-crosshatch .art,.cd.c-roughdraft .art,.cd.c-arrival .art,.cd.c-subject .art{height:78px;background:#e9e2d4 center/cover no-repeat}
+.cd.c-remit .art>*,.cd.c-remit .art::before,.cd.c-factcheck .art>*,.cd.c-factcheck .art::before,.cd.c-crosshatch .art>*,.cd.c-crosshatch .art::before,.cd.c-roughdraft .art>*,.cd.c-roughdraft .art::before,.cd.c-arrival .art>*,.cd.c-arrival .art::before,.cd.c-subject .art>*,.cd.c-subject .art::before{display:none}
+.cd.c-remit .art{background-image:url(cards/remit.jpg);background-position:50% 30%}
+.cd.c-factcheck .art{background-image:url(cards/factcheck.jpg);background-position:50% 30%}
+.cd.c-crosshatch .art{background-image:url(cards/crosshatch.jpg);background-position:40% 30%}
+.cd.c-roughdraft .art{background-image:url(cards/roughdraft.jpg);background-position:45% 35%}
+.cd.c-arrival .art{background-image:url(cards/arrival.jpg);background-position:45% 25%}
+.cd.c-subject .art{background-image:url(cards/subject.jpg);background-position:40% 30%}
