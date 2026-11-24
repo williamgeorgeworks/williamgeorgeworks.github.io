@@ -1,6 +1,83 @@
 {
   "editions": [
     {
+      "date": "2026-11-24",
+      "title": "Tuesday Brings Hundreds Of Millions Of Hours, A Week Of Cats And Puzzles, A Marvel Board Game And A Free Coyote",
+      "standfirst": "Terry (PC, Steam Deck, master race, full price on day one) and Reggie (PS5, saving for a Pro, waiting for the sale) read through the latest gaming news and argue about every bit of it. A shorter edition today, because only the stories we could check made the cut. Everything in big type is made up, and so is the arguing. Everything in the boxes is real.",
+      "stories": [
+        {
+          "kicker": "PlayStation",
+          "headline": "Six Hundred And Eighty-Three Million Hours Get Totted Up And A Great Many Kettles Ask For A Rest",
+          "satire": "Terry reads out 683 million hours twice, once for the audience and once for his Steam Deck, which he says has played at least half of them in spirit. Reggie points out the average is 17.4 hours each, which in his house is roughly how long a sale takes to arrive. Terry says sales are for people with no sense of occasion. Reggie says patience is just a discount wearing a coat. Terry opens his mouth, closes it, and goes to check a settings menu. Reggie wins, and sends an invoice for the pause.",
+          "real": "The PlayStation Blog reported on 23 November that more than 39 million unique players had played Grand Theft Auto VI on PS5 between 19 and 22 November, logging 683 million hours, an average of 17.4 hours each. It also said the game was the first played on 70% of new PS5 consoles.",
+          "source": {
+            "name": "PlayStation Blog",
+            "url": "https://blog.playstation.com/2026/11/23/thank-you-for-making-grand-theft-auto-vi-the-biggest-launch-in-playstation-history/"
+          }
+        },
+        {
+          "kicker": "PlayStation",
+          "headline": "A Photo Contest About Bricks, Rust And Fabric Announces Its Next Theme, And It Is Gathering",
+          "satire": "Terry studies the entries and says his graphics card could render every single brick individually, if he had remembered to take a screenshot, which he did not, because he was busy playing. Reggie says remembering to take the picture is the entire competition. He decides to enter, then realises he would have to buy the game first, at full price, to photograph it. He says he will wait for the sale and enter then. Terry points at the closing date. Terry wins, and Reggie goes to gather his thoughts.",
+          "real": "The PlayStation Blog's Share of the Week on 20 November featured community photos on the theme of texture, taken in games including Saros, Ghost of Yotei, Mafia: The Old Country, Cyberpunk 2077, Resonance: A Plague Tale Legacy and Another World. The next theme is Gathered, with entries due by 11:59 PM PT on 25 November.",
+          "source": {
+            "name": "PlayStation Blog",
+            "url": "https://blog.playstation.com/2026/11/20/share-of-the-week-texture/"
+          }
+        },
+        {
+          "kicker": "Releases",
+          "headline": "More Than Eleven PS5 Games Are Due This Week And The Calendar Asks Everyone To Form An Orderly Queue",
+          "satire": "Reggie has drawn up a timetable, colour-coded by how long each game must wait before its price comes down, and is laminating it. Terry says on his PC he would simply open all eleven at once, in tabs. Reggie asks which window the music is coming from. Terry says he is sure it is one of them. They spend a happy minute listening to the music from an unknown game, and nobody can find it. Draw, with a laminator.",
+          "real": "Push Square reported on 23 November that more than 11 PS5 and PS Plus games are due out this week, 23 to 29 November, including Gothic, Spectrum Retreat and Station to Station.",
+          "source": {
+            "name": "Push Square",
+            "url": "https://www.pushsquare.com/guides/these-11plus-ps5-and-ps-plus-games-are-coming-out-this-week-23rd-29th-november"
+          }
+        },
+        {
+          "kicker": "Xbox",
+          "headline": "Two Cats Must Move In Perfect Mirror Image While Elsewhere The Nation Bids On A Box It Has Not Opened",
+          "satire": "Terry says the mirror cats are the most elegant thing in gaming and he will be thinking about them all week, probably at his desk. Reggie is far more taken with the game about bidding on a storage unit without seeing inside, a pastime he says he has practised in real life for years, with a nice little earner to show for it. Terry says he has never seen the earner. Reggie says that is the point of a hidden asset. Terry wins, because Reggie has just bid forty pence on an empty box and is arguing with himself.",
+          "real": "jeu.video reported on 22 November, citing Xbox Wire, that this week's Xbox releases include Cat Mirror, a puzzle about two cats whose movements mirror each other, Sokobear Goo with 40 levels, and Storage Hunter Simulator, about bidding on storage-unit auctions. It notes that dates may change.",
+          "source": {
+            "name": "jeu.video",
+            "url": "https://jeu.video/en/article/new-xbox-games-november-23-27-2026"
+          },
+          "link": {
+            "text": "More cats, and a lot more mischief: Grand Theft Kitty.",
+            "url": "grand-theft-kitty.html"
+          }
+        },
+        {
+          "kicker": "Mobile",
+          "headline": "A Famous Board Game Gets A Comic-Book Makeover Until January And Nobody Is Sent To Jail Yet",
+          "satire": "Reggie says a board game that runs until late January is the only long-term investment he trusts, because the rules are printed on the lid. Terry says he would buy every property the moment it came out, at the listed price, on principle. Reggie says that is exactly how the bank stays in business. Terry says he is the bank. Reggie asks to see the paperwork. Neither can find it. Draw, and the little iron is blamed.",
+          "real": "Pocket Gamer reported on 23 November that Monopoly Go's Avengers: Doomsday collaboration starts on 25 November and runs until 27 January. It adds a Doomstadt map, a Doctor Doom hero battle, an X-Mansion map takeover and Marvel minigames.",
+          "source": {
+            "name": "Pocket Gamer",
+            "url": "https://www.pocketgamer.com/monopoly-go/avengers-doomsday-collaboration/"
+          }
+        },
+        {
+          "kicker": "Mobile",
+          "headline": "A Cosy Village Game With No Fighting Whatsoever Is Free This Week And The Price Tag Looks Faintly Relieved",
+          "satire": "Terry says a game this gentle deserves to be paid for in full on day one, and tries to post a tenner to the Epic Games Store. Reggie says it is free, the tenner is therefore unclaimed, and he will look after it personally. Terry says that is not how free works. Reggie says it is exactly how free works. Terry points out the tenner is his. Reggie wins: he is already holding the tenner, and the coyote has no complaints.",
+          "real": "Pocket Gamer reported on 20 November that Lonesome Village, a combat-free life sim puzzler, is free to download and keep on iOS and Android through the Epic Games Store as that week's mobile freebie.",
+          "source": {
+            "name": "Pocket Gamer",
+            "url": "https://www.pocketgamer.com/lonesome-village/free-on-the-epic-games-store/"
+          },
+          "link": {
+            "text": "More free fun, no coyote required: visit the Arcade.",
+            "url": "arcade.html"
+          }
+        }
+      ],
+      "terry": "And that, ladies and gentlemen, is Tuesday: a staggering pile of hours, a photo contest, a week of cats and a free village! Everything in the big type is made up, the boxes are real, and I have a tenner to post. Back tomorrow!",
+      "reggie": "Check the boxes, my old son, that is where the facts live, and the rest is pure patter. Short but sound today, nothing padded, no extra charge. The Pro stays on the wish-list and the tenner stays in my pocket. Back tomorrow."
+    },
+    {
       "date": "2026-11-23",
       "title": "Monday Brings Bargain Bundles, An Evergreen Chart-Topper, Seven Brave Launches And A Very Long Evening",
       "standfirst": "Terry (PC, Steam Deck, master race, full price on day one) and Reggie (PS5, saving for a Pro, waiting for the sale) read through the latest gaming news and argue about every bit of it. A shorter edition today, because only the stories we could check made the cut. Everything in big type is made up, and so is the arguing. Everything in the boxes is real.",
