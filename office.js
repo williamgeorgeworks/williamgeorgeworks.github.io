@@ -38,7 +38,9 @@ const STAFF = [
   { id: "filament", name: "Filament Spool", tag: "Fila", role: "3D printer", prop: "spool",
     body: "#1a6b6b", skin: "#f0c9a0", hair: "#2a1a10", accent: "#e07a2f" },
   { id: "oddly", name: "Oddly Wilkins", tag: "Oddly", role: "Quirky shop", prop: "duck",
-    body: "#5a3d7a", skin: "#f3d2b3", hair: "#f2e6a0", accent: "#f2c14e" }
+    body: "#5a3d7a", skin: "#f3d2b3", hair: "#f2e6a0", accent: "#f2c14e" },
+  { id: "rupert", name: "Reel Rupert", tag: "Rupert", role: "Video", prop: "reel",
+    body: "#241818", skin: "#e8c4a0", hair: "#5a2010", accent: "#d4af37" }
 ];
 
 const WORK_FLAVOUR = [
@@ -1076,6 +1078,11 @@ function drawProp(px, py, kind, facing) {
     p(px + 6, py, 5, 5, "#f2c14e");
     p(px + 10, py + 2, 3, 2, "#e07a2f");
     p(px + 8, py + 2, 2, 2, "#141414");
+  } else if (kind === "reel") {
+    box(px, py, 9, 9, "#2a2a2a", "#141414");
+    p(px + 1, py + 1, 7, 7, "#d4af37");
+    p(px + 3, py + 3, 3, 3, "#2a2a2a");
+    p(px + 8, py + 2, 3, 5, "#3d2a1c");
   } else if (kind === "quill") {
     p(px + 3, py, 4, 5, "#f4f0e4");
     p(px + 4, py + 1, 2, 3, "#ffffff");
@@ -1221,7 +1228,7 @@ function drawPerson(pr) {
     p(bx, y - 44, 8, 5, s.accent);
     p(bx + (left ? -3 : 7), y - 43, 3, 2, "#e07a2f");
   }
-  const held = ["clipboard", "envelope", "book", "joystick", "basket", "spool", "duck", "quill"];
+  const held = ["clipboard", "envelope", "book", "joystick", "basket", "spool", "duck", "reel", "quill"];
   const armX = left ? x - 11 : x + 7;
   p(armX, y - 22, 4, 10, s.skin);
   if (held.includes(s.prop)) drawProp(left ? x - 16 : x + 9, y - 20, s.prop, pr.facing);
