@@ -113,13 +113,16 @@ State at end of 23 Nov 2026 (branch `archie/seen-off-dayout`, working copy `/wor
 
 1. **Done:** M2 complete (builds in `/workspace/seen-off-steam/dist/m2/`, not rebuilt since). M3 so far, web only, no desktop rebuild:
    Dexter recoloured; the shared inked card frame (owner tint, larger art window, owner type line, Libre Caslon rules text, rarity crest);
-   painted art on 37 cards: the six cat cards, all nine hero starter cards and all 22 base-pool commons. Kenneth's sprite redrawn from
-   his portrait (flat cap, glasses, quill) and his UI colour is now near-black `#1d1c24`. Screenshots: `shots/d1-*`, `d2-*.png`.
-2. **Tests:** `node tests/verify.js` (about 7 min; 206/206 passing on 24 Nov; the autoplay driver now takes the last event option if the first one refuses, which fixed the intermittent m1 play-through stall on "An imaginary invoice"; `ONLY=m2d` etc. runs one section).
-   Playtest: `RUNS=6 node tools/playtest.js out.json`.
-3. **Suggested next chunk: the uncommons**, about six per session (two per hero), same method (refs in `../refs/`, one generation each,
-   max one retry, crop to `web/cards/`, CSS block, verify check, AI content list). Still without art: 12 per hero (uncommons, rares and the
-   milestone-2 unlock cards) plus the 6 shared/clutter cards. Then a desktop rebuild into `dist/m3/` once the art settles.
+   painted art on 43 cards: the six cat cards, all nine hero starter cards, all 22 base-pool commons and six uncommons (25 Nov).
+   Kenneth's sprite redrawn from his portrait, his UI colour is near-black `#1d1c24`, and his hero-pick blurb says he has been drawn.
+   Screenshots: `shots/d1-*`, `d2-*`, `d3-*.png`. Local helper scripts (push, screenshots) live in `/workspace/seen-off-steam/helpers/`
+   because `/tmp` is wiped when the box is refreshed.
+2. **Tests:** `node tests/verify.js` (about 7 min; 207/207 passing on 25 Nov; `ONLY=m2d` etc. runs one section). The autoplay driver takes the
+   last event option if the first one refuses. Playtest: `RUNS=6 node tools/playtest.js out.json`.
+3. **Suggested next chunk (small):** the remaining base uncommons, two per hero: Reggie A Nice Little Earner, Rounding Up; Terry Day One
+   Purchase, Theatrical Outrage; Kenneth Long Story, Mysterious Parcel (same method). Then the last base uncommons (My Old Son, Wounded Dignity,
+   Steady Hand, Left Without Saying Goodbye), the rares, the milestone-2 unlock cards and the six shared/clutter cards, and a desktop
+   rebuild into `dist/m3/` once the art settles.
 4. **Still open for M3 (from the M2 proposal):** real drawings for the 35 new enemies (still labelled PLACEHOLDER stand-ups); the other
    four places (Arcades & Bingo, the Winter Gardens, the B&B, the Old Pier); Daily Rules; legendary cards; a boss-health pass for later places.
 5. **Before release:** declare everything in the AI content list below in Steam's Content Survey.
@@ -207,6 +210,16 @@ inner keyline so the frame reads on dark backgrounds), the card owner badge, the
 portrait disc (tint `#dcdbe2`), the map token and his ink-blot hit particles (`HCOL`/`HTINT`/`HINK`). Purple stays for general effects
 (statuses, elites, Air of Mystery) and Tilly's card. His title blurb no longer says nobody has drawn him.
 
+### First six uncommons (25 Nov 2026)
+
+Uncommons are offered the same way as commons (34% of reward slots, then uniform within the hero's base uncommons; the milestone-2
+unlock uncommons only after their stick), so every base uncommon is equally "most seen". Picked one attack and one other per hero:
+**Reggie** Final Demand, Itemised Bill; **Terry** Splatter Storm, Two-Page Spread; **Kenneth** Wrong House, Coin Toss. Likeness from
+`../refs/*-portrait.jpg`, style from the existing card art. One generation each, no retries. Generic prom and plain beach huts, unnamed
+tower, no trade marks, no banknotes (Coin Toss shows a blank gold token). Full images `../mockups/card-final-demand.jpg`,
+`card-itemised-bill.jpg`, `card-splatter-storm.jpg`, `card-two-page-spread.jpg`, `card-wrong-house.jpg`, `card-coin-toss.jpg`;
+crops in `web/cards/` (`finaldemand`, `itemised`, `storm`, `layout`, `wronghouse`, `cointoss`).
+
 **Steam Content Survey, pre-generated AI content (definite; keep this list up to date):**
 - `web/cards/redpen.jpg`, `web/cards/cough.jpg`, `web/cards/invoice.jpg`: AI-generated (23 Nov 2026) from Reggie's portrait and our card style.
 - `web/cards/inkblot.jpg`, `web/cards/sketch.jpg`, `web/cards/splatter.jpg`: AI-generated (23 Nov 2026) from Terry's portrait and our card style.
@@ -214,17 +227,18 @@ portrait disc (tint `#dcdbe2`), the map token and his ink-blot hit particles (`H
 - `web/cards/remit.jpg`, `factcheck.jpg`, `crosshatch.jpg`, `roughdraft.jpg`, `arrival.jpg`, `subject.jpg`: AI-generated (24 Nov 2026) from the three heroes' portraits and our card style.
 - `web/cards/patter.jpg`, `lineedit.jpg`, `fullcolour.jpg`, `bigtitle.jpg`, `nobody.jpg`, `knowsterry.jpg`: AI-generated (24 Nov 2026) from the three heroes' portraits and our card style.
 - `web/cards/tenner.jpg`, `braveface.jpg`, `proofread.jpg`, `wraparound.jpg`, `inkwash.jpg`, `quick.jpg`, `refphoto.jpg`, `friendreg.jpg`, `cousin.jpg`, `uninvited.jpg`: AI-generated (24 Nov 2026) from the three heroes' portraits and our card style.
+- `web/cards/finaldemand.jpg`, `itemised.jpg`, `storm.jpg`, `layout.jpg`, `wronghouse.jpg`, `cointoss.jpg`: AI-generated (25 Nov 2026) from the three heroes' portraits and our card style.
 - `web/cats/*.jpg` (all six cat signature cards): crops of the cat card mockups in `../mockups/card-*.jpg`, which **were AI-generated**
   (from the cats' real photos). Declare them as pre-generated AI content.
 - The full-size sources of all of the above in `../mockups/`.
 
 ### Cards still needing real art
 
-Only the six cats' signature cards, Reggie's three starter cards (Red Pen, Polite Cough, Imaginary Invoice), Terry's three (Ink Blot, Sketchbook, Splatter), Kenneth's three (Firm Handshake, Vague Nod, Who Invited Him?) and all 22 base-pool commons have painted art. Every other card still shows its ink icon on the coloured panel (placeholder):
+Only the six cats' signature cards, Reggie's three starter cards (Red Pen, Polite Cough, Imaginary Invoice), Terry's three (Ink Blot, Sketchbook, Splatter), Kenneth's three (Firm Handshake, Vague Nod, Who Invited Him?) all 22 base-pool commons and six uncommons (Final Demand, Itemised Bill, Splatter Storm, Two-Page Spread, Wrong House, Coin Toss) have painted art. Every other card still shows its ink icon on the coloured panel (placeholder):
 
-- **Reggie (12):** A Nice Little Earner, Itemised Bill, Compound Interest, My Old Son, Cartel Pricing, Rounding Up, Final Demand, Wounded Dignity, Cash in Hand, VAT Inclusive, Late Payment Charge, The Bailiffs
-- **Terry (12):** Theatrical Outrage, Frame Rate, Day One Purchase, Splatter Storm, Two-Page Spread, Steady Hand, Masterpiece, Scribble, Bleed Edge, Spot Colour, Letters to the Editor, Centre Spread
-- **Kenneth (12):** Mysterious Parcel, Long Story, Open Invitation, Plus One, Wrong House, Coin Toss, Left Without Saying Goodbye, Air of Mystery, Minutes of the Meeting, Reply All, Delegated, Nobody Minuted It
+- **Reggie (10):** A Nice Little Earner, Compound Interest, My Old Son, Cartel Pricing, Rounding Up, Wounded Dignity, Cash in Hand, VAT Inclusive, Late Payment Charge, The Bailiffs
+- **Terry (10):** Theatrical Outrage, Frame Rate, Day One Purchase, Steady Hand, Masterpiece, Scribble, Bleed Edge, Spot Colour, Letters to the Editor, Centre Spread
+- **Kenneth (10):** Mysterious Parcel, Long Story, Open Invitation, Plus One, Left Without Saying Goodbye, Air of Mystery, Minutes of the Meeting, Reply All, Delegated, Nobody Minuted It
 - **Shared / clutter (6):** Form 27B, Mislaid Sock, Parking Ticket, Writer's Block, Unflattering Photo, Catchphrase
 
 ## What the desktop bundle changes

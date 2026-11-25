@@ -193,3 +193,13 @@
 .cd.c-friendreg .art{background-image:url(cards/friendreg.jpg);background-position:50% 30%}
 .cd.c-cousin .art{background-image:url(cards/cousin.jpg);background-position:50% 30%}
 .cd.c-uninvited .art{background-image:url(cards/uninvited.jpg);background-position:45% 30%}
+
+/* first six uncommons (2 per hero): painted art, AI-generated from the heroes' portraits (25 Nov 2026; see README) */
+.cd.c-finaldemand .art,.cd.c-itemised .art,.cd.c-storm .art,.cd.c-layout .art,.cd.c-wronghouse .art,.cd.c-cointoss .art{height:78px;background:#e9e2d4 center/cover no-repeat}
+.cd.c-finaldemand .art>*,.cd.c-finaldemand .art::before,.cd.c-itemised .art>*,.cd.c-itemised .art::before,.cd.c-storm .art>*,.cd.c-storm .art::before,.cd.c-layout .art>*,.cd.c-layout .art::before,.cd.c-wronghouse .art>*,.cd.c-wronghouse .art::before,.cd.c-cointoss .art>*,.cd.c-cointoss .art::before{display:none}
+.cd.c-finaldemand .art{background-image:url(cards/finaldemand.jpg);background-position:45% 40%}
+.cd.c-itemised .art{background-image:url(cards/itemised.jpg);background-position:50% 30%}
+.cd.c-storm .art{background-image:url(cards/storm.jpg);background-position:45% 30%}
+.cd.c-layout .art{background-image:url(cards/layout.jpg);background-position:50% 30%}
+.cd.c-wronghouse .art{background-image:url(cards/wronghouse.jpg);background-position:50% 30%}
+.cd.c-cointoss .art{background-image:url(cards/cointoss.jpg);background-position:45% 25%}
