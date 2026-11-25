@@ -6,6 +6,7 @@
   if(!n.querySelector('a[href="employee-of-the-month.html"]')){var eo=document.createElement('a');eo.href='employee-of-the-month.html';eo.textContent='Employee of the Month';n.appendChild(eo);}
   if(!n.querySelector('a[href="board.html"]')){var bd=document.createElement('a');bd.href='board.html';bd.textContent='Reggie\'s Board';n.appendChild(bd);}
   if(!n.querySelector('a[href="music.html"]')){var mu=document.createElement('a');mu.href='music.html';mu.textContent='Music';n.appendChild(mu);}
+  if(!n.querySelector('a[href="gazette.html"]')){var gz=document.createElement('a');gz.href='gazette.html';gz.textContent='The Gazette';n.appendChild(gz);}
   if(!n.querySelector('a[href="office.html"], a[href="/office.html"]')){
     var ofc=document.createElement('a');
     ofc.href=n.querySelector('a[href^="/"]')?'/office.html':'office.html';
