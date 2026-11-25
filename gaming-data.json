@@ -1,6 +1,143 @@
 {
   "editions": [
     {
+      "date": "2026-11-25",
+      "title": "Wednesday Brings A Cardboard League, A Robot Samurai, A Secret Nightclub And A Late Delivery Of Four Games",
+      "standfirst": "Terry (PC, Steam Deck, master race, full price on day one) and Reggie (PS5, saving for a Pro, waiting for the sale) read through the latest gaming news and argue about every bit of it. Everything in big type is made up, and so is the arguing. Everything in the boxes is real.",
+      "stories": [
+        {
+          "kicker": "PlayStation",
+          "headline": "The Final Four November Games Arrive A Week Late And Politely Ask Everyone To Form A Queue",
+          "satire": "Reggie declares the one-week delay a masterstroke, since a game that arrives late is, by his reckoning, a sale with a calendar attached. Terry says he would have bought all four on release day at full price, including the cricket one, purely to feel something. Reggie asks how many of the four Terry has actually started. Terry says buying them is the hobby and playing them is the epilogue. Reggie says that is the most expensive epilogue he has ever heard. Reggie wins, and Terry goes to check whether a cricket game has a day-one edition.",
+          "real": "Push Square reported on 24 November that the last four PS Plus Extra games for November are now available in the UK, USA and Japan after a one-week delay: Cricket 26: The Official Game of the Ashes, Like a Dragon: Pirate Yakuza in Hawaii, MotoGP 26 and Trepang2.",
+          "source": {
+            "name": "Push Square",
+            "url": "https://www.pushsquare.com/news/2026/11/final-4-ps-plus-extra-games-for-november-2026-available-to-download-now"
+          }
+        },
+        {
+          "kicker": "Collectables",
+          "headline": "Real Cardboard Versions Of A Pretend Sports League Are Due In December, And The League Has Never Felt So Solid",
+          "satire": "Terry announces he will pre-order the lot, so his shelf is as ready as his graphics card. Reggie says a trading card has the smoothest frame rate in gaming: one frame, forever, and not a single stutter. Terry opens his mouth to object and finds there is nothing to object to. Reggie adds that a card never needs a driver update either, and Terry says he is not going to dignify that, then checks whether he has any drivers to update. Reggie wins, on the strength of a very still piece of cardboard.",
+          "real": "Push Square reported on 25 November that Panini is making real-life GTA 6 trading cards with Rockstar, covering only the game's fictional sports teams. The cards are due in December, and no price has been announced yet.",
+          "source": {
+            "name": "Push Square",
+            "url": "https://www.pushsquare.com/news/2026/11/real-life-gta-6-trading-cards-are-about-to-get-scalped"
+          }
+        },
+        {
+          "kicker": "PlayStation",
+          "headline": "A Flying, Swimming Robot Suit Is Pencilled In For Just Before Christmas And Nobody Has Asked About The Coat Hooks",
+          "satire": "Terry says a suit with full 360-degree movement is the closest anything has come to describing his seating arrangement. Reggie asks what it costs to fly and swim, then asks when it will be half price. Terry says dreams are not discounted. Reggie says everything is discounted eventually, including dreams, and he is raising an invoice for the daydream, payable by Boxing Day. Terry says that is not how daydreams work. Reggie says that is the beauty of it. Draw, in a suit nobody has paid for.",
+          "real": "Push Square reported on 24 November that Wuthering Waves version 4.0 is scheduled for 22 December. It adds the Strider Mechsuit, which offers 360-degree mobility, flight and underwater exploration, along with two new characters.",
+          "source": {
+            "name": "Push Square",
+            "url": "https://www.pushsquare.com/news/2026/11/wuthering-waves-becomes-a-stealth-iron-man-game-in-next-ps5-update"
+          }
+        },
+        {
+          "kicker": "Xbox",
+          "headline": "A Podracing Update Adds Private Lobbies For Six, And Reggie Has Nobody To Invite But The Cats",
+          "satire": "Terry rebinds every control before the engines start, says rebinding is practically a birthright of the master race, and spends the entire first lap in an options menu. Reggie presses whichever button the game suggests and sets off. Terry says there is an art to preparing. Reggie says the art is called the finish line. Reggie offers the six-player lobby to Terry and four cats, who all decline, and sets a lap time alone. Reggie wins, and Terry is still deciding which finger should do what.",
+          "real": "Pure Xbox reported on 24 November that Fuse Games' free Speed Legends update for Star Wars: Galactic Racer arrives in December. It adds private lobbies for up to six players, input re-binding, two new podracers and eight podracing scenarios, with split-screen multiplayer targeted for early 2027.",
+          "source": {
+            "name": "Pure Xbox",
+            "url": "https://www.purexbox.com/news/2026/11/fuse-games-reveals-whats-coming-to-star-wars-galactic-racer-in-december-update"
+          },
+          "link": {
+            "text": "Pedal to the metal, with cats: Kitty Grand Prix.",
+            "url": "kitty-grand-prix.html"
+          }
+        },
+        {
+          "kicker": "Releases",
+          "headline": "A Secret Nightclub Sits Behind Twelve Switches And A Cheat Code, And The Cheat Code Is Gloriously Old",
+          "satire": "Reggie is thrilled that a brand-new game has a puzzle which needs a cheat code from the PS2 era, and says his old console is finally a nice little earner. Terry says he has already built a spreadsheet of the twelve substations, colour-coded, with a tab for the cheat code and a tab for the tab. Reggie asks who builds a spreadsheet to go to a nightclub. Terry says someone who has never queued for a drink. Terry wins, and the nightclub gets a very well-organised guest.",
+          "real": "Pure Xbox reported on 24 November that a GTA 6 Easter egg opens a secret portal into a nightclub from Vice City, after a long chain of steps that includes visiting 12 substations in a set order and entering a Vice City cheat code.",
+          "source": {
+            "name": "Pure Xbox",
+            "url": "https://www.purexbox.com/news/2026/11/gta-6s-most-spectacular-easter-egg-so-far-has-just-been-discovered"
+          }
+        },
+        {
+          "kicker": "Nintendo",
+          "headline": "A Water-Racing Classic Joins The Switch 2 GameCube Shelf And Several Bath Toys Feel Seen",
+          "satire": "Terry demands to know why the screen needs a border at all, and says his PC has never once had a frame it did not choose. Reggie says the update lets you switch the border off for nothing, which is the first free option he has been offered all week, and he is switching it off twice just to enjoy being asked. Terry says choice is free on a PC too. Reggie says yes, but nobody sends the PC a version number to celebrate. Reggie wins, and the border is switched off and on again by way of a thank-you.",
+          "real": "Nintendo Life reported on 24 November that Wave Race: Blue Storm has joined the GameCube library on Nintendo Switch Online + Expansion Pack for Switch 2. The same update, version 2.2.0, lets players turn off the border graphic when playing GameCube games.",
+          "source": {
+            "name": "Nintendo Life",
+            "url": "https://www.nintendolife.com/news/2026/11/nintendo-expands-switch-2s-gamecube-library-with-another-game-this-week"
+          }
+        },
+        {
+          "kicker": "UK",
+          "headline": "The UK Chart Puts One Game In Front Of Another In An Order That Keeps Counting Quietly Upward",
+          "satire": "Reggie notices the Zelda game has gone first, then second, then third, and says it looks like someone counting down to a launch. Terry says the next number is four, so it is counting backwards in a very orderly fashion. Reggie says an orderly countdown is the most British thing a chart can do. Terry says the only countdown he trusts is the one on a store page at midnight. Reggie asks whether the rocket is booked. Terry says he will check the timetable. Terry wins, and the rocket stays at the bottom of the garden.",
+          "real": "Nintendo Everything reported on 24 November that in the UK software chart for the week ending 21 November, Grand Theft Auto VI entered at number one, EA Sports FC 27 was second and The Legend of Zelda: Ocarina of Time was third. The Zelda game had been number one in its first week and number two the week before.",
+          "source": {
+            "name": "Nintendo Everything",
+            "url": "https://nintendoeverything.com/uk-software-sales-chart-for-the-week-ending-november-21-2026-zelda-ocarina-of-time-holds-on-strong/"
+          }
+        },
+        {
+          "kicker": "Mobile",
+          "headline": "A Season Of Daydreams Is Announced For Pocket Monsters And Terry Remembers He Owns A Phone",
+          "satire": "Reggie says a season of daydreaming is the only thing he has ever been good at, and he has been daydreaming about a Pro since the spring. Terry says phones are beneath the master race, then admits a Steam Deck is simply a phone with ambition. Reggie says in that case Terry is already out in the field. Terry says he will take the Mega Froslass raid in a calm and dignified manner, in the garden, at dusk, with the Deck. Terry wins on a technicality, and Reggie goes to look up what a Mega Drampa wants for its tea.",
+          "real": "Final Weapon reported on 24 November that Pokemon GO's Daydream Destinations season will run from 1 December to 1 March 2027. It brings Mega Froslass and Mega Drampa to Raid Day events, and the new Community Days begin on 12 and 13 December.",
+          "source": {
+            "name": "Final Weapon",
+            "url": "https://finalweapon.net/2026/11/24/pokemon-go-launches-daydream-destinations-season-on-december-1"
+          }
+        },
+        {
+          "kicker": "Pokemon",
+          "headline": "A New Ranked Rulebook Has A Name That Sounds Like A Form From The Council Office",
+          "satire": "Reggie reads Regulation M-D aloud and asks which counter at the council office to queue at. Terry says it runs from 2 December to 3 March, which in his house is one long ranked weekend. Reggie asks how many of the 24 new Pokemon Terry can name. Terry names three, then a snack. Reggie says that leaves him twenty-one short and a biscuit up. Terry says the biscuit is an ally. Reggie wins, and files a form to say so.",
+          "real": "Serebii reported on 25 November that Pokemon Champions Ranked Battle Regulation M-D runs from 2 December 2026 to 3 March 2027. It adds 24 new Pokemon and 4 Mega Evolutions.",
+          "source": {
+            "name": "Serebii",
+            "url": "https://www.serebii.net/news/2026/November.shtml"
+          }
+        },
+        {
+          "kicker": "PC",
+          "headline": "A Graphics Driver Fixes A Log File That Kept Rewriting Itself, And Terry Calls It A Diary",
+          "satire": "Terry says his rig barely noticed, and that a log file growing by tens of gigabytes an hour is the kind of problem only a premium system gets to have. Reggie says the only thing his PS5 writes all night is the sale calendar in his head. Terry says a diary is a sign of a rich inner life. Reggie says it was a very dramatic diary, with several volumes an hour. Terry says at least his has a driver to look after it. Terry wins, and goes to check how many volumes he has written.",
+          "real": "PC Gamer reported on 24 November that Nvidia has released Game Ready driver 621.40, which addresses a bug in earlier driver packages that made a log file be rewritten repeatedly, adding up to tens of gigabytes per hour.",
+          "source": {
+            "name": "PC Gamer",
+            "url": "https://www.pcgamer.com/hardware/graphics-cards/nvidia-patch-finally-eradicates-the-ssd-hammering-bug-its-last-hotfix-didnt-actually-fix/"
+          }
+        },
+        {
+          "kicker": "PC",
+          "headline": "An Anniversary Party In A Big Fantasy Game Is Told It Can Stay Over, Boss And All",
+          "satire": "Terry says he grabbed every anniversary item on day one at full price, so the news that most of it stays puts him in the awkward position of having hurried for no reason. Reggie says he waited, kept his money and now keeps the boss as well, so he feels vindicated. Terry says hurrying is a lifestyle. Reggie says so is waiting. They agree they were both right, then look for a while at a boss called Moophisto, and neither says anything. Draw, with a cow-shaped silence.",
+          "real": "PC Gamer reported on 24 November that Blizzard says most of the Diablo 2 anniversary content from Diablo 4's Season of Hell's Legacy will stay when the Season of Tyrael's Gambit begins on 1 December. That includes all the unique Prime Evil boss fights and items such as the Hellfire Torch Charm.",
+          "source": {
+            "name": "PC Gamer",
+            "url": "https://www.pcgamer.com/games/rpg/fan-favorite-diablo-2-anniversary-bosses-and-items-wont-disappear-when-diablo-4s-next-season-starts/"
+          }
+        },
+        {
+          "kicker": "PC",
+          "headline": "A Robot Samurai With Jet Legs Is Introduced, And Everyone Within Reach Of A Checkout Looks Up",
+          "satire": "Terry says a jet-propelled samurai is the only fitting mascot for a man who reaches the store page at one minute past midnight. Reggie says a roguelite mode means losing everything and starting again, which is how his basket feels when a discount code runs out. Terry says the jet legs would get him to the checkout in time. Reggie says the sword arm would finish the argument. Terry wins, and Reggie asks whether the firing range does a family rate.",
+          "real": "PC Gamer reported on 24 November that Bungie has shown a cinematic for Bishop, a samurai-style robot runner shell in Marathon with a sword arm and jet-propelled legs. It arrives with the Symbiosis update, which adds a PvE roguelite mode, Team Deathmatch, new weapons and a social hub with a firing range.",
+          "source": {
+            "name": "PC Gamer",
+            "url": "https://www.pcgamer.com/games/fps/marathons-new-runner-shell-is-a-jet-propelled-robot-samurai-who-wants-to-hurt-you/"
+          },
+          "link": {
+            "text": "More losing everything and starting again, with cards: Seen Off.",
+            "url": "slay-the-pier.html"
+          }
+        }
+      ],
+      "terry": "And that, ladies and gentlemen, is Wednesday: a late delivery, a nightclub behind twelve switches and a robot with jet legs! Everything in the big type is made up, the boxes are real, and I would like it noted that I spotted the spreadsheet first. Back tomorrow!",
+      "reggie": "Check the boxes, my old son, that is where the facts live, and the rest is pure patter. A dozen stories and not a penny wasted. The Pro stays on the wish-list and the tenner stays in my pocket. Back tomorrow."
+    },
+    {
       "date": "2026-11-24",
       "title": "Tuesday Brings Hundreds Of Millions Of Hours, A Week Of Cats And Puzzles, A Marvel Board Game And A Free Coyote",
       "standfirst": "Terry (PC, Steam Deck, master race, full price on day one) and Reggie (PS5, saving for a Pro, waiting for the sale) read through the latest gaming news and argue about every bit of it. A shorter edition today, because only the stories we could check made the cut. Everything in big type is made up, and so is the arguing. Everything in the boxes is real.",
