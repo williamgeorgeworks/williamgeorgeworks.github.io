@@ -3,10 +3,8 @@
                     in the GitHub repo (GitHub Pages then republishes the site).
    2. POST /vote    a Terry-or-Reggie vote on a Daily Gaming Row story (needs the VOTES KV binding).
    3. GET  /tally   the vote counts for an edition, plus the running total.
-   4. POST /board   a message for Reggie's message board. It is checked, encrypted so that only Reggie's private key can
-                    read it, and added to board-inbox.json. Reggie reads the post, replies and publishes board.json.
-   5. POST /hit     a page view for the private stats counter (no cookies, nothing personal: day, page, referrer site).
-   6. GET  /stats   the counts for the stats page. If you add a secret called STATS_KEY it must be given as ?key=.
+   4. POST /hit     a page view for the private stats counter (no cookies, nothing personal: day, page, referrer site).
+   5. GET  /stats   the counts for the stats page. If you add a secret called STATS_KEY it must be given as ?key=.
    Secret needed: GITHUB_TOKEN (fine-grained token, this repo only, Contents: read and write).
    Binding needed for votes: VOTES (a Workers KV namespace). Scores work without it. */
 
@@ -150,68 +148,6 @@ async function save(env, v) {
 }
 
 
-/* ---- Reggie's message board -------------------------------------------------------------------
-   Waiting messages go into inbox.json in a PRIVATE repo (the post room), never the public site repo.
-   Reggie's post round reads them there, publishes or drops each one in board.json, and handled
-   messages are cleared out of the tray the next time a message arrives. No encryption key is needed. */
-const INBOX_REPO = "williamgeorgeworks/post-room";
-const INBOX = "inbox.json";
-const BOARD = "board.json";
-const INBOX_MAX = 80;
-const BOARD_PER_HOUR = 3;
-const BOARD_PER_DAY = 60;
-function boardTokensRude(text) { return String(text).split(/\s+/).filter(Boolean).some(t => t.length < 40 && isRude(t)); }
-function validateBoard(input) {
-  const name = cleanName(input && input.name) || "Anonymous";
-  let msg = String(input && input.message == null ? "" : input.message).replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f<>]/g, "").replace(/[ \t]+/g, " ").replace(/\n{3,}/g, "\n\n").trim();
-  if (msg.length < 5) return { error: "Reggie needs a little more than that to go on." };
-  if (msg.length > 400) return { error: "Keep it to 400 characters. Reggie reads a lot of post." };
-  if (/https?:|www\.|\b[a-z0-9-]+\.(com|co|uk|net|org|io|me|ly|info|biz|xyz|ru|cn)\b|@/i.test(name + " " + msg)) return { error: "No web addresses or email addresses, please. Reggie does not click things." };
-  if (/(\d[\s().-]*){9,}/.test(name + " " + msg)) return { error: "That looks like a phone number. Please leave numbers out." };
-  if (isRude(name) || boardTokensRude(msg)) return { error: "Reggie keeps a clean board. Try that again with fewer swear words." };
-  return { name, msg };
-}
-async function sha256hex(text) {
-  const d = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text));
-  return Array.from(new Uint8Array(d)).map(b => b.toString(16).padStart(2, "0")).join("").slice(0, 24);
-}
-async function boardAllowed(env, request) {
-  const ip = request.headers.get("CF-Connecting-IP") || "unknown";
-  const hour = new Date().toISOString().slice(0, 13);
-  const day = new Date().toISOString().slice(0, 10);
-  const kIp = "rl:" + (await sha256hex(ip + "|" + hour)), kDay = "rl:day:" + day;
-  const nIp = parseInt((await env.VOTES.get(kIp)) || "0", 10), nDay = parseInt((await env.VOTES.get(kDay)) || "0", 10);
-  if (nIp >= BOARD_PER_HOUR) return { error: "Steady on. Three messages an hour is the limit. Reggie needs a sit down." };
-  if (nDay >= BOARD_PER_DAY) return { error: "Reggie's post room is full for today. Try again tomorrow." };
-  await env.VOTES.put(kIp, String(nIp + 1), { expirationTtl: 7200 });
-  await env.VOTES.put(kDay, String(nDay + 1), { expirationTtl: 172800 });
-  return { ok: true };
-}
-async function readJsonFile(env, path, repo) {
-  const r = await gh(env, "/contents/" + path + "?ref=" + BRANCH, undefined, repo);
-  if (r.status === 404) return { sha: null, data: null };
-  if (!r.ok) throw new Error("read " + r.status);
-  const file = await r.json();
-  return { sha: file.sha, data: JSON.parse(b64decode(file.content)) };
-}
-async function addToInbox(env, post) {
-  for (let attempt = 0; attempt < 3; attempt++) {
-    const inbox = await readJsonFile(env, INBOX, INBOX_REPO);
-    const board = await readJsonFile(env, BOARD);
-    const done = new Set((board.data && board.data.done) || []);
-    const items = ((inbox.data && inbox.data.items) || []).filter(i => !done.has(i.id));
-    if (items.length >= INBOX_MAX) return { error: "Reggie's post room is full. He will clear it at the next post round." };
-    const id = Array.from(crypto.getRandomValues(new Uint8Array(6))).map(b => b.toString(16).padStart(2, "0")).join("");
-    items.push({ id, t: new Date().toISOString().slice(0, 16) + "Z", name: post.name, msg: post.msg });
-    const body = { message: "Post for Reggie (automatic)", content: b64encode(JSON.stringify({ items }, null, 1) + "\n"), branch: BRANCH, committer: { name: "Reginald Quill", email: "noreply@anthropic.com" } };
-    if (inbox.sha) body.sha = inbox.sha;
-    const put = await gh(env, "/contents/" + INBOX, { method: "PUT", body: JSON.stringify(body) }, INBOX_REPO);
-    if (put.ok) return { ok: true };
-    if (put.status !== 409 && put.status !== 422) throw new Error("write " + put.status);
-  }
-  throw new Error("busy");
-}
-
 const SIDES = ["terry", "reggie", "fave"];
 const EDITION_RE = /^(n-)?\d{4}-\d{2}-\d{2}$/; /* n- marks a Daily Row edition; plain dates are the Gaming Row */
 const MAX_STORY = 14;
@@ -227,7 +163,7 @@ function viewTally(t, edition) {
 }
 
 /* ---------- privacy-friendly page counter (v7) ---------- */
-const HIT_DAILY_CAP = 700; /* stays inside the free KV write allowance, which is shared with votes and the board */
+const HIT_DAILY_CAP = 700; /* stays inside the free KV write allowance, which is shared with votes */
 const HIT_KEEP_DAYS = 60;
 function hitDay(d) { return (d || new Date()).toISOString().slice(0, 10); }
 function cleanPage(p) {
@@ -312,20 +248,6 @@ export default {
       if (!env.VOTES) return reply(200, { ok: true, counted: false }, origin);
       try { return reply(200, await addHit(env, input, request.headers.get("User-Agent")), origin); }
       catch (e) { return reply(200, { ok: true, counted: false }, origin); }
-    }
-
-    if (path === "/board") {
-      if (!env.VOTES || !env.GITHUB_TOKEN) return reply(503, { ok: false, error: "The post room is closed for now." }, origin);
-      if (input && input.website) return reply(200, { ok: true, status: "queued" }, origin); /* honeypot */
-      const v = validateBoard(input);
-      if (v.error) return reply(400, { ok: false, error: v.error }, origin);
-      try {
-        const allowed = await boardAllowed(env, request);
-        if (allowed.error) return reply(429, { ok: false, error: allowed.error }, origin);
-        const out = await addToInbox(env, { name: v.name, msg: v.msg });
-        if (out.error) return reply(503, { ok: false, error: out.error }, origin);
-        return reply(200, { ok: true, status: "queued" }, origin);
-      } catch (err) { return reply(502, { ok: false, error: "The post room is busy. Try again in a minute." }, origin); }
     }
 
     if (path === "/vote") {

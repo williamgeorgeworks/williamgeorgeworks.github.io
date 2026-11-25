@@ -482,7 +482,6 @@
   cut(49, 1, person({ key: "p_terry", acc: BLUE, head: ["DEAR TERRY"], hs: 160, hc: [RED], sub: "YOUR PROBLEMS, SOLVED", quip: ["with total confidence. He has", "never had one in his life"], stamp: "AGONY UNCLE" }), 1);
   cut(50, 1, person({ prop: invoice, flip: 1, bg: INK, acc: YEL, fg: PAPER, head: ["INVOICES"], hs: 170, sub: "TERMS: STRICTLY IMAGINARY.", quip: ["payable in compliments"], qc: YEL, stamp: "PLUS A TENNER FOR THE Y", sc: YEL }), 1);
   cut(51, 1, person({ prop: rosette, bg: RED, acc: INK, fg: PAPER, head: ["EMPLOYEE", "OF THE MONTH"], hs: 120, hy: 250, gap: 128, sub: "STAFF RECOGNITION. MANDATORY.", quip: ["nobody is paid"], qc: YEL, stamp: "DRAWN AT RANDOM", sc: PAPER }), 1);
-  cut(52, 1, person({ key: "p_reggie", flip: 1, acc: BLUE, head: ["REGGIE’S", "MESSAGE BOARD"], hs: 118, hy: 250, gap: 126, sub: "OPEN THREE TIMES A DAY.", quip: ["a lot on his plate.", "Most of it is biscuits"] }), 1);
   cut(53, 1, comicPage, 2); cut(54, 1, music, 1); cut(55, 1, merch, 1); cut(56, 1, seasonal, 1);
   for (i = 0; i < 8; i++) cut(57 + Math.floor(i / 4), 1 + i % 4, flash(i), 0);
   cut(59, 1, faces, 0); cut(60, 1, email, 2); cut(62, 1, finale, 2);
