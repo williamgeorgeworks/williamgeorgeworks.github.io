@@ -109,20 +109,22 @@ on real machines (the Windows installer is built and the Linux AppImage smoke-te
 
 ### Where to pick up next time
 
-State at end of 23 Nov 2026 (branch `archie/seen-off-dayout`, working copy `/workspace/seen-off-steam/desktop`, local git mirrors the pushed commits):
+State at end of 25 Nov 2026 (branch `archie/seen-off-dayout`, working copy `/workspace/seen-off-steam/desktop`, local git mirrors the pushed commits):
 
 1. **Done:** M2 complete (builds in `/workspace/seen-off-steam/dist/m2/`, not rebuilt since). M3 so far, web only, no desktop rebuild:
    Dexter recoloured; the shared inked card frame (owner tint, larger art window, owner type line, Libre Caslon rules text, rarity crest);
-   painted art on 49 cards: the six cat cards, all nine hero starter cards, all 22 base-pool commons and twelve uncommons (25 Nov).
+   painted art on 55 cards: the six cat cards, all nine hero starter cards, all 22 base-pool commons, all 16 base-pool uncommons and two
+   rares, Masterpiece and Air of Mystery (25 Nov).
    Kenneth's sprite redrawn from his portrait, his UI colour is near-black `#1d1c24`, and his hero-pick blurb says he has been drawn.
    Screenshots: `shots/d1-*`, `d2-*`, `d3-*.png`. Local helper scripts (push, screenshots) live in `/workspace/seen-off-steam/helpers/`
    because `/tmp` is wiped when the box is refreshed.
-2. **Tests:** `node tests/verify.js` (about 7 min; 207/207 passing on 25 Nov; `ONLY=m2d` etc. runs one section). The autoplay driver takes the
+2. **Tests:** `node tests/verify.js` (about 7 min; all passing on 25 Nov: 209 checks, or 207 when the keyboard bot loses its random first fight and the two Esc-menu checks are skipped; `ONLY=m2d` etc. runs one section). The autoplay driver takes the
    last event option if the first one refuses. Playtest: `RUNS=6 node tools/playtest.js out.json`.
-3. **Suggested next chunk (small):** the last four base uncommons (Reggie My Old Son, Wounded Dignity; Terry Steady Hand; Kenneth
-   Left Without Saying Goodbye) plus two rares to make six. After that: the remaining rares, the milestone-2 unlock cards (Cash in Hand,
-   VAT Inclusive, Late Payment Charge, The Bailiffs, Bleed Edge, Spot Colour, Letters to the Editor, Centre Spread, Minutes of the Meeting,
-   Reply All, Delegated, Nobody Minuted It), the six shared/clutter cards, and a desktop rebuild into `dist/m3/` once the art settles.
+3. **Suggested next chunk (small):** the remaining base-pool rares plus Scribble, two per hero: Reggie Compound Interest, Cartel Pricing;
+   Terry Frame Rate, Scribble; Kenneth Open Invitation, Plus One. After that: the milestone-2 unlock cards (Cash in Hand, VAT Inclusive,
+   Late Payment Charge, The Bailiffs, Bleed Edge, Spot Colour, Letters to the Editor, Centre Spread, Minutes of the Meeting, Reply All,
+   Delegated, Nobody Minuted It), the six shared/clutter cards, and a desktop rebuild into `dist/m3/` once the art settles. Quality bar
+   from 25 Nov: reject any image with garbled lettering (prompts ask for no text at all; signs stay blank).
 4. **Still open for M3 (from the M2 proposal):** real drawings for the 35 new enemies (still labelled PLACEHOLDER stand-ups); the other
    four places (Arcades & Bingo, the Winter Gardens, the B&B, the Old Pier); Daily Rules; legendary cards; a boss-health pass for later places.
 5. **Before release:** declare everything in the AI content list below in Steam's Content Survey.
@@ -229,6 +231,18 @@ parcels, no logos; unnamed tower. Full images `../mockups/card-nice-little-earne
 `card-theatrical-outrage.jpg`, `card-long-story.jpg`, `card-mysterious-parcel.jpg`; crops in `web/cards/` (`earner`, `rounding`, `dayone`,
 `outrage`, `longstory`, `parcel`).
 
+### Last four uncommons, two rares, and Mysterious Parcel redone (25 Nov 2026)
+
+Same method: **Reggie** My Old Son, Wounded Dignity; **Terry** Steady Hand and the rare Masterpiece; **Kenneth** Left Without Saying
+Goodbye and the rare Air of Mystery (rares went to Terry and Kenneth so each hero got two cards this chunk). One generation each, no
+retries; every prompt asked for no lettering at all, and each image was checked for stray text. My Old Son's younger robot is an
+invented mini-Reggie, not a real person. **Mysterious Parcel** was regenerated once because the first version had garbled lettering on
+the tower; the new image came back with a blank billboard but still had a small garbled word band on the tower's top platform, so that
+band was painted over by hand (flat fill in the sign's colour, slight blur) to leave a blank sign. The rejected first version is kept as
+`../mockups/card-mysterious-parcel-v1-rejected.jpg` (not shipped). Full images `../mockups/card-my-old-son.jpg`, `card-wounded-dignity.jpg`,
+`card-steady-hand.jpg`, `card-left-without-saying-goodbye.jpg`, `card-masterpiece.jpg`, `card-air-of-mystery.jpg`,
+`card-mysterious-parcel.jpg` (v2); crops in `web/cards/` (`myoldson`, `dignity`, `steady`, `goodbye`, `masterpiece`, `mystery`, `parcel`).
+
 **Steam Content Survey, pre-generated AI content (definite; keep this list up to date):**
 - `web/cards/redpen.jpg`, `web/cards/cough.jpg`, `web/cards/invoice.jpg`: AI-generated (23 Nov 2026) from Reggie's portrait and our card style.
 - `web/cards/inkblot.jpg`, `web/cards/sketch.jpg`, `web/cards/splatter.jpg`: AI-generated (23 Nov 2026) from Terry's portrait and our card style.
@@ -237,18 +251,19 @@ parcels, no logos; unnamed tower. Full images `../mockups/card-nice-little-earne
 - `web/cards/patter.jpg`, `lineedit.jpg`, `fullcolour.jpg`, `bigtitle.jpg`, `nobody.jpg`, `knowsterry.jpg`: AI-generated (24 Nov 2026) from the three heroes' portraits and our card style.
 - `web/cards/tenner.jpg`, `braveface.jpg`, `proofread.jpg`, `wraparound.jpg`, `inkwash.jpg`, `quick.jpg`, `refphoto.jpg`, `friendreg.jpg`, `cousin.jpg`, `uninvited.jpg`: AI-generated (24 Nov 2026) from the three heroes' portraits and our card style.
 - `web/cards/finaldemand.jpg`, `itemised.jpg`, `storm.jpg`, `layout.jpg`, `wronghouse.jpg`, `cointoss.jpg`: AI-generated (25 Nov 2026) from the three heroes' portraits and our card style.
-- `web/cards/earner.jpg`, `rounding.jpg`, `dayone.jpg`, `outrage.jpg`, `longstory.jpg`, `parcel.jpg`: AI-generated (25 Nov 2026) from the three heroes' portraits and our card style.
+- `web/cards/earner.jpg`, `rounding.jpg`, `dayone.jpg`, `outrage.jpg`, `longstory.jpg`, `parcel.jpg`: AI-generated (25 Nov 2026) from the three heroes' portraits and our card style. (`parcel.jpg` regenerated the same day, sign retouched blank by hand.)
+- `web/cards/myoldson.jpg`, `dignity.jpg`, `steady.jpg`, `goodbye.jpg`, `masterpiece.jpg`, `mystery.jpg`: AI-generated (25 Nov 2026) from the three heroes' portraits and our card style.
 - `web/cats/*.jpg` (all six cat signature cards): crops of the cat card mockups in `../mockups/card-*.jpg`, which **were AI-generated**
   (from the cats' real photos). Declare them as pre-generated AI content.
 - The full-size sources of all of the above in `../mockups/`.
 
 ### Cards still needing real art
 
-Only the six cats' signature cards, Reggie's three starter cards (Red Pen, Polite Cough, Imaginary Invoice), Terry's three (Ink Blot, Sketchbook, Splatter), Kenneth's three (Firm Handshake, Vague Nod, Who Invited Him?) all 22 base-pool commons and twelve uncommons (Final Demand, Itemised Bill, A Nice Little Earner, Rounding Up, Splatter Storm, Two-Page Spread, Day One Purchase, Theatrical Outrage, Wrong House, Coin Toss, Long Story, Mysterious Parcel) have painted art. Every other card still shows its ink icon on the coloured panel (placeholder):
+Only the six cats' signature cards, Reggie's three starter cards (Red Pen, Polite Cough, Imaginary Invoice), Terry's three (Ink Blot, Sketchbook, Splatter), Kenneth's three (Firm Handshake, Vague Nod, Who Invited Him?) all 22 base-pool commons, all 16 base-pool uncommons and two rares (Masterpiece, Air of Mystery) have painted art. Every other card still shows its ink icon on the coloured panel (placeholder):
 
-- **Reggie (8):** Compound Interest, My Old Son, Cartel Pricing, Wounded Dignity, Cash in Hand, VAT Inclusive, Late Payment Charge, The Bailiffs
-- **Terry (8):** Frame Rate, Steady Hand, Masterpiece, Scribble, Bleed Edge, Spot Colour, Letters to the Editor, Centre Spread
-- **Kenneth (8):** Open Invitation, Plus One, Left Without Saying Goodbye, Air of Mystery, Minutes of the Meeting, Reply All, Delegated, Nobody Minuted It
+- **Reggie (6):** Compound Interest, Cartel Pricing, Cash in Hand, VAT Inclusive, Late Payment Charge, The Bailiffs
+- **Terry (6):** Frame Rate, Scribble, Bleed Edge, Spot Colour, Letters to the Editor, Centre Spread
+- **Kenneth (6):** Open Invitation, Plus One, Minutes of the Meeting, Reply All, Delegated, Nobody Minuted It
 - **Shared / clutter (6):** Form 27B, Mislaid Sock, Parking Ticket, Writer's Block, Unflattering Photo, Catchphrase
 
 ## What the desktop bundle changes

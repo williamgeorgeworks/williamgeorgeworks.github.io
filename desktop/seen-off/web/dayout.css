@@ -213,3 +213,13 @@
 .cd.c-outrage .art{background-image:url(cards/outrage.jpg);background-position:45% 25%}
 .cd.c-longstory .art{background-image:url(cards/longstory.jpg);background-position:50% 35%}
 .cd.c-parcel .art{background-image:url(cards/parcel.jpg);background-position:45% 35%}
+
+/* last four base uncommons + two rares: painted art, AI-generated from the heroes' portraits (25 Nov 2026; see README) */
+.cd.c-myoldson .art,.cd.c-dignity .art,.cd.c-steady .art,.cd.c-goodbye .art,.cd.c-masterpiece .art,.cd.c-mystery .art{height:78px;background:#e9e2d4 center/cover no-repeat}
+.cd.c-myoldson .art>*,.cd.c-myoldson .art::before,.cd.c-dignity .art>*,.cd.c-dignity .art::before,.cd.c-steady .art>*,.cd.c-steady .art::before,.cd.c-goodbye .art>*,.cd.c-goodbye .art::before,.cd.c-masterpiece .art>*,.cd.c-masterpiece .art::before,.cd.c-mystery .art>*,.cd.c-mystery .art::before{display:none}
+.cd.c-myoldson .art{background-image:url(cards/myoldson.jpg);background-position:50% 30%}
+.cd.c-dignity .art{background-image:url(cards/dignity.jpg);background-position:50% 30%}
+.cd.c-steady .art{background-image:url(cards/steady.jpg);background-position:50% 35%}
+.cd.c-goodbye .art{background-image:url(cards/goodbye.jpg);background-position:60% 30%}
+.cd.c-masterpiece .art{background-image:url(cards/masterpiece.jpg);background-position:45% 35%}
+.cd.c-mystery .art{background-image:url(cards/mystery.jpg);background-position:40% 30%}
