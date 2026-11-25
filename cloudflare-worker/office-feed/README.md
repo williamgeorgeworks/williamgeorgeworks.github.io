@@ -19,7 +19,7 @@ The Worker is not deployed as part of this pull request.
 A bot is `working` if any open issue (not a pull request) carries its label
 (`for-kenneth`, `for-terry`, `for-reggie`, `for-george`, `for-percy`,
 `for-boris`, `for-tweety`, `for-archie`, `for-brian`, `for-clive`,
-`for-frank`, `for-filament`, `for-oddly`). The response is cached for 60 seconds.
+`for-frank`, `for-filament`, `for-oddly`, `for-rupert`). The response is cached for 60 seconds.
 
 ## Deploy steps (Kenneth)
 
