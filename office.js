@@ -1631,7 +1631,7 @@ function drawFrame() {
 
 function applyShareDemo() {
   if (demoAppliedWorking) return;
-  const working = ["kenneth", "terry", "george", "percy", "tweety", "archie", "filament"];
+  const working = ["kenneth", "terry", "george", "percy", "tweety", "archie", "filament", "rupert"];
   const places = {
     reggie: { x: 54, y: FLOOR_Y + 32, facing: "r", flavour: "Off to the kettle, diplomatically" },
     frank: { x: 142, y: 592, facing: "l", flavour: "Frank's domain, the canteen" },
