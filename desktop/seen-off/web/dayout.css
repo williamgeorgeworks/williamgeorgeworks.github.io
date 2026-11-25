@@ -203,3 +203,13 @@
 .cd.c-layout .art{background-image:url(cards/layout.jpg);background-position:50% 30%}
 .cd.c-wronghouse .art{background-image:url(cards/wronghouse.jpg);background-position:50% 30%}
 .cd.c-cointoss .art{background-image:url(cards/cointoss.jpg);background-position:45% 25%}
+
+/* second six uncommons (2 per hero): painted art, AI-generated from the heroes' portraits (25 Nov 2026; see README) */
+.cd.c-earner .art,.cd.c-rounding .art,.cd.c-dayone .art,.cd.c-outrage .art,.cd.c-longstory .art,.cd.c-parcel .art{height:78px;background:#e9e2d4 center/cover no-repeat}
+.cd.c-earner .art>*,.cd.c-earner .art::before,.cd.c-rounding .art>*,.cd.c-rounding .art::before,.cd.c-dayone .art>*,.cd.c-dayone .art::before,.cd.c-outrage .art>*,.cd.c-outrage .art::before,.cd.c-longstory .art>*,.cd.c-longstory .art::before,.cd.c-parcel .art>*,.cd.c-parcel .art::before{display:none}
+.cd.c-earner .art{background-image:url(cards/earner.jpg);background-position:45% 35%}
+.cd.c-rounding .art{background-image:url(cards/rounding.jpg);background-position:45% 30%}
+.cd.c-dayone .art{background-image:url(cards/dayone.jpg);background-position:45% 25%}
+.cd.c-outrage .art{background-image:url(cards/outrage.jpg);background-position:45% 25%}
+.cd.c-longstory .art{background-image:url(cards/longstory.jpg);background-position:50% 35%}
+.cd.c-parcel .art{background-image:url(cards/parcel.jpg);background-position:45% 35%}
