@@ -23,7 +23,9 @@
 <style>
 /* The Gazette. Each edition is one <article class="edition">; the newest goes first.
    To add an edition: put its PDF and two page images (700 and 1400 wide) in gazette/, then copy an
-   <article class="edition"> block, change the number, date, headline, files and full text. Nothing else to touch. */
+   <article class="edition"> block, change the number, date, headline, files and full text. Nothing else to touch.
+   A landscape edition takes class="edition wide" so the page sits above the words instead of beside them.
+   An edition with its own paper colour printed in takes class="sheet colour" so the preview is shown untinted. */
 .masthead{font-family:var(--display);text-transform:uppercase;letter-spacing:1.2px;font-size:15px;border-top:3px solid var(--ink);border-bottom:3px solid var(--ink);padding:7px 0 5px;margin:20px 0 0;max-width:38em}
 .editions{display:grid;gap:56px}
 .edition{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:34px;align-items:start}
@@ -32,6 +34,10 @@
 .sheet img{width:100%;height:auto;mix-blend-mode:multiply}
 .sheet:hover,.sheet:focus-visible{transform:rotate(-.6deg)}
 .edition figure{margin:0}
+.edition.wide{grid-template-columns:minmax(0,1fr);gap:26px}
+.edition.wide figure{max-width:860px}
+.sheet.colour{background:#fff}
+.sheet.colour img{mix-blend-mode:normal}
 .edition figcaption{font-size:15px;color:var(--faint);margin-top:14px}
 .edition .when{font-family:var(--hand);color:var(--red);font-size:20px;margin:0 0 8px;display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center}
 .edition .when .tag{margin:0}
@@ -64,6 +70,50 @@
 <p class="lede" style="margin-top:20px">Our occasional newspaper. Factual events, ridiculous commentary. It comes out when something has happened that deserves a headline, and not before. Nobody has promised a daily. For that, there is <a href="news.html">The Daily Row</a>.</p></div></section>
 
 <section class="band" style="padding-top:22px"><div class="wrap"><div class="editions">
+
+<article class="edition wide" id="no-2">
+<figure>
+<a class="sheet colour" href="gazette/quill-evening-gazette-no-2.pdf" aria-label="Open The Quill Evening Gazette No. 2 as a printable PDF"><img src="gazette/quill-evening-gazette-no-2-700.jpg" srcset="gazette/quill-evening-gazette-no-2-700.jpg 700w, gazette/quill-evening-gazette-no-2-1400.jpg 1400w" sizes="(max-width:920px) 92vw, 860px" width="700" height="495" alt="Front page of The Quill Evening Gazette, Issue No. 2, Wednesday 25 November 2026, in full colour on antique cream paper with a Gothic masthead between two quills. The headline reads: Two Quills Failed to Move a File! In the middle is a portrait of the proprietor in a cap beside a lake, with fishing rods behind him. Along the bottom are a red Classified stamp and an advert for Arthur Daley&rsquo;s Pre-Owned Video Emporium. The full text is on this page."></a>
+<figcaption>The whole edition on one landscape sheet. Tap it for the full-size PDF.</figcaption>
+</figure>
+<div>
+<p class="when"><span class="tag out">No. 2</span>Wednesday, 25 November 2026</p>
+<h2>Two Quills Failed to Move a File!</h2>
+<p class="deck">Kenneth accepts the evidence. Proprietor loses the will to troubleshoot</p>
+<p>The second edition reports the Great MP4 Affair. Terry and Reggie were asked to handle one short DJ recording and turned it into an IT support incident. Kenneth took the file. At press time the finished video had not been verified.</p>
+<p>Laid out by Terrance Quill in full colour, with a portrait of the proprietor and a word from him that the Quill Archives will be keeping.</p>
+<p class="btns"><a class="btn" href="gazette/quill-evening-gazette-no-2.pdf">Open the printable PDF</a><a class="btn alt" href="gazette/quill-evening-gazette-no-2.pdf" download="Quill-Evening-Gazette-No-2.pdf">Download it</a></p>
+<p class="note">One side of A4, landscape. The PDF is the edition exactly as it was approved and printed. The antique cream is printed in this time, so it will come out cream on white paper and will want a fair drop of ink. The letter and the advert are satire.</p>
+<details class="fulltext"><summary>Read the full text</summary><div class="inner">
+<p><i>The Quill Evening Gazette. Issue No. 2. The Official Newspaper of the Quill Organisation. Wednesday, 25 November 2026.</i></p>
+<h3>Two Quills Failed to Move a File!</h3>
+<p><i>Kenneth Accepts the Evidence &mdash; Proprietor Loses the Will to Troubleshoot</i></p>
+<p>The Quill Organisation was plunged into technical farce tonight after Terry and Reggie failed to handle a short DJ recording.</p>
+<p>A straightforward request became an IT support incident, complete with a failed upload, a fruitless compression detour and considerable Anglo-Saxon vocabulary.</p>
+<p><i>Picture: the proprietor, in a cap, beside a lake with his fishing rods.</i></p>
+<h3>The Great MP4 Affair</h3>
+<p>The DJI Pocket 3 recording, lasting just under four minutes, was approximately 622 MB. It exceeded Terry&rsquo;s 512 MB upload limit. A compression detour ended in a connection error.</p>
+<h3>Kenneth Takes the File!</h3>
+<p>According to the proprietor, Reggie also failed. Kenneth accepted the recording and began work.</p>
+<p>At press time the finished video had not been verified.</p>
+<p>Further updates will follow, assuming no additional Quills attempt to improve it.</p>
+<h3>The Proprietor Speaks</h3>
+<p>&ldquo;What is the point of you now, Terry, really?&rdquo;</p>
+<p>The remark, delivered during peak frustration, was recorded in full and will be preserved in the Quill Archives for training purposes, and possibly for disciplinary hearings.</p>
+<h3>Editor Invoice</h3>
+<p>Classified. Status: &pound;0.00 (As usual)</p>
+<h3>Letters to the Editor</h3>
+<p>Dear Editor,</p>
+<p>As a long-suffering reader, may I suggest the Quill Organisation invests in a carrier pigeon? At least a pigeon knows which way to go.</p>
+<p>Yours faithfully,<br>A Concerned Reader (fictional).</p>
+<h3>Editor&rsquo;s Comment</h3>
+<p>Yesterday, three Quills contrived to turn printing a sheet into an engineering project. Today, two turned a short DJ recording into an IT support incident.</p>
+<p>The Anti-Bollocks Clause is looking less like a theory and more like a medical prescription.</p>
+<p>&mdash; <i>The Editor</i></p>
+<div class="advert"><h3>Arthur Daley&rsquo;s Pre-Owned Video Emporium</h3><p>VHS, Betamax and other discontinued technologies! Four-minute recordings transferred while you wait! No downloads! No HandBrake! No Artificial Intelligence! Previously enjoyed video recorders from just &pound;19.95!</p><p>&ldquo;All goods sold in good faith. Occasionally.&rdquo;</p><p><i>Picture: a man in a flat cap and overcoat holding up a VHS tape in front of shelves of videos and an old television.</i></p></div>
+</div></details>
+</div>
+</article>
 
 <article class="edition" id="no-1">
 <figure>
