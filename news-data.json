@@ -1,6 +1,65 @@
 {
  "editions": [
   {
+   "date": "2026-11-25",
+   "title": "A Christmas Budget That Needs A Sit Down, A Festive Season Declared Early, A Quarter Of Shoppers Ahead Of Schedule And A Nation Counting Its Pubs",
+   "standfirst": "Five stories from Terry and Reggie, all drawn from real news of the last few days. Everything in big type is made up. Everything in the boxes is real.",
+   "stories": [
+    {
+     "kicker": "Money",
+     "headline": "Nation Budgets Seven Hundred And Thirty-Nine Pounds For Christmas; Calculator Asks For A Sit Down",
+     "satire": "A survey puts the average Christmas at £739 a head, a figure that arrives in the mind like a sleigh in a car park. Somewhere a person is adding it up on the back of a receipt, then on the back of a second receipt, then on a napkin for luck. Terry has declared the sum a bargain and asked whether it includes the sprouts. Reggie is offering a Christmas for £738.50, my old son, with the missing fifty pence invoiced separately as a handling fee.",
+     "real": "A OnePoll survey of 2,000 UK adults for KAYAK found people expect to spend an average of £739 each on Christmas 2026, with £343 of that on presents. It also found 23% said a leisure holiday would be their first choice for Christmas Day.",
+     "source": {
+      "name": "KAYAK via GlobeNewswire",
+      "url": "https://www.globenewswire.com/news-release/2026/11/24/3409275/0/en/christmas-2026-spending-expected-to-average-739-per-person-kayak-survey-finds.html"
+     }
+    },
+    {
+     "kicker": "Christmas",
+     "headline": "Brits Declare Christmas Open On The Twenty-Fifth Of November; Calendar Asks Who Authorised That",
+     "satire": "A study says the average Briton feels properly festive a full month ahead, which leaves December standing at the door with its coat on, wondering if it is still needed. Two Christmas dinners, four shopping trips and five films are pencilled in, and the poor air fryer has been handed a turkey and a pep talk. Terry has opened a Christmas of his own and invited the whole studio. Reggie is selling pre-owned Decembers, my old son, lightly used, barely a day gone.",
+     "real": "A SharkNinja-commissioned study of 2,000 Britons found that 31% feel fully festive a month before Christmas. It found people expect two full Christmas dinners, four shopping trips and five festive films, and that 49% have used an air fryer for Christmas dinner.",
+     "source": {
+      "name": "Brit Brief",
+      "url": "https://britbrief.co.uk/business/consumers/christmas-now-starts-november-25-for-average-brit.html"
+     }
+    },
+    {
+     "kicker": "Shopping",
+     "headline": "A Quarter Of Shoppers Start Their Presents In September; The Rest Wave From The Sofa In Admiration",
+     "satire": "One in four British shoppers begins the Christmas list while the barbecue is still warm, which is the sort of planning usually reserved for moon landings. These people wrap in October and label the boxes in a small neat hand. Everyone else is simply aware that December exists and is hoping it will be gentle. Terry has bought one present in September and lost it by Halloween. Reggie is selling a head start, my old son, a genuine September, delivered in a plain bag.",
+     "real": "A SHEIN seasonal shopping study of 7,000 consumers across seven European markets found that 23% of UK shoppers begin Christmas shopping in September or October. It found 33% of UK shoppers expect to finish most of their Christmas shopping by the end of November.",
+     "source": {
+      "name": "Brit Brief",
+      "url": "https://britbrief.co.uk/business/consumers/quarter-of-brits-start-christmas-shopping-early.html"
+     }
+    },
+    {
+     "kicker": "Food and Drink",
+     "headline": "Coffee Shops Named Favourite Local Business; Flat White Accepts Award Without A Word",
+     "satire": "Research suggests the nation's affection for its small local businesses flows, above all, toward the place that knows your order and misspells your name. Bakeries and independent restaurants hover just behind, clutching their runner-up sashes. Somewhere a barista is bracing for the sudden weight of public love. Terry has demanded a standing ovation for a cup. Reggie is selling a loyalty card that is already ten stamps in, my old son, and a nice little earner on the eleventh.",
+     "real": "Small Business Saturday UK research found that 56% of Britons have a favourite local small or independent business. Cafes and coffee shops were named by 34% of respondents, ahead of bakeries and independent restaurants and takeaways at 22% each, in a OnePoll survey of 2,000 UK adults.",
+     "source": {
+      "name": "365 Retail",
+      "url": "https://365retail.co.uk/coffee-shops-top-uk-favourite-small-businesses-research/"
+     }
+    },
+    {
+     "kicker": "Pubs",
+     "headline": "Somebody Counts Every Pub In Britain And Gets Thirty-Nine Thousand Three Hundred And Seventy-Seven; Recount Not Requested",
+     "satire": "A person with a clipboard has been round the entire country and arrived at a number so tidy it could be a postcode. The number is down a little on last year, and the local locals have shrugged, adjusted a beer mat and carried on. Somewhere a regular is reporting that his stool is still there and still his. Terry has toured the lot in a single breathless afternoon. Reggie is selling a map of all of them, my old son, with the nearest one marked in biro.",
+     "real": "The Oxford Partnership counted 39,377 trading pubs and bars in November 2026, down 1.9% on November 2025. Community locals fell 0.5% year on year, while bars fell 2.4%.",
+     "source": {
+      "name": "The Morning Advertiser",
+      "url": "https://www.morningadvertiser.co.uk/Article/2026/11/23/community-pubs-resilient-as-uk-pub-and-bar-numbers-fall-19/"
+     }
+    }
+   ],
+   "terry": "And that's the news, ladies and gentlemen, five stories today, every one rooted in something real! A Christmas that costs seven hundred and thirty-nine pounds, a festive season that started without asking, a September of presents, a cup of coffee with an award and a nation with every pub counted. The big print is all ours, the boxes underneath are the truth. Join us tomorrow for more!",
+   "reggie": "Five stories, my old son, and I have invoiced you for every one, payable in a lightly used December, a loyalty card ten stamps in and a map of the pubs with the nearest marked in biro. Big type is invention, the boxes are gospel, and my fee is thirty-eight pounds fifty and a handling charge, a nice little earner. Mind how you go."
+  },
+  {
    "date": "2026-11-24",
    "title": "A Black Friday That Is Nearly Normal, A Nation Rated Minus Twenty-Two, A Tart Shaped Like Tradition And A Soap Opera On A Train",
    "standfirst": "Five stories from Terry and Reggie, all drawn from real news of the last few days. Everything in big type is made up. Everything in the boxes is real.",
