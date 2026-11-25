@@ -223,3 +223,13 @@
 .cd.c-goodbye .art{background-image:url(cards/goodbye.jpg);background-position:60% 30%}
 .cd.c-masterpiece .art{background-image:url(cards/masterpiece.jpg);background-position:45% 35%}
 .cd.c-mystery .art{background-image:url(cards/mystery.jpg);background-position:40% 30%}
+
+/* last base-pool rares + Scribble: painted art, AI-generated from the heroes' portraits (25 Nov 2026; see README) */
+.cd.c-compound .art,.cd.c-cartel .art,.cd.c-framerate .art,.cd.c-scribble .art,.cd.c-openinv .art,.cd.c-plusone .art{height:78px;background:#e9e2d4 center/cover no-repeat}
+.cd.c-compound .art>*,.cd.c-compound .art::before,.cd.c-cartel .art>*,.cd.c-cartel .art::before,.cd.c-framerate .art>*,.cd.c-framerate .art::before,.cd.c-scribble .art>*,.cd.c-scribble .art::before,.cd.c-openinv .art>*,.cd.c-openinv .art::before,.cd.c-plusone .art>*,.cd.c-plusone .art::before{display:none}
+.cd.c-compound .art{background-image:url(cards/compound.jpg);background-position:50% 35%}
+.cd.c-cartel .art{background-image:url(cards/cartel.jpg);background-position:45% 45%}
+.cd.c-framerate .art{background-image:url(cards/framerate.jpg);background-position:45% 35%}
+.cd.c-scribble .art{background-image:url(cards/scribble.jpg);background-position:50% 35%}
+.cd.c-openinv .art{background-image:url(cards/openinv.jpg);background-position:45% 30%}
+.cd.c-plusone .art{background-image:url(cards/plusone.jpg);background-position:50% 25%}
