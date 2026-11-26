@@ -1,6 +1,75 @@
 {
  "editions": [
   {
+   "date": "2026-11-26",
+   "title": "A Sandwich With Pudding Inside, Trainers Paid For In Chicken Receipts, A Christmas Number One Race Announced Early, A Six-Hundred-Mile Wall Of Rain, A Quiet Weekend On The Line And A Railway Trophy",
+   "standfirst": "Six stories from Terry and Reggie, all drawn from real news of the last few days. Everything in big type is made up. Everything in the boxes is real.",
+   "stories": [
+    {
+     "kicker": "Food and Drink",
+     "headline": "Apple Crumble Gets A Place Between Two Slices Of Bread; Pudding Declines To Wait For Its Turn",
+     "satire": "A supermarket has decided that dessert should no longer queue politely behind the main course, and has put it in a sandwich instead. Somewhere a lunch break is about to become a three-course meal that fits in one hand. Custard has not been consulted and is said to be waiting by the phone. Terry has asked whether the crumble is the filling or the bread and has been told, firmly, to sit down. Reggie is selling a spoon for the sandwich, my old son, strictly for emergencies.",
+     "real": "Sainsbury's is selling an Apple Crumble Christmas Sandwich in stores and online from Monday 30 November, for £1.85 on its own or as part of its £3.95 Meal Deal or £5.50 premium Meal Deal. It has 13 new and returning Christmas sandwiches in its range.",
+     "source": {
+      "name": "Retail Times",
+      "url": "https://retailtimes.co.uk/sainsburys-highly-anticipated-apple-crumble-christmas-sandwich-is-finally-here/"
+     }
+    },
+    {
+     "kicker": "Shopping",
+     "headline": "Trainer Shop Accepts Chicken Receipts As Currency; Shoelaces Brace For A Very Greasy Handshake",
+     "satire": "A new store in Birmingham will knock a fifth off the price of footwear if you can produce a receipt from a hot chicken restaurant, which is the first time a bin-bag of paperwork has ever been a financial asset. Shoppers are already turning out coat pockets in the street. Terry has demanded that the sports shop and the chicken shop be married on live television. Reggie says he has a drawer full of receipts, all of them from places that do not exist, and accepts all major snacks.",
+     "real": "Adidas is opening an 8,125sq ft store at Resorts World Birmingham on Thursday 26 November, with 20% off on opening day for shoppers showing a valid Dave's Hot Chicken receipt dated 19 to 26 November. On 27 and 28 November there is a free Dave's Hot Chicken portion with an in-store purchase, with 40 portions available each day from 1pm.",
+     "source": {
+      "name": "Retail Times",
+      "url": "https://retailtimes.co.uk/adidas-to-open-new-8125sq-ft-store-at-resorts-world-birmingham-on-thursday-26th-november/"
+     }
+    },
+    {
+     "kicker": "Music",
+     "headline": "Seventy-Fifth Christmas Number One Race Announced; The Nation Has Been Humming Since Halloween",
+     "satire": "Britain is to choose its seventy-fifth Christmas number one, and every radio in the country has already been playing the likely candidates since roughly the clocks changed. The race itself begins on 18 December and ends at one minute to midnight on Christmas Eve, giving the whole thing the pace of a very festive sprint to the post office. Terry has announced he will be the first person to hear the winner, then remembered that is a radio programme. Reggie is selling a lucky bell, my old son, guaranteed to ring at the right moment.",
+     "real": "Official Charts says this will be the UK's 75th Official Christmas Number 1. The chart race runs from Friday 18 December to 11.59pm on Thursday 24 December, and the result is revealed on Friday 25 December on BBC Radio 1 from 1pm to 3pm.",
+     "source": {
+      "name": "Official Charts",
+      "url": "https://www.officialcharts.com/chart-news/christmas-number-1-2026-contenders/"
+     }
+    },
+    {
+     "kicker": "Weather",
+     "headline": "Rain Described As A Six-Hundred-Mile Wall; Nation Checks Whether It Has A Door",
+     "satire": "A forecast describes the weekend's rain as a six-hundred-mile wall, which raises the practical question of who built it and whether there was planning permission. The wall is due at dawn on Saturday, running from the top of Scotland to the bottom of England, and is expected to be quite wet. Umbrellas are being tested for load-bearing. Terry has offered to knock on it. Reggie is selling ladders, my old son, in case anyone fancies a look over the top, plus a lovely little cagoule.",
+     "real": "Brit Brief reports, under a headline about a 600-mile rain wall, that a band of rain is due to reach the UK in the early hours of Saturday 28 November, with the most widespread coverage at around 5.45am from the top of Scotland to the bottom of England. The weekend forecast for Friday 27 to Sunday 29 November is rather wet and windy, with wintry downpours in the north.",
+     "source": {
+      "name": "Brit Brief",
+      "url": "https://britbrief.co.uk/weather/forecast/met-office-maps-show-600-mile-rain-wall-on-saturday.html"
+     }
+    },
+    {
+     "kicker": "Transport",
+     "headline": "Two Days Without Trains Between Peterborough And London Announced In Good Time; Timetable Enjoys Rare Lie-In",
+     "satire": "The line to London will be gloriously, deliberately empty for a weekend, and the railway has helpfully told everyone in advance, which is a bit like a restaurant announcing it will be shut and also has a menu. The signals are being upgraded to a digital kind, which one assumes will be able to turn green all by itself. Terry has volunteered to stand on the platform and wave at nothing. Reggie is selling the quiet, my old son, by the metre.",
+     "real": "Network Rail says there will be no trains between Peterborough or Letchworth Garden City and London on Saturday 28 and Sunday 29 November, for engineering work that is part of its £1.4 billion East Coast Digital Programme.",
+     "source": {
+      "name": "Network Rail",
+      "url": "https://www.networkrailmediacentre.co.uk/news/passengers-reminded-to-plan-ahead-for-east-coast-main-line-engineering-work"
+     }
+    },
+    {
+     "kicker": "Work",
+     "headline": "Railway Wins Trophy For Getting Pupils Interested In Engineering; Trophy Stays On The Mantelpiece, Not On A Siding",
+     "satire": "A rail company has been named an outstanding employer at a science and engineering awards night in Leeds, partly for setting primary school children a railway-themed challenge. Somewhere a ten-year-old has already drawn a better junction than the one in the guidebook and is waiting to be asked about it. Terry has asked to hold the trophy and been handed a laminated sign saying careful. Reggie has invoiced the pupils for a model viaduct, my old son, payable in conkers.",
+     "real": "Network Rail won the Outstanding STEM Employer Award at the STEM Awards, at a ceremony in Leeds on Friday 20 November. One of its engineers developed a railway-themed challenge for Year 5 and 6 pupils at Yarm School's Primary STEM Day.",
+     "source": {
+      "name": "Network Rail",
+      "url": "https://www.networkrailmediacentre.co.uk/news/network-rail-honoured-for-inspiring-future-engineers"
+     }
+    }
+   ],
+   "terry": "And that's the news, ladies and gentlemen, six stories today, every one rooted in something real! A pudding in a sandwich, a receipt that buys trainers, a race for number one that has already started in our heads, a wall of rain, a very quiet railway and a trophy for the engineers of tomorrow. The big print is all ours, the boxes underneath are the truth. Join us tomorrow for more!",
+   "reggie": "Six stories, my old son, and I have invoiced you for every one, payable in a spoon for the sandwich, a drawer of chicken receipts, a lucky bell, a ladder for the rain and a metre of quiet, with a model viaduct thrown in at cost. Big type is invention, the boxes are gospel, and my fee is a nice little earner. Mind how you go."
+  },
+  {
    "date": "2026-11-25",
    "title": "A Christmas Budget That Needs A Sit Down, A Festive Season Declared Early, A Quarter Of Shoppers Ahead Of Schedule And A Nation Counting Its Pubs",
    "standfirst": "Five stories from Terry and Reggie, all drawn from real news of the last few days. Everything in big type is made up. Everything in the boxes is real.",
