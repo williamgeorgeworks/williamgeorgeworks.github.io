@@ -53,6 +53,9 @@ const STAFF = [
     body: "#241818", skin: "#e8c4a0", hair: "#5a2010", accent: "#d4af37" },
   { id: "penny", name: "Penny Pincher", tag: "Penny", role: "Money", prop: "coin",
     body: "#1a5c3a", skin: "#f0c9a0", hair: "#3b2a1a", accent: "#d4af37" },
+  /* Kraken Keith sits next to Penny: the money corner. Feed key "keith" (label for-keith). */
+  { id: "keith", name: "Kraken Keith", tag: "Keith", role: "Crypto watch", prop: "tablet", kind: "keith",
+    body: "#1e2a4a", skin: "#8a5cc4", hair: "#8a5cc4", accent: "#d4af37" },
   { id: "sheila", name: "Shifty Sheila", tag: "Sheila", role: "Rota", prop: "whistle",
     body: "#c45c26", skin: "#f3d2b3", hair: "#5a2010", accent: "#f2d36b" },
   { id: "sarge", name: "Sergeant Statute", tag: "Sarge", role: "Compliance", prop: "badge",
@@ -101,7 +104,7 @@ const CELE_FLAVOUR = [
 
 /* ---------- Floor plan (640 x 640, drawn at whole-number scales only) ----------
    Top band:    three private offices, and the games nook (rod rack, arcade, darts).
-   Middle:      the open floor, nineteen desks in four rows; on the right the kettle
+   Middle:      the open floor, twenty desks in four rows (Kraken Keith took the printer's); on the right the kettle
                 corner and the lounge.
    Bottom band: the canteen, the music room, and the machine's corner.
    People walk along lanes (the aisles) rather than straight through the furniture. */
@@ -190,7 +193,7 @@ const BUBBLES = {
 const LIKES = {
   kenneth: ["office"], terry: ["office", "rods"], reggie: ["office", "kettle"],
   frank: ["canteen"], brian: ["music"], archie: ["arcade"], rupert: ["sofa", "arcade"],
-  penny: ["kettle"], hettie: ["kettle", "sofa"], sarge: ["darts"], george: ["darts", "kettle"],
+  penny: ["kettle"], keith: ["arcade", "kettle"], hettie: ["kettle", "sofa"], sarge: ["darts"], george: ["darts", "kettle"],
   oddly: ["rods"], vinnie: ["arcade"], percy: ["sofa"], boris: ["darts"], clive: ["lounge"],
   filament: ["printer"], stockley: ["printer", "canteen"], tweety: ["kettle"], mona: ["lounge", "music"],
   sheila: ["kettle"], grant: ["canteen"]
@@ -291,6 +294,16 @@ function layoutDesks() {
   if (n < cols * DESK_ROWS.length) {
     const r = Math.floor(n / cols), c = n % cols;
     printerStation = { x: x0 + c * pitch, y: DESK_ROWS[r], w: slot, lane: DESK_ROWS[r] + 62 };
+    printerStation.spotX = printerStation.x + slot / 2 - 4;
+    printerStation.spotY = printerStation.y + 46;
+    printerStation.facing = "r";
+  } else {
+    /* Every desk is taken, so the printer has moved to the top of the lounge,
+       between the kettle corner and the sofa. Users queue to its right. */
+    printerStation = { x: LOUNGE.x + 48, y: LOUNGE.y - 8, w: 58, lane: LOUNGE.y + 20 };
+    printerStation.spotX = printerStation.x + 70;
+    printerStation.spotY = LOUNGE.y + 20;
+    printerStation.facing = "l";
   }
 }
 
@@ -317,7 +330,7 @@ function layoutSpots() {
   add("lounge", 470, 266, "r", 266);
   add("lounge", 478, 414, "r", 414);
   /* The printer, on its spare desk. */
-  if (printerStation) add("printer", printerStation.x + printerStation.w / 2 - 4, printerStation.y + 46, "r", printerStation.lane);
+  if (printerStation) add("printer", printerStation.spotX, printerStation.spotY, printerStation.facing, printerStation.lane);
   /* Canteen and music room. */
   rooms.forEach(r => {
     if (r.id === "canteen") {
@@ -1044,7 +1057,7 @@ function drawKettleCorner() {
   p(fx + 13, k.y + 30, 3, 3, "#1a7a52");
   p(fx + 9, k.y + 36, 6, 6, "#f4f0e4");
   p(fx + 9, k.y + 36, 6, 1, "#c4a574");
-  if (!EMBED) drawPlate(k.x + 92, k.y + k.h - 12, ["KETTLE CORNER"]);
+  if (!EMBED) drawPlate(k.x + 92, k.y + k.h - 16, ["KETTLE CORNER"]);
 }
 
 function drawLounge() {
@@ -1548,6 +1561,15 @@ function drawProp(px, py, kind, facing) {
     p(px + 3, py + 2, 1, 3, "#1a1a1a");
     p(px + 4, py + 2, 2, 3, "#1a1a1a");
     p(px + 5, py + 3, 1, 1, "#1a1a1a");
+  } else if (kind === "tablet") {
+    /* Kraken Keith's tablet: a green candlestick chart, going up, for now. */
+    box(px, py, 10, 9, "#1a1a1a", "#141414");
+    p(px + 1, py + 1, 8, 7, "#0e1a14");
+    p(px + 2, py + 5, 1, 2, "#3dff7a");
+    p(px + 4, py + 4, 1, 2, "#3dff7a");
+    p(px + 5, py + 4, 1, 1, "#d1202f");
+    p(px + 6, py + 2, 1, 3, "#3dff7a");
+    p(px + 7, py + 1, 1, 2, "#3dff7a");
   } else if (kind === "quill") {
     p(px + 3, py, 4, 5, "#f4f0e4");
     p(px + 4, py + 1, 2, 3, "#ffffff");
@@ -1577,6 +1599,10 @@ function drawPerson(pr) {
   }
   if (s.kind === "kenneth") {
     drawKenneth(pr);
+    return;
+  }
+  if (s.kind === "keith") {
+    drawKeith(pr);
     return;
   }
   const cele = pr.phase === "celebrating";
@@ -1704,6 +1730,121 @@ function drawPerson(pr) {
   if (cele) {
     p(x - 12, y - 36 - Math.min(jump, 4), 4, 8, s.skin);
     p(x + 8, y - 38 - Math.min(jump, 4), 4, 8, s.skin);
+  }
+}
+
+/* Kraken Keith, from his portrait: a purple octopus in round black glasses and a navy
+   waistcoat with a gold brooch, his chart tablet in one tentacle and a gold coin in another. */
+function drawKeith(pr) {
+  const cele = pr.phase === "celebrating";
+  const walk = pr.phase === "idle" || pr.phase === "to-desk";
+  const work = pr.phase === "working";
+  const moving = !REDUCE && walk && pr.target;
+  const frame = moving ? walkFrame(pr) : 0;
+  const jump = (!REDUCE && cele) ? Math.round(Math.abs(Math.sin(pr.celeT * 10)) * 8) : 0;
+  const bob = moving ? (frame === 1 ? 0 : 1) : idleBob(pr);
+  const x = Math.round(pr.x);
+  let y = Math.round(pr.y - jump + bob);
+  const sit = isSeated(pr);
+  const left = pr.facing === "l";
+  const skin = "#8a5cc4", skinD = "#6a3fa0", skinL = "#a87ad8", sucker = "#e8a0b8";
+  const vest = "#1e2a4a", gold = "#d4af37";
+  shadow(x - 9, Math.round(pr.y) + 2, 18, 5);
+
+  if (work) {
+    /* Seated, back to us: waistcoat, the back of a large purple head, two tentacles typing. */
+    box(x - 8, y - 14, 16, 14, vest, "#141414");
+    p(x - 7, y - 13, 5, 4, lite(vest, 0.2));
+    p(x - 6, y - 35, 12, 3, skin);
+    p(x - 6, y - 35, 12, 1, "#141414");
+    box(x - 8, y - 33, 16, 19, skin, "#141414");
+    p(x - 6, y - 31, 5, 7, skinL);
+    p(x + 3, y - 29, 1, 1, skinD);
+    p(x - 2, y - 25, 1, 1, skinD);
+    p(x - 10, y - 25, 2, 1, "#141414");
+    p(x + 8, y - 25, 2, 1, "#141414");
+    const tap = (!REDUCE && ((pr.typeT * 6 | 0) % 2)) ? 1 : 0;
+    p(x - 13, y - 9, 6, 3, skin);
+    p(x - 15, y - 8, 3, 4, skin);
+    p(x + 7, y - 9 + tap, 6, 3, skin);
+    p(x + 12, y - 8 + tap, 3, 4, skin);
+    return;
+  }
+
+  /* Tentacles where the legs would be, with a little wiggle when he walks. */
+  if (sit) {
+    for (let i = 0; i < 4; i++) {
+      p(x - 7 + i * 4, y - 4, 3, 4, skin);
+      p(x - 7 + i * 4, y, 3, 1, sucker);
+    }
+    y += SIT_DROP;
+  } else {
+    for (let i = 0; i < 4; i++) {
+      const tx = x - 7 + i * 4;
+      const out = i < 2 ? -1 : 1;
+      const sway = moving && ((i + frame) % 2) ? 1 : 0;
+      p(tx, y - 12, 3, 9, skin);
+      p(tx + out * (1 + sway), y - 4, 3, 3, skin);
+      p(tx + out * (2 + sway), y - 1, 3, 2, skin);
+      p(tx + out * (1 + sway) + 1, y - 3, 1, 1, sucker);
+    }
+  }
+
+  /* Navy waistcoat, dark buttons, gold brooch. */
+  box(x - 7, y - 24, 14, 14, vest, "#141414");
+  p(x - 6, y - 23, 4, 4, lite(vest, 0.2));
+  p(x - 1, y - 18, 1, 1, "#0a1020");
+  p(x - 1, y - 14, 1, 1, "#0a1020");
+  p(x + 2, y - 22, 3, 3, gold);
+  p(x + 3, y - 21, 1, 1, "#c47a1a");
+
+  /* The big domed head. */
+  p(x - 6, y - 47, 12, 4, skin);
+  p(x - 6, y - 48, 12, 1, "#141414");
+  p(x - 7, y - 47, 1, 3, "#141414");
+  p(x + 6, y - 47, 1, 3, "#141414");
+  box(x - 8, y - 44, 16, 20, skin, "#141414");
+  p(x - 6, y - 46, 4, 7, skinL);
+  p(x + 3, y - 43, 1, 1, skinD);
+  p(x + 1, y - 40, 1, 1, skinD);
+  p(x - 4, y - 38, 1, 1, skinD);
+  /* Round black glasses; the pupils follow where he is looking. */
+  const glance = pr.glanceT > 0;
+  p(x - 6, y - 35, 5, 5, "#141414");
+  p(x + 1, y - 35, 5, 5, "#141414");
+  p(x - 5, y - 34, 3, 3, "#fff");
+  p(x + 2, y - 34, 3, 3, "#fff");
+  p(x - 1, y - 33, 2, 1, "#141414");
+  p(x + (left ? -5 : -4), y - 33, 2, 2, "#141414");
+  p(x + (left ? 2 : 3), y - 33, 2, 2, "#141414");
+  p(x - 6, y - 37, 4, 1, skinD);
+  p(x + 2, y - 37, 4, 1, skinD);
+  p(x - 2, y - 28, 5, 1, "#141414");
+  p(x + 3, y - 29, 1, 1, "#141414");
+  /* Face tentacles drooping over the waistcoat. */
+  p(x - 5, y - 25, 2, 4, skin);
+  p(x - 1, y - 25, 2, 5, skin);
+  p(x + 3, y - 25, 2, 3, skin);
+  if (glance) p(x + (left ? -10 : 9), y - 46, 2, 4, "#8ec8e6");
+
+  /* The tablet in one tentacle... */
+  const armX = left ? x - 11 : x + 7;
+  p(armX, y - 22, 4, 10, skin);
+  p(armX + 1, y - 14, 1, 1, sucker);
+  drawProp(left ? x - 18 : x + 9, y - 21, "tablet", pr.facing);
+  /* ...and the gold coin held up in another, unless that tentacle is busy with a mug or a dart. */
+  const busy = pr.phase === "idle" && !pr.target && pr.spot &&
+    ["kettle", "lounge", "darts", "rods", "canteen", "sofa", "music"].includes(pr.activity);
+  if (cele) {
+    p(x - 12, y - 36 - Math.min(jump, 4), 4, 10, skin);
+    p(x + 8, y - 38 - Math.min(jump, 4), 4, 10, skin);
+  } else if (!busy) {
+    const ox = left ? x + 7 : x - 11;
+    p(ox, y - 27, 4, 10, skin);
+    p(ox + 1, y - 22, 1, 1, sucker);
+    p(ox - 1, y - 33, 6, 6, "#141414");
+    p(ox, y - 32, 4, 4, gold);
+    p(ox + 1, y - 31, 2, 2, "#f2d36b");
   }
 }
 
@@ -2067,7 +2208,7 @@ function drawBubble(pr) {
   const text = pr.bubble.text;
   const x = Math.round(pr.x);
   const sit = isSeated(pr);
-  const top = Math.round(pr.y) + (sit ? SIT_DROP : 0) - (pr.staff.kind === "kenneth" || pr.staff.kind === "reggie" ? 60 : pr.staff.kind === "terry" ? 58 : 50);
+  const top = Math.round(pr.y) + (sit ? SIT_DROP : 0) - (pr.staff.kind === "kenneth" || pr.staff.kind === "reggie" ? 60 : pr.staff.kind === "terry" || pr.staff.kind === "keith" ? 56 : 50);
   const w = text.length * 4 + 5, h = 10;
   let bx = Math.round(x - w / 2);
   bx = Math.max(4, Math.min(W - w - 4, bx));
@@ -2246,7 +2387,7 @@ function applyShareDemo() {
   /* A posed snapshot for office-share.png: most at their desks, a few at the idle spots. */
   const places = {
     reggie: "kettle-0", archie: "arcade-0", boris: "darts-0", oddly: "sofa-1",
-    frank: "canteen-1", brian: "music-0", clive: "rods-0"
+    frank: "canteen-1", brian: "music-0", clive: "rods-0", keith: "arcade-1"
   };
   const bubbles = { boris: "180!", archie: "1UP!", oddly: "ZZZ" };
   people.forEach(p => {
