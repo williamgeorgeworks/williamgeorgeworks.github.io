@@ -1,6 +1,73 @@
 {
   "editions": [
     {
+      "date": "2026-11-27",
+      "title": "Friday Brings A Million Bookshops, A Very Patient Fish, A Free Biome Or Four, A Truck Stop Preview And A Fashion Update For The PS5",
+      "standfirst": "Terry (PC, Steam Deck, master race, full price on day one) and Reggie (PS5, saving for a Pro, waiting for the sale) read through the latest gaming news and argue about every bit of it. Everything in big type is made up, and so is the arguing. Everything in the boxes is real. It is a short edition today: only stories we could check properly made the cut.",
+      "stories": [
+        {
+          "kicker": "Mobile",
+          "headline": "A Cosy Bookshop On Wheels Sells A Million Copies Of Itself And Starts Shopping For Decorations",
+          "satire": "Terry says a million copies is the sort of figure that makes him feel better about his own library, which he has bought at full price and opened twice. Reggie says the shop sounds like a nice little earner: books, a wagon, no rent. Terry points out that the new add-on brings thirty decorations, and he has already made room on a shelf he does not own. Reggie asks which of the thirty is the till. Terry says he will check, and spends ten minutes on a store page. Reggie wins, because a till is the only decoration that matters.",
+          "real": "Pocket Gamer reported on 26 November that Tiny Bookshop has sold one million copies, and that its Arts & Crafts DLC is set to arrive later this month. The DLC adds two new locations, 24 wagon parts and 30 decorations.",
+          "source": {
+            "name": "Pocket Gamer",
+            "url": "https://www.pocketgamer.com/tiny-bookshop/new-arts-and-crafts-dlc-coming-soon/"
+          }
+        },
+        {
+          "kicker": "Mobile",
+          "headline": "A Fishing Game Arrives On Phones With Species That Behave Differently, Which Is More Than Can Be Said For The Bank Holiday Weather",
+          "satire": "Reggie says a game full of fish with their own personalities is exactly his sort of angler's paradise: patient, unhurried and never in a rush to spend. Terry says he fished on his Steam Deck at lunchtime and the fish were, in his words, a bit beneath him. Reggie asks how a fish can be beneath a man who is standing on a virtual jetty. Terry says it is a master race thing. The fish, being fish, offer no comment. Terry wins on a technicality, mostly that Reggie's phone is on four percent.",
+          "real": "Pocket Gamer reported on 25 November that Fishing Inc is out now on iOS and Android. Players can fish for many species with distinct behaviours, including legendary catches, at locations from small fishing holes to the open ocean.",
+          "source": {
+            "name": "Pocket Gamer",
+            "url": "https://www.pocketgamer.com/fishing-inc/out-now-on-mobile/"
+          },
+          "link": {
+            "text": "Real fish, real ditch: Ferret's Ditch.",
+            "url": "ferrets-ditch.html"
+          }
+        },
+        {
+          "kicker": "PC",
+          "headline": "A City Builder Is Handed Four Free Climates And Nobody Has Packed A Brolly",
+          "satire": "Terry says four biomes for free is the first time anything has cost him exactly what his budget allows, which is nothing, and he intends to celebrate by buying the expansion on the same day at full price. Reggie says the free bit is the only bit he is interested in, and the expansion can wait for its sale. Terry says the alpine one will suit him best, as he lives at altitude. Reggie asks what altitude. Terry says metaphorical. Reggie wins, and returns to his tropical island with a very small, very free palm tree.",
+          "real": "Simulation Daily reported on 26 November that Cities: Skylines II is getting a free update alongside the Park Adventures expansion, both due on 2 December. The free update adds alpine, arid, Mediterranean and tropical biomes to the Asset Editor.",
+          "source": {
+            "name": "Simulation Daily",
+            "url": "https://simulationdaily.com/news/cities-skylines-ii-free-update-announced/"
+          }
+        },
+        {
+          "kicker": "PC",
+          "headline": "Truck Stops Of The Future Are Shown In Screenshots, And Only Some Of Them, Like A Very Slow Magician",
+          "satire": "Reggie says showing only some of the truck stops is a smart bit of salesmanship, my old son: keep the best until the customer is hooked. Terry says he would drive past every one of them in a lorry, frame rate unlocked, and still find time to complain about the parking. Reggie says a lorry has no frame rate, it has a gearbox. Terry says that is exactly what a console person would say. Reggie says he is a console person with a gearbox and a clear conscience. Reggie wins, and Terry goes to count the stops he has not been shown.",
+          "real": "Simulation Daily reported on 25 November that SCS Software has published screenshots and details of the upcoming North Dakota DLC for American Truck Simulator. The truck stops shown are only some of the many that will be in the DLC.",
+          "source": {
+            "name": "Simulation Daily",
+            "url": "https://simulationdaily.com/news/american-truck-simulator-north-dakota-stops/"
+          },
+          "link": {
+            "text": "Fewer lorries, more cats at speed: Kitty Grand Prix.",
+            "url": "kitty-grand-prix.html"
+          }
+        },
+        {
+          "kicker": "PlayStation",
+          "headline": "A Dress-Up Adventure Gets A Big Version Number On PS5 And The Wardrobe Asks For A Bigger Door",
+          "satire": "Reggie says a version 3.0 on his PS5 is a perfectly good reason to feel he is getting somewhere without spending anything, since the game itself is free to browse. Terry says a master-race wardrobe has no version number, it simply arrives in the most expensive possible edition. Reggie asks whether it fits on a Steam Deck. Terry says everything fits on a Steam Deck if you do not look at the battery. Terry wins, then notices his battery is at three percent and has to leave the argument to look for a plug.",
+          "real": "Gaming Route's roundup of 26 November news reported that Infinity Nikki Version 3.0 launched on PS5 on 26 November, according to the PlayStation Blog.",
+          "source": {
+            "name": "Gaming Route (news roundup page)",
+            "url": "https://gamingroute.com/gaming-news-today-november-26-2026/"
+          }
+        }
+      ],
+      "terry": "And that, ladies and gentlemen, is Friday: a million bookshops, four free climates and a wardrobe with a version number! Everything in the big type is made up, the boxes are real, and I would like it noted that my battery was at three percent for dramatic effect. Back tomorrow!",
+      "reggie": "Check the boxes, my old son, that is where the facts live, and the rest is pure patter. A short edition, but not a penny wasted, and not a single story we could not check. The Pro stays on the wish-list and the tenner stays in my pocket. Back tomorrow."
+    },
+    {
       "date": "2026-11-25",
       "title": "Wednesday Brings A Cardboard League, A Robot Samurai, A Secret Nightclub And A Late Delivery Of Four Games",
       "standfirst": "Terry (PC, Steam Deck, master race, full price on day one) and Reggie (PS5, saving for a Pro, waiting for the sale) read through the latest gaming news and argue about every bit of it. Everything in big type is made up, and so is the arguing. Everything in the boxes is real.",
