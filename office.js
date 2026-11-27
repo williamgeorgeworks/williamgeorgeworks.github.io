@@ -50,7 +50,13 @@ const STAFF = [
   { id: "mona", name: "Mona Megaphone", tag: "Mona", role: "Marketing", prop: "megaphone",
     body: "#7a1a5c", skin: "#f3d2b3", hair: "#1a1a1a", accent: "#e040fb" },
   { id: "hettie", name: "Hettie Homefront", tag: "Hettie", role: "Home", prop: "teacup",
-    body: "#7a4a2a", skin: "#f0c9a0", hair: "#6a3a20", accent: "#c5a572" }
+    body: "#7a4a2a", skin: "#f0c9a0", hair: "#6a3a20", accent: "#c5a572" },
+  { id: "stockley", name: "Stockley Shelves", tag: "Stockley", role: "Stock", prop: "crate",
+    body: "#a8875a", skin: "#e8c4a0", hair: "#c45c26", accent: "#6b4a28" },
+  { id: "grant", name: "Grant Grabber", tag: "Grant", role: "Grants", prop: "grant",
+    body: "#5a3d20", skin: "#e8c4a0", hair: "#2a1a10", accent: "#4c1d95" },
+  { id: "vinnie", name: "Vinnie Views", tag: "Vinnie", role: "YouTube", prop: "trophy",
+    body: "#1a1a1a", skin: "#e8c4a0", hair: "#1a1a1a", accent: "#c81e3a" }
 ];
 
 const WORK_FLAVOUR = [
@@ -225,7 +231,8 @@ function layoutDesks() {
   const floorStaff = STAFF.filter(s => !s.office);
   const n = floorStaff.length;
   /* Two rows still fit a dozen desks; more than that needs a third row,
-     kept clear of the weird machine on the right. */
+     kept clear of the weird machine on the right. Nineteen floor desks
+     land as seven on the top row and six on each row below. */
   const rows = n > 12 ? 3 : 2;
   const slot = 58, gap = 22;
   const ys = rows === 2
@@ -1134,6 +1141,25 @@ function drawProp(px, py, kind, facing) {
     p(px + 7, py + 4, 3, 3, "#f4f0e4");
     p(px + 2, py, 2, 3, "#d8d4c8");
     p(px + 5, py + 1, 2, 2, "#d8d4c8");
+  } else if (kind === "crate") {
+    box(px, py + 3, 10, 7, "#c4a574", "#141414");
+    p(px + 1, py + 5, 8, 1, "#8a6a40");
+    p(px + 2, py, 3, 4, "#d4b896");
+    p(px + 5, py + 1, 4, 3, "#b08956");
+    p(px + 3, py + 2, 2, 2, "#8a6a40");
+  } else if (kind === "grant") {
+    box(px, py + 4, 6, 6, "#c4a574", "#141414");
+    p(px + 1, py + 5, 4, 4, "#a8875a");
+    p(px + 2, py + 2, 2, 3, "#8a6a40");
+    p(px + 4, py, 6, 6, "#a8d4e8");
+    p(px + 5, py + 1, 4, 4, "#d4e8f4");
+    p(px + 9, py + 5, 3, 2, "#d4af37");
+  } else if (kind === "trophy") {
+    box(px, py, 9, 7, "#d4af37", "#141414");
+    p(px + 1, py + 1, 7, 5, "#f2e6a0");
+    p(px + 3, py + 2, 1, 3, "#1a1a1a");
+    p(px + 4, py + 2, 2, 3, "#1a1a1a");
+    p(px + 5, py + 3, 1, 1, "#1a1a1a");
   } else if (kind === "quill") {
     p(px + 3, py, 4, 5, "#f4f0e4");
     p(px + 4, py + 1, 2, 3, "#ffffff");
@@ -1279,7 +1305,7 @@ function drawPerson(pr) {
     p(bx, y - 44, 8, 5, s.accent);
     p(bx + (left ? -3 : 7), y - 43, 3, 2, "#e07a2f");
   }
-  const held = ["clipboard", "envelope", "book", "joystick", "basket", "spool", "duck", "reel", "coin", "whistle", "badge", "megaphone", "teacup", "quill"];
+  const held = ["clipboard", "envelope", "book", "joystick", "basket", "spool", "duck", "reel", "coin", "whistle", "badge", "megaphone", "teacup", "crate", "grant", "trophy", "quill"];
   const armX = left ? x - 11 : x + 7;
   p(armX, y - 22, 4, 10, s.skin);
   if (held.includes(s.prop)) drawProp(left ? x - 16 : x + 9, y - 20, s.prop, pr.facing);
@@ -1682,7 +1708,7 @@ function drawFrame() {
 
 function applyShareDemo() {
   if (demoAppliedWorking) return;
-  const working = ["kenneth", "terry", "george", "percy", "tweety", "archie", "filament", "rupert", "penny", "sheila", "sarge", "mona", "hettie"];
+  const working = ["kenneth", "terry", "george", "percy", "tweety", "archie", "filament", "rupert", "penny", "sheila", "sarge", "mona", "hettie", "stockley", "grant", "vinnie"];
   const places = {
     reggie: { x: 54, y: FLOOR_Y + 32, facing: "r", flavour: "Off to the kettle, diplomatically" },
     frank: { x: 142, y: 592, facing: "l", flavour: "Frank's domain, the canteen" },
