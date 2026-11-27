@@ -233,3 +233,13 @@
 .cd.c-scribble .art{background-image:url(cards/scribble.jpg);background-position:50% 35%}
 .cd.c-openinv .art{background-image:url(cards/openinv.jpg);background-position:45% 30%}
 .cd.c-plusone .art{background-image:url(cards/plusone.jpg);background-position:50% 25%}
+
+/* first six milestone-2 unlock cards: painted art, AI-generated from the heroes' portraits (27 Nov 2026; see README) */
+.cd.c-bailiffs .art,.cd.c-latepay .art,.cd.c-bleed .art,.cd.c-spot .art,.cd.c-replyall .art,.cd.c-delegated .art{height:78px;background:#e9e2d4 center/cover no-repeat}
+.cd.c-bailiffs .art>*,.cd.c-bailiffs .art::before,.cd.c-latepay .art>*,.cd.c-latepay .art::before,.cd.c-bleed .art>*,.cd.c-bleed .art::before,.cd.c-spot .art>*,.cd.c-spot .art::before,.cd.c-replyall .art>*,.cd.c-replyall .art::before,.cd.c-delegated .art>*,.cd.c-delegated .art::before{display:none}
+.cd.c-bailiffs .art{background-image:url(cards/bailiffs.jpg);background-position:40% 30%}
+.cd.c-latepay .art{background-image:url(cards/latepay.jpg);background-position:50% 35%}
+.cd.c-bleed .art{background-image:url(cards/bleed.jpg);background-position:40% 40%}
+.cd.c-spot .art{background-image:url(cards/spot.jpg);background-position:45% 35%}
+.cd.c-replyall .art{background-image:url(cards/replyall.jpg);background-position:50% 35%}
+.cd.c-delegated .art{background-image:url(cards/delegated.jpg);background-position:50% 30%}
