@@ -7,12 +7,13 @@
 const REPO = "williamgeorgeworks/quill-family-hq";
 
 /* Everyone on the office page. Kenneth, Terrance and Reginald have private
-   offices; the other sixteen have desks on the open floor. */
+   offices; the other nineteen have desks on the open floor. */
 export const OFFICE_BOTS = [
   "kenneth", "terry", "reggie",
   "boris", "tweety", "percy", "george",
   "archie", "brian", "clive", "frank", "filament", "oddly", "rupert",
-  "penny", "sheila", "sarge", "mona", "hettie"
+  "penny", "sheila", "sarge", "mona", "hettie",
+  "stockley", "grant", "vinnie"
 ];
 
 export const LABEL_TO_BOT = {
@@ -34,7 +35,10 @@ export const LABEL_TO_BOT = {
   "for-sheila": "sheila",
   "for-sarge": "sarge",
   "for-mona": "mona",
-  "for-hettie": "hettie"
+  "for-hettie": "hettie",
+  "for-stockley": "stockley",
+  "for-grant": "grant",
+  "for-vinnie": "vinnie"
 };
 
 const ORIGINS = [
