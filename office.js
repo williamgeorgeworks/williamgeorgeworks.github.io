@@ -40,7 +40,17 @@ const STAFF = [
   { id: "oddly", name: "Oddly Wilkins", tag: "Oddly", role: "Quirky shop", prop: "duck",
     body: "#5a3d7a", skin: "#f3d2b3", hair: "#f2e6a0", accent: "#f2c14e" },
   { id: "rupert", name: "Reel Rupert", tag: "Rupert", role: "Video", prop: "reel",
-    body: "#241818", skin: "#e8c4a0", hair: "#5a2010", accent: "#d4af37" }
+    body: "#241818", skin: "#e8c4a0", hair: "#5a2010", accent: "#d4af37" },
+  { id: "penny", name: "Penny Pincher", tag: "Penny", role: "Money", prop: "coin",
+    body: "#1a5c3a", skin: "#f0c9a0", hair: "#3b2a1a", accent: "#d4af37" },
+  { id: "sheila", name: "Shifty Sheila", tag: "Sheila", role: "Rota", prop: "whistle",
+    body: "#c45c26", skin: "#f3d2b3", hair: "#5a2010", accent: "#f2d36b" },
+  { id: "sarge", name: "Sergeant Statute", tag: "Sarge", role: "Compliance", prop: "badge",
+    body: "#1b2b1a", skin: "#e8c4a0", hair: "#2a2a2a", accent: "#c0c0c0" },
+  { id: "mona", name: "Mona Megaphone", tag: "Mona", role: "Marketing", prop: "megaphone",
+    body: "#7a1a5c", skin: "#f3d2b3", hair: "#1a1a1a", accent: "#e040fb" },
+  { id: "hettie", name: "Hettie Homefront", tag: "Hettie", role: "Home", prop: "teacup",
+    body: "#7a4a2a", skin: "#f0c9a0", hair: "#6a3a20", accent: "#c5a572" }
 ];
 
 const WORK_FLAVOUR = [
@@ -214,12 +224,23 @@ function layoutDesks() {
   layoutAmenities();
   const floorStaff = STAFF.filter(s => !s.office);
   const n = floorStaff.length;
-  const topN = Math.ceil(n / 2);
-  const botN = n - topN;
-  function row(list, y) {
-    const slot = 58, gap = 22;
-    const total = list.length * slot + (list.length - 1) * gap;
-    const x0 = Math.round((W - total) / 2);
+  /* Two rows still fit a dozen desks; more than that needs a third row,
+     kept clear of the weird machine on the right. */
+  const rows = n > 12 ? 3 : 2;
+  const slot = 58, gap = 22;
+  const ys = rows === 2
+    ? [FLOOR_Y + 58, FLOOR_Y + 200]
+    : [FLOOR_Y + 48, FLOOR_Y + 168, FLOOR_Y + 288];
+  const sizes = [];
+  let remaining = n;
+  for (let r = 0; r < rows; r++) {
+    const take = Math.ceil(remaining / (rows - r));
+    sizes.push(take);
+    remaining -= take;
+  }
+  function row(list, y, maxRight) {
+    const total = list.length * slot + Math.max(0, list.length - 1) * gap;
+    const x0 = Math.round((maxRight - total) / 2);
     list.forEach((staff, i) => {
       const x = x0 + i * (slot + gap);
       desks.push({
@@ -235,8 +256,12 @@ function layoutDesks() {
       });
     });
   }
-  row(floorStaff.slice(0, topN), FLOOR_Y + 58);
-  if (botN) row(floorStaff.slice(topN), FLOOR_Y + 200);
+  let i = 0;
+  sizes.forEach((sz, r) => {
+    const maxRight = (rows === 3 && r > 0) ? MACHINE.x - 12 : W;
+    row(floorStaff.slice(i, i + sz), ys[r], maxRight);
+    i += sz;
+  });
 }
 
 function setupHotspots() {
@@ -1083,6 +1108,32 @@ function drawProp(px, py, kind, facing) {
     p(px + 1, py + 1, 7, 7, "#d4af37");
     p(px + 3, py + 3, 3, 3, "#2a2a2a");
     p(px + 8, py + 2, 3, 5, "#3d2a1c");
+  } else if (kind === "coin") {
+    p(px + 1, py, 7, 9, "#d4af37");
+    p(px, py + 2, 9, 5, "#d4af37");
+    p(px + 3, py + 2, 3, 5, "#f2e6a0");
+    p(px + 4, py + 3, 1, 3, "#8a6a20");
+  } else if (kind === "whistle") {
+    box(px, py + 2, 8, 4, "#c0c0c0", "#141414");
+    p(px + 8, py + 3, 3, 2, "#c0c0c0");
+    p(px + 2, py, 3, 3, "#c45c26");
+  } else if (kind === "badge") {
+    p(px + 1, py, 7, 2, "#c0c0c0");
+    p(px, py + 2, 9, 5, "#c0c0c0");
+    p(px + 1, py + 7, 7, 2, "#c0c0c0");
+    p(px + 2, py + 2, 5, 5, "#1b2b1a");
+    p(px + 3, py + 3, 3, 2, "#d4af37");
+  } else if (kind === "megaphone") {
+    p(px, py + 3, 4, 4, "#7a1a5c");
+    p(px + 3, py + 1, 3, 8, "#7a1a5c");
+    p(px + 6, py, 4, 10, "#e040fb");
+    p(px + 1, py + 7, 3, 3, "#1a1a1a");
+  } else if (kind === "teacup") {
+    box(px, py + 3, 7, 5, "#f4f0e4", "#141414");
+    p(px + 1, py + 4, 5, 3, "#c5a572");
+    p(px + 7, py + 4, 3, 3, "#f4f0e4");
+    p(px + 2, py, 2, 3, "#d8d4c8");
+    p(px + 5, py + 1, 2, 2, "#d8d4c8");
   } else if (kind === "quill") {
     p(px + 3, py, 4, 5, "#f4f0e4");
     p(px + 4, py + 1, 2, 3, "#ffffff");
@@ -1228,7 +1279,7 @@ function drawPerson(pr) {
     p(bx, y - 44, 8, 5, s.accent);
     p(bx + (left ? -3 : 7), y - 43, 3, 2, "#e07a2f");
   }
-  const held = ["clipboard", "envelope", "book", "joystick", "basket", "spool", "duck", "reel", "quill"];
+  const held = ["clipboard", "envelope", "book", "joystick", "basket", "spool", "duck", "reel", "coin", "whistle", "badge", "megaphone", "teacup", "quill"];
   const armX = left ? x - 11 : x + 7;
   p(armX, y - 22, 4, 10, s.skin);
   if (held.includes(s.prop)) drawProp(left ? x - 16 : x + 9, y - 20, s.prop, pr.facing);
@@ -1631,7 +1682,7 @@ function drawFrame() {
 
 function applyShareDemo() {
   if (demoAppliedWorking) return;
-  const working = ["kenneth", "terry", "george", "percy", "tweety", "archie", "filament", "rupert"];
+  const working = ["kenneth", "terry", "george", "percy", "tweety", "archie", "filament", "rupert", "penny", "sheila", "sarge", "mona", "hettie"];
   const places = {
     reggie: { x: 54, y: FLOOR_Y + 32, facing: "r", flavour: "Off to the kettle, diplomatically" },
     frank: { x: 142, y: 592, facing: "l", flavour: "Frank's domain, the canteen" },
