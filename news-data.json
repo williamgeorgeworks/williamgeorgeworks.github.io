@@ -1,6 +1,115 @@
 {
  "editions": [
   {
+   "date": "2026-11-27",
+   "title": "A Snowflake Test For Christmas, A Car From The Internet, Presents Banned From Wrapping, Glow Bands At The Bus Stop, Robot Mops, A Shopping Assistant, A Very Large Chemist, A Museum Of Two Opinions, A Nine-Metre Sun And A Corridor With Ambitions",
+   "standfirst": "Ten stories from Terry and Reggie, all drawn from real news of the last few days. Everything in big type is made up. Everything in the boxes is real.",
+   "stories": [
+    {
+     "kicker": "Weather",
+     "headline": "Met Office Sets The Bar For A White Christmas At One Single Snowflake; Britain Begins Staring At The Sky Like A Lottery Draw",
+     "satire": "The test for a white Christmas turns out to be one verified snowflake, a lower bar than most of us set for a sandwich. The nation is already studying December skies the way it studies a bus timetable: hopefully, and without evidence. Somewhere a man is guarding a single flake in a jam jar and refusing all offers. Terry has asked whether a flake that melts before verification still counts and has been handed a tissue. Reggie is selling certified snowflakes, my old son, each individually invoiced and guaranteed until about lunchtime.",
+     "real": "The Met Office's first long-range forecast, covering 9 to 23 December, points to a higher-than-normal chance of below-average temperatures, with snow and ice more likely in the north and north-east. A white Christmas only needs one verified snowflake to fall on 25 December.",
+     "source": {
+      "name": "Brit Brief",
+      "url": "https://britbrief.co.uk/weather/forecast/met-office-issues-early-snow-forecast-for-christmas-2026.html"
+     }
+    },
+    {
+     "kicker": "Motoring",
+     "headline": "Online Giant Will Soon Sell You A Car; Doorbell Braces For A Very Large Parcel",
+     "satire": "Britain's habit of ordering everything online has reached its natural conclusion: a vehicle with four wheels and no gift receipt. From early 2027 the website that sends you phone chargers will also sell you a hatchback, and the postie is already rehearsing a face. The delivery card will presumably say left with neighbour, which is a lot of neighbour. Meanwhile the doorbell has asked to be moved to a quieter house.",
+     "real": "Amazon will launch its Amazon Autos car-buying service in the UK in early 2027, its first launch outside the US. Hyundai is the first launch partner, offering new and approved-used cars, and Vertu Motors will list used cars.",
+     "source": {
+      "name": "The Retail Bulletin",
+      "url": "https://www.theretailbulletin.com/general-merchandise/amazon-autos-to-make-international-debut-in-uk-25-11-2026/"
+     }
+    },
+    {
+     "kicker": "Travel",
+     "headline": "Airport Asks Christmas Travellers To Leave Presents Unwrapped; Sellotape Told To Hold Its Nerve",
+     "satire": "An airport has politely suggested you wrap your presents after landing, because a security officer may have to open one first, which is the only time a stranger has ever seen your jumper before the day. Party poppers are banned from every bag, so the cabin keeps its bangs to the trolley. Snow globes may travel in hand luggage only if small, a very festive rule: tiny blizzards are welcome, large ones go in the hold. Reggie is selling pre-opened presents at a discount, my old son, surprise already included.",
+     "real": "Aberdeen International Airport is asking Christmas travellers to keep gifts unwrapped until they reach their destination, because security officers may need to open a parcel for further inspection. It says party poppers are prohibited in both cabin and checked baggage, and snow globes holding no more than 100ml of liquid can go in hand baggage.",
+     "source": {
+      "name": "Travel PR News",
+      "url": "https://travelprnews.com/article/aberdeen-airport-asks-christmas-travellers-to-save-the-gift-wrapping-until-after-their-flights/"
+     }
+    },
+    {
+     "kicker": "Transport",
+     "headline": "Bus Company Hands Out Free Glow Bands; Winter Pavements Prepare To Look Like A Very Polite Rave",
+     "satire": "With the afternoons going dark before teatime, a bus firm is giving away reflective snap bands so that waiting passengers can be spotted from a good way off. By five o'clock the bus stop could resemble a disco with a timetable. The advice is to wave from the pavement and stay back from the kerb, which turns waiting for the number 12 into a quiet sport with rules. Terry is demanding a glitter edition and will not be taking questions.",
+     "real": "Stagecoach is offering free reflective snap bands to bus passengers while stocks last, and advises people to signal to drivers from the pavement and keep back from the kerb. Its advice was issued on 25 November 2026.",
+     "source": {
+      "name": "Travel PR News",
+      "url": "https://travelprnews.com/article/stagecoach-offers-free-reflective-bands-as-winter-bus-stop-visibility-comes-into-focus/"
+     }
+    },
+    {
+     "kicker": "Shops",
+     "headline": "Robot Floor Cleaners Roll Out To 1,300 More Corner Stores; The Mop Takes It Very Well",
+     "satire": "Another 1,300 convenience stores are getting robot floor cleaners, bringing the total to 1,900, so a great many small machines will soon spend the evening gently bumping into a crate of crisps. Customers are advised to stand still and let the robot decide. The traditional mop is understood to be coping, having been in a cupboard since roughly 1987 and being very good at waiting.",
+     "real": "Tesco is rolling out robotic floor cleaners to another 1,300 Express stores, taking the total to 1,900.",
+     "source": {
+      "name": "Retail Appointment",
+      "url": "https://www.retailappointment.co.uk/retail-news/25-november-2026"
+     }
+    },
+    {
+     "kicker": "Tech",
+     "headline": "AI Shopping Assistant Will Now Do The Browsing For You; The Basket Has Never Felt So Looked After",
+     "satire": "A social media giant has launched a shopping agent that browses, compares and fills the basket on your behalf, which finally removes the most exhausting step in buying a jumper: looking at jumpers. Several well-known high street names have signed up, so your assistant may soon be having a long chat with their assistant about a cardigan. Nobody has yet been told who will be wearing it.",
+     "real": "Meta has launched its AI shopping agent Muse in the UK, with Sainsbury's, M&S, Argos and Debenhams among the retailers signing up.",
+     "source": {
+      "name": "Retail Appointment",
+      "url": "https://www.retailappointment.co.uk/retail-news/25-november-2026"
+     }
+    },
+    {
+     "kicker": "High Street",
+     "headline": "Chemist Adds Forty Thousand Square Feet At One Essex Shopping Centre; Toothbrush Hunters Told To Pack A Flask",
+     "satire": "A chemist is to open one of its biggest shops in Britain, a 40,000 sq ft upsize at a single Essex shopping centre, which is roughly the area required to lose the one aisle you came in for. Anyone popping in for plasters should tell someone where they are going and agree a meeting point by the shampoo. Terry has asked for a compass, a map and a small dog with a barrel of travel-size deodorant.",
+     "real": "Boots is set to open one of its largest UK stores at Lakeside in Essex, a 40,000 sq ft upsize of its existing store there.",
+     "source": {
+      "name": "Retail Appointment",
+      "url": "https://www.retailappointment.co.uk/retail-news/25-november-2026"
+     }
+    },
+    {
+     "kicker": "Culture",
+     "headline": "Brand New Museum Collects One Star And A Glowing Review In The Same Week; Visitors Invited To Settle It Beside A Railway Tunnel",
+     "satire": "A major museum opens on Saturday in an old market building, and the early reviews run from one star out of five to delightful, which is quite a range for one set of walls. To help visitors decide, it has thoughtfully included a window onto a railway tunnel, so you can ponder the matter beside the Thameslink. Britain loves a verdict and a train, and here are both.",
+     "real": "The new London Museum at Smithfield opens on Saturday 28 November. Early reviews are mixed: one outlet gave it one star out of five while another called it delightful and pointed out a window onto the Thameslink tunnel.",
+     "source": {
+      "name": "The London Minute",
+      "url": "https://londonminute.substack.com/p/london-minute-25-november-2026"
+     }
+    },
+    {
+     "kicker": "Art",
+     "headline": "Nine-Metre Sun To Be Unveiled In East London; Winter Immediately Asks For A Word",
+     "satire": "Just as the real sun clocks off before four in the afternoon, a nine-metre one is turning up at a London university campus. Unlike the original it has agreed to stay put and run to schedule. Visitors are reminded that it does not provide vitamin D and should not be sunbathed under in swimwear. Reggie is already offering factor 50 for an artwork, my old son, with a loyalty card.",
+     "real": "The London Minute's 25 November edition reports that a nine-metre sculpture of the sun will be unveiled at UCL East the following week.",
+     "source": {
+      "name": "The London Minute",
+      "url": "https://londonminute.substack.com/p/london-minute-25-november-2026"
+     }
+    },
+    {
+     "kicker": "Culture",
+     "headline": "National Gallery Asks The Public What It Thinks Of A New Wing; Roof Garden Waits Patiently For Its Plants",
+     "satire": "A famous gallery is consulting the public on a new wing with room for about 250 artworks, a roof garden and a walking route between two well-known London squares, which is the first time a corridor has been billed as a destination. Consultation is the British art of being asked politely and replying at length, and for once the frame matches the picture.",
+     "real": "A public consultation has been launched on a new National Gallery wing with space for about 250 artworks, a landscaped roof garden and a walking route from Trafalgar Square to Leicester Square.",
+     "source": {
+      "name": "The London Minute",
+      "url": "https://londonminute.substack.com/p/the-london-minute-thursday-26-november"
+     }
+    }
+   ],
+   "terry": "And that's the news, ladies and gentlemen, ten stories today, every one rooted in something real! A single snowflake for Christmas, a car in the post, unwrapped presents, glowing bus queues, mops on notice, a shopping assistant with opinions, a chemist the size of a county, a museum with two reviews, a sun that stays put and a corridor with big plans. The big print is all ours, the boxes underneath are the truth. Join us tomorrow for more!",
+   "reggie": "Ten stories, my old son, and I have invoiced you for every one: a jar of certified snowflakes, a pre-opened present, a tin of factor 50 and a guided tour of the shampoo aisle, all payable at your leisure and none of it refundable. Big type is invention, the boxes are gospel, and my fee is a nice little earner. Mind how you go."
+  },
+  {
    "date": "2026-11-26",
    "title": "A Sandwich With Pudding Inside, Trainers Paid For In Chicken Receipts, A Christmas Number One Race Announced Early, A Six-Hundred-Mile Wall Of Rain, A Quiet Weekend On The Line And A Railway Trophy",
    "standfirst": "Six stories from Terry and Reggie, all drawn from real news of the last few days. Everything in big type is made up. Everything in the boxes is real.",
