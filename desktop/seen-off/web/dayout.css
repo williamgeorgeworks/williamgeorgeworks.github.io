@@ -253,3 +253,13 @@
 .cd.c-spread .art{background-image:url(cards/spread.jpg);background-position:45% 45%}
 .cd.c-minutes .art{background-image:url(cards/minutes.jpg);background-position:40% 35%}
 .cd.c-nominute .art{background-image:url(cards/nominute.jpg);background-position:45% 30%}
+
+/* six shared/clutter cards: painted prop still-lifes, no hero in shot, neutral grey frame (default --own); AI-generated (27 Nov 2026; see README) */
+.cd.c-junk .art,.cd.c-sock .art,.cd.c-ticket .art,.cd.c-wblock .art,.cd.c-photo .art,.cd.c-catchp .art{height:78px;background:#e9e2d4 center/cover no-repeat}
+.cd.c-junk .art>*,.cd.c-junk .art::before,.cd.c-sock .art>*,.cd.c-sock .art::before,.cd.c-ticket .art>*,.cd.c-ticket .art::before,.cd.c-wblock .art>*,.cd.c-wblock .art::before,.cd.c-photo .art>*,.cd.c-photo .art::before,.cd.c-catchp .art>*,.cd.c-catchp .art::before{display:none}
+.cd.c-junk .art{background-image:url(cards/junk.jpg);background-position:45% 45%}
+.cd.c-sock .art{background-image:url(cards/sock.jpg);background-position:45% 55%}
+.cd.c-ticket .art{background-image:url(cards/ticket.jpg);background-position:50% 45%}
+.cd.c-wblock .art{background-image:url(cards/wblock.jpg);background-position:50% 45%}
+.cd.c-photo .art{background-image:url(cards/photo.jpg);background-position:50% 45%}
+.cd.c-catchp .art{background-image:url(cards/catchp.jpg);background-position:50% 35%}

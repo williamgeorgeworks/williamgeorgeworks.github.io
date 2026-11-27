@@ -113,21 +113,20 @@ State at end of 27 Nov 2026 (branch `archie/seen-off-dayout`, working copy `/wor
 
 1. **Done:** M2 complete (builds in `/workspace/seen-off-steam/dist/m2/`, not rebuilt since). M3 so far, web only, no desktop rebuild:
    Dexter recoloured; the shared inked card frame (owner tint, larger art window, owner type line, Libre Caslon rules text, rarity crest);
-   painted art on 73 cards: the six cat cards, all nine hero starter cards, every base-pool hero card (22 commons, 16 uncommons,
-   7 rares and Scribble; finished 25 Nov) and all twelve milestone-2 unlock cards (27 Nov). Every hero card is now painted; only
-   the 6 shared/clutter cards are still placeholders.
+   painted art on all 79 cards (finished 27 Nov 2026): the six cat cards, all nine hero starter cards, every base-pool hero card
+   (22 commons, 16 uncommons, 7 rares and Scribble), all twelve milestone-2 unlock cards and the six shared/clutter cards.
    Kenneth's sprite redrawn from his portrait, his UI colour is near-black `#1d1c24`, and his hero-pick blurb says he has been drawn.
    Screenshots: `shots/d1-*`, `d2-*`, `d3-*.png`. Local helper scripts (push, screenshots) live in `/workspace/seen-off-steam/helpers/`
    because `/tmp` is wiped when the box is refreshed.
-2. **Tests:** `node tests/verify.js` (about 7 min; all passing on 27 Nov: 212 checks, or 210 when the keyboard bot loses its random first fight and the two Esc-menu checks are skipped; `ONLY=m2d` etc. runs one section). The autoplay driver takes the
+2. **Tests:** `node tests/verify.js` (about 7 min; all passing on 27 Nov: 213 checks, or 211 when the keyboard bot loses its random first fight and the two Esc-menu checks are skipped; `ONLY=m2d` etc. runs one section). The autoplay driver takes the
    last event option if the first one refuses. Playtest: `RUNS=6 node tools/playtest.js out.json`.
-3. **Suggested next chunk (small):** the six shared/clutter cards (Form 27B, Mislaid Sock, Parking Ticket, Writer's Block,
-   Unflattering Photo, Catchphrase). They belong to no hero, so they need a house style first (suggestion: hero-less still-life
-   props on the prom in the same ink-and-splatter style, all paper blank, no real parking-ticket or council branding). Then a desktop
-   rebuild into `dist/m3/` once the art settles. Quality bar: reject any image with garbled lettering (prompts ask for a wordless
-   image; signs, papers and cards stay blank; a stray background sign may be painted out by hand and logged). Unlock cards are
-   locked at the start of a run, so screenshot them with `HAND=... node ../helpers/cardshot.js`, which sets a debug hand in the page
-   without changing the game. Overview for Ben: `shots/d3-08-hand-overview.png`.
+3. **Card art is complete.** Suggested next: a desktop rebuild into `dist/m3/` (Windows/Linux bundles as in M2) so the painted cards
+   ship in the app, then a quick visual pass at 1920x1080 and in the deck viewer. Quality bar if anything is redone: reject any image
+   with garbled lettering (prompts ask for a wordless image; signs, papers and cards stay blank; a stray background sign may be
+   painted out by hand and logged). Unlock cards are locked at the start of a run, so screenshot them with
+   `HAND=... node ../helpers/cardshot.js`, which sets a debug hand in the page without changing the game. Clutter cards are
+   unplayable, so in a hand the game shows them desaturated (existing `.cd.no` style); `shots/d4-03b-shared-art.png` shows their art
+   in full colour. Overviews for Ben: `shots/d3-08-hand-overview.png`, `shots/d4-04-overview.png`.
 4. **Still open for M3 (from the M2 proposal):** real drawings for the 35 new enemies (still labelled PLACEHOLDER stand-ups); the other
    four places (Arcades & Bingo, the Winter Gardens, the B&B, the Old Pier); Daily Rules; legendary cards; a boss-health pass for later places.
 5. **Before release:** declare everything in the AI content list below in Steam's Content Survey.
@@ -283,6 +282,21 @@ shipped). Full images `../mockups/card-cash-in-hand.jpg`, `card-vat-inclusive.jp
 `card-centre-spread.jpg` (retouched), `card-minutes-of-the-meeting.jpg`, `card-nobody-minuted-it.jpg`; crops in `web/cards/`
 (`cashhand`, `vat`, `letters`, `spread`, `minutes`, `nominute`).
 
+### The six shared/clutter cards (27 Nov 2026)
+
+These belong to no hero, so they use a house style: a single prop on the prom with no hero (and no person) in shot, in the same
+ink-and-splatter painted style, with the existing neutral grey frame (`--own:#6b7183`). Style reference only (Terry's Ink Blot
+card); no portraits needed since no hero appears. **Form 27B** a stack of forms under a blank rubber stamp, sheets blowing away;
+**Mislaid Sock** one stripy sock by a puddle, a suspicious seagull; **Parking Ticket** a plain yellow sleeve with a squiggle-line
+slip on a wooden handcart's seat, a smug seagull (no road signs, no council or official branding); **Writer's Block** a typewriter
+turned to stone, blank keys, crumpled blank paper; **Unflattering Photo** an instant photo of a seagull caught mid-squawk (no
+people); **Catchphrase** an empty end-of-pier stage, a microphone and an empty speech bubble, unimpressed seagulls. One generation
+each; one retry: Unflattering Photo's first try came out as a near-photographic 3D-looking seagull that did not match the painted
+style, redone in the inked style. All papers checked zoomed-in: squiggle lines only. Rejected try kept as
+`../mockups/card-unflattering-photo-v1-rejected.jpg` (not shipped). Full images `../mockups/card-form-27b.jpg`,
+`card-mislaid-sock.jpg`, `card-parking-ticket.jpg`, `card-writers-block.jpg`, `card-unflattering-photo.jpg`, `card-catchphrase.jpg`;
+crops in `web/cards/` (`junk`, `sock`, `ticket`, `wblock`, `photo`, `catchp`).
+
 **Steam Content Survey, pre-generated AI content (definite; keep this list up to date):**
 - `web/cards/redpen.jpg`, `web/cards/cough.jpg`, `web/cards/invoice.jpg`: AI-generated (23 Nov 2026) from Reggie's portrait and our card style.
 - `web/cards/inkblot.jpg`, `web/cards/sketch.jpg`, `web/cards/splatter.jpg`: AI-generated (23 Nov 2026) from Terry's portrait and our card style.
@@ -296,15 +310,15 @@ shipped). Full images `../mockups/card-cash-in-hand.jpg`, `card-vat-inclusive.jp
 - `web/cards/compound.jpg`, `cartel.jpg`, `framerate.jpg`, `scribble.jpg`, `openinv.jpg`, `plusone.jpg`: AI-generated (25 Nov 2026) from the three heroes' portraits and our card style.
 - `web/cards/bailiffs.jpg`, `latepay.jpg`, `bleed.jpg`, `spot.jpg`, `replyall.jpg`, `delegated.jpg`: AI-generated (27 Nov 2026) from the three heroes' portraits and our card style.
 - `web/cards/cashhand.jpg`, `vat.jpg`, `letters.jpg`, `spread.jpg`, `minutes.jpg`, `nominute.jpg`: AI-generated (27 Nov 2026) from the three heroes' portraits and our card style (`spread.jpg`'s background sign retouched blank by hand).
+- `web/cards/junk.jpg`, `sock.jpg`, `ticket.jpg`, `wblock.jpg`, `photo.jpg`, `catchp.jpg`: AI-generated (27 Nov 2026) prop still-lifes in our card style (no heroes or people depicted).
 - `web/cats/*.jpg` (all six cat signature cards): crops of the cat card mockups in `../mockups/card-*.jpg`, which **were AI-generated**
   (from the cats' real photos). Declare them as pre-generated AI content.
 - The full-size sources of all of the above in `../mockups/`.
 
 ### Cards still needing real art
 
-Only the six cats' signature cards, Reggie's three starter cards (Red Pen, Polite Cough, Imaginary Invoice), Terry's three (Ink Blot, Sketchbook, Splatter), Kenneth's three (Firm Handshake, Vague Nod, Who Invited Him?), every base-pool hero card (all 22 commons, 16 uncommons, 7 rares and Scribble) and all twelve milestone-2 unlock cards have painted art. Every other card still shows its ink icon on the coloured panel (placeholder):
-
-- **Shared / clutter (6):** Form 27B, Mislaid Sock, Parking Ticket, Writer's Block, Unflattering Photo, Catchphrase
+None. As of 27 Nov 2026 every card has painted art: the six cats' signature cards, all hero starter cards, every base-pool hero
+card, all twelve milestone-2 unlock cards and the six shared/clutter cards. All of it is pre-generated AI content (see the list above).
 
 ## What the desktop bundle changes
 
