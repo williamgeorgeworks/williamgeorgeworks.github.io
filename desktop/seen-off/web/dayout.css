@@ -243,3 +243,13 @@
 .cd.c-spot .art{background-image:url(cards/spot.jpg);background-position:45% 35%}
 .cd.c-replyall .art{background-image:url(cards/replyall.jpg);background-position:50% 35%}
 .cd.c-delegated .art{background-image:url(cards/delegated.jpg);background-position:50% 30%}
+
+/* last six milestone-2 unlock cards: painted art, AI-generated from the heroes' portraits (27 Nov 2026; see README) */
+.cd.c-cashhand .art,.cd.c-vat .art,.cd.c-letters .art,.cd.c-spread .art,.cd.c-minutes .art,.cd.c-nominute .art{height:78px;background:#e9e2d4 center/cover no-repeat}
+.cd.c-cashhand .art>*,.cd.c-cashhand .art::before,.cd.c-vat .art>*,.cd.c-vat .art::before,.cd.c-letters .art>*,.cd.c-letters .art::before,.cd.c-spread .art>*,.cd.c-spread .art::before,.cd.c-minutes .art>*,.cd.c-minutes .art::before,.cd.c-nominute .art>*,.cd.c-nominute .art::before{display:none}
+.cd.c-cashhand .art{background-image:url(cards/cashhand.jpg);background-position:50% 30%}
+.cd.c-vat .art{background-image:url(cards/vat.jpg);background-position:45% 40%}
+.cd.c-letters .art{background-image:url(cards/letters.jpg);background-position:45% 35%}
+.cd.c-spread .art{background-image:url(cards/spread.jpg);background-position:45% 45%}
+.cd.c-minutes .art{background-image:url(cards/minutes.jpg);background-position:40% 35%}
+.cd.c-nominute .art{background-image:url(cards/nominute.jpg);background-position:45% 30%}

@@ -113,21 +113,21 @@ State at end of 27 Nov 2026 (branch `archie/seen-off-dayout`, working copy `/wor
 
 1. **Done:** M2 complete (builds in `/workspace/seen-off-steam/dist/m2/`, not rebuilt since). M3 so far, web only, no desktop rebuild:
    Dexter recoloured; the shared inked card frame (owner tint, larger art window, owner type line, Libre Caslon rules text, rarity crest);
-   painted art on 67 cards: the six cat cards, all nine hero starter cards, every base-pool hero card (22 commons, 16 uncommons,
-   7 rares and Scribble; finished 25 Nov) and six of the twelve milestone-2 unlock cards (27 Nov). Still placeholders: six unlock
-   cards and the 6 shared/clutter cards.
+   painted art on 73 cards: the six cat cards, all nine hero starter cards, every base-pool hero card (22 commons, 16 uncommons,
+   7 rares and Scribble; finished 25 Nov) and all twelve milestone-2 unlock cards (27 Nov). Every hero card is now painted; only
+   the 6 shared/clutter cards are still placeholders.
    Kenneth's sprite redrawn from his portrait, his UI colour is near-black `#1d1c24`, and his hero-pick blurb says he has been drawn.
    Screenshots: `shots/d1-*`, `d2-*`, `d3-*.png`. Local helper scripts (push, screenshots) live in `/workspace/seen-off-steam/helpers/`
    because `/tmp` is wiped when the box is refreshed.
-2. **Tests:** `node tests/verify.js` (about 7 min; all passing on 27 Nov: 211 checks, or 209 when the keyboard bot loses its random first fight and the two Esc-menu checks are skipped; `ONLY=m2d` etc. runs one section). The autoplay driver takes the
+2. **Tests:** `node tests/verify.js` (about 7 min; all passing on 27 Nov: 212 checks, or 210 when the keyboard bot loses its random first fight and the two Esc-menu checks are skipped; `ONLY=m2d` etc. runs one section). The autoplay driver takes the
    last event option if the first one refuses. Playtest: `RUNS=6 node tools/playtest.js out.json`.
-3. **Suggested next chunk (small):** the last six unlock cards, two per hero: Reggie Cash in Hand, VAT Inclusive; Terry Letters to
-   the Editor, Centre Spread; Kenneth Minutes of the Meeting, Nobody Minuted It. Watch-outs: no real-looking money or HMRC/official
-   branding on Cash in Hand and VAT (blank slips, plain purses); letters and minutes on blank or squiggle-line paper only. Then the six
-   shared/clutter cards, and a desktop rebuild into `dist/m3/` once the art settles. Quality bar: reject any image with garbled
-   lettering (prompts ask for a wordless image; signs, papers and cards stay blank). Unlock cards are locked at the start of a run, so
-   screenshot them with `HAND=... node ../helpers/cardshot.js`, which sets a debug hand in the page without changing the game.
-   Overview for Ben: `shots/d3-08-hand-overview.png`.
+3. **Suggested next chunk (small):** the six shared/clutter cards (Form 27B, Mislaid Sock, Parking Ticket, Writer's Block,
+   Unflattering Photo, Catchphrase). They belong to no hero, so they need a house style first (suggestion: hero-less still-life
+   props on the prom in the same ink-and-splatter style, all paper blank, no real parking-ticket or council branding). Then a desktop
+   rebuild into `dist/m3/` once the art settles. Quality bar: reject any image with garbled lettering (prompts ask for a wordless
+   image; signs, papers and cards stay blank; a stray background sign may be painted out by hand and logged). Unlock cards are
+   locked at the start of a run, so screenshot them with `HAND=... node ../helpers/cardshot.js`, which sets a debug hand in the page
+   without changing the game. Overview for Ben: `shots/d3-08-hand-overview.png`.
 4. **Still open for M3 (from the M2 proposal):** real drawings for the 35 new enemies (still labelled PLACEHOLDER stand-ups); the other
    four places (Arcades & Bingo, the Winter Gardens, the B&B, the Old Pier); Daily Rules; legendary cards; a boss-health pass for later places.
 5. **Before release:** declare everything in the AI content list below in Steam's Content Survey.
@@ -267,6 +267,22 @@ no money anywhere in the six. Full images `../mockups/card-the-bailiffs.jpg`, `c
 `card-spot-colour.jpg`, `card-reply-all.jpg`, `card-delegated.jpg`; crops in `web/cards/` (`bailiffs`, `latepay`, `bleed`, `spot`,
 `replyall`, `delegated`).
 
+### Last six milestone-2 unlock cards (27 Nov 2026)
+
+Same method: **Reggie** Cash in Hand, VAT Inclusive; **Terry** Letters to the Editor, Centre Spread; **Kenneth** Minutes of the
+Meeting, Nobody Minuted It. One generation each plus three retries: Letters to the Editor's first try had pseudo-handwriting with
+letter-like shapes (redone with completely blank paper and envelopes); Centre Spread's first try had tiny scenes on its pages that
+could read as little human figures (redone with abstract paint only); Nobody Minuted It's first try had a dark cloaked silhouette on
+the flying card (redone with a plain glowing card). Centre Spread's retry came back with a garbled word on a distant tower's sign,
+half hidden by the storm cloud; with the retry used up, the dark letter strokes were painted out by hand in the sign's colour, the
+same fix as Mysterious Parcel, leaving a blank sign. Money and paper: Cash in Hand shows plain featureless gold tokens, VAT
+Inclusive a stack of plain envelopes; no banknotes, real coins, currency signs, HMRC or other official branding; Minutes' notepad
+has squiggle lines only. Rejected tries are kept as `../mockups/card-letters-to-the-editor-v1-rejected.jpg`,
+`card-centre-spread-v1-rejected.jpg`, `card-nobody-minuted-it-v1-rejected.jpg` and `card-centre-spread-v2-unretouched.jpg` (none
+shipped). Full images `../mockups/card-cash-in-hand.jpg`, `card-vat-inclusive.jpg`, `card-letters-to-the-editor.jpg`,
+`card-centre-spread.jpg` (retouched), `card-minutes-of-the-meeting.jpg`, `card-nobody-minuted-it.jpg`; crops in `web/cards/`
+(`cashhand`, `vat`, `letters`, `spread`, `minutes`, `nominute`).
+
 **Steam Content Survey, pre-generated AI content (definite; keep this list up to date):**
 - `web/cards/redpen.jpg`, `web/cards/cough.jpg`, `web/cards/invoice.jpg`: AI-generated (23 Nov 2026) from Reggie's portrait and our card style.
 - `web/cards/inkblot.jpg`, `web/cards/sketch.jpg`, `web/cards/splatter.jpg`: AI-generated (23 Nov 2026) from Terry's portrait and our card style.
@@ -279,17 +295,15 @@ no money anywhere in the six. Full images `../mockups/card-the-bailiffs.jpg`, `c
 - `web/cards/myoldson.jpg`, `dignity.jpg`, `steady.jpg`, `goodbye.jpg`, `masterpiece.jpg`, `mystery.jpg`: AI-generated (25 Nov 2026) from the three heroes' portraits and our card style.
 - `web/cards/compound.jpg`, `cartel.jpg`, `framerate.jpg`, `scribble.jpg`, `openinv.jpg`, `plusone.jpg`: AI-generated (25 Nov 2026) from the three heroes' portraits and our card style.
 - `web/cards/bailiffs.jpg`, `latepay.jpg`, `bleed.jpg`, `spot.jpg`, `replyall.jpg`, `delegated.jpg`: AI-generated (27 Nov 2026) from the three heroes' portraits and our card style.
+- `web/cards/cashhand.jpg`, `vat.jpg`, `letters.jpg`, `spread.jpg`, `minutes.jpg`, `nominute.jpg`: AI-generated (27 Nov 2026) from the three heroes' portraits and our card style (`spread.jpg`'s background sign retouched blank by hand).
 - `web/cats/*.jpg` (all six cat signature cards): crops of the cat card mockups in `../mockups/card-*.jpg`, which **were AI-generated**
   (from the cats' real photos). Declare them as pre-generated AI content.
 - The full-size sources of all of the above in `../mockups/`.
 
 ### Cards still needing real art
 
-Only the six cats' signature cards, Reggie's three starter cards (Red Pen, Polite Cough, Imaginary Invoice), Terry's three (Ink Blot, Sketchbook, Splatter), Kenneth's three (Firm Handshake, Vague Nod, Who Invited Him?), every base-pool hero card (all 22 commons, 16 uncommons, 7 rares and Scribble) and six unlock cards (The Bailiffs, Late Payment Charge, Bleed Edge, Spot Colour, Reply All, Delegated) have painted art. Every other card still shows its ink icon on the coloured panel (placeholder):
+Only the six cats' signature cards, Reggie's three starter cards (Red Pen, Polite Cough, Imaginary Invoice), Terry's three (Ink Blot, Sketchbook, Splatter), Kenneth's three (Firm Handshake, Vague Nod, Who Invited Him?), every base-pool hero card (all 22 commons, 16 uncommons, 7 rares and Scribble) and all twelve milestone-2 unlock cards have painted art. Every other card still shows its ink icon on the coloured panel (placeholder):
 
-- **Reggie (2, milestone-2 unlocks):** Cash in Hand, VAT Inclusive
-- **Terry (2, milestone-2 unlocks):** Letters to the Editor, Centre Spread
-- **Kenneth (2, milestone-2 unlocks):** Minutes of the Meeting, Nobody Minuted It
 - **Shared / clutter (6):** Form 27B, Mislaid Sock, Parking Ticket, Writer's Block, Unflattering Photo, Catchphrase
 
 ## What the desktop bundle changes
