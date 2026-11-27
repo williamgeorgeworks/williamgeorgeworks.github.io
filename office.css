@@ -16,7 +16,8 @@
 }
 .office-stage-wrap {
   width: 100%;
-  margin: 0 0 16px;
+  margin: 0 0 10px;
+  padding: 0 0 8px;
   text-align: center;
   overflow-x: auto;
   overflow-y: hidden;
@@ -24,6 +25,7 @@
 }
 .office-stage {
   background: #141414;
+  box-shadow: 6px 6px 0 var(--ink);
   overflow: hidden;
   line-height: 0;
   display: inline-block;
@@ -99,7 +101,6 @@
 }
 .office-credit { margin-top: 16px; }
 @media (max-width: 560px) {
-  .office-stage { box-shadow: 5px 5px 0 var(--ink); }
   .office-board-list { grid-template-columns: 1fr; }
 }
 @media (prefers-reduced-motion: reduce) {

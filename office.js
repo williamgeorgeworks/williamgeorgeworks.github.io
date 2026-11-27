@@ -1,5 +1,15 @@
-/* Virtual office — private offices, an open floor, a canteen, a music room, and the machine.
-   To add or remove someone (including Kenneth, Terrance or Reginald), edit STAFF only. */
+/* Virtual office: private offices, a games nook, an open floor of desks, the kettle
+   corner, a lounge, a canteen, a music room, and the machine.
+   To add or remove someone (including Kenneth, Terrance or Reginald), edit STAFF only.
+
+   How it hangs together:
+   - STAFF is the roster. The live feed maps each id to "working" or "idle", nothing more.
+   - Working people walk to their own desk and sit there.
+   - Idle people drift between SPOTS (kettle, darts, arcade, rod rack, sofa, canteen,
+     music room, printer...) and do a little something at each one.
+   - The still scenery is painted once into an off-screen sheet; each frame only redraws
+     the moving bits, at about 30 frames a second, and stops when the tab is hidden,
+     the office is scrolled out of view, or the visitor prefers reduced motion. */
 
 /* Paste the Worker address here after Kenneth deploys it, then open a follow-up PR
    (or tell George the address). Leave it empty to stay in friendly offline mode. */
@@ -89,8 +99,31 @@ const CELE_FLAVOUR = [
   "Off to the kettle in triumph"
 ];
 
-const W = 640, H = 640, FLOOR_Y = 128;
-const MACHINE = { x: 548, y: 368, w: 78, h: 66, cx: 587, cy: 401, berth: 56 };
+/* ---------- Floor plan (640 x 640, drawn at whole-number scales only) ----------
+   Top band:    three private offices, and the games nook (rod rack, arcade, darts).
+   Middle:      the open floor, nineteen desks in four rows; on the right the kettle
+                corner and the lounge.
+   Bottom band: the canteen, the music room, and the machine's corner.
+   People walk along lanes (the aisles) rather than straight through the furniture. */
+const W = 640, H = 640;
+const TOP_H = 118;              /* bottom wall of the offices and the nook */
+const AISLE_X = 440;            /* the main walkway, top to bottom */
+const TOP_LANE = 126;           /* walkway under the offices and the nook */
+const BOTTOM_LANE = 440;        /* walkway above the canteen and the music room */
+const DESK_ROWS = [150, 220, 290, 360];
+const DESK_SLOT = 58, DESK_GAP = 22, DESK_X0 = 30;
+const FLOOR_BLOCK = { x: 12, y: 134, w: 420, h: 298 };
+const BAND_Y = 452;             /* top of the canteen, music room and machine corner */
+const NOOK = { x: 410, y: 2, w: 222, h: TOP_H - 2 };
+const KETTLE = { x: 452, y: 132, w: 180, h: 102 };
+const LOUNGE = { x: 452, y: 246, w: 180, h: 190 };
+const MACHINE_CORNER = { x: 516, y: BAND_Y, w: 116, h: H - BAND_Y - 8 };
+const MACHINE = { x: 544, y: 532, w: 78, h: 66, cx: 583, cy: 565 };
+const BOARD = { cx: 606, cy: 20, r: 11 };        /* the dartboard */
+const CABINET = { x: 512, y: 12, w: 32, h: 66 }; /* the arcade cabinet */
+const SOFA = { x: 472, y: 280, w: 140, h: 50 };
+const SIT_DROP = 6;
+const FRAME_MS = 1000 / 30;
 
 let viewScale = 1;
 const REDUCE = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -98,14 +131,15 @@ const params = new URLSearchParams(location.search);
 const DEMO = params.get("demo") || "";
 const EMBED = params.get("embed") === "1" || (!document.getElementById("office-canvas") && !!document.getElementById("office-live"));
 const EMBED_CAM_X = 0;
-const EMBED_CAM_Y = 136;
+const EMBED_CAM_Y = 60;
 const EMBED_W = 640;
 const EMBED_H = 240;
 
 if (EMBED && params.get("embed") === "1") document.documentElement.classList.add("office-embed");
 
 const canvas = document.getElementById("office-canvas") || document.getElementById("office-live");
-const ctx = canvas.getContext("2d");
+const screenCtx = canvas ? canvas.getContext("2d") : null;
+let ctx = screenCtx;            /* swapped to the scenery sheet while that is painted */
 const boardList = document.getElementById("office-board-list");
 const feedNote = document.getElementById("office-feed-note");
 const demoNote = document.getElementById("office-demo-note");
@@ -114,7 +148,9 @@ const desks = [];
 const rooms = [];
 const people = [];
 const cats = [];
-const hotspots = [];
+const spots = [];
+let printerStation = null;
+let sceneSheet = null;
 let feedOffline = !OFFICE_FEED_URL && !DEMO;
 let lastFeed = 0;
 let fetching = false;
@@ -123,6 +159,47 @@ let lastTs = 0;
 let animT = 0;
 let demoAppliedWorking = false;
 let demoAppliedIdle = false;
+
+/* What people get up to at each kind of spot. Shown on the status board. */
+const PLACE_FLAVOUR = {
+  kettle: ["Kettle duty", "Brewing up, strictly medicinal", "Auditing the biscuits", "Third cuppa, for morale"],
+  darts: ["Darts, for morale", "Aiming for treble twenty, hitting the wall", "One hundred and eighty, allegedly"],
+  arcade: ["Just one more go", "Chasing the high score", "Insert coin, insert excuse"],
+  rods: ["Untangling a line, at length", "Admiring the rods", "Describing the one that got away"],
+  sofa: ["Resting the eyes", "A strategic sit-down", "On the sofa, thinking hard"],
+  lounge: ["Chatting by the plant", "Loitering with intent", "Examining the ceiling for clues"],
+  canteen: ["Frank's domain, the canteen", "A diplomatic bacon sandwich", "Chips, for research"],
+  music: ["Brian's natural haunt", "Having a listen", "Air guitar, very loud"],
+  printer: ["Staring at the printer", "Negotiating with the printer"],
+  office: ["Pacing the office, thoughtfully", "Rearranging the pens", "A quiet moment in the office"]
+};
+/* Little speech bubbles. Kept short: the pixel font is tiny. */
+const BUBBLES = {
+  kettle: ["TEA?", "BREW!", "BISCUIT?"],
+  darts: ["180!", "OOPS", "DOUBLE TOP"],
+  arcade: ["1UP!", "HI SCORE", "ONE MORE GO"],
+  rods: ["THIS BIG", "NIBBLE?"],
+  sofa: ["ZZZ", "ZZZ", "COMFY"],
+  lounge: ["NO WAY", "OOH"],
+  canteen: ["CHIPS!", "VINEGAR?"],
+  printer: ["PC LOAD LETTER", "JAM?"],
+  music: [],
+  office: []
+};
+/* Who tends to head where, when they have the choice. Everyone else picks at random. */
+const LIKES = {
+  kenneth: ["office"], terry: ["office", "rods"], reggie: ["office", "kettle"],
+  frank: ["canteen"], brian: ["music"], archie: ["arcade"], rupert: ["sofa", "arcade"],
+  penny: ["kettle"], hettie: ["kettle", "sofa"], sarge: ["darts"], george: ["darts", "kettle"],
+  oddly: ["rods"], vinnie: ["arcade"], percy: ["sofa"], boris: ["darts"], clive: ["lounge"],
+  filament: ["printer"], stockley: ["printer", "canteen"], tweety: ["kettle"], mona: ["lounge", "music"],
+  sheila: ["kettle"], grant: ["canteen"]
+};
+/* How long people linger at each kind of spot, in seconds: [least, extra]. */
+const DWELL = {
+  kettle: [12, 12], darts: [16, 14], arcade: [16, 16], rods: [12, 12], sofa: [20, 20], lounge: [10, 10],
+  canteen: [16, 14], music: [16, 14], printer: [8, 6], office: [14, 14]
+};
 
 function pick(arr, salt) {
   return arr[Math.abs((salt | 0) + arr.length * 3) % arr.length];
@@ -154,186 +231,176 @@ function fitCanvas() {
 }
 
 function layoutOffices() {
-  rooms.length = 0;
   const holders = STAFF.filter(s => s.office);
-  const margin = 8, gap = 14, rh = 120;
+  const margin = 8, gap = 10, rh = TOP_H - 2;
   const n = holders.length;
-  const rw = Math.floor((W - margin * 2 - gap * (n - 1)) / n);
+  const rw = Math.floor((NOOK.x - 10 - margin - gap * (n - 1)) / n);
   holders.forEach((staff, i) => {
     const x = margin + i * (rw + gap);
     const y = 2;
     const cx = x + Math.round(rw / 2);
     rooms.push({
-      id: staff.id,
-      staff: staff,
-      x: x,
-      y: y,
-      w: rw,
-      h: rh,
-      cx: cx,
-      doorX: cx,
-      doorY: y + rh + 6,
-      doorW: 24
+      id: staff.id, staff: staff, x: x, y: y, w: rw, h: rh, cx: cx,
+      doorX: cx, doorY: y + rh + 6, doorW: 24, lane: TOP_LANE
     });
     const deskY = y + 36;
     desks.push({
-      id: staff.id,
-      x: cx - 29,
-      y: deskY,
-      w: 58,
-      h: 28,
-      cx: cx,
-      chairX: cx,
-      chairY: deskY + 40,
-      staff: staff,
-      private: true
+      id: staff.id, x: cx - 29, y: deskY, w: 58, h: 28, cx: cx,
+      chairX: cx, chairY: deskY + 40, staff: staff, private: true, lane: TOP_LANE
     });
   });
 }
 
 function layoutAmenities() {
-  /* One row only, with a proper gap between the two rooms. The TV room,
-     reflection room and both meeting rooms are gone: nobody was really
-     sent there, and Ben asked for air rather than empty rooms. */
-  const rows = [
-    { y: 492, h: 140, doors: "n", items: [
-      { id: "canteen", plate: ["CANTEEN"], x: 10, w: 292 },
-      { id: "music", plate: ["MUSIC"], x: 338, w: 292 }
-    ]}
-  ];
-  rows.forEach(row => {
-    row.items.forEach(item => {
-      const cx = item.x + Math.round(item.w / 2);
-      rooms.push({
-        id: item.id,
-        plate: item.plate,
-        amenity: true,
-        doorSide: row.doors,
-        x: item.x,
-        y: row.y,
-        w: item.w,
-        h: row.h,
-        cx: cx,
-        doorX: cx,
-        doorY: row.y - 6,
-        doorW: 24
-      });
-      hotspots.push({ x: cx - 16, y: row.y + 70, room: item.id, kind: item.id });
-      hotspots.push({ x: cx + 18, y: row.y + 110, room: item.id, kind: item.id });
+  /* The canteen and the music room share the bottom band with the machine's corner. */
+  [
+    { id: "canteen", plate: ["CANTEEN"], x: 8, w: 248 },
+    { id: "music", plate: ["MUSIC"], x: 268, w: 236 }
+  ].forEach(item => {
+    const cx = item.x + Math.round(item.w / 2);
+    rooms.push({
+      id: item.id, plate: item.plate, amenity: true, doorSide: "n",
+      x: item.x, y: BAND_Y, w: item.w, h: H - BAND_Y - 8, cx: cx,
+      doorX: cx, doorY: BAND_Y - 6, doorW: 24, lane: BOTTOM_LANE
     });
   });
 }
 
 function layoutDesks() {
   desks.length = 0;
+  rooms.length = 0;
   layoutOffices();
   layoutAmenities();
   const floorStaff = STAFF.filter(s => !s.office);
-  const n = floorStaff.length;
-  /* Two rows still fit a dozen desks; more than that needs a third row,
-     kept clear of the weird machine on the right. Nineteen floor desks
-     land as seven on the top row and six on each row below. */
-  const rows = n > 12 ? 3 : 2;
-  const slot = 58, gap = 22;
-  const ys = rows === 2
-    ? [FLOOR_Y + 58, FLOOR_Y + 200]
-    : [FLOOR_Y + 48, FLOOR_Y + 168, FLOOR_Y + 288];
-  const sizes = [];
-  let remaining = n;
-  for (let r = 0; r < rows; r++) {
-    const take = Math.ceil(remaining / (rows - r));
-    sizes.push(take);
-    remaining -= take;
-  }
-  function row(list, y, maxRight) {
-    const total = list.length * slot + Math.max(0, list.length - 1) * gap;
-    const x0 = Math.round((maxRight - total) / 2);
-    list.forEach((staff, i) => {
-      const x = x0 + i * (slot + gap);
-      desks.push({
-        id: staff.id,
-        x: x,
-        y: y,
-        w: slot,
-        h: 28,
-        cx: x + slot / 2,
-        chairX: x + slot / 2,
-        chairY: y + 46,
-        staff: staff
-      });
+  /* Five to a row, four rows. If the crew outgrows twenty, the rows squeeze up. */
+  const cols = Math.max(5, Math.ceil(floorStaff.length / DESK_ROWS.length));
+  const pitch = Math.min(DESK_SLOT + DESK_GAP, Math.floor((FLOOR_BLOCK.w - 8) / cols));
+  const slot = Math.min(DESK_SLOT, pitch - 12);
+  const x0 = cols === 5 ? DESK_X0 : FLOOR_BLOCK.x + 6;
+  floorStaff.forEach((staff, i) => {
+    const r = Math.floor(i / cols), c = i % cols;
+    const x = x0 + c * pitch, y = DESK_ROWS[Math.min(r, DESK_ROWS.length - 1)];
+    desks.push({
+      id: staff.id, x: x, y: y, w: slot, h: 28, cx: x + slot / 2,
+      chairX: x + slot / 2, chairY: y + 46, staff: staff, lane: y + 62
     });
+  });
+  /* The printer gets the first spare desk, if there is one. */
+  const n = floorStaff.length;
+  printerStation = null;
+  if (n < cols * DESK_ROWS.length) {
+    const r = Math.floor(n / cols), c = n % cols;
+    printerStation = { x: x0 + c * pitch, y: DESK_ROWS[r], w: slot, lane: DESK_ROWS[r] + 62 };
   }
-  let i = 0;
-  sizes.forEach((sz, r) => {
-    const maxRight = (rows === 3 && r > 0) ? MACHINE.x - 12 : W;
-    row(floorStaff.slice(i, i + sz), ys[r], maxRight);
-    i += sz;
-  });
 }
 
-function setupHotspots() {
-  /* Amenity rooms already added their interior spots in layoutAmenities. */
-  [
-    { x: 54, y: FLOOR_Y + 32, kind: "kettle" },
-    { x: 500, y: FLOOR_Y + 32, kind: "printer" },
-    { x: 160, y: FLOOR_Y + 164 },
-    { x: 320, y: FLOOR_Y + 164 },
-    { x: 430, y: FLOOR_Y + 164 },
-    { x: 90, y: FLOOR_Y + 290 },
-    { x: 250, y: FLOOR_Y + 290 },
-    { x: 400, y: FLOOR_Y + 290 },
-    { x: 80, y: 472, kind: "corridor" },
-    { x: 240, y: 472, kind: "corridor" },
-    { x: 400, y: 472, kind: "corridor" }
-  ].forEach(s => {
-    if (!nearMachine(s.x, s.y)) hotspots.push(s);
-  });
+function layoutSpots() {
+  spots.length = 0;
+  function add(kind, x, y, facing, lane, extra) {
+    const n = spots.filter(s => s.kind === kind).length;
+    spots.push(Object.assign({ id: kind + "-" + n, kind: kind, x: x, y: y, facing: facing, lane: lane, who: null }, extra || {}));
+  }
+  /* Games nook, open to the walkway below it. */
+  add("rods", 446, 100, "l", TOP_LANE);
+  add("arcade", 554, 90, "l", TOP_LANE);
+  add("arcade", 494, 104, "r", TOP_LANE, { watch: true });
+  add("darts", 608, 106, "l", TOP_LANE);
+  add("darts", 580, 110, "r", TOP_LANE, { waiting: true });
+  /* Kettle corner. */
+  add("kettle", 482, 200, "r", 200);
+  add("kettle", 530, 206, "l", 206);
+  add("kettle", 578, 200, "r", 200);
+  /* Lounge: three on the sofa, two stood about. */
+  add("sofa", 502, 326, "r", 346, { seat: true });
+  add("sofa", 532, 326, "l", 346, { seat: true });
+  add("sofa", 562, 326, "r", 346, { seat: true });
+  add("lounge", 470, 266, "r", 266);
+  add("lounge", 478, 414, "r", 414);
+  /* The printer, on its spare desk. */
+  if (printerStation) add("printer", printerStation.x + printerStation.w / 2 - 4, printerStation.y + 46, "r", printerStation.lane);
+  /* Canteen and music room. */
   rooms.forEach(r => {
-    if (r.amenity) return;
-    hotspots.push({ x: r.cx - 24, y: r.y + 90, room: r.id });
-    hotspots.push({ x: r.doorX, y: r.doorY, room: r.id });
+    if (r.id === "canteen") {
+      add("canteen", r.x + 58, r.y + 72, "r", BOTTOM_LANE, { room: r.id });
+      add("canteen", r.x + 128, r.y + 108, "r", BOTTOM_LANE, { room: r.id });
+      add("canteen", r.x + 206, r.y + 108, "l", BOTTOM_LANE, { room: r.id });
+      add("canteen", r.x + 166, r.y + 150, "l", BOTTOM_LANE, { room: r.id });
+    } else if (r.id === "music") {
+      add("music", r.x + 70, r.y + 96, "l", BOTTOM_LANE, { room: r.id });
+      add("music", r.x + 132, r.y + 102, "r", BOTTOM_LANE, { room: r.id });
+      add("music", r.x + 40, r.y + 140, "r", BOTTOM_LANE, { room: r.id });
+      add("music", r.x + 180, r.y + 124, "l", BOTTOM_LANE, { room: r.id, guitar: true });
+      add("music", r.x + 120, r.y + 156, "r", BOTTOM_LANE, { room: r.id });
+    } else if (r.staff) {
+      add("office", r.cx - 30, r.y + 94, "r", TOP_LANE, { room: r.id, only: r.id });
+      add("office", r.cx + 32, r.y + 96, "l", TOP_LANE, { room: r.id, only: r.id });
+    }
   });
 }
 
-function nearMachine(x, y, extra) {
-  return Math.hypot(x - MACHINE.cx, y - MACHINE.cy) < MACHINE.berth + (extra || 0);
-}
-
-function aroundMachine(x1, y1, x2, y2) {
-  const mx = MACHINE.cx, my = MACHINE.cy, r = MACHINE.berth + 8;
-  const dx = x2 - x1, dy = y2 - y1;
-  const len2 = dx * dx + dy * dy || 1;
-  let t = ((mx - x1) * dx + (my - y1) * dy) / len2;
-  t = Math.max(0, Math.min(1, t));
-  const px = x1 + t * dx, py = y1 + t * dy;
-  if (Math.hypot(px - mx, py - my) >= r) return null;
-  return { x: MACHINE.x - 18, y: my };
-}
+/* Cats go where they like, in straight lines, as cats do. */
+const CAT_SPOTS = [
+  { x: 590, y: 322, sofa: true }, { x: 540, y: 412 }, { x: 612, y: 216 }, { x: 600, y: 266 },
+  { x: 200, y: 280 }, { x: 120, y: 350 }, { x: 300, y: 420 }, { x: 440, y: 380 },
+  { x: 520, y: 118 }, { x: 440, y: 180 }
+];
 
 function roomAt(x, y) {
   return rooms.find(r => x >= r.x + 2 && x <= r.x + r.w - 2 && y >= r.y + 2 && y <= r.y + r.h) || null;
 }
 
-function setRoute(who, dest) {
-  who.waypoints = [];
-  if (nearMachine(dest.x, dest.y, -8)) {
-    dest = { x: MACHINE.x - 24, y: dest.y };
+/* Which walkway a point joins. Desk-floor points use the aisle just below them. */
+function laneFor(pt) {
+  if (pt.lane !== undefined && pt.lane !== null) return pt.lane;
+  if (pt.y <= TOP_LANE + 6) return TOP_LANE;
+  if (pt.y >= BOTTOM_LANE - 2) return BOTTOM_LANE;
+  if (pt.x < AISLE_X - 6) {
+    const lanes = [TOP_LANE].concat(DESK_ROWS.map(y => y + 62));
+    return lanes.find(l => l >= pt.y - 1) || lanes[lanes.length - 1];
   }
-  const from = roomAt(who.x, who.y);
-  const to = roomAt(dest.x, dest.y);
-  if (from && (!to || from.id !== to.id)) who.waypoints.push({ x: from.doorX, y: from.doorY });
-  if (to && (!from || from.id !== to.id)) who.waypoints.push({ x: to.doorX, y: to.doorY });
-  who.waypoints.push({ x: dest.x, y: dest.y });
-  const points = [{ x: who.x, y: who.y }].concat(who.waypoints);
+  return pt.y;
+}
+
+function routeBetween(a, b, out, nudge) {
+  /* A small per-person nudge keeps people from walking in perfect single file. */
+  const n = nudge || 0;
+  const la = laneFor(a) + n, lb = laneFor(b) + n;
+  function add(x, y) {
+    const last = out[out.length - 1] || a;
+    if (Math.abs(last.x - x) > 0.5 || Math.abs(last.y - y) > 0.5) out.push({ x: x, y: y });
+  }
+  add(a.x, la);
+  if (la !== lb) {
+    add(AISLE_X + n, la);
+    add(AISLE_X + n, lb);
+  }
+  add(b.x, lb);
+  add(b.x, b.y);
+}
+
+function setRoute(who, dest) {
   const out = [];
-  for (let i = 0; i < points.length - 1; i++) {
-    const a = points[i], b = points[i + 1];
-    const detour = aroundMachine(a.x, a.y, b.x, b.y);
-    if (detour) out.push(detour);
-    out.push(b);
+  const from = roomAt(who.x, who.y);
+  const to = dest.room ? rooms.find(r => r.id === dest.room) : roomAt(dest.x, dest.y);
+  let start = { x: who.x, y: who.y, lane: from ? undefined : who.atLane };
+  const nudge = who.salt === undefined ? 0 : ((who.salt % 5) - 2) * 2;
+  who.atLane = undefined;
+  if (from && to && from.id === to.id) {
+    out.push({ x: dest.x, y: dest.y });
+  } else {
+    if (from) {
+      out.push({ x: from.doorX, y: from.doorY });
+      start = { x: from.doorX, y: from.doorY, lane: from.lane };
+    }
+    if (to) {
+      routeBetween(start, { x: to.doorX, y: to.doorY, lane: to.lane }, out, nudge);
+      out.push({ x: dest.x, y: dest.y });
+    } else {
+      routeBetween(start, dest, out, nudge);
+    }
   }
   who.waypoints = out;
-  who.target = who.waypoints.shift();
+  who.target = who.waypoints.shift() || null;
 }
 
 function flavourFor(id, mode, salt) {
@@ -342,35 +409,120 @@ function flavourFor(id, mode, salt) {
   return pick(IDLE_FLAVOUR, salt + id.length * 13);
 }
 
+function flavourForPlace(person, spot) {
+  const list = spot && PLACE_FLAVOUR[spot.kind];
+  if (list) return pick(list, (Date.now() / 1000 | 0) + person.salt * 7 + person.id.length);
+  return flavourFor(person.id, "idle", Date.now() / 1000 | 0);
+}
+
+function freeSpots(person) {
+  return spots.filter(s => !s.who && (!s.only || s.only === person.id));
+}
+
+function releaseSpot(person) {
+  if (person.spot && person.spot.who === person.id) person.spot.who = null;
+  person.spot = null;
+  person.activity = null;
+  person.bubble = null;
+}
+
+function claimSpot(person, spot) {
+  releaseSpot(person);
+  spot.who = person.id;
+  person.spot = spot;
+}
+
+/* Pick somewhere new to be idle. Favourite haunts first, about half the time. */
+function idleTarget(person) {
+  const free = freeSpots(person).filter(s => s !== person.spot);
+  if (!free.length) return null;
+  const likes = LIKES[person.id] || [];
+  const liked = free.filter(s => likes.includes(s.kind));
+  if (liked.length && Math.random() < 0.55) return liked[Math.floor(Math.random() * liked.length)];
+  /* Office holders keep to their own office a fair bit; nobody else goes in. */
+  const pool = free.filter(s => s.kind !== "office" || Math.random() < 0.4);
+  const use = pool.length ? pool : free;
+  return use[Math.floor(Math.random() * use.length)];
+}
+
+function settleAt(person, spot) {
+  claimSpot(person, spot);
+  person.x = spot.x;
+  person.y = spot.y;
+  person.target = null;
+  person.waypoints = [];
+  person.facing = spot.facing;
+  person.activity = spot.kind;
+  person.atLane = spot.lane;
+  person.flavour = flavourForPlace(person, spot);
+  person.bubbleT = 2 + Math.random() * 6;
+  const d = DWELL[spot.kind] || [6, 6];
+  person.wait = d[0] + Math.random() * d[1];
+}
+
+function headForSpot(person) {
+  const spot = idleTarget(person);
+  if (!spot) {
+    person.wait = 1.5 + Math.random() * 2;
+    return;
+  }
+  if (REDUCE) {
+    settleAt(person, spot);
+    return;
+  }
+  claimSpot(person, spot);
+  setRoute(person, spot);
+}
+
+function firstSpot(person, index) {
+  const free = freeSpots(person);
+  const likes = LIKES[person.id] || [];
+  const liked = free.filter(s => likes.includes(s.kind));
+  if (liked.length) return liked[index % liked.length];
+  const open = free.filter(s => s.kind !== "office");
+  const use = open.length ? open : free;
+  return use.length ? use[(index * 7) % use.length] : null;
+}
+
 function makePerson(staff, index) {
   const desk = desks.find(d => d.id === staff.id);
-  const floorSpots = hotspots.filter(s => !s.room);
-  const start = staff.office
-    ? { x: desk.chairX + (index % 2 ? -16 : 16), y: desk.chairY + 8 }
-    : floorSpots[index % floorSpots.length];
-  return {
+  const pr = {
     id: staff.id,
     staff: staff,
     desk: desk,
-    x: REDUCE ? desk.chairX : start.x + (index % 3) * 4,
-    y: REDUCE ? desk.chairY : start.y,
+    x: desk.chairX,
+    y: desk.chairY,
     want: "idle",
     phase: "idle",
     target: null,
     waypoints: [],
-    wait: 0.4 * index,
+    wait: 0,
     walkT: index * 0.3,
     celeT: 0,
     glanceT: 0,
-    pendingDest: null,
     facing: "r",
     flavour: flavourFor(staff.id, "idle", index + 3),
-    typeT: 0
+    typeT: 0,
+    salt: index,
+    spot: null,
+    activity: null,
+    atLane: desk.lane,
+    bubble: null,
+    bubbleT: 3,
+    throwT: 0
   };
+  const spot = firstSpot(pr, index);
+  if (spot) {
+    settleAt(pr, spot);
+    /* Stagger the first wander so the whole office does not stand up at once. */
+    pr.wait = 4 + (index % 7) * 2 + Math.random() * 10;
+  }
+  return pr;
 }
 
-function makeCat(id, x, y) {
-  return { id, x, y, target: null, wait: id === "arthur" ? 0.2 : 1.2, walkT: 0, facing: "l", loaf: id === "arthur" };
+function makeCat(id, spotIndex) {
+  const s = CAT_SPOTS[spotIndex];
+  return { id, x: s.x, y: s.y, spot: s, target: null, wait: id === "arthur" ? 6 : 3, walkT: 0, facing: "l" };
 }
 
 function buildBoard() {
@@ -413,14 +565,17 @@ function setWant(person, want) {
   const prev = person.want;
   person.want = want;
   if (want === "working") {
+    releaseSpot(person);
     person.flavour = flavourFor(person.id, "working", Date.now() / 1000 | 0);
     person.phase = REDUCE ? "working" : "to-desk";
-    setRoute(person, { x: person.desk.chairX, y: person.desk.chairY });
+    setRoute(person, { x: person.desk.chairX, y: person.desk.chairY, lane: person.desk.lane });
     person.wait = 0;
     if (REDUCE) {
       person.x = person.desk.chairX;
       person.y = person.desk.chairY;
       person.phase = "working";
+      person.target = null;
+      person.waypoints = [];
     }
   } else if (prev === "working" || person.phase === "working" || person.phase === "to-desk") {
     person.flavour = flavourFor(person.id, "celebrating", Date.now() / 1000 | 0);
@@ -429,11 +584,10 @@ function setWant(person, want) {
     person.target = null;
     if (REDUCE) {
       person.phase = "idle";
-      person.flavour = flavourFor(person.id, "idle", Date.now() / 1000 | 0);
-      person.wait = 0.2;
+      person.atLane = person.desk.lane;
+      headForSpot(person);
     }
   } else {
-    person.flavour = flavourFor(person.id, "idle", Date.now() / 1000 | 0);
     if (person.phase !== "celebrating") person.phase = "idle";
   }
   paintBoard();
@@ -444,14 +598,9 @@ function applyBots(bots) {
   people.forEach(p => {
     const state = map[p.id] === "working" ? "working" : "idle";
     setWant(p, state);
-    if (REDUCE && state === "working" && p.desk) {
-      p.x = p.desk.chairX;
-      p.y = p.desk.chairY;
-      p.phase = "working";
-      p.target = null;
-      p.waypoints = [];
-    }
   });
+  /* With reduced motion there is no animation loop, so repaint the still picture. */
+  if (!shouldAnimate()) drawFrame();
 }
 
 function stepMove(who, dt, speed) {
@@ -477,32 +626,8 @@ function stepMove(who, dt, speed) {
   return false;
 }
 
-const PLACE_FLAVOUR = {
-  canteen: ["Frank's domain, the canteen", "A diplomatic bacon sandwich", "Lunch, or the idea of lunch"],
-  music: ["Brian's natural haunt", "Having a listen"],
-  kettle: ["Kettle duty", "Off to the kettle, diplomatically"],
-  printer: ["Staring at the printer"]
-};
-
-function flavourForPlace(person, dest) {
-  const key = (dest && (dest.kind || dest.room)) || "";
-  const list = PLACE_FLAVOUR[key];
-  if (list) return pick(list, (Date.now() / 1000 | 0) + person.id.length);
-  return flavourFor(person.id, "idle", Date.now() / 1000 | 0);
-}
-
-function idleTarget(person) {
-  const safe = hotspots.filter(s => !nearMachine(s.x, s.y));
-  let preferred = [];
-  if (person.id === "frank") preferred = safe.filter(s => s.room === "canteen" || s.kind === "canteen");
-  if (person.id === "brian") preferred = safe.filter(s => s.room === "music" || s.kind === "music");
-  let pool;
-  if (preferred.length && Math.random() < 0.55) pool = preferred;
-  else if (person.staff.office && Math.random() < 0.3) pool = safe.filter(s => s.room === person.id);
-  else pool = safe;
-  const far = pool.filter(s => Math.hypot(s.x - person.x, s.y - person.y) > 28);
-  const use = far.length ? far : (pool.length ? pool : safe);
-  return use[Math.floor(Math.random() * use.length)];
+function bubblesShowing() {
+  return people.filter(p => p.bubble).length;
 }
 
 function tickPerson(p, dt) {
@@ -514,6 +639,7 @@ function tickPerson(p, dt) {
       p.y = p.desk.chairY;
       p.phase = "working";
       p.facing = "r";
+      p.atLane = p.desk.lane;
     }
     return;
   }
@@ -531,61 +657,79 @@ function tickPerson(p, dt) {
     if (p.celeT >= 1.8) {
       p.phase = "idle";
       p.flavour = flavourFor(p.id, "idle", Date.now() / 1000 | 0);
-      p.wait = 0.2;
-      if (!REDUCE) setRoute(p, { x: hotspots[0].x, y: hotspots[0].y });
-      else p.target = null;
+      p.atLane = p.desk.lane;
+      headForSpot(p);
       paintBoard();
     }
     return;
   }
-  if (REDUCE) {
-    if (p.staff.office) {
-      p.x = p.desk.chairX;
-      p.y = p.desk.chairY + 12;
-    } else {
-      const floor = hotspots.filter(s => !s.room);
-      const stand = floor[STAFF.filter(s => !s.office).findIndex(s => s.id === p.id) % floor.length];
-      p.x = stand.x;
-      p.y = stand.y;
+  /* Idle: walking to a spot, or doing something at one. */
+  if (p.target) {
+    if (stepMove(p, dt, 42) && p.spot) {
+      settleAt(p, p.spot);
+      paintBoard();
     }
     return;
+  }
+  if (p.bubble) {
+    p.bubble.t -= dt;
+    if (p.bubble.t <= 0) p.bubble = null;
+  } else if (p.activity) {
+    p.bubbleT -= dt;
+    const lines = (p.spot && p.spot.watch) ? ["OOH", "GO ON!"] : (BUBBLES[p.activity] || []);
+    if (p.bubbleT <= 0) {
+      p.bubbleT = 5 + Math.random() * 9;
+      if (lines.length && bubblesShowing() < 3 && !(p.spot && p.spot.waiting)) {
+        p.bubble = { text: lines[Math.floor(Math.random() * lines.length)], t: 2 };
+      }
+    }
+  }
+  if (p.glanceT > 0) p.glanceT -= dt;
+  else if (Math.hypot(p.x - MACHINE.cx, p.y - MACHINE.cy) < 200 && Math.random() < dt * 0.06) {
+    p.glanceT = 1;
+    p.facing = p.x < MACHINE.cx ? "r" : "l";
+    p.flavour = "Giving the machine a wide berth";
+    paintBoard();
   }
   if (p.wait > 0) {
     p.wait -= dt;
-    if (!REDUCE && p.glanceT <= 0 && nearMachine(p.x, p.y, 40) && !nearMachine(p.x, p.y) && Math.random() < 0.02) {
-      p.glanceT = 0.9;
-      p.facing = p.x < MACHINE.cx ? "r" : "l";
-      p.flavour = "Giving the machine a wide berth";
-      paintBoard();
-    }
-    if (p.glanceT > 0) p.glanceT -= dt;
-    if (p.wait <= 0 && p.pendingDest) {
-      setRoute(p, p.pendingDest);
-      p.pendingDest = null;
-    }
     return;
   }
-  const arrived = stepMove(p, dt, 38);
-  if (arrived) {
-    p.wait = 1.2 + Math.random() * 2.8;
-    p.flavour = flavourHere(p);
-    paintBoard();
-    p.pendingDest = idleTarget(p);
-    p.target = null;
-  }
+  headForSpot(p);
 }
 
-function flavourHere(person) {
-  const room = roomAt(person.x, person.y);
-  if (room && room.amenity) return flavourForPlace(person, { room: room.id, kind: room.id });
-  let best = null, bestD = 24;
-  hotspots.forEach(s => {
-    if (s.room || (s.kind !== "kettle" && s.kind !== "printer")) return;
-    const d = Math.hypot(s.x - person.x, s.y - person.y);
-    if (d < bestD) { best = s; bestD = d; }
-  });
-  if (best) return flavourForPlace(person, best);
-  return flavourFor(person.id, "idle", Date.now() / 1000 | 0);
+/* The darts: one thrower at a time, three darts, then they fetch them back. */
+const darts = { stuck: [], t: 0, flying: null };
+function tickDarts(dt) {
+  const thrower = people.find(p => p.activity === "darts" && p.spot && !p.spot.waiting && !p.target);
+  if (!thrower) {
+    darts.flying = null;
+    return;
+  }
+  thrower.throwT += dt;
+  darts.t += dt;
+  if (!darts.flying && darts.t > 1.7) {
+    darts.t = 0;
+    if (darts.stuck.length >= 3) {
+      darts.stuck = [];
+      return;
+    }
+    const miss = Math.random() < 0.18;
+    const ang = Math.random() * Math.PI * 2;
+    const rad = miss ? BOARD.r + 3 + Math.random() * 4 : Math.random() * (BOARD.r - 2);
+    darts.flying = {
+      x0: thrower.x + (thrower.facing === "l" ? 8 : -10), y0: thrower.y - 40,
+      x1: BOARD.cx + Math.cos(ang) * rad, y1: BOARD.cy + Math.sin(ang) * rad, t: 0
+    };
+    thrower.throwT = 0;
+  }
+  if (darts.flying) {
+    darts.flying.t += dt / 0.32;
+    if (darts.flying.t >= 1) {
+      darts.stuck.push({ x: darts.flying.x1, y: darts.flying.y1 });
+      darts.flying = null;
+    }
+  }
 }
 
 function tickCat(c, dt) {
@@ -594,18 +738,18 @@ function tickCat(c, dt) {
     c.wait -= dt;
     return;
   }
-  if (c.loaf && Math.random() < 0.004) {
-    c.wait = 3 + Math.random() * 4;
-    return;
-  }
   const arrived = stepMove(c, dt, 28);
   if (arrived) {
-    c.wait = 0.8 + Math.random() * 3;
-    const floor = hotspots.filter(s => !s.room && !nearMachine(s.x, s.y, 10) && (s.y || 0) < 492);
-    const spots = floor.filter(s => Math.hypot(s.x - c.x, s.y - c.y) > 20);
-    const use = spots.length ? spots : floor;
-    const dest = use[Math.floor(Math.random() * use.length)];
-    if (dest) c.target = { x: dest.x + (Math.random() * 16 - 8), y: dest.y + (Math.random() * 10 - 5) };
+    c.wait = 4 + Math.random() * 10;
+    if (c.id === "arthur" && c.spot && c.spot.sofa) c.wait += 10;   /* Arthur and the sofa have an understanding */
+    const taken = cats.filter(o => o !== c).map(o => o.spot);
+    const options = CAT_SPOTS.filter(s => s !== c.spot && !taken.includes(s));
+    const dest = options[Math.floor(Math.random() * options.length)];
+    if (dest) {
+      c.spot = dest;
+      c.target = { x: dest.x, y: dest.y };
+      c.wait = c.wait > 0 ? c.wait : 0;
+    }
   }
 }
 
@@ -724,55 +868,48 @@ function drawPlant(x, y) {
   p(x + 7, y - 2, 5, 6, "#146b48");
 }
 
-function drawKettle() {
-  const x = 32, y = FLOOR_Y + 8;
-  shadow(x - 2, y + 26, 40, 6);
-  box(x - 4, y + 22, 40, 8, "#6b4a2a", "#3d2a1c");
-  p(x - 2, y + 23, 36, 2, "#8b6a42");
-  p(x + 2, y + 22, 6, 10, "#5a3c22");
-  p(x + 26, y + 22, 6, 10, "#5a3c22");
-  /* body */
+function disc(cx, cy, r, colour) {
+  for (let dy = -r; dy <= r; dy++) {
+    const half = Math.floor(Math.sqrt(r * r - dy * dy) + 0.3);
+    p(cx - half, cy + dy, half * 2 + 1, 1, colour);
+  }
+}
+
+function drawCarpet(x, y, w, h) {
+  /* Hard-wearing office carpet tiles under the desks, in a sensible slate blue. */
+  const size = 20;
+  for (let ty = y; ty < y + h; ty += size) {
+    for (let tx = x; tx < x + w; tx += size) {
+      const odd = (((tx - x) / size | 0) + ((ty - y) / size | 0)) % 2;
+      const tw = Math.min(size, x + w - tx), th = Math.min(size, y + h - ty);
+      p(tx, ty, tw, th, odd ? "#5f7386" : "#586b7d");
+      for (let i = 3; i < th - 1; i += 4) p(tx + (odd ? 2 : 1), ty + i, tw - 3, 1, odd ? "#66798b" : "#536475");
+    }
+  }
+  p(x - 2, y - 2, w + 4, 2, "#3d4a57");
+  p(x - 2, y + h, w + 4, 2, "#3d4a57");
+  p(x - 2, y, 2, h, "#3d4a57");
+  p(x + w, y, 2, h, "#3d4a57");
+}
+
+function drawKettleOn(x, y) {
+  /* The office kettle, sat on the counter. Steam is added each frame. */
   box(x + 8, y + 6, 16, 16, "#c8c4b8", "#141414");
   p(x + 9, y + 7, 5, 13, "#e8e4d8");
   p(x + 20, y + 8, 3, 12, "#9a968c");
   p(x + 10, y + 18, 12, 3, "#8a8680");
-  /* lid + red knob */
   p(x + 10, y + 3, 12, 4, "#d8d4c8");
   p(x + 9, y + 4, 14, 2, "#141414");
   box(x + 13, y - 2, 6, 6, "#d1202f", "#141414");
   p(x + 14, y - 1, 2, 2, "#f26a6a");
-  /* spout + handle */
   p(x + 24, y + 10, 6, 3, "#a8a49c");
   p(x + 28, y + 8, 3, 5, "#a8a49c");
-  p(x + 6, y + 8, 3, 2, "#3d2a1c");
   p(x + 5, y + 8, 2, 10, "#3d2a1c");
+  p(x + 6, y + 8, 3, 2, "#3d2a1c");
   p(x + 6, y + 17, 3, 2, "#3d2a1c");
-  if (!REDUCE) {
-    const s = (animT * 1.6) % 1;
-    p(x + 14, y - 8 - s * 7, 2, 3, "#ffffffcc");
-    p(x + 18, y - 10 - s * 9, 2, 3, "#ffffff88");
-  }
 }
 
-function drawPrinter() {
-  const x = 548, y = FLOOR_Y + 4;
-  shadow(x + 1, y + 30, 36, 5);
-  box(x, y + 8, 36, 22, "#d8d2c6", "#141414");
-  p(x + 1, y + 9, 34, 3, "#f0ece4");
-  p(x + 2, y + 18, 32, 10, "#b8b2a6");
-  box(x + 4, y, 28, 10, "#c4bfb2", "#141414");
-  p(x + 6, y + 2, 24, 6, "#22409a");
-  p(x + 7, y + 3, 10, 3, "#4a6ab0");
-  p(x + 8, y + 4, 4, 1, "#c0d0f0");
-  const led = !REDUCE && (animT % 1 < 0.5);
-  p(x + 30, y + 14, 3, 3, led ? "#2e8b57" : "#e6c200");
-  p(x + 6, y + 28, 24, 4, "#f4f0e4");
-  p(x + 6, y + 27, 24, 1, "#141414");
-  p(x + 8, y + 29, 20, 1, "#d8d2c6");
-}
-
-function drawWaterCooler() {
-  const x = 196, y = FLOOR_Y + 6;
+function drawWaterCooler(x, y) {
   shadow(x, y + 34, 18, 5);
   box(x, y + 18, 16, 16, "#c0c0c0", "#141414");
   p(x + 1, y + 19, 6, 14, "#d8d8d8");
@@ -780,50 +917,327 @@ function drawWaterCooler() {
   p(x + 4, y + 1, 4, 16, "#8ec8e6");
   p(x + 5, y + 3, 2, 6, "#f4f0e4");
   p(x + 2, y + 32, 12, 4, "#a0a0a0");
-  if (!REDUCE && (animT * 2 % 1) < 0.45) p(x + 7, y + 24, 2, 2, "#f4f0e4");
 }
 
-function drawClock() {
-  const x = 308, y = FLOOR_Y + 4;
-  box(x, y, 24, 24, "#3d2a1c", "#141414");
-  p(x + 2, y + 2, 20, 20, "#f4f0e4");
-  p(x + 3, y + 3, 18, 18, "#efe6d4");
-  p(x + 11, y + 4, 2, 8, "#141414");
-  p(x + 11, y + 11, 7, 2, "#d1202f");
-  p(x + 11, y + 11, 2, 2, "#141414");
+function drawPlate(cx, y, lines, fill) {
+  const plateW = Math.max.apply(null, lines.map(s => s.length * 4 + 6));
+  const plateH = lines.length * 7 + 4;
+  const px = cx - Math.round(plateW / 2);
+  box(px, y, plateW, plateH, fill || "#f4f0e4", "#3d2a1c");
+  lines.forEach((line, i) => drawLabel(cx, y + 2 + i * 7, line, "#141414"));
 }
 
-function drawRug() {
-  const x = 210, y = FLOOR_Y + 144, w = 220, h = 40;
-  shadow(x + 2, y + h - 2, w - 2, 5);
-  p(x, y, w, h, "#6b1c1c");
-  p(x + 3, y + 3, w - 6, h - 6, "#8a2a2a");
-  p(x + 8, y + 8, w - 16, h - 16, "#7a2424");
-  /* ink-red border pattern */
-  for (let i = 0; i < w - 8; i += 8) {
-    p(x + 4 + i, y + 4, 4, 2, "#d1202f");
-    p(x + 4 + i, y + h - 6, 4, 2, "#d1202f");
+function drawNook() {
+  const n = NOOK;
+  /* Pub carpet: red with a little gold diamond, as is traditional. */
+  p(n.x, n.y, n.w, n.h, "#6b1f24");
+  for (let y = n.y + 36; y < n.y + n.h; y += 12) {
+    for (let x = n.x + 6 + ((y / 12) % 2 ? 6 : 0); x < n.x + n.w - 4; x += 12) {
+      p(x, y, 2, 2, "#b8862a");
+      p(x + 1, y - 1, 1, 1, "#8a2a30");
+    }
   }
-  p(x + 6, y + 10, w - 12, 1, "#5a1818");
+  /* Bottle-green back wall with a dado rail. */
+  p(n.x, n.y, n.w, 34, "#2e4a3c");
+  p(n.x, n.y + 24, n.w, 10, "#3a5a48");
+  p(n.x, n.y + 23, n.w, 1, "#c4a574");
+  p(n.x, n.y + 33, n.w, 1, "#1a2a22");
+  /* Walls: top and west; the south side is open to the walkway. */
+  p(n.x, n.y - 2, n.w + 6, 3, "#141414");
+  p(n.x - 2, n.y - 2, 3, n.h + 2, "#141414");
+  p(W - 8, n.y, 6, n.h, "#141414");
+  /* Rod rack on the wall: four rods, reels down at the bottom. */
+  box(n.x + 8, n.y + 8, 50, 4, "#6b4a2a", "#3d2a1c");
+  box(n.x + 8, n.y + 40, 50, 4, "#6b4a2a", "#3d2a1c");
+  ["#2a2a2a", "#7a1f2b", "#1a5c3a", "#c4a574"].forEach((c, i) => {
+    const rx = n.x + 14 + i * 12;
+    p(rx, n.y + 4, 2, 56, c);
+    p(rx, n.y + 4, 1, 56, lite(c, 0.25));
+    box(rx - 2, n.y + 46, 6, 6, "#c0c0c0", "#141414");
+    p(rx - 1, n.y + 56, 4, 3, "#3d2a1c");
+  });
+  /* Landing net leaning on the wall. */
+  p(n.x + 66, n.y + 12, 1, 46, "#8a6a40");
+  p(n.x + 60, n.y + 6, 13, 1, "#3d2a1c");
+  p(n.x + 60, n.y + 6, 1, 9, "#3d2a1c");
+  p(n.x + 72, n.y + 6, 1, 9, "#3d2a1c");
+  p(n.x + 61, n.y + 15, 11, 1, "#3d2a1c");
+  for (let i = 0; i < 3; i++) p(n.x + 63 + i * 3, n.y + 7, 1, 8, "#6a6a6a");
+  /* A stuffed fish on a plaque. It is very big, apparently. */
+  box(n.x + 76, n.y + 6, 22, 12, "#6b4a2a", "#3d2a1c");
+  p(n.x + 79, n.y + 10, 12, 4, "#7a9a6a");
+  p(n.x + 78, n.y + 11, 2, 2, "#7a9a6a");
+  p(n.x + 91, n.y + 9, 4, 6, "#5a7a4a");
+  p(n.x + 81, n.y + 11, 1, 1, "#141414");
+  /* The arcade cabinet (the screen is drawn each frame). */
+  const c = CABINET;
+  shadow(c.x + 2, c.y + c.h - 2, c.w, 6);
+  box(c.x, c.y, c.w, c.h, "#3a1a4a", "#141414");
+  p(c.x + 1, c.y + 1, 4, c.h - 2, "#5a2a6e");
+  box(c.x + 2, c.y + 2, c.w - 4, 10, "#e6c200", "#141414");
+  if (!EMBED) drawLabel(c.x + c.w / 2, c.y + 5, "ARCADE", "#7a1f2b");
+  box(c.x + 4, c.y + 14, c.w - 8, 22, "#141414", "#141414");
+  box(c.x - 1, c.y + 38, c.w + 2, 8, "#2a2a2a", "#141414");
+  p(c.x + 7, c.y + 35, 2, 5, "#c0c0c0");
+  box(c.x + 5, c.y + 33, 6, 4, "#d1202f", "#141414");
+  p(c.x + 16, c.y + 40, 3, 3, "#3dff7a");
+  p(c.x + 21, c.y + 40, 3, 3, "#e23d4a");
+  p(c.x + 26, c.y + 40, 3, 3, "#6ab8d8");
+  p(c.x + 12, c.y + 52, 8, 6, "#141414");
+  p(c.x + 15, c.y + 53, 2, 4, "#e6c200");
+  /* Chalk scoreboard and the dartboard. */
+  box(BOARD.cx - 40, n.y + 6, 22, 26, "#1a1a1a", "#6b4a2a");
+  for (let i = 0; i < 4; i++) p(BOARD.cx - 37, n.y + 10 + i * 5, 6 + (i * 5) % 9, 1, "#d8d4c8");
+  p(BOARD.cx - 28, n.y + 9, 1, 20, "#d8d4c8");
+  disc(BOARD.cx, BOARD.cy, BOARD.r + 1, "#141414");
+  disc(BOARD.cx, BOARD.cy, BOARD.r - 1, "#1a1a1a");
+  for (let a = 0; a < 20; a++) {
+    const ang = a * Math.PI / 10;
+    for (let r = 2; r < BOARD.r - 1; r++) {
+      const col = r > BOARD.r - 3 ? (a % 2 ? "#d1202f" : "#1a7a52") : r > 5 && r < 7 ? (a % 2 ? "#d1202f" : "#1a7a52") : (a % 2 ? "#f2e6c8" : "#1a1a1a");
+      p(BOARD.cx + Math.round(Math.cos(ang) * r), BOARD.cy + Math.round(Math.sin(ang) * r), 1, 1, col);
+    }
+  }
+  disc(BOARD.cx, BOARD.cy, 1, "#1a7a52");
+  p(BOARD.cx, BOARD.cy, 1, 1, "#d1202f");
+  /* The oche, in white tape. */
+  p(BOARD.cx - 24, n.y + n.h - 6, 40, 2, "#f4f0e4");
 }
 
-function drawMachine() {
+function drawKettleCorner() {
+  const k = KETTLE;
+  tileFloor(k.x, k.y, k.w, k.h, "#e8e2c8", "#cfd8c0");
+  /* Counter with a tiled splashback, kettle, toaster, biscuit tin and a mug tree. */
+  const cx = k.x + 16, cy = k.y + 12, cw = 126;
+  p(cx, cy - 8, cw, 10, "#f4f0e4");
+  for (let i = 0; i < cw; i += 8) p(cx + i, cy - 8, 1, 10, "#d8d4c8");
+  p(cx, cy - 4, cw, 1, "#d8d4c8");
+  shadow(cx + 2, cy + 30, cw, 6);
+  box(cx, cy + 2, cw, 30, "#8b5a2b", "#141414");
+  p(cx + 1, cy + 3, cw - 2, 6, "#d8d2c6");
+  p(cx + 1, cy + 8, cw - 2, 1, "#a8a296");
+  for (let i = 1; i < 4; i++) p(cx + i * (cw / 4), cy + 10, 1, 21, "#6b4a2a");
+  for (let i = 0; i < 4; i++) p(cx + i * (cw / 4) + cw / 8 - 3, cy + 16, 6, 2, "#c4a574");
+  drawKettleOn(cx + 2, cy - 18);
+  /* toaster */
+  box(cx + 42, cy - 8, 20, 13, "#c0c0c0", "#141414");
+  p(cx + 43, cy - 7, 7, 10, "#e0e0e0");
+  p(cx + 46, cy - 8, 4, 2, "#141414");
+  p(cx + 54, cy - 8, 4, 2, "#141414");
+  /* biscuit tin */
+  box(cx + 70, cy - 6, 16, 11, "#22409a", "#141414");
+  p(cx + 70, cy - 8, 16, 3, "#2a50b0");
+  p(cx + 74, cy - 3, 8, 4, "#d1202f");
+  /* mug tree */
+  p(cx + 98, cy - 20, 2, 24, "#6b4a2a");
+  p(cx + 94, cy + 2, 10, 2, "#6b4a2a");
+  [["#d1202f", -6, -16], ["#f4f0e4", 3, -11], ["#e6c200", -6, -7]].forEach(([c, dx, dy]) => box(cx + 99 + dx, cy + dy, 5, 5, c, "#141414"));
+  /* fridge, with magnets */
+  const fx = k.x + k.w - 30;
+  shadow(fx + 1, k.y + 50, 26, 6);
+  box(fx, k.y + 2, 26, 50, "#f0ece4", "#141414");
+  p(fx + 1, k.y + 3, 6, 47, "#ffffff");
+  p(fx, k.y + 18, 26, 1, "#141414");
+  p(fx + 20, k.y + 8, 2, 7, "#9a968c");
+  p(fx + 20, k.y + 24, 2, 10, "#9a968c");
+  p(fx + 8, k.y + 26, 3, 3, "#d1202f");
+  p(fx + 13, k.y + 30, 3, 3, "#1a7a52");
+  p(fx + 9, k.y + 36, 6, 6, "#f4f0e4");
+  p(fx + 9, k.y + 36, 6, 1, "#c4a574");
+  if (!EMBED) drawPlate(k.x + 92, k.y + k.h - 12, ["KETTLE CORNER"]);
+}
+
+function drawLounge() {
+  const l = LOUNGE;
+  /* Rug: cream border, red field, a bit worn where Dexter supervises it. */
+  const rx = l.x + 8, ry = l.y + 52, rw = l.w - 14, rh = l.h - 62;
+  shadow(rx + 2, ry + rh - 2, rw, 5);
+  p(rx, ry, rw, rh, "#f2e6c8");
+  p(rx + 4, ry + 4, rw - 8, rh - 8, "#8a2a2a");
+  p(rx + 8, ry + 8, rw - 16, rh - 16, "#7a2424");
+  for (let i = 0; i < rw - 12; i += 8) {
+    p(rx + 6 + i, ry + 6, 4, 1, "#d1202f");
+    p(rx + 6 + i, ry + rh - 7, 4, 1, "#d1202f");
+  }
+  for (let i = 0; i < rw; i += 4) {
+    p(rx + i, ry - 2, 1, 2, "#e8dcc0");
+    p(rx + i, ry + rh, 1, 2, "#e8dcc0");
+  }
+  p(rx + rw / 2 - 10, ry + rh / 2 + 8, 20, 6, "#6b1c1c");
+  /* The sofa, facing us: teal velvet, three cushions, two fat arms. */
+  const s = SOFA;
+  shadow(s.x + 2, s.y + s.h - 2, s.w, 7);
+  box(s.x + 8, s.y, s.w - 16, 24, "#1f5a5e", "#141414");
+  p(s.x + 10, s.y + 2, s.w - 20, 5, "#2f7a7e");
+  box(s.x + 10, s.y + 22, s.w - 20, 22, "#2a6e72", "#141414");
+  for (let i = 1; i < 3; i++) p(s.x + 10 + i * ((s.w - 20) / 3), s.y + 23, 1, 20, "#1f5a5e");
+  p(s.x + 11, s.y + 23, s.w - 22, 3, "#3a8a8e");
+  box(s.x, s.y + 10, 14, s.h - 10, "#1f5a5e", "#141414");
+  box(s.x + s.w - 14, s.y + 10, 14, s.h - 10, "#1f5a5e", "#141414");
+  p(s.x + 2, s.y + 11, 10, 4, "#2f7a7e");
+  p(s.x + s.w - 12, s.y + 11, 10, 4, "#2f7a7e");
+  p(s.x + 4, s.y + s.h, 4, 3, "#3d2a1c");
+  p(s.x + s.w - 8, s.y + s.h, 4, 3, "#3d2a1c");
+  /* Coffee table with two mugs and a newspaper. */
+  const tx = s.x + 40, ty = s.y + 78;
+  shadow(tx + 2, ty + 14, 62, 6);
+  box(tx, ty, 62, 14, "#8b5a2b", "#141414");
+  p(tx + 1, ty + 1, 60, 3, "#b07a40");
+  p(tx + 4, ty + 14, 4, 5, "#5a3c22");
+  p(tx + 54, ty + 14, 4, 5, "#5a3c22");
+  box(tx + 8, ty + 2, 18, 9, "#f4f0e4", "#141414");
+  p(tx + 10, ty + 4, 10, 1, "#141414");
+  p(tx + 10, ty + 6, 13, 1, "#6a6a6a");
+  p(tx + 10, ty + 8, 8, 1, "#6a6a6a");
+  box(tx + 36, ty - 2, 6, 6, "#d1202f", "#141414");
+  box(tx + 46, ty, 6, 6, "#f4f0e4", "#141414");
+  /* Standard lamp and plants. */
+  p(l.x + l.w - 12, l.y + 4, 1, 40, "#3d2a1c");
+  box(l.x + l.w - 20, l.y, 16, 10, "#f2d36b", "#3d2a1c");
+  p(l.x + l.w - 18, l.y + 1, 12, 3, "#fff1b0");
+  p(l.x + l.w - 16, l.y + 44, 10, 2, "#3d2a1c");
+  drawPlant(l.x + l.w - 24, l.y + l.h - 28);
+  drawPlant(l.x + 2, l.y + 30);
+}
+
+function drawMachineCorner() {
+  const m = MACHINE_CORNER;
+  /* Bare concrete, hazard tape round the edge, and a sign nobody needed to write. */
+  p(m.x, m.y, m.w, m.h, "#4a4844");
+  for (let i = 0; i < 6; i++) p(m.x + 10 + i * 17, m.y + 20 + (i * 37) % (m.h - 40), 9, 1, "#3a3834");
+  p(m.x + 30, m.y + 70, 1, 14, "#2a2824");
+  p(m.x + 31, m.y + 83, 8, 1, "#2a2824");
+  for (let i = 0; i < m.w; i += 10) {
+    p(m.x + i, m.y, 6, 4, "#e6c200");
+    p(m.x + i + 6, m.y, 4, 4, "#141414");
+  }
+  for (let i = 0; i < m.h; i += 10) {
+    p(m.x, m.y + i, 4, 6, "#e6c200");
+    p(m.x, m.y + i + 6, 4, 4, "#141414");
+  }
+  p(m.x - 2, m.y, 2, m.h, "#141414");
+  p(m.x, m.y + m.h, m.w, 2, "#141414");
+  if (!EMBED) drawPlate(m.x + m.w / 2 + 2, m.y + 12, ["DO NOT", "TOUCH"], "#e6c200");
+  const mc = MACHINE;
+  shadow(mc.x - 2, mc.y + mc.h, mc.w + 8, 7);
+  p(mc.x - 8, mc.y + mc.h - 2, mc.w + 16, 8, "#141414");
+  for (let i = 0; i < 10; i++) p(mc.x - 8 + i * 10, mc.y + mc.h - 2, 6, 8, i % 2 ? "#e6c200" : "#141414");
+  box(mc.x + 8, mc.y + 28, 60, 32, "#2a2420", "#141414");
+  p(mc.x + 10, mc.y + 30, 20, 28, "#3a342e");
+  p(mc.x + 12, mc.y + 32, 8, 2, "#5a5248");
+  box(mc.x + 14, mc.y + 8, 44, 32, "#3a2a48", "#141414");
+  p(mc.x + 16, mc.y + 10, 14, 28, "#4a3a58");
+  p(mc.x + 4, mc.y + 22, 12, 2, "#141414");
+  p(mc.x + 4, mc.y + 22, 2, 26, "#141414");
+  p(mc.x + 68, mc.y + 36, 10, 2, "#141414");
+  box(mc.x + 20, mc.y + 40, 14, 14, "#f4f0e4", "#141414");
+  p(mc.x + 24, mc.y + 44, 6, 7, "#d1202f");
+  p(mc.x + 52, mc.y + 4, 2, 20, "#c0c0c0");
+  if (!EMBED) drawLabel(mc.cx, mc.y + mc.h - 8, "NO", "#d1202f");
+}
+
+function drawPrinterStation() {
+  const s = printerStation;
+  if (!s) return;
+  const x = s.x + 10, y = s.y + 6;
+  /* A small table of its own, and the printer, which is having a day. */
+  shadow(s.x + 6, s.y + 34, s.w - 10, 6);
+  box(s.x + 4, s.y + 22, s.w - 8, 10, "#6b5344", "#141414");
+  p(s.x + 5, s.y + 23, s.w - 10, 3, "#8a7360");
+  p(s.x + 8, s.y + 32, 5, 8, "#4a3a30");
+  p(s.x + s.w - 13, s.y + 32, 5, 8, "#4a3a30");
+  box(x, y + 4, 36, 18, "#d8d2c6", "#141414");
+  p(x + 1, y + 5, 34, 3, "#f0ece4");
+  box(x + 4, y - 4, 28, 9, "#c4bfb2", "#141414");
+  p(x + 6, y - 2, 24, 5, "#22409a");
+  p(x + 7, y - 1, 10, 2, "#4a6ab0");
+  p(x + 6, y + 18, 24, 3, "#f4f0e4");
+  /* the jam */
+  p(x + 10, y + 20, 8, 6, "#f4f0e4");
+  p(x + 11, y + 22, 6, 1, "#9a968c");
+  drawPlant(s.x + s.w - 4, s.y + 12);
+}
+
+/* Everything that never moves, painted once into an off-screen sheet. */
+function paintScenery() {
+  ctx.drawImage(ensurePlanks(), 0, 0);
+  p(0, 0, W, TOP_H + 2, "#efe6d4");
+  drawCarpet(FLOOR_BLOCK.x, FLOOR_BLOCK.y, FLOOR_BLOCK.w, FLOOR_BLOCK.h);
+  drawNook();
+  drawKettleCorner();
+  drawWaterCooler(KETTLE.x + 2, KETTLE.y + 54);
+  drawLounge();
+  drawMachineCorner();
+  drawPrinterStation();
+  drawAllRooms();
+  p(0, 0, W, 2, "#141414");
+  p(0, H - 2, W, 2, "#141414");
+  p(0, 0, 2, H, "#141414");
+  p(W - 2, 0, 2, H, "#141414");
+}
+
+function buildScenery() {
+  const sheet = document.createElement("canvas");
+  sheet.width = W;
+  sheet.height = H;
+  const sctx = sheet.getContext("2d");
+  if (!sctx) return null;
+  ctx = sctx;
+  ctx.imageSmoothingEnabled = false;
+  paintScenery();
+  ctx = screenCtx;
+  return sheet;
+}
+
+/* The bits of scenery that move: steam, toast, the arcade screen, the darts, the machine. */
+function drawLiveScenery() {
+  const kx = KETTLE.x + 18, ky = KETTLE.y + 12 - 18;
+  const brewing = people.some(pr => pr.activity === "kettle" && !pr.target);
+  if (!REDUCE) {
+    const s = (animT * 1.6) % 1;
+    p(kx + 14, ky - 8 - s * 7, 2, 3, "#ffffffcc");
+    p(kx + 18, ky - 10 - s * 9, 2, 3, "#ffffff88");
+    if (brewing) p(kx + 11, ky - 12 - ((animT * 1.3 + 0.5) % 1) * 10, 2, 3, "#ffffffaa");
+  }
+  /* Toast pops up every so often. */
+  const tx = KETTLE.x + 16 + 42, ty = KETTLE.y + 12 - 8;
+  const pop = !REDUCE && (animT % 9) > 7.6;
+  if (pop) {
+    p(tx + 4, ty - 6, 4, 6, "#c4893a");
+    p(tx + 12, ty - 5, 4, 5, "#c4893a");
+    p(tx + 4, ty - 6, 4, 1, "#8a5a20");
+  }
+  /* Arcade screen: attract mode, or a proper game when somebody is playing. */
+  const c = CABINET, sx = c.x + 5, sy = c.y + 15, sw = c.w - 10, sh = 20;
+  const playing = people.some(pr => pr.activity === "arcade" && !pr.target && !(pr.spot && pr.spot.watch));
+  p(sx, sy, sw, sh, playing ? "#101830" : "#141428");
+  if (playing) {
+    const t = REDUCE ? 0.4 : (animT * 0.5) % 1;
+    for (let i = 0; i < 6; i++) if (i / 6 > t) p(sx + 2 + i * 4, sy + 10, 1, 1, "#f2e6a0");
+    p(sx + 1 + Math.round(t * (sw - 6)), sy + 8, 5, 5, "#e6c200");
+    p(sx + 3 + Math.round(t * (sw - 6)), sy + 10, 3, 1, "#101830");
+    p(sx + 2, sy + 2, 3, 1, "#e23d4a");
+    p(sx + sw - 6, sy + 2, 4, 1, "#3dff7a");
+    const g = Math.round(((t + 0.6) % 1) * (sw - 6));
+    p(sx + sw - 6 - g, sy + 13, 4, 4, "#e040fb");
+  } else if (REDUCE || (animT % 1.4) < 0.9) {
+    p(sx + 3, sy + 8, sw - 6, 1, "#d1202f");
+    p(sx + 5, sy + 11, sw - 10, 1, "#e6c200");
+  }
+  /* Darts in the board, and one in flight. */
+  darts.stuck.forEach(d => {
+    p(d.x, d.y, 1, 1, "#141414");
+    p(d.x - 1, d.y + 1, 1, 2, "#f4f0e4");
+    p(d.x - 2, d.y + 2, 1, 1, "#d1202f");
+  });
+  if (darts.flying) {
+    const f = darts.flying, t = Math.min(1, f.t);
+    const x = f.x0 + (f.x1 - f.x0) * t, y = f.y0 + (f.y1 - f.y0) * t - Math.sin(t * Math.PI) * 6;
+    p(x, y, 2, 1, "#141414");
+    p(x - 2, y + 1, 2, 1, "#d1202f");
+  }
+  /* The machine's eye. Everyone pretends not to notice it. */
   const m = MACHINE;
-  /* berth stain */
-  p(m.x - 8, m.y + m.h - 2, m.w + 16, 10, "#14141422");
-  shadow(m.x - 2, m.y + m.h, m.w + 8, 7);
-  /* hazard stripes on the plinth */
-  p(m.x - 8, m.y + m.h - 2, m.w + 16, 8, "#141414");
-  for (let i = 0; i < 10; i++) {
-    p(m.x - 8 + i * 10, m.y + m.h - 2, 6, 8, i % 2 ? "#e6c200" : "#141414");
-  }
-  /* chassis */
-  box(m.x + 8, m.y + 28, 60, 32, "#2a2420", "#141414");
-  p(m.x + 10, m.y + 30, 20, 28, "#3a342e");
-  p(m.x + 12, m.y + 32, 8, 2, "#5a5248");
-  box(m.x + 14, m.y + 8, 44, 32, "#3a2a48", "#141414");
-  p(m.x + 16, m.y + 10, 14, 28, "#4a3a58");
-  /* pulsing eye */
   const pulse = REDUCE ? 0.55 : (Math.sin(animT * 3.2) * 0.5 + 0.5);
   const glow = pulse > 0.55 ? "#a04ad0" : "#3dff7a";
   const glowDim = pulse > 0.55 ? "#6b2a8a" : "#1a6b3a";
@@ -832,58 +1246,16 @@ function drawMachine() {
   p(m.x + 30, m.y + 3, 12, 10, "#f4f0e4");
   p(m.x + 33, m.y + 5, 6, 6, "#141414");
   p(m.x + 34, m.y + 6, 2, 2, "#f4f0e4");
-  /* cables */
-  p(m.x + 4, m.y + 22, 12, 2, "#141414");
-  p(m.x + 4, m.y + 22, 2, 26, "#141414");
-  p(m.x + 68, m.y + 36, 10, 2, "#141414");
-  /* switch and spark */
-  box(m.x + 20, m.y + 40, 14, 14, "#f4f0e4", "#141414");
-  p(m.x + 24, m.y + 44, 6, 7, "#d1202f");
-  p(m.x + 52, m.y + 4, 2, 20, "#c0c0c0");
   if (!REDUCE && ((animT * 7) % 1) < 0.22) {
     p(m.x + 56, m.y - 6, 3, 3, "#e6c200");
     p(m.x + 60, m.y, 2, 2, "#f4f0e4");
     p(m.x + 54, m.y + 2, 2, 2, "#3dff7a");
   }
-  if (viewScale >= 1 && !EMBED) drawLabel(m.cx, m.y + m.h - 8, "NO", "#d1202f");
-}
-
-function drawInkSplat() {
-  const x = 22, y = FLOOR_Y + 300;
-  p(x, y, 12, 7, "#14141433");
-  p(x + 4, y + 4, 8, 6, "#14141433");
-  p(x + 10, y + 2, 4, 4, "#14141422");
-  p(x - 3, y + 3, 4, 3, "#14141422");
-  p(x + 2, y - 2, 3, 3, "#14141422");
-}
-
-function drawRoom() {
-  ctx.drawImage(ensurePlanks(), 0, FLOOR_Y, W, H - FLOOR_Y, 0, FLOOR_Y, W, H - FLOOR_Y);
-  /* north wall under the private offices */
-  p(0, 0, W, FLOOR_Y, "#efe6d4");
-  drawRug();
-  drawKettle();
-  drawPrinter();
-  drawWaterCooler();
-  drawClock();
-  drawInkSplat();
-  drawPlant(70, FLOOR_Y + 210);
-  drawPlant(470, FLOOR_Y + 16);
-  /* one filing cabinet, out of the way */
-  shadow(20, FLOOR_Y + 230, 22, 6);
-  box(20, FLOOR_Y + 204, 20, 28, "#6b5344", "#141414");
-  p(22, FLOOR_Y + 206, 16, 2, "#8a7360");
-  p(22, FLOOR_Y + 210, 16, 7, "#4a3a30");
-  p(22, FLOOR_Y + 220, 16, 7, "#4a3a30");
-  p(24, FLOOR_Y + 212, 3, 2, "#c4a574");
-  p(24, FLOOR_Y + 222, 3, 2, "#c4a574");
-  drawMachine();
-  drawAllRooms();
-  /* outer frame */
-  p(0, 0, W, 2, "#141414");
-  p(0, H - 2, W, 2, "#141414");
-  p(0, 0, 2, H, "#141414");
-  p(W - 2, 0, 2, H, "#141414");
+  /* The printer's light blinks orange. It always blinks orange. */
+  if (printerStation) {
+    const led = !REDUCE && (animT % 1 < 0.5);
+    p(printerStation.x + 10 + 31, printerStation.y + 6 + 9, 3, 3, led ? "#e07a2f" : "#6a3a10");
+  }
 }
 
 function drawAllRooms() {
@@ -991,7 +1363,7 @@ function drawAmenityFurniture(r) {
     box(r.x + 62, r.y + 24, 8, 8, "#d1202f", "#141414");
     p(r.x + 64, r.y + 25, 3, 2, "#f26a6a");
     /* two tables, not four, with a bit of air */
-    [[r.x + 120, r.y + 70], [r.x + 200, r.y + 70]].forEach(([tx, ty]) => {
+    [[r.x + 112, r.y + 70], [r.x + 184, r.y + 70]].forEach(([tx, ty]) => {
       shadow(tx + 2, ty + 18, 44, 6);
       box(tx, ty, 46, 18, "#f4f0e4", "#141414");
       p(tx + 1, ty + 1, 44, 3, "#ffffff");
@@ -1076,6 +1448,22 @@ function drawDesk(d) {
     box(mx, y + 10, 6, 6, "#f4f0e4", "#141414");
     p(mx + 1, y + 11, 4, 2, "#d1202f");
     p(mx + 6, y + 12, 2, 3, "#f4f0e4");
+  } else if (!d.private) {
+    /* A bit of desk clutter, so the rows do not look like a showroom. */
+    const k = STAFF.indexOf(d.staff) % 4;
+    if (k === 0) {
+      p(d.x + 6, y + 12, 9, 5, "#f4f0e4");
+      p(d.x + 7, y + 11, 8, 1, "#d8d4c8");
+      p(d.x + 7, y + 14, 6, 1, "#9a968c");
+    } else if (k === 1) {
+      box(d.x + d.w - 13, y + 11, 6, 6, "#c45c26", "#3d2a1c");
+      p(d.x + d.w - 12, y + 5, 4, 6, "#2a8a5a");
+      p(d.x + d.w - 13, y + 7, 1, 2, "#2a8a5a");
+    } else if (k === 2) {
+      p(d.x + d.w - 12, y + 15, 7, 2, "#3d2a1c");
+      p(d.x + d.w - 10, y + 6, 1, 9, "#3d2a1c");
+      box(d.x + d.w - 13, y + 3, 7, 4, "#e6c200", "#3d2a1c");
+    }
   }
 }
 
@@ -1199,7 +1587,8 @@ function drawPerson(pr) {
   const jump = (!REDUCE && cele) ? Math.round(Math.abs(Math.sin(pr.celeT * 10)) * 8) : 0;
   const bob = moving ? (frame === 1 ? 0 : 1) : idleBob(pr);
   const x = Math.round(pr.x);
-  const y = Math.round(pr.y - jump + bob);
+  let y = Math.round(pr.y - jump + bob);
+  const sit = isSeated(pr);
   const left = pr.facing === "l";
   shadow(x - 8, Math.round(pr.y) + 2, 16, 5);
 
@@ -1242,7 +1631,10 @@ function drawPerson(pr) {
   /* legs + shoes, 3-frame walk */
   const shoe = "#2a1c14";
   const trouser = dark(s.body, 0.45);
-  if (frame === 1) {
+  if (sit) {
+    drawSeatedLegs(x, y, trouser, shoe);
+    y += SIT_DROP;
+  } else if (frame === 1) {
     p(x - 5, y - 10, 5, 10, trouser);
     p(x + 1, y - 10, 5, 10, trouser);
     p(x - 5, y, 5, 3, shoe);
@@ -1324,7 +1716,8 @@ function drawKenneth(pr) {
   const jump = (!REDUCE && cele) ? Math.round(Math.abs(Math.sin(pr.celeT * 10)) * 8) : 0;
   const bob = moving ? (frame === 1 ? 0 : 1) : idleBob(pr);
   const x = Math.round(pr.x);
-  const y = Math.round(pr.y - jump + bob);
+  let y = Math.round(pr.y - jump + bob);
+  const sit = isSeated(pr);
   const left = pr.facing === "l";
   const metal = "#e8dcc8";
   const vest = "#1a1a1a";
@@ -1358,7 +1751,10 @@ function drawKenneth(pr) {
 
   const shoe = "#2a1c14";
   const trouser = "#2a2a2a";
-  if (frame === 1) {
+  if (sit) {
+    drawSeatedLegs(x, y, trouser, shoe);
+    y += SIT_DROP;
+  } else if (frame === 1) {
     p(x - 5, y - 10, 5, 10, trouser);
     p(x + 1, y - 10, 5, 10, trouser);
     p(x - 5, y, 5, 3, shoe);
@@ -1439,7 +1835,8 @@ function drawRobot(pr) {
   const jump = (!REDUCE && cele) ? Math.round(Math.abs(Math.sin(pr.celeT * 10)) * 8) : 0;
   const bob = moving ? (frame === 1 ? 0 : 1) : idleBob(pr);
   const x = Math.round(pr.x);
-  const y = Math.round(pr.y - jump + bob);
+  let y = Math.round(pr.y - jump + bob);
+  const sit = isSeated(pr);
   const left = pr.facing === "l";
   const metal = terry ? "#d8d4c8" : "#ccc8bc";
   const vest = "#b81c24";
@@ -1488,18 +1885,23 @@ function drawRobot(pr) {
 
   /* legs */
   const thigh = "#6a6860";
-  if (frame === 2) {
-    p(x - 6, y - 8, 5, 8, thigh);
-    p(x + 2, y - 13, 5, 13, thigh);
-  } else if (frame === 1) {
-    p(x - 5, y - 10, 5, 10, thigh);
-    p(x + 1, y - 10, 5, 10, thigh);
+  if (sit) {
+    drawSeatedLegs(x, y, thigh, "#2a1c14");
+    y += SIT_DROP;
   } else {
-    p(x - 6, y - 13, 5, 13, thigh);
-    p(x + 2, y - 8, 5, 8, thigh);
+    if (frame === 2) {
+      p(x - 6, y - 8, 5, 8, thigh);
+      p(x + 2, y - 13, 5, 13, thigh);
+    } else if (frame === 1) {
+      p(x - 5, y - 10, 5, 10, thigh);
+      p(x + 1, y - 10, 5, 10, thigh);
+    } else {
+      p(x - 6, y - 13, 5, 13, thigh);
+      p(x + 2, y - 8, 5, 8, thigh);
+    }
+    p(x - 6, y, 5, 3, "#2a1c14");
+    p(x + 2, y, 5, 3, "#2a1c14");
   }
-  p(x - 6, y, 5, 3, "#2a1c14");
-  p(x + 2, y, 5, 3, "#2a1c14");
 
   if (terry) {
     box(x - 8, y - 24, 16, 15, vest, "#141414");
@@ -1564,6 +1966,117 @@ function drawRobot(pr) {
     p(x - 13, y - 38 - Math.min(jump, 4), 4, 8, metal);
     p(x + 9, y - 40 - Math.min(jump, 4), 4, 8, metal);
   }
+}
+
+function isSeated(pr) {
+  return pr.phase === "idle" && !pr.target && !!pr.spot && !!pr.spot.seat && pr.activity === "sofa";
+}
+
+function drawSeatedLegs(x, y, trouser, shoe) {
+  p(x - 6, y - 4, 5, 4, trouser);
+  p(x + 2, y - 4, 5, 4, trouser);
+  p(x - 6, y, 5, 2, shoe);
+  p(x + 2, y, 5, 2, shoe);
+}
+
+function armColour(s) {
+  if (s.kind === "kenneth") return "#9a968c";
+  if (s.kind === "terry") return "#d8d4c8";
+  if (s.kind === "reggie") return "#ccc8bc";
+  return s.skin;
+}
+
+function drawMug(x, y, band) {
+  box(x - 1, y, 6, 6, "#f4f0e4", "#141414");
+  p(x, y + 2, 4, 2, band);
+  if (!REDUCE) {
+    const s = (animT * 1.4 + x * 0.07) % 1;
+    p(x + 1, y - 3 - s * 5, 1, 2, "#ffffffaa");
+  }
+}
+
+/* Whatever someone is up to at their idle spot, drawn over the top of them.
+   Their own icon and prop are never changed; this only adds a mug, a rod, a dart... */
+function drawActivity(pr) {
+  if (pr.phase !== "idle" || pr.target || !pr.activity || !pr.spot) return;
+  const s = pr.staff, kind = pr.activity, spot = pr.spot;
+  const robot = s.kind === "terry" || s.kind === "reggie";
+  const x = Math.round(pr.x);
+  const y = Math.round(pr.y) + (isSeated(pr) ? SIT_DROP : 0) + idleBob(pr);
+  const left = pr.facing === "l";
+  const fx = left ? x + (robot ? 8 : 7) : x - (robot ? 12 : 11);  /* the free hand */
+  const arm = armColour(s);
+  const band = s.accent || "#d1202f";
+  if (kind === "kettle" || kind === "lounge" || (kind === "sofa" && pr.salt % 2 === 0) || (kind === "darts" && spot.waiting)) {
+    p(fx, y - 22, 4, 9, arm);
+    drawMug(fx, y - 15, band);
+  } else if (kind === "darts") {
+    /* Throwing arm up, dart in hand, until it has just been thrown. */
+    const thrown = !REDUCE && pr.throwT < 0.35;
+    if (thrown) {
+      p(fx + (left ? -2 : 2), y - 30, 4, 8, arm);
+    } else {
+      p(fx, y - 34, 4, 12, arm);
+      p(fx + 1, y - 39, 1, 5, "#141414");
+      p(fx, y - 36, 3, 1, "#d1202f");
+    }
+  } else if (kind === "rods") {
+    const dir = left ? 1 : -1;
+    p(fx, y - 22, 4, 9, arm);
+    for (let i = 0; i < 20; i++) p(fx + 1 + dir * i, y - 14 - i, 1, 1, i < 4 ? "#3d2a1c" : "#5a5a5a");
+    p(fx + dir * 3, y - 17, 3, 3, "#c0c0c0");
+    const tipX = fx + 1 + dir * 19, tipY = y - 33;
+    const bob = REDUCE ? 0 : Math.round(Math.sin(animT * 2 + pr.salt) * 1.5);
+    p(tipX, tipY, 1, 16 + bob, "#e8e8e8");
+    p(tipX - 1, tipY + 16 + bob, 3, 2, "#d1202f");
+    p(tipX - 1, tipY + 18 + bob, 3, 1, "#f4f0e4");
+  } else if (kind === "arcade" && !spot.watch) {
+    const jig = REDUCE ? 0 : (((animT * 8 + pr.salt) | 0) % 2);
+    p(fx, y - 22 + jig, 4, 9, arm);
+  } else if (kind === "canteen") {
+    p(fx, y - 20, 4, 7, arm);
+    p(fx - 3, y - 14, 10, 2, "#f4f0e4");
+    p(fx - 3, y - 13, 10, 1, "#9a968c");
+    p(fx - 2, y - 17, 2, 3, "#f2c14e");
+    p(fx + 1, y - 18, 2, 4, "#e6b23a");
+    p(fx + 4, y - 17, 2, 3, "#f2c14e");
+  } else if (kind === "music") {
+    if (spot.guitar) {
+      /* Air guitar, with an actual guitar, which slightly ruins the joke. */
+      p(x - 8, y - 18, 16, 3, "#6b3d12");
+      box(x - 12, y - 21, 9, 9, "#7a1f2b", "#141414");
+      p(x - 9, y - 18, 3, 3, "#141414");
+      const strum = REDUCE ? 0 : (((animT * 6) | 0) % 2);
+      p(x - 6, y - 16 - strum * 2, 4, 3, arm);
+    }
+    if (!REDUCE) {
+      const t = (animT * 0.7 + pr.salt * 0.37) % 1.6;
+      if (t < 1.2) {
+        const nx = x + 6 + Math.round(Math.sin(t * 5) * 2), ny = Math.round(y - 46 - t * 12);
+        const col = t < 0.9 ? "#f2e6a0" : "#c4b880";
+        p(nx, ny, 3, 2, col);
+        p(nx + 2, ny - 6, 1, 6, col);
+        p(nx + 2, ny - 6, 3, 1, col);
+      }
+    }
+  }
+}
+
+function drawBubble(pr) {
+  if (!pr.bubble || pr.target || pr.phase !== "idle") return;
+  const text = pr.bubble.text;
+  const x = Math.round(pr.x);
+  const sit = isSeated(pr);
+  const top = Math.round(pr.y) + (sit ? SIT_DROP : 0) - (pr.staff.kind === "kenneth" || pr.staff.kind === "reggie" ? 60 : pr.staff.kind === "terry" ? 58 : 50);
+  const w = text.length * 4 + 5, h = 10;
+  let bx = Math.round(x - w / 2);
+  bx = Math.max(4, Math.min(W - w - 4, bx));
+  box(bx, top - h, w, h, "#fffdf7", "#141414");
+  p(x - 1, top - 1, 3, 2, "#fffdf7");
+  p(x - 2, top, 1, 2, "#141414");
+  p(x + 2, top, 1, 2, "#141414");
+  p(x - 1, top + 2, 3, 1, "#141414");
+  drawLabel(bx + w / 2, top - h + 3, text, "#141414");
 }
 
 function drawArthur(c) {
@@ -1652,7 +2165,23 @@ const GLYPHS = {
   U:[0b101,0b101,0b101,0b101,0b111],
   V:[0b101,0b101,0b101,0b010,0b010],
   W:[0b101,0b101,0b101,0b111,0b101],
-  Y:[0b101,0b101,0b010,0b010,0b010]
+  Y:[0b101,0b101,0b010,0b010,0b010],
+  J:[0b001,0b001,0b001,0b101,0b010],
+  X:[0b101,0b101,0b010,0b101,0b101],
+  Z:[0b111,0b001,0b010,0b100,0b111],
+  "0":[0b111,0b101,0b101,0b101,0b111],
+  "1":[0b010,0b110,0b010,0b010,0b111],
+  "2":[0b110,0b001,0b010,0b100,0b111],
+  "3":[0b110,0b001,0b010,0b001,0b110],
+  "4":[0b101,0b101,0b111,0b001,0b001],
+  "5":[0b111,0b100,0b110,0b001,0b110],
+  "6":[0b011,0b100,0b111,0b101,0b111],
+  "7":[0b111,0b001,0b010,0b010,0b010],
+  "8":[0b111,0b101,0b111,0b101,0b111],
+  "9":[0b111,0b101,0b111,0b001,0b110],
+  "!":[0b010,0b010,0b010,0b000,0b010],
+  "?":[0b110,0b001,0b010,0b000,0b010],
+  "'":[0b010,0b010,0b000,0b000,0b000]
 };
 function drawGlyph(x, y, ch, color) {
   const bits = GLYPHS[ch];
@@ -1673,6 +2202,7 @@ function drawLabel(cx, y, text, color) {
 
 
 function drawFrame() {
+  if (!ctx) return;
   ctx.imageSmoothingEnabled = false;
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   if (EMBED) {
@@ -1683,10 +2213,13 @@ function drawFrame() {
     ctx.clip();
     ctx.translate(-EMBED_CAM_X, -EMBED_CAM_Y);
   }
-  drawRoom();
+  if (!sceneSheet) sceneSheet = buildScenery();
+  if (sceneSheet) ctx.drawImage(sceneSheet, 0, 0);
+  else paintScenery();
+  drawLiveScenery();
   const sprites = [];
   desks.forEach(d => sprites.push({ y: d.y + 20, draw: () => drawDesk(d) }));
-  people.forEach(pr => sprites.push({ y: pr.y, draw: () => drawPerson(pr) }));
+  people.forEach(pr => sprites.push({ y: pr.y, draw: () => { drawPerson(pr); drawActivity(pr); } }));
   cats.forEach(c => sprites.push({
     y: c.y,
     draw: () => (c.id === "arthur" ? drawArthur(c) : drawDexter(c))
@@ -1702,47 +2235,55 @@ function drawFrame() {
       p(d.cx - w / 2, ly, w, 1, "#3d2a1c");
       drawLabel(d.cx, ly + 1, d.staff.tag, "#141414");
     });
+    people.forEach(drawBubble);
   }
   if (EMBED) ctx.restore();
 }
 
 function applyShareDemo() {
   if (demoAppliedWorking) return;
-  const working = ["kenneth", "terry", "george", "percy", "tweety", "archie", "filament", "rupert", "penny", "sheila", "sarge", "mona", "hettie", "stockley", "grant", "vinnie"];
+  const working = ["kenneth", "terry", "george", "percy", "tweety", "filament", "rupert", "penny", "sheila", "sarge", "mona", "hettie", "stockley", "grant", "vinnie"];
+  /* A posed snapshot for office-share.png: most at their desks, a few at the idle spots. */
   const places = {
-    reggie: { x: 54, y: FLOOR_Y + 32, facing: "r", flavour: "Off to the kettle, diplomatically" },
-    frank: { x: 142, y: 592, facing: "l", flavour: "Frank's domain, the canteen" },
-    boris: { x: 222, y: 592, facing: "r", flavour: "Lunch, or the idea of lunch" },
-    oddly: { x: 174, y: 610, facing: "l", flavour: "A diplomatic bacon sandwich" },
-    brian: { x: 400, y: 580, facing: "r", flavour: "Brian's natural haunt" },
-    clive: { x: 510, y: 604, facing: "l", flavour: "Having a listen" }
+    reggie: "kettle-0", archie: "arcade-0", boris: "darts-0", oddly: "sofa-1",
+    frank: "canteen-1", brian: "music-0", clive: "rods-0"
   };
+  const bubbles = { boris: "180!", archie: "1UP!", oddly: "ZZZ" };
   people.forEach(p => {
     p.target = null;
     p.waypoints = [];
-    p.pendingDest = null;
     if (working.includes(p.id)) {
       setWant(p, "working");
+      releaseSpot(p);
       p.x = p.desk.chairX;
       p.y = p.desk.chairY;
+      p.target = null;
+      p.waypoints = [];
       p.phase = "working";
       p.facing = "r";
     } else {
-      setWant(p, "idle");
-      const spot = places[p.id];
-      if (spot) {
-        p.x = spot.x;
-        p.y = spot.y;
-        p.facing = spot.facing;
-        p.phase = "idle";
-        p.wait = 9999;
-        p.flavour = spot.flavour;
-      }
+      releaseSpot(p);
     }
   });
-  cats.forEach(c => {
+  people.forEach(p => {
+    const id = places[p.id];
+    const spot = id && spots.find(s => s.id === id);
+    if (!spot) return;
+    setWant(p, "idle");
+    settleAt(p, spot);
+    p.phase = "idle";
+    p.wait = 9999;
+    p.bubbleT = 9999;
+    p.throwT = 1;
+    if (bubbles[p.id]) p.bubble = { text: bubbles[p.id], t: 9999 };
+  });
+  darts.stuck = [{ x: BOARD.cx - 2, y: BOARD.cy - 3 }, { x: BOARD.cx + 1, y: BOARD.cy - 4 }, { x: BOARD.cx - 1, y: BOARD.cy - 5 }];
+  const poses = [{ x: 590, y: 322 }, { x: 540, y: 412 }];
+  cats.forEach((c, i) => {
     c.target = null;
     c.wait = 9999;
+    c.x = poses[i % poses.length].x;
+    c.y = poses[i % poses.length].y;
   });
   paintBoard();
   demoAppliedWorking = true;
@@ -1771,6 +2312,7 @@ function applyDemo(now) {
   if (DEMO === "celebrating") {
     if (!demoAppliedIdle) {
       people.forEach(p => { if (p.id !== "george") setWant(p, "idle"); });
+      releaseSpot(george);
       george.want = "working";
       george.x = george.desk.chairX;
       george.y = george.desk.chairY;
@@ -1787,6 +2329,7 @@ function applyDemo(now) {
       const k = people.find(p => p.id === "kenneth") || george;
       people.forEach(p => { if (p.id !== k.id) setWant(p, "idle"); });
       setWant(k, "idle");
+      releaseSpot(k);
       k.target = null;
       k.waypoints = [];
       k.pendingDest = null;
@@ -1826,6 +2369,7 @@ async function pullFeed() {
 
 let officeOnScreen = true;
 let rafId = 0;
+let lastDraw = 0;
 
 function shouldAnimate() {
   return !REDUCE && !document.hidden && officeOnScreen;
@@ -1834,14 +2378,21 @@ function shouldAnimate() {
 function loop(ts) {
   rafId = 0;
   if (!shouldAnimate()) return;
+  /* About thirty frames a second is plenty for pixel people, and kinder to phones. */
+  if (lastDraw && ts - lastDraw < FRAME_MS - 2) {
+    rafId = requestAnimationFrame(loop);
+    return;
+  }
+  lastDraw = ts;
   if (!t0) t0 = ts;
   const now = (ts - t0) / 1000;
   let dt = lastTs ? (ts - lastTs) / 1000 : 0.016;
-  if (dt > 0.08) dt = 0.08;
+  if (dt > 0.1) dt = 0.1;
   lastTs = ts;
   animT = now;
   if (DEMO) applyDemo(now);
   people.forEach(p => tickPerson(p, dt));
+  tickDarts(dt);
   cats.forEach(c => tickCat(c, dt));
   drawFrame();
   if (!DEMO && OFFICE_FEED_URL && !document.hidden && performance.now() - lastFeed > POLL_MS) {
@@ -1853,6 +2404,7 @@ function loop(ts) {
 function resumeLoop() {
   if (!shouldAnimate() || rafId) return;
   lastTs = 0;
+  lastDraw = 0;
   rafId = requestAnimationFrame(loop);
 }
 
@@ -1873,15 +2425,25 @@ function watchEmbedVisibility() {
   });
 }
 
+/* On a phone the office is wider than the screen. Start with the middle in view
+   (the aisle, the kettle corner and the sofa), rather than the empty left edge. */
+function centreStage() {
+  const wrap = document.getElementById("office-stage-wrap");
+  if (!wrap || EMBED) return;
+  const spare = wrap.scrollWidth - wrap.clientWidth;
+  if (spare > 8 && wrap.scrollLeft === 0) wrap.scrollLeft = Math.round(spare * 0.62);
+}
+
 function boot() {
   if (!canvas || !ctx) return;
   fitCanvas();
   window.addEventListener("resize", fitCanvas);
+  centreStage();
   layoutDesks();
-  setupHotspots();
+  layoutSpots();
   STAFF.forEach((s, i) => people.push(makePerson(s, i)));
-  cats.push(makeCat("arthur", 320, FLOOR_Y + 164));
-  cats.push(makeCat("dexter", 360, FLOOR_Y + 270));
+  cats.push(makeCat("arthur", 0));
+  cats.push(makeCat("dexter", 1));
   if (DEMO && demoNote) {
     demoNote.hidden = false;
     feedOffline = false;
