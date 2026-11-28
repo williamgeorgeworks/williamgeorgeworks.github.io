@@ -542,6 +542,71 @@ async function m2d(browser, port) {
   ok(`${tag} the six shared cards show their painted art`, await ev(async () => { const B = __SO.B(); B.hand = ['junk', 'sock', 'ticket', 'wblock', 'photo', 'catchp'].map(id => ({ id, u: 0 })); __SO.render(); await new Promise(r => setTimeout(r, 900)); return ['junk', 'sock', 'ticket', 'wblock', 'photo', 'catchp'].every(id => new RegExp('cards/' + id + '\\.jpg').test(getComputedStyle(document.querySelector('.c-' + id + ' .art')).backgroundImage)); }));
   ok(`${tag} the Handout card shows its painted art`, await ev(async () => { const B = __SO.B(); B.hand = [{ id: 'handout', u: 0 }]; __SO.render(); await new Promise(r => setTimeout(r, 900)); const art = document.querySelector('.c-handout .art'); return art && /cards\/handout\.jpg/.test(getComputedStyle(art).backgroundImage); }));
   ok(`${tag} the four new clutter cards show their painted art`, await ev(async () => { const B = __SO.B(); B.hand = ['nohot', 'groan', 'condemned', 'wetsand'].map(id => ({ id, u: 0 })); __SO.render(); await new Promise(r => setTimeout(r, 900)); return ['nohot', 'groan', 'condemned', 'wetsand'].every(id => { const art = document.querySelector('.c-' + id + ' .art'); return art && new RegExp('cards/' + id + '\\.jpg').test(getComputedStyle(art).backgroundImage); }); }));
+  ok(`${tag} the three legendary cards exist at rarity l`, await ev(() => {
+    const C = __SO.CARDS, L = __SO.QLEG;
+    return L.r[0] === 'bankrupt' && C.bankrupt.rar === 'l' && C.bankrupt.h === 'r' && C.bankrupt.o.xcost &&
+      L.t[0] === 'magnum' && C.magnum.rar === 'l' && C.magnum.h === 't' && C.magnum.o.mag === 5 &&
+      L.k[0] === 'cloud' && C.cloud.rar === 'l' && C.cloud.h === 'k';
+  }));
+  const lpools = n => ev(n => { __SO.DAY.sticks = n; __SO.poolFix(); const P = __SO.POOL, Q = __SO.QLEG; return ['r', 't', 'k'].map(h => Q[h].filter(id => P[h].includes(id)).length).join(','); }, n);
+  ok(`${tag} legendary cards stay out of the pools before their sticks`, (await lpools(14)) === '0,0,0', await lpools(14));
+  ok(`${tag} stick #15 adds Reggie's legendary`, (await lpools(15)) === '1,0,0', await lpools(15));
+  ok(`${tag} stick #16 adds Terry's legendary`, (await lpools(16)) === '1,1,0', await lpools(16));
+  ok(`${tag} stick #17 adds Kenneth's legendary`, (await lpools(17)) === '1,1,1', await lpools(17));
+  ok(`${tag} Bankrupt: 3 Energy vs Invoice 5 on two enemies deals 15 each`, await ev(async () => {
+    __SO.S.hero = 'r'; __SO.act('begin'); await new Promise(r => setTimeout(r, 200)); __SO.act('cat', 'arthur'); __SO.DAY.done1 = 1;
+    __SO.fightWith(['breeze', 'breeze'], 'F'); await new Promise(r => setTimeout(r, 300));
+    const B = __SO.B(); B.energy = 3; B.attk = 0; B.hand = [{ id: 'bankrupt', u: 0 }];
+    B.en.forEach(e => { e.block = 0; e.hp = e.max = 200; e.st.inv = 5; });
+    const hp0 = B.en.map(e => e.hp);
+    const okp = __SO.playCard(0);
+    return okp && B.energy === 0 && B.en.every((e, i) => hp0[i] - e.hp === 15 && e.st.inv === 5) && !B.disc.some(c => c.id === 'bankrupt');
+  }));
+  ok(`${tag} Magnum Opus costs 5, then 0 after five Attacks, and deals 60`, await ev(async () => {
+    __SO.S.hero = 't'; __SO.act('begin'); await new Promise(r => setTimeout(r, 200)); __SO.act('cat', 'arthur'); __SO.DAY.done1 = 1;
+    __SO.fightWith(['breeze'], 'F'); await new Promise(r => setTimeout(r, 300));
+    const B = __SO.B(), e = B.en[0];
+    e.block = 0; e.hp = e.max = 200;
+    B.energy = 9; B.attk = 0; B.hand = [{ id: 'magnum', u: 0 }];
+    const c0 = __SO.cost(B.hand[0]);
+    const hp0 = e.hp;
+    const okp = __SO.playCard(0, 0);
+    const mid = okp && c0 === 5 && hp0 - e.hp === 60 && B.attk === 1 && B.energy === 4;
+    e.hp = e.max = 200; e.block = 0; e.dead = 0;
+    B.energy = 9; B.attk = 5; B.hand = [{ id: 'magnum', u: 0 }];
+    const c1 = __SO.cost(B.hand[0]);
+    const hp1 = e.hp;
+    const ok2 = __SO.playCard(0, 0);
+    return mid && ok2 && c1 === 0 && hp1 - e.hp === 60 && B.energy === 9 && B.attk === 6;
+  }));
+  ok(`${tag} The Cloud Provides adds 5 fleeting 0-cost cards, 7 when upgraded`, await ev(async () => {
+    __SO.S.hero = 'k'; __SO.act('begin'); await new Promise(r => setTimeout(r, 200)); __SO.act('cat', 'arthur'); __SO.DAY.done1 = 1;
+    __SO.fightWith(['breeze'], 'F'); await new Promise(r => setTimeout(r, 300));
+    const B = __SO.B(); B.energy = 1; B.hand = [{ id: 'cloud', u: 0 }];
+    const okp = __SO.playCard(0);
+    const five = okp && B.hand.length === 5 && B.hand.every(c => c.z && c.tmp);
+    B.energy = 1; B.hand = [{ id: 'cloud', u: 1 }];
+    const ok2 = __SO.playCard(0);
+    return five && ok2 && B.hand.length === 7 && B.hand.every(c => c.z && c.tmp);
+  }));
+  ok(`${tag} a boss chest guarantees the unlocked legendary if it is not in the deck`, await ev(async () => {
+    __SO.S.hero = 'r'; __SO.act('begin'); await new Promise(r => setTimeout(r, 200)); __SO.act('cat', 'arthur'); __SO.DAY.done1 = 1;
+    __SO.DAY.sticks = 15; __SO.poolFix();
+    const R = __SO.run(); R.part = 2;
+    if (R.deck.some(c => c.id === 'bankrupt')) return 'already in deck';
+    const offer = __SO.putBossLegend(['redpen', 'cough', 'invoice']);
+    const no = (__SO.DAY.sticks = 14, __SO.poolFix(), __SO.putBossLegend(['redpen', 'cough', 'invoice']));
+    return offer[0] === 'bankrupt' && no[0] === 'redpen';
+  }));
+  ok(`${tag} the three legendary cards show their painted art`, await ev(async () => {
+    __SO.fightWith(['breeze'], 'F'); await new Promise(r => setTimeout(r, 300));
+    const B = __SO.B(); B.hand = ['bankrupt', 'magnum', 'cloud'].map(id => ({ id, u: 0 })); __SO.render();
+    await new Promise(r => setTimeout(r, 900));
+    return ['bankrupt', 'magnum', 'cloud'].every(id => {
+      const art = document.querySelector('.c-' + id + ' .art');
+      return !!(art && art.nodeType === 1 && new RegExp('cards/' + id + '\\.jpg').test(getComputedStyle(art).backgroundImage));
+    });
+  }));
   ok(`${tag} Kenneth's cards are framed in black`, await ev(async () => { const B = __SO.B(); B.hand = [{ id: 'handshake', u: 0 }]; __SO.render(); await new Promise(r => setTimeout(r, 300)); return getComputedStyle(document.querySelector('.c-handshake'), '::before').borderTopColor === 'rgb(29, 28, 36)'; }));
   ok(`${tag} cat art files load`, loaded.every(w => w >= 300), loaded.join(','));
   ok(`${tag} hand with cat cards fits, nothing clips`, await ev(() => document.documentElement.scrollHeight <= innerHeight));

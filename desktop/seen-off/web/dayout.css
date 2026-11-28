@@ -254,6 +254,14 @@
 .cd.c-minutes .art{background-image:url(cards/minutes.jpg);background-position:40% 35%}
 .cd.c-nominute .art{background-image:url(cards/nominute.jpg);background-position:45% 30%}
 
+/* legendary cards: painted from the portraits (28 Nov 2026; see README); gold foil frame is in index.html */
+.cd.c-bankrupt .art,.cd.c-magnum .art,.cd.c-cloud .art{height:78px;background:#e9e2d4 center/cover no-repeat}
+.cd.c-bankrupt .art>*,.cd.c-bankrupt .art::before,.cd.c-magnum .art>*,.cd.c-magnum .art::before,.cd.c-cloud .art>*,.cd.c-cloud .art::before{display:none}
+.cd.c-bankrupt .art{background-image:url(cards/bankrupt.jpg);background-position:50% 35%}
+.cd.c-magnum .art{background-image:url(cards/magnum.jpg);background-position:50% 30%}
+.cd.c-cloud .art{background-image:url(cards/cloud.jpg);background-position:48% 35%}
+.cd.q-l .gem{width:16px;height:16px;margin-left:-8px;bottom:-9px;transform:none;border:0;border-radius:0;background:linear-gradient(180deg,#fff6c4,#e8b923 55%,#c49212);clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);box-shadow:0 0 10px 3px rgba(255,214,64,.95)}
+
 /* six shared/clutter cards: painted prop still-lifes, no hero in shot, neutral grey frame (default --own); AI-generated (27 Nov 2026; see README) */
 .cd.c-junk .art,.cd.c-sock .art,.cd.c-ticket .art,.cd.c-wblock .art,.cd.c-photo .art,.cd.c-catchp .art,.cd.c-handout .art,.cd.c-nohot .art,.cd.c-groan .art,.cd.c-condemned .art,.cd.c-wetsand .art{height:78px;background:#e9e2d4 center/cover no-repeat}
 .cd.c-junk .art>*,.cd.c-junk .art::before,.cd.c-sock .art>*,.cd.c-sock .art::before,.cd.c-ticket .art>*,.cd.c-ticket .art::before,.cd.c-wblock .art>*,.cd.c-wblock .art::before,.cd.c-photo .art>*,.cd.c-photo .art::before,.cd.c-catchp .art>*,.cd.c-catchp .art::before,.cd.c-handout .art>*,.cd.c-handout .art::before,.cd.c-nohot .art>*,.cd.c-nohot .art::before,.cd.c-groan .art>*,.cd.c-groan .art::before,.cd.c-condemned .art>*,.cd.c-condemned .art::before,.cd.c-wetsand .art>*,.cd.c-wetsand .art::before{display:none}

@@ -75,7 +75,7 @@ Branch `archie/seen-off-dayout`, commits (each pushed after its tests passed):
 |---|---|
 | Six places | **The Beach, the Rock Shop, the Pleasure Park, the Tower, the Chippy, the Lights** have their own crowds (4-5 enemies, an elite, a boss), their own event and scenery props. Mechanics: the Windbreak shelters everyone; the Ringmaster's *Roll Up*; the Sugar Dummy heals; *You Must Be This Tall* hits 12 if you held more than 5 cards; the Woman Behind the Counter asks *Salt? / Vinegar? / Open or wrapped?* (answer with a Skill / Attack / Power, or she gains 3 Gusto); the Mighty Organ starts half sunk in the organ pit (half damage) and rises; Faulty Bulbs flicker (25% miss); the Queue gains Block when hit; the Stick That Says BLACKPOOL snaps into two at half health; the Crocodile's *Behind You!* hides its number. New: clutter *Unflattering Photo* and *Catchphrase*, keepsake *Ride Photo*, brew *Bag of Scraps*. |
 | Prom art | Real ink drawings for the Sea Breeze, Lamppost Gull, Ticket Inspector, Stag Do, Bride, Bridesmaid and the Last Tram (destination blind, bell countdown). |
-| Unlocks | Stick #2 **Arthur's wig** (drawn under his red hat; on/off in the album). Sticks #4/#8/#12: **4 new cards** each for Reggie/Terry/Kenneth (the plan's table has 4 each; the plan's stick text said 5, so the stick now says four). Stick #6 souvenir line two (tested). Stick #10 or the first win: **the Daily Run** (date-seeded: same Quill, cats, maps, fights, rewards and shops for everyone that day; best score per date on the report; the Day Tripper streak now only ticks on the Daily). |
+| Unlocks | Stick #2 **Arthur's wig** (drawn under his red hat; on/off in the album). Sticks #4/#8/#12: **4 new cards** each for Reggie/Terry/Kenneth (the plan's table has 4 each; the plan's stick text said 5, so the stick now says four). Sticks #15/#16/#17: **legendary cards** for Reggie, Terry and Kenneth (Bankrupt, Magnum Opus, The Cloud Provides; the Ferret's planned card waits until that hero exists). Stick #6 souvenir line two (tested). Stick #10 or the first win: **the Daily Run** (date-seeded: same Quill, cats, maps, fights, rewards and shops for everyone that day; best score per date on the report; the Day Tripper streak now only ticks on the Daily). |
 | Polish | *TONIGHT ONLY* title card before bosses; **NEW!** stamp on never-seen reward cards; **Effects: full / calm / off** in the menu (off = reduced motion); keyboard/pad walk of shop, rest, edit, event, keepsake and rewards; the Prom's boss tile says "the end of the line" (piers keep "the end of the pier"). |
 | Cat card art | The six cats' signature cards (Ruling of the Court, Royal Decree, Rip Your Face Off, Requisition, Wouldn't Say Boo, Who, Me?) show art cropped from the mockups in `../mockups/` (`web/cats/*.jpg`, 360 px). `old-card-royal-decree-reggie.jpg` was skipped as asked. |
 | Tuning | `tools/playtest.js` (headless bot, no cheats; `tools/playtest-summary.py` summarises). Before: `ROCK_RATE` .5 gave a winning first day 5-6 sticks; now **.3** gives ~4 (the plan's sticks 1-4). The Last Tram went from 118-124 to **132-138** health: the bot still wins it 17/18 times, losing ~31 health (it was ~28). The Crocodile (Beach boss) is the hardest new boss (bot ends on 7-47 health); the later bosses (Counter, the Man Off the Telly) are on the easy side. |
@@ -102,8 +102,8 @@ AI image tools, they must be declared in Steam's Content Survey (see the Content
 in M1. Dexter was fixed on 23 Nov 2026: he is now smoky black (near-black head, ears and body) with a silver-grey chest ruff and amber eyes,
 as in his photos (he was drawn dark grey, and his ruff colour was never drawn). The live website file is untouched.
 
-**Not done / untested in M2:** Daily Rules (added in M3, see below) and Steam leaderboards (no Steamworks); Rainy Day tokens; the
-legendary cards; all ten new places have their own crowds (Arcades, Winter Gardens, the B&B and the Old Pier finished 28 Nov); the Daily's seed
+**Not done / untested in M2:** Daily Rules (added in M3, see below) and Steam leaderboards (no Steamworks); Rainy Day tokens. The
+legendary cards for the three existing Quills are in M3 (see below); all ten new places have their own crowds (Arcades, Winter Gardens, the B&B and the Old Pier finished 28 Nov); the Daily's seed
 covers generation (maps, fights, rewards, shops, events), not mid-fight draws after turn 1. Steam Deck hardware and Windows were not run
 on real machines (the Windows installer is built and the Linux AppImage smoke-tested under Xvfb).
 
@@ -185,7 +185,7 @@ State at end of 27 Nov 2026 (branch `archie/seen-off-dayout`, working copy `/wor
    `HAND=... node ../helpers/cardshot.js`, which sets a debug hand in the page without changing the game. Clutter cards are
    unplayable, so in a hand the game shows them desaturated (existing `.cd.no` style); `shots/d4-03b-shared-art.png` shows their art
    in full colour. Overviews for Ben: `shots/d3-08-hand-overview.png`, `shots/d4-04-overview.png`.
-4. **Still open for M3 (from the M2 proposal):** legendary cards. Painted clutter art, enemy drawings, all ten new places, Daily Rules, both boss-health passes and the `dist/m3b/` desktop rebuild are done, 27–28 Nov, see above. First pass: Counter 188–196, the Man Off the Telly 236–244, Old Rattler 146–154; the Crocodile left as the hard early boss. Second pass: the Mighty Organ 154–162; the Rock Shop stick, the Bingo Caller and the Keynote Speaker left alone.
+4. **Milestone 3 (from the M2 proposal), finished 28 Nov 2026:** legendary cards for the three existing Quills (Bankrupt, Magnum Opus, The Cloud Provides; the Ferret's planned "The One That Didn't Get Away" waits until that hero exists). Painted clutter art, enemy drawings, all ten new places, Daily Rules, both boss-health passes and the `dist/m3b/` desktop rebuild were already done, 27-28 Nov, see above. First pass: Counter 188-196, the Man Off the Telly 236-244, Old Rattler 146-154; the Crocodile left as the hard early boss. Second pass: the Mighty Organ 154-162; the Rock Shop stick, the Bingo Caller and the Keynote Speaker left alone. A `dist/m3c/` rebuild follows this change.
 5. **Before release:** declare everything in the AI content list below in Steam's Content Survey.
 
 **WebKitGTK note:** `app.security.dangerousDisableAssetCspModification` is `["style-src"]`. Without it Tauri adds hashes to `style-src`,
@@ -199,7 +199,7 @@ animation delays). Scripts keep Tauri's CSP handling; the policy still allows on
 * **Larger art window** (48 px on desktop, was 46; 78 px for the cat cards). **Type line names the owner** (`ATTACK – SPYRO`, `SKILL – REGGIE`; `cardOwner()`).
 * **Rules text in Libre Caslon Text** (old-style serif, SIL Open Font License 1.1, Copyright 2018 The Libre Caslon Text Project Authors;
   `web/fonts/libre-caslon-text-latin-*.woff2` from @fontsource, licence in `web/fonts/OFL-LibreCaslonText.txt`, shipped under `licences/`).
-* **Rarity crest:** a small shield at the bottom centre (grey common, blue uncommon, gold rare).
+* **Rarity crest:** a small shield at the bottom centre (grey common, blue uncommon, gold rare) and a foil star for legendary, with a slower gold sheen on the frame.
 * **The six cats' signature cards show their mockup art full width** (`web/cats/*.jpg`, 480 px crops of `../mockups/card-*.jpg`;
   `old-card-royal-decree-reggie.jpg` not used).
 
@@ -237,6 +237,7 @@ hand (his attack still lobs a parcel). His UI colour stays purple `#7a3ff0` unti
 
 `rollCards()` picks a rarity per slot (58% common, 34% uncommon, 8% rare), then a card uniformly from that hero's pool, so every
 base-pool common is offered equally and more often than anything else (the milestone-2 unlock commons only appear after their stick).
+From Teatime onwards (`RUN.part >= 2`) there is also a 1% chance a slot is the hero's unlocked legendary, if it is not already in the deck. Boss chests guarantee that legendary when it is unlocked and not already held.
 Two base commons per hero were painted, one attack and one skill: **Reggie** Kindly Remit, Fact Check; **Terry** Cross-Hatch, Rough Draft;
 **Kenneth** Unexplained Arrival, Changes the Subject. Likeness from `../refs/reggie-portrait.jpg`, `terry-portrait.jpg`,
 `kenneth-portrait.jpg`; style from the existing starter-card art and the Spyro card. Generic prom, unnamed tower, no trade marks.
@@ -370,13 +371,18 @@ crops in `web/cards/` (`junk`, `sock`, `ticket`, `wblock`, `photo`, `catchp`).
 - `web/cards/junk.jpg`, `sock.jpg`, `ticket.jpg`, `wblock.jpg`, `photo.jpg`, `catchp.jpg`: AI-generated (27 Nov 2026) prop still-lifes in our card style (no heroes or people depicted).
 - `web/cards/handout.jpg`: AI-generated (28 Nov 2026) prop still-life in our card style (blank conference leaflets, no heroes, people, lettering or money). One generation, no retry. Screenshots: `shots/d6-05-handout.jpg`, `shots/d6-05-handout-card.png`, `shots/d6-05-handout-hand.png`.
 - `web/cards/nohot.jpg`, `groan.jpg`, `condemned.jpg`, `wetsand.jpg`: AI-generated (28 Nov 2026) prop still-lifes in our card style (No Hot Food in Rooms, Groan, Condemned, Wet Sand; no heroes, people, lettering or money). One generation each, no retry. Screenshots: `shots/d8-01-*.jpg`, `shots/d8-02-clutter-hand.png`, `shots/d8-02-clutter-cards.png`.
+- `web/cards/bankrupt.jpg`, `magnum.jpg`, `cloud.jpg`: AI-generated (28 Nov 2026) from the three heroes' portraits and our card style (Bankrupt, Magnum Opus, The Cloud Provides). One generation each, no retry. Wordless papers and cards; no money. Screenshots: `shots/d9-01-*.jpg`, `shots/d9-02-legend-hand.png`.
 - `web/cats/*.jpg` (all six cat signature cards): crops of the cat card mockups in `../mockups/card-*.jpg`, which **were AI-generated**
   (from the cats' real photos). Declare them as pre-generated AI content.
 - The full-size sources of all of the above in `../mockups/`.
 
+### Legendary cards (28 Nov 2026)
+
+As specified in `content-plan.md`. A new top rarity `rar:'l'`, gold foil frame and a foil-star crest. Three cards for the existing Quills, unlocked on the Rock Meter at sticks #15 (Reggie, **Bankrupt**: X cost, every enemy pays its Invoice X times, Exhaust, upgrade keeps the card), #16 (Terry, **Magnum Opus**: deal 60/80, costs 1 less for every Attack already played this fight, base cost 5) and #17 (Kenneth, **The Cloud Provides**: add 5/7 random cards to hand, each costing 0 and Fleeting). They appear as a 1% chance on card rewards from Teatime onwards, and a boss chest guarantees one if it is unlocked and not already in the deck. The Ferret's planned card, **The One That Didn't Get Away** (deal 10 for every Catch this fight, Exhaust), is not in the game yet.
+
 ### Cards still needing real art
 
-The original 79 cards plus the later clutter cards (Handout, No Hot Food in Rooms, Groan, Condemned and Wet Sand, finished 28 Nov 2026) have painted art. All painted card art is pre-generated AI content (see the list above).
+The original 79 cards, the later clutter cards (Handout, No Hot Food in Rooms, Groan, Condemned and Wet Sand) and the three Quill legendary cards (Bankrupt, Magnum Opus, The Cloud Provides, finished 28 Nov 2026) have painted art. All painted card art is pre-generated AI content (see the list above). The Ferret legendary has no art yet because that hero is not in the game.
 
 ## What the desktop bundle changes
 
