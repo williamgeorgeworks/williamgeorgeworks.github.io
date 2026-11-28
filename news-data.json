@@ -1,6 +1,55 @@
 {
  "editions": [
   {
+   "date": "2026-11-28",
+   "title": "A Shopping Agent With Opinions, A Billion-Pound Weekend, A Gift Budget Cut Into Slices And A Parcel That Arrives Before You Finish Ordering It",
+   "standfirst": "A short edition today: four stories from Terry and Reggie, each drawn from real news of the last few days. Everything in big type is made up. Everything in the boxes is real.",
+   "stories": [
+    {
+     "kicker": "Tech",
+     "headline": "Fashion Chain And Supermarket Both Hand The Shopping To A Personal AI Agent; The Basket Is Said To Be Looking Over Its Shoulder",
+     "satire": "Two household names have invited a personal AI agent into their online shops, which means the thing doing your browsing now has more tabs open than you do. Somewhere a trouser is being compared with a tin of beans on the grounds that both are in the basket. The agent will track the deals, the basket will track the agent, and the shopper will track the biscuits that somehow appeared. Terry has asked it to find a good sofa and received a very polite list of cushions. Reggie is selling a deluxe agent for your agent, my old son, one invoice, no refunds, tell nobody.",
+     "real": "Debenhams Group has connected its brands, including Debenhams, Karen Millen, boohoo, boohooMAN and PrettyLittleThing, to Muse, Meta's personal AI agent, which has launched in the UK. Sainsbury's has added a Muse integration to its online shopping, announced on 24 November 2026.",
+     "source": {
+      "name": "Retail Rewired",
+      "url": "https://retailrewired.co.uk/2026/11/24/debenhams-sainsburys-integrate-metas-muse-bringing-personal-ai-agents-into-online-journeys/"
+     }
+    },
+    {
+     "kicker": "Money",
+     "headline": "Black Friday Forecast To Clear A Billion Pounds In A Single Day; The Nation's Bank Card Asks To Sit Down",
+     "satire": "One day, one billion-odd pounds, and not a single person has admitted to being the one who bought the air fryer. Forecasters expect the online tills to ring so hard that the postcode lottery will begin delivering to itself. The bank card, which has not had a day off since lunchtime, has put a small sign on its back saying back in January. Cyber Monday, meanwhile, is reportedly stretching in the car park before its big entrance. Terry has counted the pounds on live television and run out of fingers by the first row of zeros.",
+     "real": "Adobe Digital Insights forecasts that UK shoppers will spend £4.05bn online across the Black Friday to Cyber Monday weekend. Black Friday alone is forecast at a record £1.24bn, up 7.1% on 2025, and Cyber Monday is expected to pass £1bn for the first time.",
+     "source": {
+      "name": "Retail Rewired",
+      "url": "https://retailrewired.co.uk/2026/11/25/adobe-forecasts-that-1bn-will-be-spent-online-every-day-across-the-bfcm-weekend/"
+     }
+    },
+    {
+     "kicker": "Christmas",
+     "headline": "Survey Finds Christmas Budgets Being Carved Up Like A Turkey, With A Slice Set Aside For The Sales; Gravy Not Yet Allocated",
+     "satire": "A survey has discovered that the nation is handing out its Christmas money the way it hands out dinner: a bit for the sales, a bit for the main event, and a quiet reserve for the sprouts nobody asked for. Spreadsheets across the land are being filled in by candlelight with a very festive frown. The budget has been cut into portions so careful that the last pound is being treated like the final roast potato. Reggie has a nice little earner in pre-sliced budgets, my old son, one slice each, wrapped in an imaginary invoice.",
+     "real": "An eBay Advertising UK survey of 2,001 UK adults who celebrate Christmas found that 48% are likely to buy Christmas gifts in the 2026 Black Friday sales. Shoppers overall plan to set aside 22% of their total Christmas budget for Black Friday, and the survey found 73% of Gen Z likely to buy gifts then, with 37% of their budget set aside.",
+     "source": {
+      "name": "Retail Times",
+      "url": "https://retailtimes.co.uk/gen-z-to-put-over-a-third-of-their-christmas-budget-into-black-friday-ebay-advertising-research-finds/"
+     }
+    },
+    {
+     "kicker": "Delivery",
+     "headline": "Online Marketplace Reports Local Delivery Up 185 Per Cent; Parcels Now Said To Be Leaving Slightly Before They Are Ordered",
+     "satire": "Deliveries from nearby warehouses are growing so fast that the van may soon arrive while you are still deciding on the colour. The doorstep, once a place for a mat, is now a busy little airport with a very small runway and one confused hedge. Customers report a new sensation: the knock at the door arriving before the confirmation email, which is just rude to the email. The postie has been seen jogging, then walking, then wondering aloud whether a jog counts as a delivery. Terry has ordered a biscuit and would like it to know it is already late.",
+     "real": "Early data from AliExpress UK's 11.11 sale shows local delivery up 185% year-on-year and branded tech up 80% year-on-year. Its Black Friday and Cyber Monday sale runs from 19 November to 3 December, with up to 20% off via platform coupons and 1 to 3-day delivery on eligible products from local stock.",
+     "source": {
+      "name": "Retail Times",
+      "url": "https://retailtimes.co.uk/aliexpress-sees-local-delivery-surge-185-year-on-year-as-uk-shoppers-gear-up-for-black-friday/"
+     }
+    }
+   ],
+   "terry": "And that's the news, ladies and gentlemen, a short one today, four stories, every one rooted in something real! A shopping agent with a lot of tabs, a billion-pound day, a Christmas budget cut into portions and a parcel with places to be. The big print is all ours, the boxes underneath are the truth. Join us tomorrow for more!",
+   "reggie": "Four stories, my old son, and I have invoiced you for every one: a deluxe agent for your agent, a pre-sliced budget and a very small runway for the postie, all payable at your leisure and none of it refundable. Big type is invention, the boxes are gospel, and my fee is a nice little earner. Mind how you go."
+  },
+  {
    "date": "2026-11-27",
    "title": "A Snowflake Test For Christmas, A Car From The Internet, Presents Banned From Wrapping, Glow Bands At The Bus Stop, Robot Mops, A Shopping Assistant, A Very Large Chemist, A Museum Of Two Opinions, A Nine-Metre Sun And A Corridor With Ambitions",
    "standfirst": "Ten stories from Terry and Reggie, all drawn from real news of the last few days. Everything in big type is made up. Everything in the boxes is real.",
