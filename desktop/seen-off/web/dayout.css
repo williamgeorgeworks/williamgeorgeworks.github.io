@@ -255,8 +255,8 @@
 .cd.c-nominute .art{background-image:url(cards/nominute.jpg);background-position:45% 30%}
 
 /* six shared/clutter cards: painted prop still-lifes, no hero in shot, neutral grey frame (default --own); AI-generated (27 Nov 2026; see README) */
-.cd.c-junk .art,.cd.c-sock .art,.cd.c-ticket .art,.cd.c-wblock .art,.cd.c-photo .art,.cd.c-catchp .art,.cd.c-handout .art{height:78px;background:#e9e2d4 center/cover no-repeat}
-.cd.c-junk .art>*,.cd.c-junk .art::before,.cd.c-sock .art>*,.cd.c-sock .art::before,.cd.c-ticket .art>*,.cd.c-ticket .art::before,.cd.c-wblock .art>*,.cd.c-wblock .art::before,.cd.c-photo .art>*,.cd.c-photo .art::before,.cd.c-catchp .art>*,.cd.c-catchp .art::before,.cd.c-handout .art>*,.cd.c-handout .art::before{display:none}
+.cd.c-junk .art,.cd.c-sock .art,.cd.c-ticket .art,.cd.c-wblock .art,.cd.c-photo .art,.cd.c-catchp .art,.cd.c-handout .art,.cd.c-nohot .art,.cd.c-groan .art,.cd.c-condemned .art,.cd.c-wetsand .art{height:78px;background:#e9e2d4 center/cover no-repeat}
+.cd.c-junk .art>*,.cd.c-junk .art::before,.cd.c-sock .art>*,.cd.c-sock .art::before,.cd.c-ticket .art>*,.cd.c-ticket .art::before,.cd.c-wblock .art>*,.cd.c-wblock .art::before,.cd.c-photo .art>*,.cd.c-photo .art::before,.cd.c-catchp .art>*,.cd.c-catchp .art::before,.cd.c-handout .art>*,.cd.c-handout .art::before,.cd.c-nohot .art>*,.cd.c-nohot .art::before,.cd.c-groan .art>*,.cd.c-groan .art::before,.cd.c-condemned .art>*,.cd.c-condemned .art::before,.cd.c-wetsand .art>*,.cd.c-wetsand .art::before{display:none}
 .cd.c-junk .art{background-image:url(cards/junk.jpg);background-position:45% 45%}
 .cd.c-sock .art{background-image:url(cards/sock.jpg);background-position:45% 55%}
 .cd.c-ticket .art{background-image:url(cards/ticket.jpg);background-position:50% 45%}
@@ -264,4 +264,9 @@
 .cd.c-photo .art{background-image:url(cards/photo.jpg);background-position:50% 45%}
 .cd.c-catchp .art{background-image:url(cards/catchp.jpg);background-position:50% 35%}
 .cd.c-handout .art{background-image:url(cards/handout.jpg);background-position:50% 45%}
+.cd.c-nohot .art{background-image:url(cards/nohot.jpg);background-position:50% 45%}
+.cd.c-groan .art{background-image:url(cards/groan.jpg);background-position:50% 40%}
+.cd.c-condemned .art{background-image:url(cards/condemned.jpg);background-position:50% 40%}
+.cd.c-wetsand .art{background-image:url(cards/wetsand.jpg);background-position:40% 55%}
+
 .so-rule{margin:.5em auto;max-width:44em;padding:.35em .7em;border:2px dashed var(--red,#e3182d);border-radius:8px;background:#fffbe0;font-size:.95rem}
