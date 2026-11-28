@@ -263,3 +263,4 @@
 .cd.c-wblock .art{background-image:url(cards/wblock.jpg);background-position:50% 45%}
 .cd.c-photo .art{background-image:url(cards/photo.jpg);background-position:50% 45%}
 .cd.c-catchp .art{background-image:url(cards/catchp.jpg);background-position:50% 35%}
+.so-rule{margin:.5em auto;max-width:44em;padding:.35em .7em;border:2px dashed var(--red,#e3182d);border-radius:8px;background:#fffbe0;font-size:.95rem}

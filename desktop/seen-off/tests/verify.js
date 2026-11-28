@@ -445,6 +445,19 @@ async function m2d(browser, port) {
     return { daily: R2.daily, hero: R2.hero, off, map, set, hand }; });
   const d1 = await daily(); await ev(async () => { __SO.S.scr = 'title'; __SO.S.mode = null; __SO.render(); await new Promise(r => setTimeout(r, 300)); }); const d2 = await daily();
   ok(`${tag} Daily Run: same Quill, cats, map, first fight and hand both times`, d1.daily === await ev(() => __SO.today()) && JSON.stringify(d1) === JSON.stringify(d2), JSON.stringify(d1).slice(0, 200) + ' | ' + JSON.stringify(d2).slice(0, 200));
+  ok(`${tag} Daily Rules: one rule per date, all six turn up, shown on the cat screen`, await ev(async () => { const ks = Object.keys(__SO.RULES), seen = new Set(); for (let i = 0; i < 90; i++) { const d = new Date(Date.UTC(2027, 0, 1 + i)).toISOString().slice(0, 10); if (__SO.ruleFor(d) !== __SO.ruleFor(d)) return false; seen.add(__SO.ruleFor(d)); }
+    __SO.S.scr = 'title'; __SO.S.mode = null; __SO.render(); await new Promise(r => setTimeout(r, 200)); const tip = document.querySelector('[data-a=daily]').title; document.querySelector('[data-a=daily]').click(); await new Promise(r => setTimeout(r, 400)); const k = __SO.ruleFor(__SO.today()), el = document.querySelector('.so-rule');
+    return ks.length === 6 && seen.size === 6 && __SO.run().rule === k && !!el && el.textContent.includes(__SO.RULES[k].n) && tip.includes(__SO.RULES[k].n); }));
+  await page.screenshot({ path: `${SHOTS}/m3-daily-rule.png` });
+  ok(`${tag} Daily Rules do what they say (Sea Fret, on Account, Seagull Day, Crowds, Wakes Week, Two Cats)`, await ev(async () => { const R = __SO.run(), o = {}, ens = () => __SO.B().en.map(e => e.k).join();
+    R.rule = 'fret'; __SO.fightWith(['gull'], 'F'); o.fret = __SO.B().en[0].st.sog >= 1 && __SO.H().st.sog >= 1;
+    R.rule = 'account'; __SO.fightWith(['gull'], 'F'); o.acc = __SO.B().en[0].st.inv === 5;
+    R.rule = 'gulls'; __SO.fightWith(['pigeon'], 'F'); o.gulls = ens() === 'pigeon,gull';
+    R.rule = 'crowds'; __SO.fightWith(['fish', 'gull'], 'F'); o.crowds = ens() === 'fish,gull,fish'; __SO.fightWith(['typo', 'typo', 'typo', 'typo'], 'F'); o.room = __SO.B().en.length === 4;
+    R.rule = 'gulls'; __SO.fightWith(['king'], 'B'); o.boss = ens() === 'king';
+    R.rule = 'wakes'; __SO.openShop(); o.wakes = __SO.S.shop.brews.every(b => b.p === 34);
+    __SO.S.scr = 'title'; __SO.render(); await new Promise(r => setTimeout(r, 200)); document.querySelector('[data-a=daily]').click(); await new Promise(r => setTimeout(r, 300)); __SO.run().rule = 'twocats'; __SO.act('cat', __SO.S.offer[0]); o.cats = __SO.run().cats.length === 2;
+    R.rule = ''; __SO.run().rule = ''; __SO.S.scr = 'title'; __SO.S.mode = null; __SO.render(); return JSON.stringify(o); }).then(j => !/false/.test(j)));
   ok(`${tag} a normal run is not seeded`, await ev(async () => { const maps = []; for (let i = 0; i < 2; i++) { __SO.S.scr = 'title'; __SO.render(); __SO.act('begin'); __SO.act('cat', __SO.S.offer[0]); __SO.DAY.done1 = 1; await new Promise(r => setTimeout(r, 100)); __SO.enterStage('prom'); maps.push(JSON.stringify(__SO.run().map.map(r => r.map(n => n ? n.t : '-'))) + __SO.run().daily); } return maps[0] !== maps[1] && !/true|\d{4}-/.test(maps[0]); }));
   const st0 = await ev(() => { __SO.DAY.streak = { last: '', n: 0, best: 0 }; __SO.finish(false); return __SO.DAY.streak.n; });
   ok(`${tag} a normal day out does not tick the Day Tripper streak`, st0 === 0, st0);

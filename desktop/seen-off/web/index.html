@@ -662,6 +662,16 @@ function hashStr(s){var h=2166136261;for(var i=0;i<s.length;i++){h^=s.charCodeAt
 function mulberry(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
 function seeded(tag,fn){if(!RUN||!RUN.daily||DRNG)return fn();DRNG=mulberry(hashStr(RUN.daily+'|'+tag));try{return fn();}finally{DRNG=null;}}
 function startDaily(){var d=today();DRNG=mulberry(hashStr(d+'|hero'));try{S.hero=pick(['r','t','k']);}finally{DRNG=null;}S.lvl=0;S.dailyNext=d;newRun();}
+/* Daily Rules (milestone 3): one per date, picked from the date alone, so everyone gets the same rule. */
+var RULES={fret:{n:'Sea Fret',tx:'Everyone starts every fight Soggy, you included.'},
+ account:{n:'Everything on Account',tx:'Every enemy starts with 5 Invoice, and you start with no Scrumplings.'},
+ twocats:{n:'Two Cats',tx:'You start with two familiars.'},
+ gulls:{n:'Seagull Day',tx:'Every ordinary fight has a Seagull added, if there is room.'},
+ crowds:{n:'Bank Holiday Crowds',tx:'Every ordinary fight has one more of its own, if there is room.'},
+ wakes:{n:'Wakes Week',tx:'The whole town is off at once: every shop is a quarter cheaper.'}};
+function ruleFor(d){var ks=Object.keys(RULES);return ks[hashStr(d+'|rule')%ks.length];}
+function rule(k){return !!(RUN&&RUN.daily&&RUN.rule===k);}
+function ruleHtml(k){var r=RULES[k];return r?'<p class="so-rule"><b>Daily Rule: '+r.n+'.</b> '+r.tx+'</p>':'';}
 function today(){var d=new Date();return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2);}
 function streakTick(){ /* cosmetic only: a missed day halves it, never resets it */
   var s=DAY.streak,t=today();if(s.last===t)return;var gap=s.last?Math.round((new Date(t)-new Date(s.last))/864e5):1;
@@ -673,7 +683,7 @@ function dayReport(won,pts){
   var ck=RUN.hero+':'+(RUN.cats[0]||'');if(RUN.cats[0]&&!DAY.combos[ck]){DAY.combos[ck]=1;bonus+=50;why.push('a new Quill and cat');}
   var s0=DAY.sticks,got=bank().concat(rockAdd(bonus));
   if(RUN.stats.combo>DAY.best.combo)DAY.best.combo=RUN.stats.combo;
-  var first=!DAY.done1;DAY.done1=1;var dly=null;if(RUN.daily){streakTick();var ds=Math.round(pts||0);DAY.daily=DAY.daily||{};var pb=DAY.daily[RUN.daily]||0;dly={date:RUN.daily,score:ds,best:Math.max(pb,ds),nb:ds>pb};DAY.daily[RUN.daily]=dly.best;}saveDay();
+  var first=!DAY.done1;DAY.done1=1;var dly=null;if(RUN.daily){streakTick();var ds=Math.round(pts||0);DAY.daily=DAY.daily||{};var pb=DAY.daily[RUN.daily]||0;dly={rule:RUN.rule,date:RUN.daily,score:ds,best:Math.max(pb,ds),nb:ds>pb};DAY.daily[RUN.daily]=dly.best;}saveDay();
   var c=RUN.cats[0]?CATS[RUN.cats[0]].name:'Nobody',pl=RUN.stage?STAGES[RUN.stage].n:'the Prom',by=B&&!won?(B.en.filter(function(e){return !e.dead;}).map(function(e){return e.name;})[0]||'Something'):'';
   var note={r:won?'Weather fair. Invoiced '+RUN.stats.kills+' of them. '+c+' ruled against the milk. Wish you were here, but not on my account.':'Got as far as '+pl+'. '+by+' saw me off, and will be hearing from me. '+c+' has kept the receipts.',
     t:won?'Hit everything. Most of it deserved it. '+c+' said nothing all day, which I respect. Back next week.':'Got as far as '+pl+'. '+by+' had the better of it. '+c+' looked away. I will be back. They always say that.',
@@ -734,7 +744,7 @@ function albumHTML(){
 function reportHTML(){
   var e=S.end,r=e.rep,P=r.places.map(function(id){return STAGES[id]?STAGES[id].n:id;});
   var h='<div class="panel report'+(e.won?' won':'')+'"><h2>'+(r.whole?'Seen off, the whole day':e.won?'A day out, seen off':'Seen off yourself')+'</h2>'+
-    '<div class="pc-back"><div class="pc-msg"><span class="pc-head">The Day Out Report</span><p class="hand">'+r.note+'</p><p class="sig">'+HEROES[e.hero].name+(e.lvl?' · Encore '+e.lvl:'')+'</p>'+(r.daily?'<p class="so-daily">Daily Run, '+r.daily.date+': '+r.daily.score+' points'+(r.daily.nb?' (your best today)':' (best today '+r.daily.best+')')+' · Day Tripper streak '+DAY.streak.n+'</p>':'')+'</div>'+
+    '<div class="pc-back"><div class="pc-msg"><span class="pc-head">The Day Out Report</span><p class="hand">'+r.note+'</p><p class="sig">'+HEROES[e.hero].name+(e.lvl?' · Encore '+e.lvl:'')+'</p>'+(r.daily?'<p class="so-daily">Daily Run, '+r.daily.date+(RULES[r.daily.rule]?' ('+RULES[r.daily.rule].n+')':'')+': '+r.daily.score+' points'+(r.daily.nb?' (your best today)':' (best today '+r.daily.best+')')+' · Day Tripper streak '+DAY.streak.n+'</p>':'')+'</div>'+
     '<div class="pc-addr"><span class="pc-stamp">'+ic(r.places.length?STAGES[r.places[r.places.length-1]].ic:'tram')+'</span><dl>'+
     '<dt>Went to</dt><dd class="pl">'+(P.join(' → ')||'Nowhere, in the end')+'</dd>'+
     '<dt>Seen off</dt><dd data-n="'+r.kills+'">0</dd><dt>Best combo</dt><dd data-n="'+r.combo+'">0</dd><dt>Cards played</dt><dd data-n="'+r.cards+'">0</dd><dt>Scrumplings spent</dt><dd data-n="'+r.spent+'">0</dd></dl></div></div>'+
@@ -775,6 +785,7 @@ function genMap(){
 function newRun(){
   var h=HEROES[S.hero];
   RUN={daily:S.dailyNext||'',hero:h.id,lvl:S.lvl,max:h.hp,hp:h.hp,gold:60,deck:h.deck.map(function(id){return {id:id,u:0};}),relics:[],cats:[],brews:[],act:1,row:-1,col:1,map:[],part:0,stage:null,day:[],stats:{kills:0,cards:0,spent:0,combo:0,fights:0,newp:0},banked:0,score:0,floor:0,seen:[],en:0,first:1};
+  if(RUN.daily){RUN.rule=ruleFor(RUN.daily);if(RUN.rule==='account')RUN.gold=0;}
   S.dailyNext='';markSeen(h.deck);META.runs++;saveMeta();S.scr='cat';S.offer=seeded('cats',function(){return shuffle(CATIDS.slice()).slice(0,3);});saveRun();render();
 }
 function addCat(id){RUN.cats.push(id);RUN.deck.push({id:CATS[id].card,u:0});}
@@ -831,6 +842,7 @@ function fxOn(who,text,col){
 }
 function startCombat(kind){
   var tbl=ENC[stEnc()][kind],set=(kind==='F'&&RUN.first)?pick(tbl.slice(0,4)):pick(tbl),hm=(1+.1*RUN.lvl)*(STGD()&&STGD().hm||1);RUN.first=0;
+  if(kind==='F'&&set.length<4&&(rule('gulls')||rule('crowds')))set=set.concat([rule('gulls')?'gull':set[0]]);
   H={hero:1,name:HEROES[RUN.hero].name,block:0,st:{}};Object.defineProperty(H,'hp',{get:function(){return RUN.hp;},set:function(v){RUN.hp=v;}});H.max=RUN.max;
   B={kind:kind,en:[],draw:[],hand:[],disc:[],turn:0,energy:0,over:false,won:false,count:0,tcount:0,combo:0,cmax:0,hat:has('hat'),brolly:has('brolly'),mult:1};
   set.forEach(function(k,i){var d=EN[k],hp=Math.round(ri(d.hp[0],d.hp[1])*hm);B.en.push({k:k,name:d.n,hp:hp,max:hp,block:0,st:{},i:set.length>1?i:0,sc:d.sc||1,boss:d.boss,elite:d.elite,slot:i,seed:ri(1,99999)});});
@@ -838,7 +850,7 @@ function startCombat(kind){
   if(has('accord'))B.draw.splice(ri(0,B.draw.length),0,{id:'sock',u:0});
   if(has('rock'))H.st.gus=1;if(has('deckchair'))H.st.poi=1;if(has('manus')){H.st.gus=(H.st.gus||0)+2;H.st.poi=(H.st.poi||0)+2;}
   if(hasCat('tilly'))H.st.claw=3;if(hasCat('arthur'))H.block=8;
-  B.en.forEach(function(e){if(has('wetfish'))e.st.sog=1;if(has('bill'))e.st.inv=3;e.mv=nextMove(e);});
+  B.en.forEach(function(e){if(has('wetfish'))e.st.sog=1;if(has('bill'))e.st.inv=3;if(rule('fret'))e.st.sog=(e.st.sog||0)+1;if(rule('account'))e.st.inv=(e.st.inv||0)+5;e.mv=nextMove(e);});if(rule('fret'))H.st.sog=(H.st.sog||0)+1;
   B.en.forEach(function(e){if(EN[e.k].sunk)e.sunk=EN[e.k].sunk;});var nf=RUN.nextFight;if(nf){if(nf.eflu)B.en.forEach(function(e){e.st.flu=(e.st.flu||0)+nf.eflu;});if(nf.poi)H.st.poi=(H.st.poi||0)+nf.poi;if(nf.flu)H.st.flu=(H.st.flu||0)+nf.flu;RUN.nextFight=null;}if(RUN.stGus&&RUN.stGus===RUN.stage)H.st.gus=(H.st.gus||0)+1;
   S.scr='combat';S.sel=-1;S.brewSel=-1;FX=[];fxReset(0);clearStamps();startTurn(true);if(kind==='B')setTimeout(bossBill,60);
 }
@@ -988,6 +1000,7 @@ function openShop(){
   var rel=shuffle(Object.keys(RELICS).filter(function(k){return !has(k)&&!RELICS[k][2];})).slice(0,2);
   S.shop={cards:cards.map(function(id){return {id:id,p:price(id)};}),rel:rel.map(function(id){return {id:id,p:ri(135,165)};}),brews:shuffle(Object.keys(BREWS)).slice(0,2).map(function(id){return {id:id,p:45};}),cut:75,cat:null};
   var sc=shuffle(CATIDS.filter(function(c){return !hasCat(c);}))[0];if(sc)S.shop.cat={id:sc,p:110};
+  if(rule('wakes')){var q=function(o){if(o)o.p=Math.round(o.p*.75);};S.shop.cards.forEach(q);S.shop.rel.forEach(q);S.shop.brews.forEach(q);q(S.shop.cat);S.shop.cut=Math.round(S.shop.cut*.75);}
   S.scr='shop';
 }
 var EVENTS=[
@@ -2354,9 +2367,9 @@ function render(){
     h+='</div><div class="row">';
     for(i=0;i<=5;i++)h+='<button type="button" class="chip'+(S.lvl===i?' on':'')+'" data-a="lvl" data-i="'+i+'"'+(i>META.open?' disabled':'')+'>Encore '+i+'</button>';
     h+='</div><p style="font-size:.85rem;font-style:italic">'+(S.lvl?'Encore '+S.lvl+': everything out there is '+S.lvl*10+'% tougher and hits harder, and the score counts for '+(100+25*S.lvl)+'%.':'Win a run to open the next Encore: tougher piers, bigger scores.')+'</p>';
-    h+='<div class="row"><button type="button" class="btn big2" data-a="begin">Start the day</button>'+(dailyOpen()?'<button type="button" class="btn quiet so-dailyb" data-a="daily">Daily Run'+(DAY.daily&&DAY.daily[today()]?' (best '+DAY.daily[today()]+')':'')+'</button>':'')+'<button type="button" class="btn quiet" data-a="album">Postcard album</button>'+(saved?'<button type="button" class="btn quiet" data-a="resume">Carry on as '+HEROES[saved.hero].name+' ('+(saved.stage&&STAGES[saved.stage]?STAGES[saved.stage].n:PARTS[saved.part||0].n)+')</button>':'')+'</div></div>';
+    h+='<div class="row"><button type="button" class="btn big2" data-a="begin">Start the day</button>'+(dailyOpen()?'<button type="button" class="btn quiet so-dailyb" data-a="daily" title="Today’s rule: '+RULES[ruleFor(today())].n+'">Daily Run'+(DAY.daily&&DAY.daily[today()]?' (best '+DAY.daily[today()]+')':'')+'</button>':'')+'<button type="button" class="btn quiet" data-a="album">Postcard album</button>'+(saved?'<button type="button" class="btn quiet" data-a="resume">Carry on as '+HEROES[saved.hero].name+' ('+(saved.stage&&STAGES[saved.stage]?STAGES[saved.stage].n:PARTS[saved.part||0].n)+')</button>':'')+'</div></div>';
   }else if(S.scr==='cat'){
-    h='<div class="panel"><h2>Three cats have noticed you</h2><p>One of them will come along as your familiar. Its trick works in every fight, and its card goes in your deck.</p><div class="row">';
+    h='<div class="panel"><h2>Three cats have noticed you</h2><p>One of them will come along as your familiar. Its trick works in every fight, and its card goes in your deck.</p>'+(RUN&&RUN.daily?ruleHtml(RUN.rule):'')+'<div class="row">';
     S.offer.forEach(function(c){var x=CATS[c];h+='<button type="button" class="pick" style="--c:'+x.hat+';--tint:'+tint(x.hat)+'" data-a="cat" data-i="'+c+'"><canvas data-art="cat" data-id="'+c+'" aria-hidden="true"></canvas><b>'+x.name+'</b><span>'+x.perk+'</span><span><em>Card: '+CARDS[x.card].name+'</em></span></button>';});
     h+='</div></div>';
   }else if(S.scr==='map'){
@@ -2456,7 +2469,7 @@ function act(a,i,el){
   else if(a==='daily'){if(dailyOpen())startDaily();return;}
   else if(a==='wig'){DAY.wig=DAY.wig===0?1:0;saveDay();}
   else if(a==='resume'){RUN=loadRun();if(RUN){S.lvl=RUN.lvl;S.scr=RUN.cats.length?(RUN.stage?'map':'stage'):'cat';if(S.scr==='cat')S.offer=shuffle(CATIDS.slice()).slice(0,3);}}
-  else if(a==='cat'){addCat(i);S.scr='stage';S.note=CATS[i].name+' has come along. '+CARDS[CATS[i].card].name+' is in your deck.';saveRun();}
+  else if(a==='cat'){addCat(i);S.scr='stage';S.note=CATS[i].name+' has come along. '+CARDS[CATS[i].card].name+' is in your deck.';if(rule('twocats')&&RUN.cats.length<2){var c2=S.offer.filter(function(c){return c!==i;})[0];if(c2){addCat(c2);S.note+=' It is Two Cats day, so '+CATS[c2].name+' has come too, with '+CARDS[CATS[c2].card].name+'.';}}saveRun();}
   else if(a==='node'){enterNode(+i);return;}
   else if(a==='card'){i=+i;if(S.sel===i){sn=snapCard(i);one=alive();one=one.length===1?B.en.indexOf(one[0]):null;if(playCard(i,null))flyCard(sn,one);else if(B.hand[i]&&!playable(B.hand[i])){sfx('no');S.shake=!CARDS[B.hand[i].id].o.unp;}}else{S.sel=i;S.brewSel=-1;}}
   else if(a==='enemy'){i=+i;if(S.brewSel>=0)useBrew(S.brewSel,i);else if(S.sel>=0){sn=snapCard(S.sel);if(playCard(S.sel,i))flyCard(sn,i);}}
@@ -2554,7 +2567,7 @@ document.addEventListener('visibilitychange',function(){if(!A.ac)return;try{if(d
 (function(){var ul=$('catList');CATIDS.forEach(function(id){var c=CATS[id],li=document.createElement('li');li.style.borderLeftColor=c.hat;var b=document.createElement('b');b.textContent=c.name;li.appendChild(b);li.appendChild(document.createElement('br'));var s=document.createElement('span');s.textContent=c.perk;li.appendChild(s);ul.appendChild(li);});})();
 S.lvl=0;render();loadWall();requestAnimationFrame(frame);
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){if(S.scr!=='combat')render();});
-window.__SO={ART:ART,S:S,act:act,render:render,run:function(){return RUN;},B:function(){return B;},H:function(){return H;},BOX:function(){return BOX;},cvPos:cvPos,beating:beating,trav:function(){return TRAV;},beat:function(){return BEAT;},META:META,CARDS:CARDS,alive:alive,playable:playable,A:A,DAY:DAY,STAGES:STAGES,PARTS:PARTS,STICKS:STICKS,enterStage:enterStage,saveDay:saveDay,saveRun:saveRun,finish:finish,fx:function(){return PO.length;},fightWith:function(set,kind){var e=ENC[stEnc()],k=kind||'F',o=e[k];e[k]=[set];RUN.first=0;S.scr='map';startCombat(k);e[k]=o;render();},EN:EN,ENC:ENC,setFx:setFx,fxl:function(){return FXL;},rm:function(){return RM;},POOL:POOL,QNEW:QNEW,poolFix:poolFix,wigOn:wigOn,dailyOpen:dailyOpen,startDaily:startDaily,today:today,playCard:playCard,strike:strike,drawN:draw,endTurn:endTurn,openEvent:openEvent,useBrew:useBrew,addRelic:addRelic,RELICS:RELICS,BREWS:BREWS,EVENTS:EVENTS};
+window.__SO={openShop:openShop,RULES:RULES,ruleFor:ruleFor,ART:ART,S:S,act:act,render:render,run:function(){return RUN;},B:function(){return B;},H:function(){return H;},BOX:function(){return BOX;},cvPos:cvPos,beating:beating,trav:function(){return TRAV;},beat:function(){return BEAT;},META:META,CARDS:CARDS,alive:alive,playable:playable,A:A,DAY:DAY,STAGES:STAGES,PARTS:PARTS,STICKS:STICKS,enterStage:enterStage,saveDay:saveDay,saveRun:saveRun,finish:finish,fx:function(){return PO.length;},fightWith:function(set,kind){var e=ENC[stEnc()],k=kind||'F',o=e[k];e[k]=[set];RUN.first=0;S.scr='map';startCombat(k);e[k]=o;render();},EN:EN,ENC:ENC,setFx:setFx,fxl:function(){return FXL;},rm:function(){return RM;},POOL:POOL,QNEW:QNEW,poolFix:poolFix,wigOn:wigOn,dailyOpen:dailyOpen,startDaily:startDaily,today:today,playCard:playCard,strike:strike,drawN:draw,endTurn:endTurn,openEvent:openEvent,useBrew:useBrew,addRelic:addRelic,RELICS:RELICS,BREWS:BREWS,EVENTS:EVENTS};
 if(window.__STP_TEST)window.__STP={S:S,run:function(){return RUN;},B:function(){return B;},H:function(){return H;},act:act,playCard:playCard,endTurn:endTurn,playable:playable,cost:cost,dmgCalc:dmgCalc,alive:alive,CARDS:CARDS,POOL:POOL,META:META,canGo:canGo,A:A,SONG:SONG,tone:tone,render:render,an:function(){return {AN:AN,SW:SW,FL:FL,ZP:ZP,GLAG:GLAG,HLAG:HLAG,TRAV:TRAV};},fx:function(){return {FX:FX,PT:PT,PO:PO,WB:WB,BEAT:BEAT};},endBeat:endBeat,beating:beating,sparkAt:sparkAt,confetti:confetti,ic:ic,IC:IC};
 })();
 </script>

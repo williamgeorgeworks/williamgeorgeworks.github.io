@@ -102,7 +102,7 @@ AI image tools, they must be declared in Steam's Content Survey (see the Content
 in M1. Dexter was fixed on 23 Nov 2026: he is now smoky black (near-black head, ears and body) with a silver-grey chest ruff and amber eyes,
 as in his photos (he was drawn dark grey, and his ruff colour was never drawn). The live website file is untouched.
 
-**Not done / untested in M2:** Daily Rules (the plan's one rule per day) and Steam leaderboards (no Steamworks); Rainy Day tokens; the
+**Not done / untested in M2:** Daily Rules (added in M3, see below) and Steam leaderboards (no Steamworks); Rainy Day tokens; the
 legendary cards; Arcades & Bingo, the Winter Gardens, the B&B and the Old Pier still borrow pier crowds ("Coming soon"); the Daily's seed
 covers generation (maps, fights, rewards, shops, events), not mid-fight draws after turn 1. Steam Deck hardware and Windows were not run
 on real machines (the Windows installer is built and the Linux AppImage smoke-tested under Xvfb).
@@ -135,6 +135,14 @@ A Man Off the Telly, drawn as a walking telly with a made-up cartoon presenter o
 stays only as the fallback. Drawing source per place is kept in `/workspace/seen-off-steam/helpers/art-*.js`. Screenshots:
 `shots/d5-03-enemies-*.png`. Test: `m2d … enemies have real drawings` (`window.__SO.ART` exposed for the test only).
 
+**Daily Rules (27–28 Nov 2026):** each Daily Run now has one Daily Rule, picked from the date alone (same for everyone), shown on the
+Daily Run button's tooltip, on the cat screen and in the Day Out Report. Six rules, from the v1 plan's list plus *Bank Holiday Crowds* and
+*Wakes Week*: **Sea Fret** (everyone starts every fight Soggy, you included), **Everything on Account** (every enemy starts with 5 Invoice; you
+start with no Scrumplings), **Two Cats** (you start with two familiars: the one you pick plus the next cat offered), **Seagull Day** (every ordinary
+fight gets a Seagull if there is room, max four enemies), **Bank Holiday Crowds** (every ordinary fight gets one more of its first enemy if there is
+room) and **Wakes Week** (every shop is a quarter cheaper). Rules only touch Daily Runs; normal days out are unchanged. Left out from the v1
+list: *Tide's Out* and *Half-Day Closing* (they need map changes). Screenshot: `shots/d5-04-daily-rule.png`. Tests: two new `m2d` checks.
+
 ### Where to pick up next time
 
 State at end of 27 Nov 2026 (branch `archie/seen-off-dayout`, working copy `/workspace/seen-off-steam/desktop`, local git mirrors the pushed commits):
@@ -146,7 +154,7 @@ State at end of 27 Nov 2026 (branch `archie/seen-off-dayout`, working copy `/wor
    Kenneth's sprite redrawn from his portrait, his UI colour is near-black `#1d1c24`, and his hero-pick blurb says he has been drawn.
    Screenshots: `shots/d1-*`, `d2-*`, `d3-*.png`. Local helper scripts (push, screenshots) live in `/workspace/seen-off-steam/helpers/`
    because `/tmp` is wiped when the box is refreshed.
-2. **Tests:** `node tests/verify.js` (about 7 min; all passing on 27 Nov: 214 checks, or 212 when the keyboard bot loses its random first fight and the two Esc-menu checks are skipped; `ONLY=m2d` etc. runs one section). The autoplay driver takes the
+2. **Tests:** `node tests/verify.js` (about 7 min; all passing on 28 Nov: 216 checks, or 214 when the keyboard bot loses its random first fight and the two Esc-menu checks are skipped; `ONLY=m2d` etc. runs one section). The autoplay driver takes the
    last event option if the first one refuses. Playtest: `RUNS=6 node tools/playtest.js out.json`.
 3. **Card art is complete.** Suggested next: a desktop rebuild into `dist/m3/` (Windows/Linux bundles as in M2) so the painted cards
    ship in the app, then a quick visual pass at 1920x1080 and in the deck viewer. Quality bar if anything is redone: reject any image
@@ -156,7 +164,7 @@ State at end of 27 Nov 2026 (branch `archie/seen-off-dayout`, working copy `/wor
    unplayable, so in a hand the game shows them desaturated (existing `.cd.no` style); `shots/d4-03b-shared-art.png` shows their art
    in full colour. Overviews for Ben: `shots/d3-08-hand-overview.png`, `shots/d4-04-overview.png`.
 4. **Still open for M3 (from the M2 proposal):** (enemy drawings done 27 Nov, see above) the other
-   four places (Arcades & Bingo, the Winter Gardens, the B&B, the Old Pier); Daily Rules; legendary cards; a boss-health pass for later places.
+   four places (Arcades & Bingo, the Winter Gardens, the B&B, the Old Pier); Daily Rules (done 28 Nov, see above); legendary cards; a boss-health pass for later places.
 5. **Before release:** declare everything in the AI content list below in Steam's Content Survey.
 
 **WebKitGTK note:** `app.security.dangerousDisableAssetCspModification` is `["style-src"]`. Without it Tauri adds hashes to `style-src`,
