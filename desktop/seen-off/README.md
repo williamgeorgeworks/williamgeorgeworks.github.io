@@ -103,7 +103,7 @@ in M1. Dexter was fixed on 23 Nov 2026: he is now smoky black (near-black head, 
 as in his photos (he was drawn dark grey, and his ruff colour was never drawn). The live website file is untouched.
 
 **Not done / untested in M2:** Daily Rules (added in M3, see below) and Steam leaderboards (no Steamworks); Rainy Day tokens; the
-legendary cards; Arcades & Bingo, the Winter Gardens, the B&B and the Old Pier still borrow pier crowds ("Coming soon"); the Daily's seed
+legendary cards; the Winter Gardens, the B&B and the Old Pier still borrow pier crowds ("Coming soon"); Arcades & Bingo has its own crowd (28 Nov); the Daily's seed
 covers generation (maps, fights, rewards, shops, events), not mid-fight draws after turn 1. Steam Deck hardware and Windows were not run
 on real machines (the Windows installer is built and the Linux AppImage smoke-tested under Xvfb).
 
@@ -143,6 +143,8 @@ fight gets a Seagull if there is room, max four enemies), **Bank Holiday Crowds*
 room) and **Wakes Week** (every shop is a quarter cheaper). Rules only touch Daily Runs; normal days out are unchanged. Left out from the v1
 list: *Tide's Out* and *Half-Day Closing* (they need map changes). Screenshot: `shots/d5-04-daily-rule.png`. Tests: two new `m2d` checks.
 
+**Arcades & Bingo (28 Nov 2026):** this place now has its own crowd (no more “Coming soon” stand-ins). Enemies: Tuppenny Falls (drops 2 Scrumplings whenever you hit it), the Fruit Machine (Spin deals 2, 8 or a 24 jackpot), the Change Machine (Short Change steals 10 Scrumplings), Dabbers in pairs, the Claw (Grab takes a card from your hand and gives it back when the Claw is seen off) and the Bingo Caller (traditional calls only: Kelly's Eye, Legs Eleven, Two Little Ducks, Clickety Click; at half health he shouts HOUSE!, gains 25 Block, and later moves hit harder). Event: The Penny Falls (push your luck up to three times: 15, then 30, then 60, with a 1 in 3 chance of losing the tray). Canvas ink drawings, no AI. Screenshots: `shots/d6-01-arcades-foes.png`, `shots/d6-01-arcades-boss.png`.
+
 ### Where to pick up next time
 
 State at end of 27 Nov 2026 (branch `archie/seen-off-dayout`, working copy `/workspace/seen-off-steam/desktop`, local git mirrors the pushed commits):
@@ -164,7 +166,7 @@ State at end of 27 Nov 2026 (branch `archie/seen-off-dayout`, working copy `/wor
    unplayable, so in a hand the game shows them desaturated (existing `.cd.no` style); `shots/d4-03b-shared-art.png` shows their art
    in full colour. Overviews for Ben: `shots/d3-08-hand-overview.png`, `shots/d4-04-overview.png`.
 4. **Still open for M3 (from the M2 proposal):** (enemy drawings done 27 Nov, see above) the other
-   four places (Arcades & Bingo, the Winter Gardens, the B&B, the Old Pier); Daily Rules (done 28 Nov, see above); legendary cards; a boss-health pass for later places.
+   three places (the Winter Gardens, the B&B, the Old Pier); Arcades & Bingo and Daily Rules (done 28 Nov, see above); legendary cards; a boss-health pass for later places.
 5. **Before release:** declare everything in the AI content list below in Steam's Content Survey.
 
 **WebKitGTK note:** `app.security.dangerousDisableAssetCspModification` is `["style-src"]`. Without it Tauri adds hashes to `style-src`,
