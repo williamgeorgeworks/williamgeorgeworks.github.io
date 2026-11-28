@@ -145,7 +145,7 @@ list: *Tide's Out* and *Half-Day Closing* (they need map changes). Screenshot: `
 
 **Arcades & Bingo (28 Nov 2026):** this place now has its own crowd (no more “Coming soon” stand-ins). Enemies: Tuppenny Falls (drops 2 Scrumplings whenever you hit it), the Fruit Machine (Spin deals 2, 8 or a 24 jackpot), the Change Machine (Short Change steals 10 Scrumplings), Dabbers in pairs, the Claw (Grab takes a card from your hand and gives it back when the Claw is seen off) and the Bingo Caller (traditional calls only: Kelly's Eye, Legs Eleven, Two Little Ducks, Clickety Click; at half health he shouts HOUSE!, gains 25 Block, and later moves hit harder). Event: The Penny Falls (push your luck up to three times: 15, then 30, then 60, with a 1 in 3 chance of losing the tray). Canvas ink drawings, no AI. Screenshots: `shots/d6-01-arcades-foes.png`, `shots/d6-01-arcades-boss.png`.
 
-**The Winter Gardens (28 Nov 2026):** its own crowd, no “Coming soon” stand-ins. Enemies: Conference Delegate (Point of Order adds Form 27B), Darts Fan in Fancy Dress (a banana; One Hundred and Eighty! once a fight), Mirror Ball, Raffle Tickets in fours, the Walk-On Music (Single Twenty below Encore 5, Treble Twenty 20×3 at Encore 5+) and the Keynote Speaker (Next Slide adds a **Handout** clutter card — unplayable, fleeting; painted art still to do; Any Questions? 2 Soggy and 2 Flustered; Overrunning 12×2 and an extra turn). Event: The Raffle (25 Scrumplings for a keepsake, a brew or a Mislaid Sock, or ask what third prize is: a hamper, heal 5). Canvas ink drawings, no AI. No ballroom trade marks. Screenshots: `shots/d6-02-winter-foes.png`, `shots/d6-02-winter-boss.png`.
+**The Winter Gardens (28 Nov 2026):** its own crowd, no “Coming soon” stand-ins. Enemies: Conference Delegate (Point of Order adds Form 27B), Darts Fan in Fancy Dress (a banana; One Hundred and Eighty! once a fight), Mirror Ball, Raffle Tickets in fours, the Walk-On Music (Single Twenty below Encore 5, Treble Twenty 20×3 at Encore 5+) and the Keynote Speaker (Next Slide adds a **Handout** clutter card — unplayable, fleeting; painted art done 28 Nov, see below; Any Questions? 2 Soggy and 2 Flustered; Overrunning 12×2 and an extra turn). Event: The Raffle (25 Scrumplings for a keepsake, a brew or a Mislaid Sock, or ask what third prize is: a hamper, heal 5). Canvas ink drawings, no AI. No ballroom trade marks. Screenshots: `shots/d6-02-winter-foes.png`, `shots/d6-02-winter-boss.png`.
 
 **Boss-health pass (28 Nov 2026), first cut:** a 24-run playtest (sticks 14, new places, all three Quills, all wins) on the beach→park→chippy→lights route showed the later bosses on the easy side, as the M2 notes said. The Woman Behind the Counter (was 160–168, plan 190) is now **188–196**; A Man Off the Telly (was 208–216, plan 200, but the bot often finished with 40–60 health) is now **236–244**; Old Rattler (was 132–138) is now **146–154**. The Crocodile (126–132) was left alone: it is still the hard early boss (bot end health down to 3). The Rock Shop and Tower bosses were not in that sample (the bot preferred the first unlocked new place each stage). Bingo Caller and Keynote Speaker are new and untested. A second pass should include those four.
 
@@ -175,7 +175,7 @@ State at end of 27 Nov 2026 (branch `archie/seen-off-dayout`, working copy `/wor
    `HAND=... node ../helpers/cardshot.js`, which sets a debug hand in the page without changing the game. Clutter cards are
    unplayable, so in a hand the game shows them desaturated (existing `.cd.no` style); `shots/d4-03b-shared-art.png` shows their art
    in full colour. Overviews for Ben: `shots/d3-08-hand-overview.png`, `shots/d4-04-overview.png`.
-4. **Still open for M3 (from the M2 proposal):** legendary cards; painted art for the new clutter (Handout, and later No Hot Food, Groan, Condemned, Wet Sand). Enemy drawings, all ten new places, Daily Rules and both boss-health passes are done, 27–28 Nov, see above. First pass: Counter 188–196, the Man Off the Telly 236–244, Old Rattler 146–154; the Crocodile left as the hard early boss. Second pass: the Mighty Organ 154–162; the Rock Shop stick, the Bingo Caller and the Keynote Speaker left alone.
+4. **Still open for M3 (from the M2 proposal):** legendary cards; painted art for the remaining new clutter (No Hot Food in Rooms, Groan, Condemned, Wet Sand). Handout art, enemy drawings, all ten new places, Daily Rules and both boss-health passes are done, 27–28 Nov, see above. First pass: Counter 188–196, the Man Off the Telly 236–244, Old Rattler 146–154; the Crocodile left as the hard early boss. Second pass: the Mighty Organ 154–162; the Rock Shop stick, the Bingo Caller and the Keynote Speaker left alone.
 5. **Before release:** declare everything in the AI content list below in Steam's Content Survey.
 
 **WebKitGTK note:** `app.security.dangerousDisableAssetCspModification` is `["style-src"]`. Without it Tauri adds hashes to `style-src`,
@@ -358,14 +358,14 @@ crops in `web/cards/` (`junk`, `sock`, `ticket`, `wblock`, `photo`, `catchp`).
 - `web/cards/bailiffs.jpg`, `latepay.jpg`, `bleed.jpg`, `spot.jpg`, `replyall.jpg`, `delegated.jpg`: AI-generated (27 Nov 2026) from the three heroes' portraits and our card style.
 - `web/cards/cashhand.jpg`, `vat.jpg`, `letters.jpg`, `spread.jpg`, `minutes.jpg`, `nominute.jpg`: AI-generated (27 Nov 2026) from the three heroes' portraits and our card style (`spread.jpg`'s background sign retouched blank by hand).
 - `web/cards/junk.jpg`, `sock.jpg`, `ticket.jpg`, `wblock.jpg`, `photo.jpg`, `catchp.jpg`: AI-generated (27 Nov 2026) prop still-lifes in our card style (no heroes or people depicted).
+- `web/cards/handout.jpg`: AI-generated (28 Nov 2026) prop still-life in our card style (blank conference leaflets, no heroes, people, lettering or money). One generation, no retry. Screenshots: `shots/d6-05-handout.jpg`, `shots/d6-05-handout-card.png`, `shots/d6-05-handout-hand.png`.
 - `web/cats/*.jpg` (all six cat signature cards): crops of the cat card mockups in `../mockups/card-*.jpg`, which **were AI-generated**
   (from the cats' real photos). Declare them as pre-generated AI content.
 - The full-size sources of all of the above in `../mockups/`.
 
 ### Cards still needing real art
 
-None. As of 27 Nov 2026 every card has painted art: the six cats' signature cards, all hero starter cards, every base-pool hero
-card, all twelve milestone-2 unlock cards and the six shared/clutter cards. All of it is pre-generated AI content (see the list above).
+The original 79 cards plus the Handout clutter card (28 Nov 2026) have painted art. Still text-only, painted art to do: No Hot Food in Rooms, Groan, Condemned, Wet Sand. All painted card art is pre-generated AI content (see the list above).
 
 ## What the desktop bundle changes
 
