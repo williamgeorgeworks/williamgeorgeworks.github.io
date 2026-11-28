@@ -225,3 +225,13 @@ html.office-embed .office-card { display: none !important; }
 @media (prefers-reduced-motion: reduce) {
   .office-card { box-shadow: 4px 4px 0 var(--ink, #141414); }
 }
+
+.office-sound-row {
+  text-align: center;
+  margin: 0 auto 12px;
+}
+.office-sound-btn[aria-pressed="true"] {
+  background: var(--red, #d1202f);
+  color: #fffdf7;
+}
+html.office-embed .office-sound-row { display: none !important; }
