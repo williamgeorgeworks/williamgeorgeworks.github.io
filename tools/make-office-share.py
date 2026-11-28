@@ -220,7 +220,7 @@ def capture_canvas(http_port):
     udd = f"/tmp/office-share-chrome-{os.getpid()}"
     os.makedirs(udd, exist_ok=True)
     url = f"http://127.0.0.1:{http_port}/office.html?demo=share"
-    # A 640-wide window keeps the canvas at 1x (see fitCanvas in office.js).
+    # A 1920-wide window lets the office paint at its native 1920 bitmap.
     cmd = [
         chrome,
         "--headless=new",
@@ -233,7 +233,7 @@ def capture_canvas(http_port):
         f"--user-data-dir={udd}",
         f"--remote-debugging-port={debug_port}",
         "--remote-allow-origins=*",
-        "--window-size=640,900",
+        "--window-size=1920,1100",
         "about:blank",
     ]
     proc = subprocess.Popen(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
@@ -243,7 +243,7 @@ def capture_canvas(http_port):
         page = next(t for t in targets if t.get("type") == "page")
         sock = ws_connect(page["webSocketDebuggerUrl"])
         cdp = CDP(sock)
-        cdp.call("Emulation.setDeviceMetricsOverride", width=640, height=900, deviceScaleFactor=1, mobile=False)
+        cdp.call("Emulation.setDeviceMetricsOverride", width=1920, height=1100, deviceScaleFactor=1, mobile=False)
         cdp.call("Page.enable")
         cdp.call("Runtime.enable")
         cdp.call("Page.navigate", url=url)
@@ -322,9 +322,12 @@ def compose(office):
     # Leave a little air under/over the art so the frame is visible.
     art_size = 560
     office_sq = office.convert("RGB")
-    if office_sq.size != (640, 640):
-        office_sq = office_sq.resize((640, 640), Image.Resampling.NEAREST)
-    art = office_sq.resize((art_size, art_size), Image.Resampling.NEAREST)
+    # Downsample the 1920 (or other) bitmap with a quality filter so the
+    # 1200×630 card stays sharp, rather than nearest-neighbour from 640.
+    if office_sq.size[0] != office_sq.size[1]:
+        side = min(office_sq.size)
+        office_sq = office_sq.crop((0, 0, side, side))
+    art = office_sq.resize((art_size, art_size), Image.Resampling.LANCZOS)
     frame = 4
     framed = Image.new("RGB", (art_size + frame * 2, art_size + frame * 2), CREAM)
     framed.paste(art, (frame, frame))
