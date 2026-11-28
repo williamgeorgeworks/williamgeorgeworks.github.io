@@ -625,6 +625,17 @@ async function m2d(browser, port) {
     __SO.META.wins = w;
     return title === 'The Ferret is fishing';
   }));
+  const fArt = await ev(async () => {
+    const ids = ['six','hairrig','bite','feeder','bait','unhook','wrongpeg','khandle','nobite','twentyp','gotaway','keepnet','greatmorn','nightfish','weighin'];
+    const w = __SO.META.wins;
+    __SO.META.wins = 1; __SO.S.hero = 'f'; __SO.act('begin'); await new Promise(r => setTimeout(r, 200)); __SO.act('cat', 'arthur'); __SO.DAY.done1 = 1;
+    __SO.fightWith(['breeze'], 'F'); await new Promise(r => setTimeout(r, 300));
+    const B = __SO.B(); B.hand = ids.map(id => ({ id, u: 0 })); __SO.render(); await new Promise(r => setTimeout(r, 900));
+    const missed = ids.filter(id => { const art = document.querySelector('.c-' + id + ' .art'); return !(art && new RegExp('cards/' + id + '\\.jpg').test(getComputedStyle(art).backgroundImage)); });
+    __SO.META.wins = w;
+    return missed.length ? missed.join(',') : 'ok';
+  });
+  ok(`${tag} the Ferret reward cards show their painted art`, fArt === 'ok', fArt);
   ok(`${tag} Bankrupt: 3 Energy vs Invoice 5 on two enemies deals 15 each`, await ev(async () => {
     __SO.S.hero = 'r'; __SO.act('begin'); await new Promise(r => setTimeout(r, 200)); __SO.act('cat', 'arthur'); __SO.DAY.done1 = 1;
     __SO.fightWith(['breeze', 'breeze'], 'F'); await new Promise(r => setTimeout(r, 300));

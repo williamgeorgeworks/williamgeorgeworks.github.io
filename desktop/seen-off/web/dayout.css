@@ -268,6 +268,24 @@
 .cd.c-flick .art{background-image:url(cards/flick.jpg);background-position:50% 30%}
 .cd.c-bivvy .art{background-image:url(cards/bivvy.jpg);background-position:50% 40%}
 .cd.c-castout .art{background-image:url(cards/castout.jpg);background-position:45% 30%}
+/* The Ferret reward cards: painted art from Terry's illustrated portrait of the Ferret on williamgeorgeworks.co.uk (28 Nov 2026; see README) */
+.cd.c-six .art,.cd.c-hairrig .art,.cd.c-bite .art,.cd.c-feeder .art,.cd.c-bait .art,.cd.c-unhook .art,.cd.c-wrongpeg .art,.cd.c-khandle .art,.cd.c-nobite .art,.cd.c-twentyp .art,.cd.c-gotaway .art,.cd.c-keepnet .art,.cd.c-greatmorn .art,.cd.c-nightfish .art,.cd.c-weighin .art{height:48px;background:#e9e2d4 center/cover no-repeat}
+.cd.c-six .art>*,.cd.c-six .art::before,.cd.c-hairrig .art>*,.cd.c-hairrig .art::before,.cd.c-bite .art>*,.cd.c-bite .art::before,.cd.c-feeder .art>*,.cd.c-feeder .art::before,.cd.c-bait .art>*,.cd.c-bait .art::before,.cd.c-unhook .art>*,.cd.c-unhook .art::before,.cd.c-wrongpeg .art>*,.cd.c-wrongpeg .art::before,.cd.c-khandle .art>*,.cd.c-khandle .art::before,.cd.c-nobite .art>*,.cd.c-nobite .art::before,.cd.c-twentyp .art>*,.cd.c-twentyp .art::before,.cd.c-gotaway .art>*,.cd.c-gotaway .art::before,.cd.c-keepnet .art>*,.cd.c-keepnet .art::before,.cd.c-greatmorn .art>*,.cd.c-greatmorn .art::before,.cd.c-nightfish .art>*,.cd.c-nightfish .art::before,.cd.c-weighin .art>*,.cd.c-weighin .art::before{display:none}
+.cd.c-six .art{background-image:url(cards/six.jpg);background-position:50% 30%}
+.cd.c-hairrig .art{background-image:url(cards/hairrig.jpg);background-position:50% 35%}
+.cd.c-bite .art{background-image:url(cards/bite.jpg);background-position:45% 30%}
+.cd.c-feeder .art{background-image:url(cards/feeder.jpg);background-position:50% 30%}
+.cd.c-bait .art{background-image:url(cards/bait.jpg);background-position:50% 30%}
+.cd.c-unhook .art{background-image:url(cards/unhook.jpg);background-position:50% 40%}
+.cd.c-wrongpeg .art{background-image:url(cards/wrongpeg.jpg);background-position:50% 35%}
+.cd.c-khandle .art{background-image:url(cards/khandle.jpg);background-position:45% 30%}
+.cd.c-nobite .art{background-image:url(cards/nobite.jpg);background-position:45% 30%}
+.cd.c-twentyp .art{background-image:url(cards/twentyp.jpg);background-position:50% 30%}
+.cd.c-gotaway .art{background-image:url(cards/gotaway.jpg);background-position:50% 35%}
+.cd.c-keepnet .art{background-image:url(cards/keepnet.jpg);background-position:50% 40%}
+.cd.c-greatmorn .art{background-image:url(cards/greatmorn.jpg);background-position:50% 30%}
+.cd.c-nightfish .art{background-image:url(cards/nightfish.jpg);background-position:50% 30%}
+.cd.c-weighin .art{background-image:url(cards/weighin.jpg);background-position:50% 35%}
 .cd.q-l .gem{width:16px;height:16px;margin-left:-8px;bottom:-9px;transform:none;border:0;border-radius:0;background:linear-gradient(180deg,#fff6c4,#e8b923 55%,#c49212);clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);box-shadow:0 0 10px 3px rgba(255,214,64,.95)}
 
 /* six shared/clutter cards: painted prop still-lifes, no hero in shot, neutral grey frame (default --own); AI-generated (27 Nov 2026; see README) */
