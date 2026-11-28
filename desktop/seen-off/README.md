@@ -170,6 +170,18 @@ The AppImage was smoke-tested under Xvfb at 1280x800 with `SteamDeck=1` (`shots/
 
 The AppImage was smoke-tested under Xvfb at 1280x800 with `SteamDeck=1` (`shots/d11-05-appimage-xvfb.png` title screen, three Quills only on a first-run save, `shots/d11-06-appimage-menu.png` in-game menu). No Mac build. Windows and Steam Deck were not run on real hardware. The box needed the documented GTK/WebKit and llvm-rc packages reinstalled before this rebuild.
 
+**Desktop build `dist/m3f/`** (built 28 Nov 2026, 11:26-11:28 Europe/London, from commit `7dd78240`, which adds painted art for the Ferret's fifteen reward cards and a Plus One redo with a see-through double of Kenneth, plus everything in m3e; copies with `SHA256SUMS` in `/workspace/seen-off-steam/builds-m3f/`). Also at `/workspace/seen-off-steam/dist/m3f/` and `desktop/dist/m3f/` (gitignored). Not uploaded or published anywhere.
+
+| File | SHA256 |
+|---|---|
+| `Seen Off_0.1.0_amd64.AppImage` | `43e0914f7cc10250732f017bf6121425ffda719daf691e4e3d16732c516c174a` |
+| `Seen Off_0.1.0_amd64.deb` | `48c537e071937092b53c1cece1d564bf5cb00b5ed31eccc56e7161be1d8da4a5` |
+| `Seen Off_0.1.0_x64-setup.exe` | `20299ff287193736f9237f88de67980b7ece2fd897a7d0acaf66579b00c1400d` |
+| `seen-off.exe` | `b9092bec8116a563e945060cae7b7b82d0a4dcd9ed040e8c759327277cbb98a4` |
+
+The AppImage was smoke-tested under Xvfb at 1280x800 with `SteamDeck=1` after clearing the leftover box save (`shots/d12-06-appimage-xvfb.png` first-run picker, three Quills only, no Carry on as Terry, `shots/d12-08-appimage-menu.png` menu showing Carry On). No Mac build. Windows and Steam Deck were not run on real hardware.
+
+
 **Enemy drawings (no AI):** the PLACEHOLDER stand-ups are replaced by canvas ink drawings in the same `ART` style as the pier
 enemies, so nothing here is an AI image and nothing needs adding to the AI content list. Done: Beach (Sandcastle, Jellyfish, Windbreak,
 Shore Crab, the Donkey, the Crocodile in a striped puppet booth with his string of sausages), Rock Shop (Stick of Rock, Chattering Teeth,
