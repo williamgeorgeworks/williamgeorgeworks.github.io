@@ -147,6 +147,17 @@ The AppImage was smoke-tested under Xvfb at 1280x800 with `SteamDeck=1` (`shots/
 
 The AppImage was smoke-tested under Xvfb at 1280x800 with `SteamDeck=1` (`shots/d9-03-appimage-xvfb.png`, `d9-03-appimage-ingame.png`, `d9-03-appimage-map.png`, `d9-03-appimage-fight.png`). No Mac build. Windows and Steam Deck were not run on real hardware. Missing GStreamer audio elements on the box log warnings; the UI still ran.
 
+**Desktop build `dist/m3d/`** (built 28 Nov 2026, 10:08-10:10 Europe/London, from commit `b17d603e`, which adds the fourteen painted postcard fronts and everything in m3c; copies with `SHA256SUMS` in `/workspace/seen-off-steam/builds-m3d/`). Also at `/workspace/seen-off-steam/dist/m3d/` and `desktop/dist/m3d/` (gitignored). Not uploaded or published anywhere.
+
+| File | Bytes | sha256 |
+|---|---|---|
+| `Seen Off_0.1.0_amd64.AppImage` (Linux / Steam Deck) | 102,611,448 | `b0d660314cbd031b7a0ebfe82d901b9a575787c243d93897528a5d73c55ebecd` |
+| `Seen Off_0.1.0_amd64.deb` | 11,115,382 | `35ec048c42dd5026b3815dafbadaeb48490fb575fe0a7a2e5241c4c72dd09ed3` |
+| `Seen Off_0.1.0_x64-setup.exe` (Windows NSIS installer) | 12,642,397 | `0c0f4c0dde3e93c16f2aaa764a35013a4c56a30d4b01cd63de09b816254f48b4` |
+| `seen-off.exe` (bare Windows exe) | 12,799,488 | `d51a7c1f4bd3b5c7bb09df31d6f375e25cfcb22c13296b4caa20162bfc64612c` |
+
+The AppImage was smoke-tested under Xvfb at 1280x800 with `SteamDeck=1` (`shots/d10-01-appimage-xvfb.png` title screen, `shots/d10-05-appimage-after-start.png` in-game menu, `shots/d10-04-appimage-album.png` Postcard Album showing the painted Prom front). No Mac build. Windows and Steam Deck were not run on real hardware. Missing GStreamer audio elements on the box log the same warnings as m3c; the UI still ran.
+
 **Enemy drawings (no AI):** the PLACEHOLDER stand-ups are replaced by canvas ink drawings in the same `ART` style as the pier
 enemies, so nothing here is an AI image and nothing needs adding to the AI content list. Done: Beach (Sandcastle, Jellyfish, Windbreak,
 Shore Crab, the Donkey, the Crocodile in a striped puppet booth with his string of sausages), Rock Shop (Stick of Rock, Chattering Teeth,
