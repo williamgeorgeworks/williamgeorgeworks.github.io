@@ -638,8 +638,12 @@ const PORTRAITS = {
   keith: "portraits/kraken-keith.jpg",
   arthur: "portraits/arthur.jpg",
   dexter: "portraits/dexter.jpg",
-  spyro: "portraits/spyro.jpg"
+  spyro: "portraits/spyro.jpg",
+  tilly: "portraits/tilly.jpg",
+  trixie: "portraits/trixie.jpg",
+  daisy: "portraits/daisy.jpg"
 };
+const CAT_NAMES = { arthur: "Arthur", dexter: "Dexter", spyro: "Spyro", tilly: "Tilly", trixie: "Trixie", daisy: "Daisy" };
 const JOB_LINE = {
   kenneth: "Chief of Staff to the Ferret, coordinating the bots.",
   terry: "The Machine: editor, and the first of the three.",
@@ -666,7 +670,10 @@ const JOB_LINE = {
   vinnie: "Incognito Science on YouTube.",
   arthur: "A Ragdoll, and the office loaf. Often found under the clock.",
   dexter: "The grey wolf, here to supervise the rug.",
-  spyro: "The true king, who will occasionally take an empty desk."
+  spyro: "The true king, who will occasionally take an empty desk.",
+  tilly: "A Ragdoll. Shy and quiet, and quietly dangerous.",
+  trixie: "A Ragdoll, chosen on appearance. Fair enough.",
+  daisy: "A Ragdoll. Butter would not melt."
 };
 const CHATS = {
   kettle: [
@@ -2455,115 +2462,99 @@ function drawDesk(d) {
   if (owl && owl.desk === d) drawLateLamp(d);
 }
 
-function drawProp(px, py, kind, facing) {
-  if (kind === "clipboard") {
-    box(px, py, 21, 27, "#c4a574", "#141414");
-    p(px + 3, py + 6, 15, 18, "#f4f0e4");
-    p(px + 6, py, 9, 6, "#8a6a40");
-  } else if (kind === "envelope") {
-    box(px, py + 6, 27, 18, "#f4f0e4", "#141414");
-    p(px, py + 6, 27, 3, "#1e3a5f");
-    p(px + 3, py + 9, 21, 3, "#1e3a5f");
-  } else if (kind === "book") {
-    box(px, py, 24, 27, "#7a1f2b", "#141414");
-    p(px + 18, py + 3, 3, 21, "#f2e6d0");
-    p(px + 3, py + 3, 12, 3, "#f2e6d0");
-  } else if (kind === "joystick") {
-    box(px, py + 15, 27, 15, "#141414", "#141414");
-    p(px + 9, py, 9, 18, "#c0c0c0");
-    box(px + 6, py - 9, 15, 12, "#e23d4a", "#141414");
-  } else if (kind === "basket") {
-    box(px, py, 27, 21, "#c0c0c0", "#141414");
-    p(px + 3, py + 3, 21, 12, "#e07a2f");
-    p(px + 6, py + 6, 9, 6, "#f4c078");
-  } else if (kind === "spool") {
-    box(px, py, 21, 27, "#e07a2f", "#141414");
-    p(px + 3, py + 6, 15, 15, "#22409a");
-    p(px + 6, py + 9, 9, 6, "#4a6ab0");
-  } else if (kind === "duck") {
-    p(px, py + 9, 24, 15, "#f2c14e");
-    p(px + 3, py + 12, 9, 6, "#f8dc80");
-    p(px + 18, py, 15, 15, "#f2c14e");
-    p(px + 30, py + 6, 9, 6, "#e07a2f");
-    p(px + 24, py + 6, 6, 6, "#141414");
-  } else if (kind === "reel") {
-    box(px, py, 27, 27, "#2a2a2a", "#141414");
-    p(px + 3, py + 3, 21, 21, "#d4af37");
-    p(px + 9, py + 9, 9, 9, "#2a2a2a");
-    p(px + 24, py + 6, 9, 15, "#3d2a1c");
-  } else if (kind === "coin") {
-    /* Penny's coin: every few seconds it spins on the spot, then sits still again. */
-    const spin = !REDUCE && ((animT * 0.55) % 7) < 1.1;
-    const phase = spin ? Math.abs(Math.cos(animT * 10)) : 1;
-    const cw = Math.max(1, Math.round(9 * phase));
-    const cx = px + 4 - Math.floor(cw / 2);
-    p(cx + 3, py, cw - 6, 27, "#d4af37");
-    p(cx, py + 6, cw, 15, "#d4af37");
-    if (cw > 3) {
-      p(cx + Math.floor(cw / 2), py + 6, 3, 15, "#f2e6a0");
-      if (cw > 5) p(cx + Math.floor(cw / 2), py + 9, 3, 9, "#8a6a20");
-    }
-  } else if (kind === "whistle") {
-    box(px, py + 6, 24, 12, "#c0c0c0", "#141414");
-    p(px + 24, py + 9, 9, 6, "#c0c0c0");
-    p(px + 6, py, 9, 9, "#c45c26");
-  } else if (kind === "badge") {
-    p(px + 3, py, 21, 6, "#c0c0c0");
-    p(px, py + 6, 27, 15, "#c0c0c0");
-    p(px + 3, py + 21, 21, 6, "#c0c0c0");
-    p(px + 6, py + 6, 15, 15, "#1b2b1a");
-    p(px + 9, py + 9, 9, 6, "#d4af37");
-  } else if (kind === "megaphone") {
-    p(px, py + 9, 12, 12, "#7a1a5c");
-    p(px + 9, py + 3, 9, 24, "#7a1a5c");
-    p(px + 18, py, 12, 30, "#e040fb");
-    p(px + 3, py + 21, 9, 9, "#1a1a1a");
-  } else if (kind === "teacup") {
-    box(px, py + 9, 21, 15, "#f4f0e4", "#141414");
-    p(px + 3, py + 12, 15, 9, "#c5a572");
-    p(px + 21, py + 12, 9, 9, "#f4f0e4");
-    p(px + 6, py, 6, 9, "#d8d4c8");
-    p(px + 15, py + 3, 6, 6, "#d8d4c8");
-  } else if (kind === "crate") {
-    box(px, py + 9, 30, 21, "#c4a574", "#141414");
-    p(px + 3, py + 15, 24, 3, "#8a6a40");
-    p(px + 6, py, 9, 12, "#d4b896");
-    p(px + 15, py + 3, 12, 9, "#b08956");
-    p(px + 9, py + 6, 6, 6, "#8a6a40");
-  } else if (kind === "grant") {
-    box(px, py + 12, 18, 18, "#c4a574", "#141414");
-    p(px + 3, py + 15, 12, 12, "#a8875a");
-    p(px + 6, py + 6, 6, 9, "#8a6a40");
-    p(px + 12, py, 18, 18, "#a8d4e8");
-    p(px + 15, py + 3, 12, 12, "#d4e8f4");
-    p(px + 27, py + 15, 9, 6, "#d4af37");
-  } else if (kind === "trophy") {
-    box(px, py, 27, 21, "#d4af37", "#141414");
-    p(px + 3, py + 3, 21, 15, "#f2e6a0");
-    p(px + 9, py + 6, 3, 9, "#1a1a1a");
-    p(px + 12, py + 6, 6, 9, "#1a1a1a");
-    p(px + 15, py + 9, 3, 3, "#1a1a1a");
-  } else if (kind === "tablet") {
-    /* Kraken Keith's tablet: the chart flips from a green rise to a red dip. */
-    const up = REDUCE || ((animT * 0.35 | 0) % 2 === 0);
-    box(px, py, 30, 27, "#1a1a1a", "#141414");
-    p(px + 3, py + 3, 24, 21, up ? "#0e1a14" : "#1a0e0e");
-    const col = up ? "#3dff7a" : "#d1202f";
-    const bars = up ? [2, 3, 3, 5, 4, 6] : [6, 5, 5, 3, 4, 2];
-    bars.forEach((h, i) => p(px + 6 + i, py + 24 - h, 3, Math.max(3, h - 3), col));
-  } else if (kind === "quill") {
-    p(px + 9, py, 12, 15, "#f4f0e4");
-    p(px + 12, py + 3, 6, 9, "#ffffff");
-    p(px + 9, py + 12, 6, 27, "#e8e0d0");
-    p(px + 9, py + 36, 3, 9, "#3d2a1c");
-  }
+/* ---------- The characters, drawn as little cartoon figures at 1920 ----------
+   These are drawn with smooth shapes and a soft ink outline rather than blocks, so
+   faces, hands, clothes and props read properly at the larger size. The layout,
+   colours and each person's icon are the same as before. Coordinates are world
+   pixels, with (x, y) at the feet. */
+const INK = "#1c1410";
+const OUTLINE = 2.5;
+function q(x, y, w, h, c) { ctx.fillStyle = c; ctx.fillRect(x, y, w, h); }
+
+function vFill(fill, line, lw) {
+  if (fill) { ctx.fillStyle = fill; ctx.fill(); }
+  if (line) { ctx.lineWidth = lw || OUTLINE; ctx.strokeStyle = line; ctx.stroke(); }
+}
+function vEll(cx, cy, rx, ry, fill, line, lw) {
+  ctx.beginPath();
+  ctx.ellipse(cx, cy, Math.max(0.5, rx), Math.max(0.5, ry), 0, 0, Math.PI * 2);
+  vFill(fill, line, lw);
+}
+function vEllRot(cx, cy, rx, ry, rot, fill, line, lw) {
+  ctx.beginPath();
+  ctx.ellipse(cx, cy, Math.max(0.5, rx), Math.max(0.5, ry), rot, 0, Math.PI * 2);
+  vFill(fill, line, lw);
+}
+function rrPath(x, y, w, h, r) {
+  r = Math.max(0, Math.min(r, w / 2, h / 2));
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + h, r);
+  ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r);
+  ctx.arcTo(x, y, x + w, y, r);
+  ctx.closePath();
+}
+function vRect(x, y, w, h, r, fill, line, lw) {
+  ctx.beginPath();
+  rrPath(x, y, w, h, r);
+  vFill(fill, line, lw);
+}
+function vPoly(pts, fill, line, lw) {
+  ctx.beginPath();
+  ctx.moveTo(pts[0], pts[1]);
+  for (let i = 2; i < pts.length; i += 2) ctx.lineTo(pts[i], pts[i + 1]);
+  ctx.closePath();
+  vFill(fill, line, lw);
+}
+function vPath(build, fill, line, lw) {
+  ctx.beginPath();
+  build();
+  vFill(fill, line, lw);
+}
+function vStroke(pts, col, lw) {
+  ctx.beginPath();
+  ctx.moveTo(pts[0], pts[1]);
+  for (let i = 2; i < pts.length; i += 2) ctx.lineTo(pts[i], pts[i + 1]);
+  ctx.lineWidth = lw;
+  ctx.strokeStyle = col;
+  ctx.stroke();
+}
+function vLimb(pts, w, col, line) {
+  if (line) vStroke(pts, line, w + OUTLINE * 2);
+  vStroke(pts, col, w);
+}
+function vArc(cx, cy, r, a0, a1, col, lw) {
+  ctx.beginPath();
+  ctx.arc(cx, cy, r, a0, a1);
+  ctx.lineWidth = lw;
+  ctx.strokeStyle = col;
+  ctx.stroke();
+}
+function vShadow(x, y, rx) {
+  vEll(x, y + 3, rx, rx * 0.3, "rgba(20, 14, 10, 0.22)");
+}
+function withClip(build, draw) {
+  ctx.save();
+  ctx.beginPath();
+  build();
+  ctx.clip();
+  draw();
+  ctx.restore();
+}
+function charBegin() {
+  ctx.save();
+  ctx.lineJoin = "round";
+  ctx.lineCap = "round";
+}
+function charEnd() {
+  ctx.restore();
 }
 
+/* How someone is standing this frame: walking swing, celebration jump, idle bob. */
 function walkFrame(pr) {
   if (REDUCE || !pr.target) return 0;
   return (pr.walkT * 7 | 0) % 3;
 }
-
 function idleBob(pr) {
   if (REDUCE) return 0;
   if (pr.phase === "idle" && !pr.target) {
@@ -2571,535 +2562,25 @@ function idleBob(pr) {
   }
   return 0;
 }
-
-function drawPerson(pr) {
-  const s = pr.staff;
-  if (s.kind === "terry" || s.kind === "reggie") {
-    drawRobot(pr);
-    return;
-  }
-  if (s.kind === "kenneth") {
-    drawKenneth(pr);
-    return;
-  }
-  if (s.kind === "keith") {
-    drawKeith(pr);
-    return;
-  }
+function poseOf(pr) {
   const cele = pr.phase === "celebrating";
-  const walk = pr.phase === "idle" || pr.phase === "to-desk";
-  const work = isWorkingPose(pr);
-  const moving = !REDUCE && walk && pr.target;
-  const frame = moving ? walkFrame(pr) : 0;
-  const jump = (!REDUCE && cele) ? Math.round(Math.abs(Math.sin(pr.celeT * 10)) * sx(8)) : 0;
-  const bob = moving ? (frame === 1 ? 0 : S) : idleBob(pr);
-  const x = Math.round(pr.x);
-  let y = Math.round(pr.y - jump + bob);
-  const sit = isSeated(pr);
+  const walking = pr.phase === "idle" || pr.phase === "to-desk";
+  const moving = !REDUCE && walking && !!pr.target;
+  const ph = moving ? pr.walkT * 10 : 0;
+  const swing = moving ? Math.sin(ph) : 0;
+  const jump = (!REDUCE && cele) ? Math.abs(Math.sin(pr.celeT * 10)) * sx(8) : 0;
+  const bob = moving ? (1 - Math.abs(Math.cos(ph))) * 3 : (idleBob(pr) ? 2 : 0);
   const left = pr.facing === "l";
-  shadow(x - 24, Math.round(pr.y) + 6, 48, 15);
-
-  if (work) {
-    /* Seated, back to us, facing the monitor. */
-    box(x - 24, y - 42, 48, 42, s.body, "#141414");
-    p(x - 21, y - 39, 18, 12, lite(s.body, 0.2));
-    if (s.id === "frank") p(x - 24, y - 24, 48, 24, s.accent);
-    /* head from behind */
-    box(x - 18, y - 78, 36, 36, s.skin, "#141414");
-    p(x - 15, y - 75, 12, 12, lite(s.skin, 0.2));
-    if (s.prop === "hat") {
-      box(x - 24, y - 90, 48, 18, s.accent, "#141414");
-      p(x - 18, y - 99, 36, 12, s.accent);
-      p(x - 15, y - 96, 12, 6, lite(s.accent, 0.3));
-    } else {
-      p(x - 18, y - 90, 36, 18, s.hair);
-      p(x - 18, y - 90, 36, 3, "#141414");
-    }
-    if (s.prop === "headphones") {
-      p(x - 27, y - 72, 9, 21, "#111");
-      p(x + 18, y - 72, 9, 21, "#111");
-      p(x - 27, y - 90, 54, 9, "#111");
-    }
-    if (s.prop === "cloud") {
-      p(x - 24, y - 120, 21, 15, s.accent);
-      p(x - 15, y - 132, 33, 18, s.accent);
-      p(x + 12, y - 117, 21, 15, s.accent);
-    }
-    if (s.prop === "bird") {
-      p(x + 18, y - 96, 24, 15, s.accent);
-      p(x + 39, y - 93, 9, 6, "#e07a2f");
-    }
-    const tap = (!REDUCE && ((pr.typeT * 6 | 0) % 2)) ? S : 0;
-    paintHand(x - 36, y - 27, s.skin, true);
-    paintHand(x + 18, y - 27 + tap, s.skin, false);
-    return;
-  }
-
-  /* legs + shoes, 3-frame walk */
-  const shoe = "#2a1c14";
-  const trouser = dark(s.body, 0.45);
-  if (sit) {
-    drawSeatedLegs(x, y, trouser, shoe);
-    y += SIT_DROP;
-  } else if (frame === 1) {
-    p(x - 15, y - 30, 15, 30, trouser);
-    p(x + 3, y - 30, 15, 30, trouser);
-    p(x - 15, y, 15, 9, shoe);
-    p(x + 3, y, 15, 9, shoe);
-  } else if (frame === 2) {
-    p(x - 18, y - 24, 15, 24, trouser);
-    p(x + 6, y - 36, 15, 36, trouser);
-    p(x - 21, y, 18, 9, shoe);
-    p(x + 6, y, 15, 9, shoe);
-  } else {
-    p(x - 18, y - 36, 15, 36, trouser);
-    p(x + 6, y - 24, 15, 24, trouser);
-    p(x - 18, y, 15, 9, shoe);
-    p(x + 9, y, 18, 9, shoe);
-  }
-  /* body */
-  box(x - 21, y - 72, 42, 45, s.body, "#141414");
-  p(x - 18, y - 69, 18, 15, lite(s.body, 0.22));
-  p(x + 9, y - 48, 9, 18, dark(s.body, 0.18));
-  if (s.id === "frank") {
-    p(x - 21, y - 48, 42, 21, s.accent);
-    p(x - 18, y - 48, 36, 3, lite(s.accent, 0.25));
-  }
-  /* head + face */
-  box(x - 18, y - 108, 36, 36, s.skin, "#141414");
-  p(x - 15, y - 105, 15, 12, lite(s.skin, 0.25));
-  p(x + 6, y - 90, 9, 15, dark(s.skin, 0.12));
-  p(x - 18, y - 117, 36, 15, s.hair);
-  p(x - 18, y - 117, 36, 3, "#141414");
-  p(x - 18, y - 117, 3, 15, "#141414");
-  p(x + 15, y - 117, 3, 15, "#141414");
-  if (s.prop === "hat") {
-    box(x - 24, y - 123, 48, 18, s.accent, "#141414");
-    p(x - 18, y - 132, 36, 12, s.accent);
-    p(x - 15, y - 129, 12, 6, lite(s.accent, 0.3));
-  }
-  if (s.prop === "headphones") {
-    p(x - 24, y - 96, 9, 21, s.accent);
-    p(x + 15, y - 96, 9, 21, s.accent);
-    p(x - 24, y - 114, 48, 9, "#111");
-  }
-  /* eyes, brows, a glint, and a little mouth — not just 3× the old squares. */
-  paintEyes(x, y - 90, left);
-  if (pr.glanceT > 0) {
-    p(x + (left ? -27 : 21), y - 120, 6, 12, "#8ec8e6");
-  } else {
-    paintMouth(x, y - 75);
-  }
-  if (s.prop === "cloud") {
-    p(x - 24, y - 150, 21, 15, s.accent);
-    p(x - 15, y - 162, 33, 18, s.accent);
-    p(x + 12, y - 147, 21, 15, s.accent);
-    p(x - 3, y - 138, 12, 9, s.accent);
-  }
-  if (s.prop === "bird") {
-    const bx = left ? x - 12 : x + 6;
-    p(bx, y - 132, 24, 15, s.accent);
-    p(bx + (left ? -9 : 21), y - 129, 9, 6, "#e07a2f");
-  }
-  const held = ["clipboard", "envelope", "book", "joystick", "basket", "spool", "duck", "reel", "coin", "whistle", "badge", "megaphone", "teacup", "crate", "grant", "trophy", "quill"];
-  const armX = left ? x - 11 : x + 7;
-  p(armX, y - 66, 12, 30, s.skin);
-  if (held.includes(s.prop)) drawProp(left ? x - 48 : x + 27, y - 60, s.prop, pr.facing);
-  if (cele) {
-    p(x - 36, y - 108 - Math.min(jump, 12), 12, 24, s.skin);
-    p(x + 24, y - 114 - Math.min(jump, 12), 12, 24, s.skin);
-  }
+  return {
+    x: Math.round(pr.x), feet: Math.round(pr.y), y: Math.round(pr.y - jump),
+    body: Math.round(pr.y - jump - bob), swing: swing, moving: moving, cele: cele, jump: jump,
+    sit: isSeated(pr), work: isWorkingPose(pr), left: left, look: left ? -1 : 1,
+    glance: pr.glanceT > 0
+  };
 }
-
-/* Kraken Keith, from his portrait: a purple octopus in round black glasses and a navy
-   waistcoat with a gold brooch, his chart tablet in one tentacle and a gold coin in another. */
-function drawKeith(pr) {
-  const cele = pr.phase === "celebrating";
-  const walk = pr.phase === "idle" || pr.phase === "to-desk";
-  const work = isWorkingPose(pr);
-  const moving = !REDUCE && walk && pr.target;
-  const frame = moving ? walkFrame(pr) : 0;
-  const jump = (!REDUCE && cele) ? Math.round(Math.abs(Math.sin(pr.celeT * 10)) * sx(8)) : 0;
-  const bob = moving ? (frame === 1 ? 0 : S) : idleBob(pr);
-  const x = Math.round(pr.x);
-  let y = Math.round(pr.y - jump + bob);
-  const sit = isSeated(pr);
-  const left = pr.facing === "l";
-  const skin = "#8a5cc4", skinD = "#6a3fa0", skinL = "#a87ad8", sucker = "#e8a0b8";
-  const vest = "#1e2a4a", gold = "#d4af37";
-  shadow(x - 27, Math.round(pr.y) + 6, 54, 15);
-
-  if (work) {
-    /* Seated, back to us: waistcoat, the back of a large purple head, two tentacles typing. */
-    box(x - 24, y - 42, 48, 42, vest, "#141414");
-    p(x - 21, y - 39, 15, 12, lite(vest, 0.2));
-    p(x - 18, y - 105, 36, 9, skin);
-    p(x - 18, y - 105, 36, 3, "#141414");
-    box(x - 24, y - 99, 48, 57, skin, "#141414");
-    p(x - 18, y - 93, 15, 21, skinL);
-    p(x + 9, y - 87, 3, 3, skinD);
-    p(x - 6, y - 75, 3, 3, skinD);
-    p(x - 30, y - 75, 6, 3, "#141414");
-    p(x + 24, y - 75, 6, 3, "#141414");
-    const tap = (!REDUCE && ((pr.typeT * 6 | 0) % 2)) ? S : 0;
-    p(x - 39, y - 27, 18, 9, skin);
-    p(x - 45, y - 24, 9, 12, skin);
-    p(x + 21, y - 27 + tap, 18, 9, skin);
-    p(x + 36, y - 24 + tap, 9, 12, skin);
-    return;
-  }
-
-  /* Tentacles where the legs would be, with a little wiggle when he walks. */
-  if (sit) {
-    for (let i = 0; i < 4; i++) {
-      p(x - 21 + i * 12, y - 12, 9, 12, skin);
-      p(x - 21 + i * 12, y, 9, 3, sucker);
-    }
-    y += SIT_DROP;
-  } else {
-    for (let i = 0; i < 4; i++) {
-      const tx = x - 7 + i * 4;
-      const out = i < 2 ? -1 : 1;
-      const sway = moving && ((i + frame) % 2) ? 1 : 0;
-      p(tx, y - 36, 9, 27, skin);
-      p(tx + out * (3 + sway), y - 12, 9, 9, skin);
-      p(tx + out * (6 + sway), y - 3, 9, 6, skin);
-      p(tx + out * (3 + sway) + 3, y - 9, 3, 3, sucker);
-    }
-  }
-
-  /* Navy waistcoat, dark buttons, gold brooch. */
-  box(x - 21, y - 72, 42, 42, vest, "#141414");
-  p(x - 18, y - 69, 12, 12, lite(vest, 0.2));
-  p(x - 3, y - 54, 3, 3, "#0a1020");
-  p(x - 3, y - 42, 3, 3, "#0a1020");
-  p(x + 6, y - 66, 9, 9, gold);
-  p(x + 9, y - 63, 3, 3, "#c47a1a");
-
-  /* The big domed head. */
-  p(x - 18, y - 141, 36, 12, skin);
-  p(x - 18, y - 144, 36, 3, "#141414");
-  p(x - 21, y - 141, 3, 9, "#141414");
-  p(x + 18, y - 141, 3, 9, "#141414");
-  box(x - 24, y - 132, 48, 60, skin, "#141414");
-  p(x - 18, y - 138, 12, 21, skinL);
-  p(x + 9, y - 129, 3, 3, skinD);
-  p(x + 3, y - 120, 3, 3, skinD);
-  p(x - 12, y - 114, 3, 3, skinD);
-  /* Round black glasses; the pupils follow where he is looking. */
-  const glance = pr.glanceT > 0;
-  p(x - 18, y - 105, 15, 15, "#141414");
-  p(x + 3, y - 105, 15, 15, "#141414");
-  p(x - 15, y - 102, 9, 9, "#fff");
-  p(x + 6, y - 102, 9, 9, "#fff");
-  p(x - 3, y - 99, 6, 3, "#141414");
-  p(x + (left ? -15 : -12), y - 99, 6, 6, "#141414");
-  p(x + (left ? 6 : 9), y - 99, 6, 6, "#141414");
-  p(x - 18, y - 111, 12, 3, skinD);
-  p(x + 6, y - 111, 12, 3, skinD);
-  p(x - 6, y - 84, 15, 3, "#141414");
-  p(x + 9, y - 87, 3, 3, "#141414");
-  /* Face tentacles drooping over the waistcoat. */
-  p(x - 15, y - 75, 6, 12, skin);
-  p(x - 3, y - 75, 6, 15, skin);
-  p(x + 9, y - 75, 6, 9, skin);
-  if (glance) p(x + (left ? -30 : 27), y - 138, 6, 12, "#8ec8e6");
-
-  /* The tablet in one tentacle... */
-  const armX = left ? x - 11 : x + 7;
-  p(armX, y - 66, 12, 30, skin);
-  p(armX + 3, y - 42, 3, 3, sucker);
-  drawProp(left ? x - 54 : x + 27, y - 63, "tablet", pr.facing);
-  /* ...and the gold coin held up in another, unless that tentacle is busy with a mug or a dart. */
-  const busy = pr.phase === "idle" && !pr.target && pr.spot &&
-    ["kettle", "lounge", "darts", "rods", "canteen", "sofa", "music"].includes(pr.activity);
-  if (cele) {
-    p(x - 36, y - 108 - Math.min(jump, 12), 12, 30, skin);
-    p(x + 24, y - 114 - Math.min(jump, 12), 12, 30, skin);
-  } else if (!busy) {
-    const ox = left ? x + 7 : x - 11;
-    p(ox, y - 81, 12, 30, skin);
-    p(ox + 3, y - 66, 3, 3, sucker);
-    p(ox - 3, y - 99, 18, 18, "#141414");
-    p(ox, y - 96, 12, 12, gold);
-    p(ox + 3, y - 93, 6, 6, "#f2d36b");
-  }
-}
-
-function drawKenneth(pr) {
-  const cele = pr.phase === "celebrating";
-  const walk = pr.phase === "idle" || pr.phase === "to-desk";
-  const work = isWorkingPose(pr);
-  const moving = !REDUCE && walk && pr.target;
-  const frame = moving ? walkFrame(pr) : 0;
-  const jump = (!REDUCE && cele) ? Math.round(Math.abs(Math.sin(pr.celeT * 10)) * sx(8)) : 0;
-  const bob = moving ? (frame === 1 ? 0 : S) : idleBob(pr);
-  const x = Math.round(pr.x);
-  let y = Math.round(pr.y - jump + bob);
-  const sit = isSeated(pr);
-  const left = pr.facing === "l";
-  const metal = "#e8dcc8";
-  const vest = "#1a1a1a";
-  const shirt = "#f4f0e4";
-  const cap = "#1a1a1a";
-  const red = "#d1202f";
-  const silver = "#9a968c";
-  shadow(x - 24, Math.round(pr.y) + 6, 48, 15);
-
-  if (work) {
-    /* Seated, back to us: black vest, cream collar, cap and a side-feather. */
-    box(x - 24, y - 42, 48, 42, vest, "#141414");
-    p(x - 12, y - 42, 24, 12, shirt);
-    p(x - 3, y - 42, 6, 21, red);
-    box(x - 18, y - 84, 36, 42, metal, "#141414");
-    p(x - 15, y - 81, 15, 15, lite(metal, 0.22));
-    p(x - 27, y - 66, 9, 18, "#2a2a2a");
-    p(x + 18, y - 66, 9, 18, "#2a2a2a");
-    /* flat cap from behind, 1px red brim, feather off to the left */
-    p(x - 18, y - 102, 36, 9, cap);
-    box(x - 24, y - 96, 48, 15, cap, "#141414");
-    p(x - 21, y - 84, 42, 3, red);
-    p(x - 33, y - 126, 6, 30, red);
-    p(x - 30, y - 120, 3, 12, lite(red, 0.25));
-    p(x - 36, y - 114, 3, 9, dark(red, 0.15));
-    const tap = (!REDUCE && ((pr.typeT * 6 | 0) % 2)) ? S : 0;
-    p(x - 36, y - 27, 18, 9, silver);
-    p(x + 18, y - 27 + tap, 18, 9, silver);
-    return;
-  }
-
-  const shoe = "#2a1c14";
-  const trouser = "#2a2a2a";
-  if (sit) {
-    drawSeatedLegs(x, y, trouser, shoe);
-    y += SIT_DROP;
-  } else if (frame === 1) {
-    p(x - 15, y - 30, 15, 30, trouser);
-    p(x + 3, y - 30, 15, 30, trouser);
-    p(x - 15, y, 15, 9, shoe);
-    p(x + 3, y, 15, 9, shoe);
-  } else if (frame === 2) {
-    p(x - 18, y - 24, 15, 24, trouser);
-    p(x + 6, y - 36, 15, 36, trouser);
-    p(x - 21, y, 18, 9, shoe);
-    p(x + 6, y, 15, 9, shoe);
-  } else {
-    p(x - 18, y - 36, 15, 36, trouser);
-    p(x + 6, y - 24, 15, 24, trouser);
-    p(x - 18, y, 15, 9, shoe);
-    p(x + 9, y, 18, 9, shoe);
-  }
-
-  /* black waistcoat over a cream shirt, red tie, Q badge */
-  box(x - 21, y - 72, 42, 45, vest, "#141414");
-  p(x - 6, y - 72, 12, 15, shirt);
-  p(x - 3, y - 72, 6, 27, red);
-  p(x, y - 69, 3, 9, lite(red, 0.25));
-  p(x + 9, y - 48, 9, 9, red);
-  p(x + 12, y - 45, 3, 3, "#f4f0e4");
-
-  /* cream robot head, panel line, ear-cups with a red centre */
-  box(x - 18, y - 114, 36, 42, metal, "#141414");
-  p(x - 15, y - 111, 15, 15, lite(metal, 0.25));
-  p(x - 15, y - 93, 30, 3, dark(metal, 0.18));
-  p(x - 27, y - 96, 9, 18, "#2a2a2a");
-  p(x + 18, y - 96, 9, 18, "#2a2a2a");
-  p(x - 24, y - 90, 6, 6, red);
-  p(x + 21, y - 90, 6, 6, red);
-
-  /* thin round glasses, pupils follow facing / a glance at the machine */
-  const glance = pr.glanceT > 0;
-  p(x - 12, y - 96, 12, 9, "#fff");
-  p(x + 3, y - 96, 12, 9, "#fff");
-  p(x - 15, y - 99, 18, 3, "#141414");
-  p(x - 15, y - 87, 18, 3, "#141414");
-  p(x - 15, y - 99, 3, 15, "#141414");
-  p(x, y - 99, 3, 15, "#141414");
-  p(x, y - 99, 18, 3, "#141414");
-  p(x, y - 87, 18, 3, "#141414");
-  p(x + 15, y - 99, 3, 15, "#141414");
-  const px1 = x + (left ? -sx(3) : -sx(2)) + (glance && !left ? sx(1) : 0);
-  const px2 = x + (left ? sx(2) : sx(3)) + (glance && !left ? sx(1) : 0);
-  p(px1, y - 93, 5, 5, "#141414");
-  p(px2, y - 93, 5, 5, "#141414");
-  p(px1 + 1, y - 93, 2, 2, "#f4f0e4");
-  p(px2 + 1, y - 93, 2, 2, "#f4f0e4");
-  p(x - 3, y - 78, 9, 3, "#141414");
-
-  /* black flat cap, one-pixel red brim, feather off to the left */
-  p(x - 18, y - 132, 36, 9, cap);
-  p(x - 15, y - 129, 12, 6, "#2e2e2e");
-  box(x - 24, y - 126, 48, 15, cap, "#141414");
-  p(x - 21, y - 114, 42, 3, red);
-  p(x - 33, y - 156, 6, 33, red);
-  p(x - 30, y - 150, 3, 12, lite(red, 0.25));
-  p(x - 36, y - 144, 3, 12, dark(red, 0.15));
-
-  if (glance) p(x + (left ? -30 : 24), y - 144, 6, 12, "#8ec8e6");
-  const armX = left ? x - 11 : x + 7;
-  p(armX, y - 66, 12, 30, silver);
-  drawProp(left ? x - 48 : x + 27, y - 60, "clipboard", pr.facing);
-  if (cele) {
-    p(x - 36, y - 108 - Math.min(jump, 12), 12, 24, silver);
-    p(x + 24, y - 114 - Math.min(jump, 12), 12, 24, silver);
-  }
-}
-
-function drawRobot(pr) {
-  const s = pr.staff;
-  const terry = s.kind === "terry";
-  const cele = pr.phase === "celebrating";
-  const walk = pr.phase === "idle" || pr.phase === "to-desk";
-  const work = isWorkingPose(pr);
-  const moving = !REDUCE && walk && pr.target;
-  const frame = moving ? walkFrame(pr) : 0;
-  const jump = (!REDUCE && cele) ? Math.round(Math.abs(Math.sin(pr.celeT * 10)) * sx(8)) : 0;
-  const bob = moving ? (frame === 1 ? 0 : S) : idleBob(pr);
-  const x = Math.round(pr.x);
-  let y = Math.round(pr.y - jump + bob);
-  const sit = isSeated(pr);
-  const left = pr.facing === "l";
-  const metal = terry ? "#d8d4c8" : "#ccc8bc";
-  const vest = "#b81c24";
-  const shirt = "#f4f0e4";
-  shadow(x - 24, Math.round(pr.y) + 6, 48, 15);
-
-  if (work) {
-    box(x - 24, y - 42, 48, 42, vest, "#141414");
-    p(x - 12, y - 42, 24, 12, shirt);
-    if (terry) p(x - 3, y - 42, 6, 24, "#141414");
-    else {
-      /* bow tie peek */
-      p(x - 9, y - 42, 18, 9, "#141414");
-    }
-    if (terry) {
-      box(x - 24, y - 84, 48, 42, metal, "#141414");
-      p(x - 21, y - 81, 18, 15, lite(metal, 0.25));
-      p(x - 3, y - 102, 6, 18, metal);
-      p(x - 9, y - 111, 18, 12, "#d1202f");
-      p(x - 6, y - 108, 6, 6, lite("#d1202f", 0.3));
-      p(x - 18, y - 69, 15, 15, "#fff");
-      p(x + 6, y - 69, 15, 15, "#fff");
-      p(x - 15, y - 66, 9, 9, "#141414");
-      p(x + 9, y - 66, 9, 9, "#141414");
-      p(x - 12, y - 51, 24, 6, "#141414");
-    } else {
-      box(x - 18, y - 96, 36, 54, metal, "#141414");
-      p(x - 15, y - 93, 15, 18, lite(metal, 0.25));
-      p(x - 3, y - 108, 6, 15, metal);
-      p(x - 12, y - 72, 12, 9, "#fff");
-      p(x + 6, y - 72, 12, 9, "#fff");
-      p(x - 9, y - 69, 6, 6, "#141414");
-      p(x + 9, y - 69, 6, 6, "#141414");
-      /* monocle */
-      box(x + 3, y - 78, 21, 21, "#14141400", "#141414");
-      p(x + 3, y - 78, 21, 3, "#141414");
-      p(x + 3, y - 78, 3, 21, "#141414");
-      p(x + 21, y - 78, 3, 21, "#141414");
-      p(x + 3, y - 60, 21, 3, "#141414");
-    }
-    const tap = (!REDUCE && ((pr.typeT * 6 | 0) % 2)) ? S : 0;
-    p(x - 36, y - 27, 18, 9, metal);
-    p(x + 18, y - 27 + tap, 18, 9, metal);
-    return;
-  }
-
-  /* legs */
-  const thigh = "#6a6860";
-  if (sit) {
-    drawSeatedLegs(x, y, thigh, "#2a1c14");
-    y += SIT_DROP;
-  } else {
-    if (frame === 2) {
-      p(x - 18, y - 24, 15, 24, thigh);
-      p(x + 6, y - 39, 15, 39, thigh);
-    } else if (frame === 1) {
-      p(x - 15, y - 30, 15, 30, thigh);
-      p(x + 3, y - 30, 15, 30, thigh);
-    } else {
-      p(x - 18, y - 39, 15, 39, thigh);
-      p(x + 6, y - 24, 15, 24, thigh);
-    }
-    p(x - 18, y, 15, 9, "#2a1c14");
-    p(x + 6, y, 15, 9, "#2a1c14");
-  }
-
-  if (terry) {
-    box(x - 24, y - 72, 48, 45, vest, "#141414");
-    p(x - 12, y - 72, 24, 15, shirt);
-    p(x - 3, y - 72, 6, 27, "#141414");
-    p(x - 21, y - 69, 15, 12, lite(vest, 0.2));
-    /* box head */
-    box(x - 27, y - 120, 54, 48, metal, "#141414");
-    p(x - 24, y - 117, 21, 18, lite(metal, 0.28));
-    p(x + 15, y - 102, 9, 24, dark(metal, 0.15));
-    /* antenna, red ball */
-    p(x - 3, y - 138, 6, 18, metal);
-    box(x - 9, y - 150, 18, 15, "#d1202f", "#141414");
-    p(x - 6, y - 147, 6, 6, "#f26a6a");
-    /* ear discs */
-    p(x - 36, y - 108, 9, 24, "#9a968c");
-    p(x + 27, y - 108, 9, 24, "#9a968c");
-    /* face: big cheerful eyes and smile */
-    p(x - 18, y - 105, 18, 18, "#fff");
-    p(x + 6, y - 105, 18, 18, "#fff");
-    p(x + (left ? -15 : -12), y - 99, 9, 9, "#141414");
-    p(x + (left ? 9 : 12), y - 99, 9, 9, "#141414");
-    p(x - 12, y - 84, 30, 6, "#141414");
-    p(x - 9, y - 81, 24, 6, "#141414");
-    p(x - 6, y - 78, 18, 3, "#141414");
-  } else {
-    /* taller, slimmer */
-    box(x - 21, y - 78, 42, 51, vest, "#141414");
-    p(x - 12, y - 78, 24, 15, shirt);
-    p(x - 9, y - 78, 18, 9, "#141414"); /* bow tie */
-    p(x - 3, y - 81, 6, 6, "#141414");
-    p(x - 18, y - 75, 12, 12, lite(vest, 0.2));
-    /* pocket square */
-    p(x + 9, y - 54, 9, 9, "#f4f0e4");
-    /* long head */
-    box(x - 18, y - 138, 36, 60, metal, "#141414");
-    p(x - 15, y - 135, 15, 21, lite(metal, 0.28));
-    p(x + 9, y - 114, 6, 30, dark(metal, 0.15));
-    p(x - 3, y - 150, 6, 15, metal);
-    p(x - 27, y - 120, 9, 21, "#9a968c");
-    p(x + 18, y - 120, 9, 21, "#9a968c");
-    /* lidded eyes + small smile */
-    p(x - 12, y - 114, 12, 9, "#fff");
-    p(x + 6, y - 114, 12, 9, "#fff");
-    p(x - 9, y - 111, 6, 6, "#141414");
-    p(x + 9, y - 111, 6, 6, "#141414");
-    p(x - 12, y - 117, 12, 3, "#141414");
-    p(x + 6, y - 117, 12, 3, "#141414");
-    /* monocle */
-    p(x + 3, y - 120, 21, 3, "#141414");
-    p(x + 3, y - 120, 3, 21, "#141414");
-    p(x + 21, y - 120, 3, 21, "#141414");
-    p(x + 3, y - 102, 21, 3, "#141414");
-    p(x + 24, y - 102, 3, 24, "#141414");
-    p(x - 6, y - 96, 18, 3, "#141414");
-  }
-  const armX = left ? x - 12 : x + 8;
-  p(armX, y - 66, 12, 30, metal);
-  if (pr.glanceT > 0) p(x + (left ? -27 : 24), y - 150, 6, 12, "#8ec8e6");
-  drawProp(left ? x - 48 : x + 30, y - 66, "quill", pr.facing);
-  if (cele) {
-    p(x - 39, y - 114 - Math.min(jump, 12), 12, 24, metal);
-    p(x + 27, y - 120 - Math.min(jump, 12), 12, 24, metal);
-  }
-}
-
 function isSeated(pr) {
   return pr.phase === "idle" && !pr.target && !!pr.spot && !!pr.spot.seat && pr.activity === "sofa";
 }
-
-function drawSeatedLegs(x, y, trouser, shoe) {
-  p(x - 18, y - 12, 15, 12, trouser);
-  p(x + 6, y - 12, 15, 12, trouser);
-  p(x - 18, y, 15, 6, shoe);
-  p(x + 6, y, 15, 6, shoe);
-}
-
 function armColour(s) {
   if (s.kind === "kenneth") return "#9a968c";
   if (s.kind === "terry") return "#d8d4c8";
@@ -3107,80 +2588,605 @@ function armColour(s) {
   return s.skin;
 }
 
-function drawMug(x, y, band) {
-  box(x - 3, y, 18, 18, "#f4f0e4", "#141414");
-  p(x, y + 6, 12, 6, band);
-  if (!REDUCE) {
-    const s = (animT * 1.4 + x * 0.07) % 1;
-    p(x + 3, y - 9 - s * 15, 3, 6, "#ffffffaa");
+/* Legs and shoes. Standing legs swing in the direction of travel; seated legs
+   are short thighs pointing at us, with the shoes just below. */
+function drawLegsV(P, trouser, shoe, opts) {
+  const o = opts || {};
+  const x = P.x, y = P.y;
+  const hipY = y - (o.hip || 38);
+  const legW = o.legW || 11;
+  if (P.sit) {
+    [-1, 1].forEach(s => {
+      vEll(x + s * 8, y - 8, 8, 10, trouser, INK);
+      vEll(x + s * 9, y + 2, 8, 4.5, shoe, INK, 2);
+    });
+    return;
+  }
+  const order = P.look > 0 ? [-1, 1] : [1, -1];
+  order.forEach(s => {
+    const k = s * P.swing;
+    const dx = P.look * k * 10;
+    const lift = P.moving ? Math.max(0, k) * 5 : 0;
+    const fx = x + s * 6 + dx, fy = y - 6 - lift;
+    const kx = x + s * 6 + dx * 0.55 + P.look * Math.abs(k) * 3, ky = (hipY + fy) / 2;
+    vLimb([x + s * 6, hipY, kx, ky, fx, fy], legW, trouser, INK);
+    vEll(fx + P.look * 3, fy + 3, 8.5, 4.5, shoe, INK, 2);
+    vEll(fx + P.look * 3 - 2, fy + 1.5, 3, 1.4, lite(shoe, 0.35));
+  });
+}
+
+/* A rounded trapezoid body, lit from the top left. */
+function torsoPath(x, top, bottom, wt, wb) {
+  return function () {
+    ctx.moveTo(x - wt, top + 8);
+    ctx.quadraticCurveTo(x - wt, top, x - wt + 8, top);
+    ctx.lineTo(x + wt - 8, top);
+    ctx.quadraticCurveTo(x + wt, top, x + wt, top + 8);
+    ctx.lineTo(x + wb, bottom - 4);
+    ctx.quadraticCurveTo(x + wb, bottom, x + wb - 4, bottom);
+    ctx.lineTo(x - wb + 4, bottom);
+    ctx.quadraticCurveTo(x - wb, bottom, x - wb, bottom - 4);
+    ctx.closePath();
+  };
+}
+function drawTorsoV(x, top, bottom, wt, wb, fill, details) {
+  const path = torsoPath(x, top, bottom, wt, wb);
+  vPath(path, fill);
+  withClip(path, () => {
+    p(x + wt * 0.35, top, wt, bottom - top, dark(fill, 0.16));
+    p(x - wt, top, wt * 0.6, 6, lite(fill, 0.18));
+    if (details) details();
+  });
+  vPath(path, null, INK);
+}
+
+/* An arm from the shoulder to the hand, with a little elbow, and a mitten hand. */
+function drawArmV(sx0, sy0, hx, hy, sleeve, skin, opts) {
+  const o = opts || {};
+  const mx = (sx0 + hx) / 2, my = (sy0 + hy) / 2;
+  const dx = hx - sx0, dy = hy - sy0, len = Math.max(1, Math.hypot(dx, dy));
+  const bend = o.bend === undefined ? 3 : o.bend;
+  const side = sx0 < hx ? -1 : 1;
+  const ex = mx + (-dy / len) * bend * side, ey = my + (dx / len) * bend * side;
+  vLimb([sx0, sy0, ex, ey, hx, hy], o.w || 8.5, sleeve, INK);
+  if (o.cuff) vEll(hx - dx / len * 4, hy - dy / len * 4, 5, 3.6, o.cuff, INK, 1.5);
+  if (o.noHand) return;
+  drawHandV(hx, hy, skin, o.fingers);
+}
+function drawHandV(hx, hy, skin, fingers) {
+  vEll(hx, hy, 5.2, 5, skin, INK, 2);
+  vEll(hx - 3.6, hy - 1.5, 2, 2.6, skin, INK, 1.5);
+  vEll(hx, hy, 4.2, 4, skin);
+  if (fingers) {
+    vStroke([hx - 1, hy + 2.5, hx - 1, hy + 4.2], dark(skin, 0.3), 1);
+    vStroke([hx + 1.8, hy + 2.2, hx + 1.8, hy + 4], dark(skin, 0.3), 1);
   }
 }
 
-/* Whatever someone is up to at their idle spot, drawn over the top of them.
-   Their own icon and prop are never changed; this only adds a mug, a rod, a dart... */
-function drawActivity(pr) {
-  if (pr.phase !== "idle" || pr.target || !pr.activity || !pr.spot) return;
-  const s = pr.staff, kind = pr.activity, spot = pr.spot;
-  const robot = s.kind === "terry" || s.kind === "reggie";
-  const x = Math.round(pr.x);
-  const y = Math.round(pr.y) + (isSeated(pr) ? SIT_DROP : 0) + idleBob(pr);
-  const left = pr.facing === "l";
-  const fx = left ? x + (robot ? sx(8) : sx(7)) : x - (robot ? sx(12) : sx(11));  /* the free hand */
-  const arm = armColour(s);
-  const band = s.accent || "#d1202f";
-  if (kind === "kettle" || kind === "lounge" || (kind === "sofa" && pr.salt % 2 === 0) || (kind === "darts" && spot.waiting)) {
-    p(fx, y - 66, 12, 27, arm);
-    drawMug(fx, y - 45, band);
-  } else if (kind === "darts") {
-    /* Throwing arm up, dart in hand, until it has just been thrown. */
-    const thrown = !REDUCE && pr.throwT < 0.35;
-    if (thrown) {
-      p(fx + (left ? -6 : 6), y - 90, 12, 24, arm);
-    } else {
-      p(fx, y - 102, 12, 36, arm);
-      p(fx + 3, y - 117, 3, 15, "#141414");
-      p(fx, y - 108, 9, 3, "#d1202f");
+/* A friendly face: whites, irises that follow the facing, a glint, brows, nose, mouth. */
+function drawFaceV(cx, cy, look, o) {
+  const opt = o || {};
+  const eyeDX = 7, shift = look * 2;
+  const iris = opt.eye || "#2a1c14";
+  [-1, 1].forEach(s => {
+    const ex = cx + s * eyeDX + shift;
+    if (opt.sleepy) {
+      vArc(ex, cy + 1, 3.6, Math.PI * 0.1, Math.PI * 0.9, INK, 1.8);
+      return;
     }
-  } else if (kind === "rods") {
-    const dir = left ? 1 : -1;
-    p(fx, y - 66, 12, 27, arm);
-    for (let i = 0; i < 20; i++) p(fx + 3 + dir * i, y - 42 - i, 3, 3, i < 4 ? "#3d2a1c" : "#5a5a5a");
-    p(fx + dir * 9, y - 51, 9, 9, "#c0c0c0");
-    const tipX = fx + sx(1) + dir * sx(19), tipY = y - sx(33);
-    const bob = REDUCE ? 0 : Math.round(Math.sin(animT * 2 + pr.salt) * sx(1.5));
-    p(tipX, tipY, 3, 48 + bob, "#e8e8e8");
-    p(tipX - 3, tipY + 48 + bob, 9, 6, "#d1202f");
-    p(tipX - 3, tipY + 54 + bob, 9, 3, "#f4f0e4");
-  } else if (kind === "arcade" && !spot.watch) {
-    const jig = REDUCE ? 0 : (((animT * 8 + pr.salt) | 0) % 2);
-    p(fx, y - 66 + jig, 12, 27, arm);
-  } else if (kind === "canteen") {
-    p(fx, y - 60, 12, 21, arm);
-    p(fx - 9, y - 42, 30, 6, "#f4f0e4");
-    p(fx - 9, y - 39, 30, 3, "#9a968c");
-    p(fx - 6, y - 51, 6, 9, "#f2c14e");
-    p(fx + 3, y - 54, 6, 12, "#e6b23a");
-    p(fx + 12, y - 51, 6, 9, "#f2c14e");
-  } else if (kind === "music") {
+    vEll(ex, cy, 4.2, 5, "#fffef8", INK, 1.5);
+    const ix = ex + look * 1.4 + (opt.glance ? look * 0.6 : 0), iy = cy + (opt.glance ? 1.2 : 0.4);
+    vEll(ix, iy, 2.6, 3.2, iris);
+    vEll(ix, iy, 1.3, 1.6, "#0e0a08");
+    vEll(ix - 0.9, iy - 1.4, 1, 1, "#ffffff");
+  });
+  const brow = opt.brow || INK;
+  const lift = opt.cele ? -2 : 0;
+  [-1, 1].forEach(s => {
+    const bx = cx + s * eyeDX + shift;
+    const tilt = opt.glance ? s * 1.5 : (opt.stern ? -s * 1.2 : 0);
+    vStroke([bx - 3.5, cy - 7.5 + lift + tilt, bx + 3.5, cy - 7.5 + lift - tilt], brow, 2.2);
+  });
+  const skin = opt.skin || "#e8c4a0";
+  if (!opt.noNose) vArc(cx + look * 3, cy + 5.5, 2.2, look > 0 ? -Math.PI * 0.3 : Math.PI * 0.3, look > 0 ? Math.PI * 0.6 : Math.PI * 1.3, dark(skin, 0.3), 1.6);
+  const mx = cx + look * 2, my = cy + 11;
+  if (opt.cele) {
+    vPath(() => { ctx.moveTo(mx - 5, my - 1); ctx.quadraticCurveTo(mx, my + 8, mx + 5, my - 1); ctx.closePath(); }, "#7a2420", INK, 1.5);
+    vEll(mx, my + 3, 2.4, 1.4, "#e07a7a");
+  } else if (opt.glance) {
+    vEll(mx, my + 1, 2, 2.4, "#7a2420", INK, 1.2);
+  } else if (!opt.noMouth) {
+    vArc(mx, my - 3, 4.6, Math.PI * 0.2, Math.PI * 0.8, "#7a3a30", 1.8);
+  }
+  if (!opt.noBlush) {
+    vEll(cx - 10 + shift, cy + 6, 3.2, 1.8, "rgba(230, 110, 110, 0.28)");
+    vEll(cx + 10 + shift, cy + 6, 3.2, 1.8, "rgba(230, 110, 110, 0.28)");
+  }
+}
+function drawSweat(x, y) {
+  vPath(() => { ctx.moveTo(x, y - 5); ctx.quadraticCurveTo(x + 4, y + 1, x, y + 3); ctx.quadraticCurveTo(x - 4, y + 1, x, y - 5); }, "#8ec8e6", INK, 1.2);
+}
+
+
+/* Everyone's own prop, held in the hand at (hx, hy). look is +1 facing right, -1 left. */
+function drawPropV(kind, hx, hy, look) {
+  const L = look || 1;
+  if (kind === "clipboard") {
+    ctx.save(); ctx.translate(hx + L * 6, hy - 6); ctx.rotate(L * 0.12);
+    vRect(-11, -14, 22, 28, 3, "#b8925a", INK);
+    vRect(-8, -9, 16, 20, 1, "#fbf8ee");
+    [-4, 0, 4].forEach(dy => vStroke([-5, dy, 5, dy], "#9a968c", 1.2));
+    vStroke([-5, 8, 1, 8], "#d1202f", 1.4);
+    vRect(-5, -17, 10, 6, 2, "#c0c0c0", INK, 1.5);
+    ctx.restore();
+  } else if (kind === "envelope") {
+    ctx.save(); ctx.translate(hx + L * 8, hy - 3); ctx.rotate(-L * 0.08);
+    vRect(-14, -9, 28, 18, 2, "#fbf6ea", INK);
+    vStroke([-13, -8, 0, 2, 13, -8], "#9a8a70", 1.4);
+    vRect(6, -6, 6, 6, 1, "#d1202f");
+    vStroke([-10, 5, -2, 5], "#1e3a5f", 1.4);
+    ctx.restore();
+  } else if (kind === "book") {
+    ctx.save(); ctx.translate(hx + L * 6, hy - 5); ctx.rotate(L * 0.1);
+    vRect(-10, -13, 21, 27, 2, "#f2e6d0", INK);
+    vRect(-11, -13, 19, 27, 2, "#7a1f2b", INK);
+    p(-7, -6, 12, 2, "#d4af37");
+    p(-7, -2, 9, 1.5, "#d4af37");
+    p(-9, -13, 2.5, 27, dark("#7a1f2b", 0.3));
+    ctx.restore();
+  } else if (kind === "joystick") {
+    const x = hx + L * 8, y = hy;
+    vRect(x - 13, y - 4, 26, 12, 4, "#1e1e1e", INK);
+    vEll(x + L * 7, y + 1, 2.6, 2.6, "#e23d4a");
+    vLimb([x - L * 3, y - 2, x - L * 4, y - 16], 3.2, "#c0c0c0", INK);
+    vEll(x - L * 4, y - 18, 5.5, 5.5, "#e23d4a", INK, 2);
+    vEll(x - L * 5.5, y - 20, 1.8, 1.8, "#ff8a94");
+  } else if (kind === "basket") {
+    const x = hx + L * 10, y = hy + 2;
+    vLimb([x - L * 10, y - 4, x - L * 22, y - 8], 3, "#3d2a1c", INK);
+    ["#f2c14e", "#e6b23a", "#f8d86a", "#e6b23a", "#f2c14e"].forEach((c, i) => {
+      vRect(x - 9 + i * 4, y - 15 + (i % 2) * 3, 3.4, 12, 1, c, "#a8761a", 1);
+    });
+    vRect(x - 12, y - 6, 24, 13, 3, "#c8c8c8", INK);
+    for (let i = -8; i <= 8; i += 4) vStroke([x + i, y - 5, x + i, y + 6], "#8a8a8a", 1);
+    vStroke([x - 11, y, x + 11, y], "#8a8a8a", 1);
+  } else if (kind === "spool") {
+    const x = hx + L * 8, y = hy - 4;
+    vRect(x - 9, y - 12, 18, 24, 3, "#e07a2f", INK);
+    vRect(x - 7, y - 8, 14, 16, 1, "#22409a");
+    for (let i = -6; i <= 6; i += 3) vStroke([x - 7, y + i, x + 7, y + i + 1], "#4a6ab0", 1.2);
+    vEll(x, y - 12, 9, 2.6, "#f09a5a", INK, 1.5);
+    vStroke([x + 7, y + 6, x + 12, y + 14], "#22409a", 1.6);
+  } else if (kind === "duck") {
+    const x = hx + L * 9, y = hy - 4;
+    vEll(x, y + 3, 12, 8, "#f2c14e", INK);
+    vEll(x - L * 3, y + 1, 6, 3.5, "#f8dc80");
+    vEll(x + L * 6, y - 7, 7, 7, "#f2c14e", INK);
+    vPoly([x + L * 11, y - 8, x + L * 18, y - 6, x + L * 11, y - 4], "#e07a2f", INK, 1.5);
+    vEll(x + L * 8, y - 9, 1.6, 1.8, INK);
+    vPath(() => { ctx.moveTo(x - L * 12, y + 2); ctx.lineTo(x - L * 17, y - 3); ctx.lineTo(x - L * 10, y - 1); }, "#f2c14e", INK, 1.5);
+  } else if (kind === "reel") {
+    const x = hx + L * 10, y = hy - 4;
+    vEll(x, y, 13, 13, "#d4af37", INK);
+    vEll(x, y, 10, 10, "#b8941e");
+    for (let i = 0; i < 5; i++) {
+      const a = i / 5 * Math.PI * 2 + animT * (REDUCE ? 0 : 0.6);
+      vEll(x + Math.cos(a) * 6, y + Math.sin(a) * 6, 2.4, 2.4, "#3a2a10");
+    }
+    vEll(x, y, 2.2, 2.2, "#f2e6a0", INK, 1);
+    vPath(() => { ctx.moveTo(x + L * 11, y + 6); ctx.quadraticCurveTo(x + L * 20, y + 14, x + L * 14, y + 22); }, null, "#2a2a2a", 4);
+  } else if (kind === "coin") {
+    /* Penny's coin: every few seconds it spins on the spot, then sits still again. */
+    const spin = !REDUCE && ((animT * 0.55) % 7) < 1.1;
+    const phase = spin ? Math.abs(Math.cos(animT * 10)) : 1;
+    const x = hx + L * 6, y = hy - 10;
+    vEll(x, y, Math.max(1.5, 9 * phase), 9, "#d4af37", INK, 2);
+    if (phase > 0.4) {
+      vEll(x, y, 6.5 * phase, 6.5, "#e8c650");
+      ctx.save(); ctx.translate(x, y); ctx.scale(phase, 1);
+      ctx.fillStyle = "#8a6a20"; ctx.font = "bold 11px Georgia, serif"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+      ctx.fillText("£", 0, 1);
+      ctx.restore();
+    }
+  } else if (kind === "whistle") {
+    const x = hx + L * 8, y = hy - 4;
+    vPath(() => { ctx.moveTo(hx - L * 4, hy - 24); ctx.quadraticCurveTo(x, y - 18, x, y - 4); }, null, "#c45c26", 2);
+    vRect(x - 8, y - 5, 16, 10, 5, "#d8d8d8", INK);
+    vRect(x + L * 6 - (L > 0 ? 0 : 8), y - 4, 8, 5, 1, "#c0c0c0", INK, 1.5);
+    vEll(x - L * 2, y, 2.4, 2.4, "#6a6a6a");
+  } else if (kind === "badge") {
+    const x = hx + L * 8, y = hy - 6;
+    const pts = [];
+    for (let i = 0; i < 10; i++) {
+      const a = -Math.PI / 2 + i * Math.PI / 5, r = i % 2 ? 6 : 13;
+      pts.push(x + Math.cos(a) * r, y + Math.sin(a) * r);
+    }
+    vPoly(pts, "#d0d0d0", INK);
+    vEll(x, y, 5.5, 5.5, "#1b2b1a", INK, 1.2);
+    vEll(x, y, 2.4, 2.4, "#d4af37");
+  } else if (kind === "megaphone") {
+    const x = hx + L * 2, y = hy - 6;
+    vPoly([x, y - 4, x + L * 22, y - 12, x + L * 22, y + 12, x, y + 4], "#e040fb", INK);
+    vEll(x + L * 22, y, 3.5, 12, "#b020c8", INK, 2);
+    vRect(x - (L > 0 ? 6 : 0), y - 5, 6, 10, 2, "#7a1a5c", INK, 1.8);
+    vLimb([x + L * 2, y + 4, x + L * 2, y + 12], 4, "#1a1a1a", INK);
+  } else if (kind === "teacup") {
+    const x = hx + L * 8, y = hy - 2;
+    vEll(x, y + 6, 13, 3.4, "#f4f0e4", INK, 1.8);
+    vPath(() => { ctx.moveTo(x - 9, y - 6); ctx.lineTo(x + 9, y - 6); ctx.quadraticCurveTo(x + 8, y + 5, x, y + 5); ctx.quadraticCurveTo(x - 8, y + 5, x - 9, y - 6); }, "#fbf8ee", INK);
+    vEll(x, y - 6, 9, 2.4, "#a8763a");
+    vArc(x + L * 10, y - 1, 3.6, -Math.PI / 2, Math.PI / 2, INK, 2);
+    p(x - 6, y - 2, 12, 2, "#c5a572");
+    if (!REDUCE) {
+      const s = (animT * 1.2) % 1;
+      vPath(() => { ctx.moveTo(x - 2, y - 10 - s * 6); ctx.quadraticCurveTo(x + 3, y - 16 - s * 6, x - 1, y - 22 - s * 6); }, null, "rgba(255,255,255,0.75)", 2);
+    }
+  } else if (kind === "crate") {
+    const x = hx + L * 6, y = hy + 2;
+    vEll(x - 5, y - 13, 5, 5, "#d1202f", INK, 1.5);
+    vRect(x + 1, y - 18, 8, 9, 1, "#f4f0e4", INK, 1.5);
+    vRect(x - 15, y - 9, 30, 20, 2, "#c4a574", INK);
+    p(x - 13, y - 4, 26, 2.5, "#8a6a40");
+    p(x - 13, y + 3, 26, 2.5, "#8a6a40");
+    vStroke([x - 13, y - 7, x + 13, y + 9], "#a8875a", 2);
+  } else if (kind === "grant") {
+    const x = hx + L * 8, y = hy - 6;
+    ctx.save(); ctx.translate(x, y); ctx.rotate(-L * 0.1);
+    vRect(-13, -10, 26, 18, 2, "#fbf6ea", INK);
+    [-5, -1, 3].forEach(dy => vStroke([-9, dy, 4, dy], "#9a968c", 1.2));
+    vEll(8, 4, 4.5, 4.5, "#d4af37", INK, 1.5);
+    vPoly([6, 7, 4, 13, 8, 10, 12, 13, 10, 7], "#4c1d95");
+    ctx.restore();
+  } else if (kind === "trophy") {
+    const x = hx + L * 8, y = hy - 6;
+    vRect(x - 13, y - 11, 26, 20, 3, "#d4af37", INK);
+    vRect(x - 10, y - 8, 20, 14, 2, "#f2e6a0");
+    vPoly([x - 3, y - 5, x - 3, y + 3, x + 5, y - 1], "#c81e3a");
+    vRect(x - 4, y + 9, 8, 4, 1, "#8a6a20", INK, 1.5);
+  } else if (kind === "tablet") {
+    /* Kraken Keith's tablet: the chart flips from a green rise to a red dip. */
+    const up = REDUCE || ((animT * 0.35 | 0) % 2 === 0);
+    const x = hx + L * 8, y = hy - 6;
+    vRect(x - 14, y - 12, 28, 24, 3, "#1a1a1a", INK);
+    vRect(x - 11, y - 9, 22, 18, 1, up ? "#0e1a14" : "#1a0e0e");
+    const col = up ? "#3dff7a" : "#e0303a";
+    const pts = up ? [0, 6, 4, 3, 8, 4, 12, -1, 16, 0, 20, -6] : [0, -6, 4, -2, 8, -3, 12, 2, 16, 1, 20, 6];
+    const line = [];
+    for (let i = 0; i < pts.length; i += 2) line.push(x - 10 + pts[i], y + pts[i + 1]);
+    vStroke(line, col, 2);
+    vEll(line[line.length - 2], line[line.length - 1], 1.8, 1.8, col);
+  } else if (kind === "quill") {
+    const x = hx + L * 3, y = hy;
+    vPath(() => {
+      ctx.moveTo(x, y + 6);
+      ctx.quadraticCurveTo(x + L * 14, y - 12, x + L * 6, y - 34);
+      ctx.quadraticCurveTo(x - L * 4, y - 16, x, y + 6);
+    }, "#fbf8f0", INK, 2);
+    for (let i = 0; i < 4; i++) vStroke([x + L * (2 + i), y - 6 - i * 6, x + L * (8 + i), y - 10 - i * 6], "#d8d0c0", 1.2);
+    vStroke([x, y + 6, x - L * 2, y + 14], "#3d2a1c", 2.4);
+  }
+}
+
+/* The hats, headphones, clouds and birds some people wear. */
+function drawHeadgearV(s, cx, cy, look, back) {
+  const kind = s.prop;
+  if (kind === "hat") {
+    /* Foreman George's hard hat. */
+    vEll(cx, cy - 12, 22, 4.5, dark(s.accent, 0.1), INK);
+    vPath(() => { ctx.moveTo(cx - 17, cy - 12); ctx.quadraticCurveTo(cx - 17, cy - 32, cx, cy - 32); ctx.quadraticCurveTo(cx + 17, cy - 32, cx + 17, cy - 12); ctx.closePath(); }, s.accent, INK);
+    vRect(cx - 3, cy - 33, 6, 20, 2, lite(s.accent, 0.25));
+    vEll(cx - 8, cy - 25, 4, 2.6, "rgba(255,255,255,0.45)");
+  } else if (kind === "headphones") {
+    vArc(cx, cy - 2, 19, Math.PI * 1.05, Math.PI * 1.95, "#1a1a1a", 4);
+    if (!back || true) {
+      vRect(cx - 22, cy - 6, 8, 14, 3, s.accent, INK);
+      vRect(cx + 14, cy - 6, 8, 14, 3, s.accent, INK);
+    }
+  } else if (kind === "cloud") {
+    const t = REDUCE ? 0 : animT;
+    const bx = cx - look * 4, by = cy - 40 - Math.sin(t * 1.3) * 2;
+    [[-12, 2, 8], [-3, -4, 10], [9, 0, 8], [2, 5, 7]].forEach(([dx, dy, r]) => vEll(bx + dx, by + dy, r, r * 0.85, INK));
+    [[-12, 2, 6.5], [-3, -4, 8.5], [9, 0, 6.5], [2, 5, 5.5]].forEach(([dx, dy, r]) => vEll(bx + dx, by + dy, r, r * 0.85, s.accent));
+    vEll(bx - 5, by - 6, 3, 2, "#ffffff");
+  } else if (kind === "bird") {
+    const bx = cx + (back ? 8 : look * 10), by = cy - 26;
+    vEll(bx, by, 8, 6, s.accent, INK, 2);
+    vEll(bx + look * 6, by - 5, 5, 5, s.accent, INK, 2);
+    vPoly([bx + look * 10, by - 6, bx + look * 15, by - 4, bx + look * 10, by - 3], "#e07a2f", INK, 1.2);
+    vEll(bx + look * 7, by - 6, 1.2, 1.3, INK);
+    vPath(() => { ctx.moveTo(bx - look * 7, by); ctx.lineTo(bx - look * 13, by - 4); ctx.lineTo(bx - look * 8, by + 3); }, lite(s.accent, 0.1), INK, 1.5);
+    vStroke([bx - 2, by + 6, bx - 2, by + 9], "#e07a2f", 1.5);
+    vStroke([bx + 2, by + 6, bx + 2, by + 9], "#e07a2f", 1.5);
+  }
+}
+
+
+/* Each floor specialist's look: hair, clothes, and the odd extra. Colours come from STAFF. */
+const LOOKS = {
+  boris: { hair: "side", outfit: "jacket", tie: "#a8323a" },
+  tweety: { hair: "spiky", outfit: "hoodie" },
+  percy: { hair: "side", outfit: "cardigan", glasses: true },
+  george: { hair: "short", outfit: "hivis" },
+  archie: { hair: "quiff", outfit: "tee", stripe: true },
+  brian: { hair: "curly", outfit: "tee" },
+  clive: { hair: "crew", outfit: "hoodie", stubble: true },
+  frank: { hair: "short", outfit: "chef", tache: true },
+  filament: { hair: "ponytail", outfit: "overall", goggles: true },
+  oddly: { hair: "messy", outfit: "waistcoat" },
+  rupert: { hair: "swept", outfit: "turtleneck" },
+  penny: { hair: "bun", outfit: "blouse", glasses: true, brooch: true },
+  sheila: { hair: "ponytail", outfit: "tabard" },
+  sarge: { hair: "crew", outfit: "uniform", stern: true },
+  mona: { hair: "bob", outfit: "blouse" },
+  hettie: { hair: "bun", outfit: "cardigan" },
+  stockley: { hair: "short", outfit: "coat", beard: true },
+  grant: { hair: "side", outfit: "jacket", tie: null },
+  vinnie: { hair: "quiff", outfit: "tee", logo: true }
+};
+
+function hairBackV(style, cx, cy, col, look, back) {
+  if (style === "bob") {
+    vRect(cx - 19, cy - 12, 38, 30, 10, col, INK);
+  } else if (style === "ponytail") {
+    const px = back ? cx : cx - look * 15;
+    vEllRot(px, cy + 8, 6, 14, back ? 0 : look * 0.35, col, INK);
+    vEll(px, cy - 4, 3.5, 2.5, "#d1202f", INK, 1.2);
+  } else if (style === "bun") {
+    vEll(cx - (back ? 0 : look * 3), cy - 20, 8, 7, col, INK);
+  }
+}
+function hairFrontV(style, cx, cy, col, look) {
+  const top = () => { ctx.ellipse(cx, cy - 1, 17.5, 19, 0, Math.PI, Math.PI * 2); };
+  const hi = lite(col, 0.22);
+  if (style === "crew") {
+    vPath(() => { ctx.ellipse(cx, cy - 2, 17, 17.5, 0, Math.PI * 1.05, Math.PI * 1.95); ctx.quadraticCurveTo(cx, cy - 15, cx - 16.5, cy - 7); }, col, INK, 2);
+    for (let i = -10; i <= 10; i += 4) q(cx + i, cy - 14 + Math.abs(i) * 0.25, 1.5, 1.5, dark(col, 0.2));
+    return;
+  }
+  if (style === "curly") {
+    [[-15, -6], [-11, -14], [-4, -18], [4, -18], [11, -14], [15, -6], [0, -10], [-8, -9], [8, -9]].forEach(([dx, dy]) => vEll(cx + dx, cy + dy, 6.5, 6.5, col, INK, 2));
+    [[-11, -14], [-4, -18], [4, -18], [11, -14], [0, -10], [-8, -9], [8, -9]].forEach(([dx, dy]) => vEll(cx + dx, cy + dy, 5, 5, col));
+    vEll(cx - 6, cy - 16, 2, 1.4, hi);
+    return;
+  }
+  /* the cap of hair over the crown */
+  vPath(() => {
+    ctx.moveTo(cx - 17.5, cy - 1);
+    top();
+    if (style === "side" || style === "swept") {
+      ctx.lineTo(cx + 17.5, cy + (look > 0 ? -3 : 3));
+      ctx.quadraticCurveTo(cx + look * 4, cy - 18, cx - 17.5, cy + (look > 0 ? 3 : -3));
+    } else if (style === "bob") {
+      ctx.lineTo(cx + 17.5, cy - 7);
+      ctx.lineTo(cx - 17.5, cy - 7);
+    } else {
+      ctx.lineTo(cx + 17.5, cy - 3);
+      ctx.quadraticCurveTo(cx, cy - 13, cx - 17.5, cy - 3);
+    }
+    ctx.closePath();
+  }, col, INK, 2);
+  if (style === "bob") {
+    vRect(cx - 19, cy - 6, 6, 20, 3, col);
+    vRect(cx + 13, cy - 6, 6, 20, 3, col);
+    vStroke([cx - 19, cy - 2, cx - 19, cy + 14], INK, 2);
+    vStroke([cx + 19, cy - 2, cx + 19, cy + 14], INK, 2);
+  }
+  if (style === "quiff") vEllRot(cx + look * 5, cy - 18, 11, 6, -look * 0.3, col, INK, 2);
+  if (style === "spiky") {
+    for (let i = -2; i <= 2; i++) vPoly([cx + i * 7 - 4, cy - 14, cx + i * 7 + look * 3, cy - 26 + Math.abs(i) * 2, cx + i * 7 + 4, cy - 14], col, INK, 1.8);
+    vPath(top, col);
+  }
+  if (style === "messy") {
+    vStroke([cx - 4, cy - 19, cx - 9, cy - 25], col, 3);
+    vStroke([cx + 3, cy - 19, cx + 6, cy - 26], col, 3);
+    vStroke([cx + 10, cy - 15, cx + 16, cy - 19], col, 3);
+  }
+  if (style === "swept") vPath(() => { ctx.moveTo(cx - look * 14, cy - 12); ctx.quadraticCurveTo(cx, cy - 22, cx + look * 16, cy - 8); }, null, dark(col, 0.25), 1.6);
+  vEllRot(cx - 6, cy - 13, 5, 2, -0.3, hi);
+}
+function hairBackOfHeadV(style, cx, cy, col) {
+  /* Seen from behind: hair covers most of the head. */
+  if (style === "crew") {
+    vPath(() => { ctx.ellipse(cx, cy, 16.5, 17.5, 0, Math.PI * 0.95, Math.PI * 2.05); ctx.closePath(); }, lite(col, 0.08), INK, 2);
+  } else if (style === "bob") {
+    vRect(cx - 19, cy - 18, 38, 34, 12, col, INK);
+  } else if (style === "curly") {
+    [[-12, -8], [0, -14], [12, -8], [-13, 4], [13, 4], [-6, 6], [6, 6], [0, -2]].forEach(([dx, dy]) => vEll(cx + dx, cy + dy, 7.5, 7.5, col, INK, 2));
+    [[-12, -8], [0, -14], [12, -8], [-6, 6], [6, 6], [0, -2]].forEach(([dx, dy]) => vEll(cx + dx, cy + dy, 6, 6, col));
+  } else {
+    vPath(() => { ctx.ellipse(cx, cy - 1, 17.5, 18.5, 0, Math.PI * 0.9, Math.PI * 2.1); ctx.quadraticCurveTo(cx, cy + 14, cx - 17, cy + 5); ctx.closePath(); }, col, INK, 2);
+  }
+  vEllRot(cx - 6, cy - 9, 6, 2.5, -0.4, lite(col, 0.2));
+}
+
+function outfitDetailsV(look, s, x, top, bottom, wt) {
+  const o = look.outfit, body = s.body, acc = s.accent;
+  const shirt = "#fbf8ee";
+  if (o === "jacket" || o === "hivis" || o === "coat") {
+    vPoly([x - 7, top, x + 7, top, x, top + 19], shirt, INK, 1.5);
+    if (look.tie !== null) {
+      const tie = look.tie || (s.id === "grant" ? acc : dark(body, 0.35));
+      vPoly([x - 2.5, top + 3, x + 2.5, top + 3, x + 3.5, top + 18, x, top + 22, x - 3.5, top + 18], tie, INK, 1.2);
+    }
+    vStroke([x - 7, top, x - 3, top + 22], dark(body, 0.35), 2);
+    vStroke([x + 7, top, x + 3, top + 22], dark(body, 0.35), 2);
+    q(x + 2, top + 27, 3, 3, dark(body, 0.4));
+    q(x + 2, top + 34, 3, 3, dark(body, 0.4));
+    if (o === "hivis") {
+      q(x - wt, top + 24, wt * 2, 5, acc);
+      q(x - wt, top + 26, wt * 2, 1.4, "#e8e8e8");
+      q(x - wt, top + 34, wt * 2, 5, acc);
+      q(x - wt, top + 36, wt * 2, 1.4, "#e8e8e8");
+    }
+    if (o === "coat") {
+      vRect(x - wt + 4, top + 14, 8, 8, 1, dark(body, 0.1), INK, 1.2);
+      q(x - wt + 6, top + 9, 1.6, 7, "#22409a");
+    }
+  } else if (o === "hoodie") {
+    vPath(() => { ctx.moveTo(x - 12, top + 1); ctx.quadraticCurveTo(x, top + 12, x + 12, top + 1); }, dark(body, 0.18), INK, 1.5);
+    vStroke([x - 4, top + 6, x - 5, top + 18], "#f4f0e4", 1.6);
+    vStroke([x + 4, top + 6, x + 5, top + 18], "#f4f0e4", 1.6);
+    vRect(x - 11, bottom - 16, 22, 10, 3, dark(body, 0.1), INK, 1.4);
+  } else if (o === "cardigan") {
+    vPoly([x - 8, top, x + 8, top, x, top + 16], shirt, INK, 1.5);
+    vStroke([x, top + 16, x, bottom], dark(body, 0.35), 1.6);
+    [22, 29, 36].forEach(dy => vEll(x + 3, top + dy, 1.6, 1.6, lite(body, 0.4)));
+  } else if (o === "tee") {
+    vEll(x, top, 7, 4, s.skin, INK, 1.5);
+    if (look.stripe) q(x - wt, top + 17, wt * 2, 5, acc);
+    if (look.logo) {
+      vRect(x - 8, top + 13, 16, 12, 3, acc, INK, 1.2);
+      vPoly([x - 2, top + 16, x - 2, top + 22, x + 4, top + 19], "#ffffff");
+    }
+  } else if (o === "chef") {
+    vPoly([x - 7, top, x + 7, top, x, top + 9], s.skin);
+    vStroke([x - 7, top, x - 1, top + 12, x + 7, top], dark(body, 0.25), 1.6);
+    [-5, 5].forEach(dx => [16, 24].forEach(dy => vEll(x + dx, top + dy, 1.6, 1.6, "#9a968c")));
+    vRect(x - wt + 3, top + 22, wt * 2 - 6, bottom - top - 22, 2, acc, INK, 1.4);
+    vStroke([x - wt + 4, top + 22, x - 6, top + 4], acc, 2);
+    vStroke([x + wt - 4, top + 22, x + 6, top + 4], acc, 2);
+  } else if (o === "overall") {
+    vEll(x, top, 7, 4, "#f4f0e4", INK, 1.5);
+    vRect(x - 11, top + 10, 22, bottom - top - 10, 3, dark(body, 0.1), INK, 1.4);
+    vStroke([x - 9, top + 10, x - 13, top], dark(body, 0.25), 3);
+    vStroke([x + 9, top + 10, x + 13, top], dark(body, 0.25), 3);
+    vRect(x - 5, top + 16, 10, 8, 1, acc, INK, 1.2);
+  } else if (o === "waistcoat") {
+    vPoly([x - 10, top, x + 10, top, x + 5, top + 26, x - 5, top + 26], shirt, INK, 1.5);
+    vPoly([x - 2, top + 2, x + 2, top + 2, x + 2.5, top + 14, x, top + 17, x - 2.5, top + 14], acc, INK, 1);
+    [30, 36].forEach(dy => vEll(x, top + dy, 1.8, 1.8, acc, INK, 1));
+  } else if (o === "turtleneck") {
+    vRect(x - 9, top - 4, 18, 8, 3, lite(body, 0.12), INK, 1.5);
+    vStroke([x - 7, top, x + 7, top], dark(body, 0.3), 1);
+  } else if (o === "blouse") {
+    vPoly([x - 8, top, x, top + 8, x - 2, top + 11, x - 10, top + 4], "#fbf8ee", INK, 1.2);
+    vPoly([x + 8, top, x, top + 8, x + 2, top + 11, x + 10, top + 4], "#fbf8ee", INK, 1.2);
+    if (look.brooch) vEll(x - 9, top + 16, 2.8, 2.8, acc, INK, 1);
+    [16, 24, 32].forEach(dy => vEll(x, top + dy, 1.4, 1.4, lite(body, 0.45)));
+  } else if (o === "tabard") {
+    vEll(x, top, 7, 4, s.skin, INK, 1.5);
+    q(x - wt, top + 18, wt * 2, 4, acc);
+    q(x - wt, top + 28, wt * 2, 4, acc);
+  } else if (o === "uniform") {
+    vEll(x, top, 6, 3.5, "#d8d4c8", INK, 1.2);
+    [-1, 1].forEach(s2 => {
+      vRect(x + s2 * 9 - 5, top + 10, 10, 8, 1, dark(body, 0.12), INK, 1.2);
+      q(x + s2 * (wt - 6) - 4, top + 1, 8, 3, acc);
+    });
+    [14, 22, 30, 38].forEach(dy => vEll(x, top + dy, 1.6, 1.6, acc));
+  }
+}
+
+function facialExtrasV(look, s, cx, ey, lk) {
+  const shift = lk * 2;
+  if (look.tache) vPath(() => { ctx.moveTo(cx + shift - 7, ey + 9); ctx.quadraticCurveTo(cx + shift, ey + 5, cx + shift + 7, ey + 9); ctx.quadraticCurveTo(cx + shift, ey + 8, cx + shift - 7, ey + 9); }, s.hair, INK, 1.2);
+  if (look.beard) vPath(() => { ctx.moveTo(cx - 15, ey + 1); ctx.quadraticCurveTo(cx - 13, ey + 19, cx, ey + 20); ctx.quadraticCurveTo(cx + 13, ey + 19, cx + 15, ey + 1); ctx.quadraticCurveTo(cx + 10, ey + 12, cx + shift, ey + 13); ctx.quadraticCurveTo(cx - 10, ey + 12, cx - 15, ey + 1); }, s.hair, INK, 1.5);
+  if (look.stubble) for (let i = -9; i <= 9; i += 3) q(cx + i + shift, ey + 13 + Math.abs(i) * -0.2, 1.2, 1.2, "rgba(60, 60, 60, 0.45)");
+  if (look.glasses) {
+    [-1, 1].forEach(sd => vEll(cx + sd * 7 + shift, ey, 5.6, 5.4, "rgba(220, 235, 245, 0.18)", INK, 1.6));
+    vStroke([cx - 1.4 + shift, ey - 1, cx + 1.4 + shift, ey - 1], INK, 1.6);
+  }
+  if (look.goggles) {
+    vStroke([cx - 17, ey - 12, cx + 17, ey - 12], "#2a2a2a", 3);
+    [-1, 1].forEach(sd => vEll(cx + sd * 7 + shift, ey - 12, 5.2, 4, "#8ec8e6", INK, 1.6));
+  }
+}
+
+
+const HELD = ["clipboard", "envelope", "book", "joystick", "basket", "spool", "duck", "reel", "coin", "whistle", "badge", "megaphone", "teacup", "crate", "grant", "trophy", "quill", "tablet"];
+
+/* Whatever someone is up to at their idle spot decides where their free hand goes.
+   Their own icon and prop are never changed; this only adds a mug, a rod, a dart... */
+function activityPlan(pr, P, by) {
+  if (pr.phase !== "idle" || pr.target || !pr.activity || !pr.spot) return null;
+  const kind = pr.activity, spot = pr.spot, L = P.look, x = P.x;
+  if (kind === "kettle" || kind === "lounge" || (kind === "sofa" && pr.salt % 2 === 0) || (kind === "darts" && spot.waiting)) {
+    return { kind: "mug", hx: x - L * 12, hy: by - 58 };
+  }
+  if (kind === "darts") {
+    const thrown = !REDUCE && pr.throwT < 0.35;
+    return thrown ? { kind: "thrown", hx: x + L * 18, hy: by - 86 } : { kind: "dart", hx: x - L * 12, hy: by - 104 };
+  }
+  if (kind === "rods") return { kind: "rod", hx: x - L * 20, hy: by - 56 };
+  if (kind === "arcade" && !spot.watch) {
+    const jig = REDUCE ? 0 : (((animT * 8 + pr.salt) | 0) % 2) * 3;
+    return { kind: "arcade", hx: x + L * 8, hy: by - 62 + jig };
+  }
+  if (kind === "canteen") return { kind: "tray", hx: x - L * 6, hy: by - 54 };
+  if (kind === "music") {
     if (spot.guitar) {
-      /* Air guitar, with an actual guitar, which slightly ruins the joke. */
-      p(x - 24, y - 54, 48, 9, "#6b3d12");
-      box(x - 36, y - 63, 27, 27, "#7a1f2b", "#141414");
-      p(x - 27, y - 54, 9, 9, "#141414");
       const strum = REDUCE ? 0 : (((animT * 6) | 0) % 2);
-      p(x - 18, y - 48 - strum * 6, 12, 9, arm);
+      return { kind: "guitar", hx: x - L * 2, hy: by - 50 - strum * 4, x: x, by: by };
+    }
+    return { kind: "notes", x: x, by: by };
+  }
+  return null;
+}
+
+function drawMugV(cx, cy, band, L) {
+  vRect(cx - 7, cy - 8, 14, 15, 3, "#f4f0e4", INK, 2);
+  q(cx - 6, cy - 3, 12, 4, band);
+  vArc(cx + L * 8, cy, 3.6, L > 0 ? -Math.PI / 2 : Math.PI / 2, L > 0 ? Math.PI / 2 : Math.PI * 1.5, INK, 2);
+  vEll(cx, cy - 8, 6, 1.6, "#6b3d12");
+  if (!REDUCE) {
+    const s = (animT * 1.4 + cx * 0.07) % 1;
+    vPath(() => { ctx.moveTo(cx - 1, cy - 11 - s * 8); ctx.quadraticCurveTo(cx + 4, cy - 16 - s * 8, cx, cy - 22 - s * 8); }, null, "rgba(255,255,255,0.7)", 2);
+  }
+}
+function drawNoteV(x, y, col) {
+  vEll(x, y, 4, 3, col, INK, 1.2);
+  vStroke([x + 3.5, y, x + 3.5, y - 14], INK, 1.6);
+  vStroke([x + 3.5, y - 14, x + 9, y - 10], INK, 1.6);
+}
+
+function drawActivity(pr) {
+  const a = pr._act;
+  if (!a) return;
+  charBegin();
+  const s = pr.staff, L = pr.facing === "l" ? -1 : 1;
+  const band = s.accent || "#d1202f";
+  if (a.kind === "mug") {
+    drawMugV(a.hx - L * 9, a.hy - 2, band, L);
+    drawHandV(a.hx, a.hy, armColour(s));
+  } else if (a.kind === "dart") {
+    vStroke([a.hx - L * 4, a.hy + 2, a.hx + L * 12, a.hy - 6], "#3a3a3a", 2.4);
+    vPoly([a.hx + L * 12, a.hy - 6, a.hx + L * 18, a.hy - 9, a.hx + L * 13, a.hy - 4], "#c0c0c0");
+    vPoly([a.hx - L * 4, a.hy + 2, a.hx - L * 11, a.hy - 2, a.hx - L * 9, a.hy + 6], "#d1202f", INK, 1);
+  } else if (a.kind === "rod") {
+    const tipX = a.hx - L * 58, tipY = a.hy - 66;
+    vStroke([a.hx + L * 4, a.hy + 8, a.hx, a.hy], "#3d2a1c", 4);
+    vStroke([a.hx, a.hy, tipX, tipY], "#5a5a5a", 2.4);
+    vEll(a.hx - L * 6, a.hy - 4, 4, 4, "#c0c0c0", INK, 1.5);
+    const bob = REDUCE ? 0 : Math.sin(animT * 2 + pr.salt) * 4;
+    vStroke([tipX, tipY, tipX, tipY + 48 + bob], "rgba(240,240,240,0.9)", 1.2);
+    vEll(tipX, tipY + 52 + bob, 4, 4.5, "#d1202f", INK, 1.2);
+    q(tipX - 4, tipY + 52 + bob, 8, 2.5, "#f4f0e4");
+    drawHandV(a.hx, a.hy, armColour(s));
+  } else if (a.kind === "tray") {
+    vRect(a.hx - 20, a.hy - 5, 40, 6, 2, "#d8d4c8", INK, 1.8);
+    ["#f2c14e", "#e6b23a", "#f8d86a", "#e6b23a", "#f2c14e", "#f8d86a"].forEach((c, i) => q(a.hx - 14 + i * 3.4, a.hy - 13 + (i % 3) * 2, 3, 8, c));
+    vEll(a.hx + 11, a.hy - 7, 4, 2.4, "#d1202f");
+    drawHandV(a.hx, a.hy + 2, armColour(s));
+  } else if (a.kind === "guitar" || a.kind === "notes") {
+    if (a.kind === "guitar") {
+      const gx = a.x - L * 4, gy = a.by - 50;
+      vStroke([gx, gy, a.x + L * 34, a.by - 74], "#6b3d12", 5);
+      vRect(a.x + L * 34 - 4, a.by - 82, 8, 10, 2, "#3d2a1c", INK, 1.5);
+      vEll(gx - L * 6, gy + 4, 12, 10, "#7a1f2b", INK);
+      vEll(gx + L * 6, gy - 2, 9, 8, "#7a1f2b", INK);
+      vEll(gx - L * 6, gy + 4, 11, 9, "#7a1f2b");
+      vEll(gx, gy + 1, 3.6, 3.6, "#1a1010");
+      drawHandV(a.hx, a.hy, armColour(s));
     }
     if (!REDUCE) {
       const t = (animT * 0.7 + pr.salt * 0.37) % 1.6;
       if (t < 1.2) {
-        const nx = x + sx(6) + Math.round(Math.sin(t * 5) * sx(2)), ny = Math.round(y - sx(46) - t * sx(12));
-        const col = t < 0.9 ? "#f2e6a0" : "#c4b880";
-        p(nx, ny, 9, 6, col);
-        p(nx + 6, ny - 18, 3, 18, col);
-        p(nx + 6, ny - 18, 9, 3, col);
+        const nx = a.x + sx(6) + Math.sin(t * 5) * sx(2), ny = a.by - sx(46) - t * sx(12);
+        drawNoteV(nx, ny, t < 0.9 ? "#f2e6a0" : "#c4b880");
       }
     }
   }
+  charEnd();
 }
 
 function drawBubble(pr) {
@@ -3200,149 +3206,543 @@ function drawBubble(pr) {
   drawLabel(bx + w / 2, top - h + 3, text, "#141414");
 }
 
-function drawArthur(c) {
-  const asleep = c.spot && c.spot.clock && !c.target;
-  const bob = (!REDUCE && c.target && c.wait <= 0) ? (((c.walkT * 7 | 0) % 2) ? S : 0) : 0;
-  const x = Math.round(c.x), y = Math.round(c.y + bob);
-  if (asleep) {
-    /* A Ragdoll loaf, under the clock. Eyes shut, tail wrapped round. */
-    shadow(x - 36, y + 6, 72, 15);
-    const cream = "#e8d6b8", hi = "#f4efe4", point = "#6b5348", pointD = "#4a3a34";
-    p(x - 39, y - 24, 78, 33, cream);
-    p(x - 33, y - 30, 66, 15, hi);
-    p(x - 24, y - 21, 48, 21, "#f4efe8");
-    p(x - 24, y - 48, 42, 27, cream);
-    p(x - 21, y - 51, 15, 15, point);
-    p(x + 6, y - 51, 15, 15, point);
-    p(x - 21, y - 39, 36, 18, point);
-    p(x - 18, y - 30, 30, 9, cream);
-    p(x - 15, y - 39, 12, 3, "#3d2a1c");
-    p(x + 3, y - 39, 12, 3, "#3d2a1c");
-    p(x - 9, y - 27, 12, 6, "#c48a8a");
-    p(x + 24, y - 18, 30, 18, point);
-    p(x + 42, y - 9, 21, 18, pointD);
-    p(x - 33, y + 3, 24, 9, cream);
-    p(x + 9, y + 3, 24, 9, cream);
-    if (!REDUCE && ((animT * 0.8) % 2) < 1.2) {
-      p(x + 24, y - 66, 3, 6, "#9a968c");
-      p(x + 30, y - 78, 3, 9, "#9a968c");
-      p(x + 36, y - 69, 3, 6, "#9a968c");
+function drawPerson(pr) {
+  const s = pr.staff;
+  pr._act = null;
+  charBegin();
+  if (s.kind === "terry" || s.kind === "reggie") drawRobot(pr);
+  else if (s.kind === "kenneth") drawKenneth(pr);
+  else if (s.kind === "keith") drawKeith(pr);
+  else drawSpecialist(pr);
+  charEnd();
+}
+
+/* Work out both hands: walking swing, the prop hand, an activity, or both up to celebrate. */
+function handsFor(pr, P, by, held, act, opts) {
+  const o = opts || {};
+  const x = P.x, L = P.look, reach = o.reach || 19, rest = o.rest || 46;
+  const hands = {};
+  [-1, 1].forEach(sd => {
+    const k = -sd * P.swing;
+    let hx = x + sd * reach + L * k * 8, hy = by - rest + Math.abs(k) * 1.5;
+    if (sd === L && held) { hx = x + L * (reach + 2); hy = by - rest - 6; }
+    if (sd === -L && act && act.hx !== undefined) { hx = act.hx; hy = act.hy; }
+    if (P.cele) { hx = x + sd * (reach + 5); hy = by - (o.up || 116) - Math.min(P.jump, 12); }
+    hands[sd] = [hx, hy];
+  });
+  return hands;
+}
+
+function drawSpecialist(pr) {
+  const s = pr.staff, look = LOOKS[s.id] || { hair: "short", outfit: "tee" };
+  const P = poseOf(pr);
+  const x = P.x, L = P.look;
+  vShadow(x, P.feet, 20);
+  if (P.work) { drawSpecialistBack(pr, P, s, look); return; }
+  let by = P.body;
+  const casual = look.outfit === "tee" || look.outfit === "hoodie";
+  const trouser = casual ? "#34405a" : (s.id === "frank" ? "#2a2a34" : dark(s.body, 0.45));
+  const shoe = s.id === "sheila" || s.id === "george" ? "#3a2a1a" : "#2a1c14";
+  drawLegsV(P, trouser, shoe);
+  if (P.sit) by += SIT_DROP;
+  const hy = by - 100;
+  hairBackV(look.hair, x, hy, s.hair, L, false);
+  vRect(x - 5, by - 88, 10, 10, 3, dark(s.skin, 0.12), INK, 1.5);
+  drawTorsoV(x, by - 80, by - 36, 17, 15, s.body, () => outfitDetailsV(look, s, x, by - 80, by - 36, 17));
+  vEll(x - 16, hy + 2, 3.5, 5, s.skin, INK, 2);
+  vEll(x + 16, hy + 2, 3.5, 5, s.skin, INK, 2);
+  vEll(x, hy, 16, 17, s.skin, INK);
+  vEll(x - 5, hy - 7, 6, 3.5, lite(s.skin, 0.25));
+  vEll(x + 6, hy + 9, 7, 4, dark(s.skin, 0.05));
+  if (s.prop !== "hat") hairFrontV(look.hair, x, hy, s.hair, L);
+  else vPath(() => { ctx.moveTo(x - 16, hy - 4); ctx.quadraticCurveTo(x, hy - 9, x + 16, hy - 4); ctx.lineTo(x + 16, hy - 10); ctx.lineTo(x - 16, hy - 10); ctx.closePath(); }, s.hair);
+  drawFaceV(x, hy + 2, L, { skin: s.skin, brow: dark(s.hair, 0.2), cele: P.cele, glance: P.glance, stern: look.stern });
+  facialExtrasV(look, s, x, hy + 2, L);
+  drawHeadgearV(s, x, hy, L, false);
+  if (P.glance) drawSweat(x + (P.left ? -22 : 22), hy - 14);
+  const act = activityPlan(pr, P, by);
+  const held = HELD.includes(s.prop);
+  const hands = handsFor(pr, P, by, held, act);
+  const shortSleeve = look.outfit === "tee";
+  [-L, L].forEach(sd => {
+    const hx = hands[sd][0], hy2 = hands[sd][1];
+    const shx = x + sd * 14, shy = by - 76;
+    const holding = sd === L && held;
+    if (shortSleeve) {
+      drawArmV(shx, shy, hx, hy2, s.skin, s.skin, { noHand: holding });
+      vLimb([shx, shy, shx + (hx - shx) * 0.38, shy + (hy2 - shy) * 0.38], 10, s.body, INK);
+    } else {
+      drawArmV(shx, shy, hx, hy2, s.body, s.skin, { noHand: holding, cuff: look.outfit === "chef" ? "#fbf8ee" : null });
     }
+    if (holding) {
+      drawPropV(s.prop, hx, hy2, L);
+      drawHandV(hx, hy2, s.skin, true);
+    }
+  });
+  pr._act = act;
+}
+
+function drawSpecialistBack(pr, P, s, look) {
+  const x = P.x, by = P.y, L = P.look;
+  const tap = (!REDUCE && ((pr.typeT * 6 | 0) % 2)) ? 3 : 0;
+  [-1, 1].forEach(sd => drawArmV(x + sd * 13, by - 38, x + sd * 25, by - 30 + (sd > 0 ? tap : 0), s.body, s.skin, { bend: 2 }));
+  drawTorsoV(x, by - 46, by - 2, 18, 16, s.body, () => {
+    if (look.outfit === "hoodie") vEll(x, by - 40, 13, 9, dark(s.body, 0.16), INK, 1.5);
+    else if (look.outfit === "chef") q(x - 16, by - 30, 32, 3, s.accent);
+    else if (look.outfit === "overall" || look.outfit === "hivis" || look.outfit === "tabard") {
+      q(x - 18, by - 26, 36, 4, s.accent);
+    }
+    vStroke([x, by - 40, x, by - 6], dark(s.body, 0.22), 1.4);
+  });
+  vRect(x - 5, by - 52, 10, 9, 3, dark(s.skin, 0.12), INK, 1.5);
+  vEll(x - 16, by - 62, 3.5, 5, s.skin, INK, 2);
+  vEll(x + 16, by - 62, 3.5, 5, s.skin, INK, 2);
+  vEll(x, by - 64, 16, 17, s.skin, INK);
+  if (s.prop === "hat") {
+    vPath(() => { ctx.moveTo(x - 16, by - 72); ctx.quadraticCurveTo(x, by - 60, x + 16, by - 72); ctx.lineTo(x + 16, by - 77); ctx.lineTo(x - 16, by - 77); ctx.closePath(); }, s.hair);
+  } else {
+    hairBackOfHeadV(look.hair, x, by - 64, s.hair);
+  }
+  if (look.hair === "ponytail") { vEll(x, by - 46, 6, 13, s.hair, INK, 2); vEll(x, by - 58, 4, 2.6, "#d1202f", INK, 1); }
+  if (look.hair === "bun") vEll(x, by - 82, 8, 7, s.hair, INK, 2);
+  if (look.goggles) vStroke([x - 16, by - 70, x + 16, by - 70], "#2a2a2a", 3);
+  drawHeadgearV(s, x, by - 64, L, true);
+}
+
+
+/* ---------- Kenneth: cream metal head, flat cap with a red feather, round glasses ---------- */
+function drawKenCap(x, top, L, back) {
+  /* The feather sweeps back and low, so it stays clear of his nameplate. */
+  const fb = back ? 10 : -L * 13, dir = back ? 1 : -L;
+  vPath(() => {
+    ctx.moveTo(x + fb, top - 1);
+    ctx.quadraticCurveTo(x + fb + dir * 13, top - (back ? 14 : 15), x + fb + dir * (back ? 20 : 23), top - (back ? 10 : 11));
+    ctx.quadraticCurveTo(x + fb + dir * 11, top - 2, x + fb, top - 1);
+  }, "#d1202f", INK, 1.5);
+  vStroke([x + fb, top - 1, x + fb + dir * 18, top - 9], "#8a1018", 1.1);
+  if (back) {
+    vEll(x, top + 3, 19, 8, "#1a1a1a", INK);
+    vRect(x - 18, top + 1, 36, 4, 1.5, "#c4202a");
     return;
   }
-  shadow(x - 30, y + 9, 66, 15);
-  const cream = "#e8d6b8";
-  const hi = "#f4efe4";
-  const point = "#6b5348";
-  const pointD = "#4a3a34";
-  /* fluffy cream body */
-  p(x - 33, y - 33, 66, 42, cream);
-  p(x - 27, y - 36, 54, 9, hi);
-  p(x - 18, y - 27, 36, 27, "#f4efe8");
-  /* head */
-  p(x - 21, y - 63, 42, 36, cream);
-  p(x - 18, y - 66, 15, 18, point);
-  p(x + 6, y - 66, 15, 18, point);
-  p(x - 18, y - 54, 36, 27, point);
-  p(x - 15, y - 39, 30, 12, cream);
-  /* blue Ragdoll eyes */
-  p(x - 12, y - 48, 12, 12, "#7ec8e8");
-  p(x + 3, y - 48, 12, 12, "#7ec8e8");
-  p(x - 9, y - 45, 6, 6, "#141414");
-  p(x + 6, y - 45, 6, 6, "#141414");
-  p(x - 9, y - 48, 3, 3, "#f4f0e4");
-  p(x + 6, y - 48, 3, 3, "#f4f0e4");
-  p(x - 6, y - 33, 12, 6, "#c48a8a");
-  const tailL = c.facing === "l";
-  p(x + (tailL ? 27 : -48), y - 24, 33, 18, point);
-  p(x + (tailL ? 45 : -60), y - 12, 24, 27, pointD);
-  p(x - 30, y, 18, 12, cream);
-  p(x + 12, y, 18, 12, cream);
-  p(x - 30, y + 6, 15, 9, point);
-  p(x + 15, y + 6, 15, 9, point);
+  vPath(() => {
+    ctx.moveTo(x - 19, top + 5);
+    ctx.quadraticCurveTo(x - 17 + L * 2, top - 9, x + L * 4, top - 9);
+    ctx.quadraticCurveTo(x + 20 + L * 2, top - 8, x + 19, top + 5);
+    ctx.closePath();
+  }, "#1a1a1a", INK);
+  vEll(x - 6 + L * 2, top - 4, 6, 2, "#3a3a3a");
+  vRect(x - 18, top + 1, 36, 4, 1.5, "#c4202a");
+  vEll(x + L * 17, top + 5, 11, 3.4, "#141414", INK, 2);
 }
 
-function drawSpyro(c) {
-  const bob = (!REDUCE && c.target && c.wait <= 0) ? (((c.walkT * 7 | 0) % 2) ? S : 0) : 0;
-  const sit = !!c.deskSit;
-  const x = Math.round(c.x), y = Math.round(c.y + bob);
-  const white = "#f4f0e4", shade = "#d8d4c8", tail = "#c45c26", tailD = "#8a3a10";
-  shadow(x - 27, y + 9, 60, 12);
-  if (sit) {
-    /* Upright on a desk, as the true king of that particular throne. */
-    p(x - 21, y - 30, 42, 36, white);
-    p(x - 18, y - 27, 15, 18, shade);
-    p(x - 18, y - 66, 36, 36, white);
-    p(x - 15, y - 69, 12, 15, "#f4c4c4");
-    p(x + 6, y - 69, 12, 15, "#f4c4c4");
-    p(x - 15, y - 66, 9, 12, white);
-    p(x + 6, y - 66, 9, 12, white);
-    p(x - 3, y - 69, 6, 6, "#c4a070");
-    p(x - 12, y - 48, 9, 9, "#c5d86a");
-    p(x + 6, y - 48, 9, 9, "#c5d86a");
-    p(x - 9, y - 45, 6, 6, "#141414");
-    p(x + 9, y - 45, 6, 6, "#141414");
-    p(x - 3, y - 36, 9, 6, "#c48a8a");
-    p(x + 21, y - 36, 24, 18, tail);
-    p(x + 36, y - 48, 15, 24, tailD);
-    /* a very small crown */
-    p(x - 12, y - 78, 27, 9, "#d4af37");
-    p(x - 12, y - 84, 6, 9, "#d4af37");
-    p(x - 3, y - 87, 9, 12, "#d1202f");
-    p(x + 9, y - 84, 6, 9, "#d4af37");
-    p(x - 3, y - 78, 9, 6, "#e6c200");
-    p(x - 18, y, 15, 12, white);
-    p(x + 3, y, 15, 12, white);
+function drawKenneth(pr) {
+  const s = pr.staff, P = poseOf(pr), x = P.x, L = P.look;
+  const metal = "#e8dcc8", metalD = "#c8bca4", arm = "#9a968c", hand = "#b8b4aa";
+  vShadow(x, P.feet, 20);
+  if (P.work) {
+    const by = P.y, tap = (!REDUCE && ((pr.typeT * 6 | 0) % 2)) ? 3 : 0;
+    [-1, 1].forEach(sd => drawArmV(x + sd * 13, by - 38, x + sd * 25, by - 30 + (sd > 0 ? tap : 0), arm, hand, { bend: 2 }));
+    drawTorsoV(x, by - 46, by - 2, 18, 16, "#1a1a1a", () => {
+      q(x - 18, by - 46, 36, 5, "#f4ecd8");
+      vRect(x - 7, by - 24, 14, 3, 1, "#3a3a3a");
+    });
+    vRect(x - 5, by - 52, 10, 9, 2, metalD, INK, 1.5);
+    vEll(x - 17, by - 64, 3.5, 5, metalD, INK, 2);
+    vEll(x + 17, by - 64, 3.5, 5, metalD, INK, 2);
+    vRect(x - 16, by - 82, 32, 34, 11, metal, INK);
+    vEll(x - 9, by - 58, 1.4, 1.4, metalD);
+    vEll(x + 9, by - 58, 1.4, 1.4, metalD);
+    vStroke([x - 15, by - 68, x - 18, by - 66], INK, 2);
+    vStroke([x + 15, by - 68, x + 18, by - 66], INK, 2);
+    drawKenCap(x, by - 84, L, true);
     return;
   }
-  p(x - 30, y - 30, 60, 39, white);
-  p(x - 24, y - 33, 48, 12, "#ffffff");
-  p(x - 18, y - 24, 36, 24, shade);
-  p(x - 18, y - 60, 39, 33, white);
-  p(x - 18, y - 63, 15, 15, "#f4c4c4");
-  p(x + 6, y - 63, 15, 15, "#f4c4c4");
-  p(x - 15, y - 60, 12, 12, white);
-  p(x + 6, y - 60, 12, 12, white);
-  p(x - 3, y - 63, 6, 6, "#c4a070");
-  p(x - 12, y - 45, 12, 12, "#c5d86a");
-  p(x + 3, y - 45, 12, 12, "#c5d86a");
-  p(x - 9, y - 42, 6, 6, "#141414");
-  p(x + 6, y - 42, 6, 6, "#141414");
-  p(x - 3, y - 33, 9, 6, "#c48a8a");
-  const tailL = c.facing === "l";
-  p(x + (tailL ? 24 : -48), y - 24, 33, 18, tail);
-  p(x + (tailL ? 42 : -60), y - 42, 18, 27, tailD);
-  p(x - 27, y, 18, 12, white);
-  p(x + 9, y, 18, 12, white);
+  let by = P.body;
+  drawLegsV(P, "#1a1a1a", "#0e0e0e");
+  if (P.sit) by += SIT_DROP;
+  vRect(x - 5, by - 90, 10, 12, 2, metalD, INK, 1.5);
+  drawTorsoV(x, by - 80, by - 36, 17, 15, "#f4ecd8", () => {
+    vPoly([x - 18, by - 81, x - 5, by - 81, x, by - 62, x, by - 35, x - 18, by - 35], "#1a1a1a");
+    vPoly([x + 18, by - 81, x + 5, by - 81, x, by - 62, x, by - 35, x + 18, by - 35], "#1a1a1a");
+    vStroke([x - 5, by - 81, x, by - 62, x, by - 35], "#3a3a3a", 1.2);
+    vPoly([x - 3, by - 79, x + 3, by - 79, x + 2.4, by - 72, x + 4, by - 60, x, by - 55, x - 4, by - 60, x - 2.4, by - 72], "#c4202a", INK, 1);
+    [by - 56, by - 47, by - 40].forEach(yy => vEll(x - 2.5, yy, 1.4, 1.4, "#8a8070"));
+    const bx = x - L * 10, byy = by - 66;
+    vEll(bx, byy, 5, 5, "#c4a574", INK, 1.2);
+    vArc(bx, byy, 2.4, 0, Math.PI * 2, "#3a2a10", 1.4);
+    vStroke([bx + 1, byy + 1, bx + 3, byy + 3], "#3a2a10", 1.4);
+    vArc(x + L * 8, by - 48, 5, 0.2, Math.PI - 0.2, "#c4a574", 1.2);
+  });
+  const hy = by - 104;
+  vEll(x - 18, hy + 2, 3.5, 5.5, metalD, INK, 2);
+  vEll(x + 18, hy + 2, 3.5, 5.5, metalD, INK, 2);
+  const head = () => rrPath(x - 17, hy - 20, 34, 38, 12);
+  vPath(head, metal);
+  withClip(head, () => {
+    q(x + 7, hy - 20, 12, 40, metalD);
+    q(x - 15, hy - 18, 8, 6, lite(metal, 0.35));
+  });
+  vPath(head, null, INK);
+  [[-12, 12], [12, 12]].forEach(([dx, dy]) => vEll(x + dx, hy + dy, 1.3, 1.3, "#a89c84"));
+  drawFaceV(x, hy + 2, L, { skin: metal, brow: INK, noBlush: true, noNose: true, noMouth: true, cele: P.cele, glance: P.glance, stern: true });
+  [-1, 1].forEach(sd => {
+    const gx = x + sd * 7 + L * 2;
+    vArc(gx, hy + 2, 6.4, 0, Math.PI * 2, INK, 2);
+    vEll(gx - 2, hy - 1, 2, 1.2, "rgba(255,255,255,0.6)");
+  });
+  vStroke([x - 1 + L * 2, hy + 1, x + 1 + L * 2, hy + 1], INK, 2);
+  const mx = x + L * 2, my = hy + 12;
+  if (P.cele) vRect(mx - 6, my - 1, 12, 7, 3, "#5a2a20", INK, 1.2);
+  else {
+    vRect(mx - 6, my, 12, 4.5, 2, "#3a3430", INK, 1.2);
+    vStroke([mx - 2, my + 0.5, mx - 2, my + 4], "#8a8070", 1);
+    vStroke([mx + 2, my + 0.5, mx + 2, my + 4], "#8a8070", 1);
+  }
+  drawKenCap(x, hy - 18, L, false);
+  if (P.glance) drawSweat(x + (P.left ? -24 : 24), hy - 12);
+  const act = activityPlan(pr, P, by);
+  const hands = handsFor(pr, P, by, true, act);
+  [-L, L].forEach(sd => {
+    const hx = hands[sd][0], hy2 = hands[sd][1];
+    drawArmV(x + sd * 14, by - 76, hx, hy2, arm, hand, { noHand: sd === L, w: 7.5, cuff: "#f4ecd8" });
+    if (sd === L) { drawPropV(s.prop, hx, hy2, L); drawHandV(hx, hy2, hand, true); }
+  });
+  pr._act = act;
 }
 
-function drawDexter(c) {
-  const bob = (!REDUCE && c.target && c.wait <= 0) ? (((c.walkT * 7 | 0) % 2) ? S : 0) : 0;
-  const x = Math.round(c.x), y = Math.round(c.y + bob);
-  shadow(x - 33, y + 9, 72, 15);
-  /* huge grey ruff */
-  p(x - 39, y - 36, 78, 45, "#b8b0a8");
-  p(x - 33, y - 42, 66, 18, "#c8c0b8");
-  p(x - 24, y - 30, 48, 30, "#d0c8c0");
-  /* dark face peeking */
-  p(x - 18, y - 60, 39, 36, "#1a1210");
-  p(x - 21, y - 72, 18, 18, "#1a1210");
-  p(x + 6, y - 72, 18, 18, "#1a1210");
-  /* amber eyes */
-  p(x - 12, y - 48, 12, 12, "#e6c84a");
-  p(x + 6, y - 48, 12, 12, "#e6c84a");
-  p(x - 9, y - 45, 6, 6, "#141414");
-  p(x + 9, y - 45, 6, 6, "#141414");
-  p(x - 9, y - 48, 3, 3, "#fff");
-  p(x + 9, y - 48, 3, 3, "#fff");
-  p(x - 3, y - 33, 12, 6, "#1a1210");
-  const tailL = c.facing === "l";
-  p(x + (tailL ? 30 : -54), y - 24, 36, 21, "#2a2420");
-  p(x + (tailL ? 48 : -66), y - 12, 24, 24, "#1a1210");
-  p(x - 30, y, 18, 12, "#1a1210");
-  p(x + 15, y, 18, 12, "#1a1210");
+/* ---------- Terry and Reggie, the Quill robots ---------- */
+function drawRobotHead(s, reg, x, hc, top, L, P) {
+  const metal = s.skin, metalD = dark(metal, 0.18), metalL = lite(metal, 0.35);
+  const hw = reg ? 15 : 19, hh = reg ? 52 : 38, hTop = reg ? hc - 28 : hc - 19;
+  if (!reg) {
+    vStroke([x, hTop, x + L * 2, hTop - 14], "#5a5a5a", 2.6);
+    vEll(x + L * 2, hTop - 17, 4.5, 4.5, "#d1202f", INK, 1.5);
+    vEll(x + L * 2 - 1.5, hTop - 18.5, 1.4, 1.4, "#ff9a9a");
+  } else {
+    vRect(x - 4, hTop - 6, 8, 7, 2, metalD, INK, 1.5);
+  }
+  vEll(x - hw - 2, hc + 2, 4.5, 7, metalD, INK, 2);
+  vEll(x + hw + 2, hc + 2, 4.5, 7, metalD, INK, 2);
+  vEll(x - hw - 2, hc + 2, 1.8, 3, metalL);
+  vEll(x + hw + 2, hc + 2, 1.8, 3, metalL);
+  const head = () => rrPath(x - hw, hTop, hw * 2, hh, reg ? 13 : 8);
+  vPath(head, metal);
+  withClip(head, () => {
+    q(x + hw * 0.45, hTop, hw, hh, metalD);
+    q(x - hw + 3, hTop + 3, hw * 0.6, 5, metalL);
+  });
+  vPath(head, null, INK);
+  [[-1, -1], [1, -1], [-1, 1], [1, 1]].forEach(([a, b]) => vEll(x + a * (hw - 4), hTop + (b < 0 ? 4 : hh - 4), 1.3, 1.3, dark(metal, 0.35)));
+  return { metal, metalD };
 }
 
+function drawRobot(pr) {
+  const s = pr.staff, reg = s.kind === "reggie", P = poseOf(pr), x = P.x, L = P.look;
+  const metal = s.skin, metalD = dark(metal, 0.18);
+  vShadow(x, P.feet, 20);
+  if (P.work) {
+    const by = P.y, tap = (!REDUCE && ((pr.typeT * 6 | 0) % 2)) ? 3 : 0;
+    [-1, 1].forEach(sd => drawArmV(x + sd * 13, by - 38, x + sd * 25, by - 30 + (sd > 0 ? tap : 0), metal, metal, { bend: 2, cuff: "#f4ecd8" }));
+    drawTorsoV(x, by - 46, by - 2, 18, 16, s.body, () => {
+      q(x - 18, by - 46, 36, 5, "#f4ecd8");
+      vRect(x - 8, by - 26, 16, 4, 1.5, dark(s.body, 0.25));
+    });
+    vRect(x - 5, by - 54, 10, 10, 2, metalD, INK, 1.5);
+    drawRobotHead(s, reg, x, reg ? by - 78 : by - 70, by - 46, L, P);
+    return;
+  }
+  const hip = reg ? 44 : 38;
+  let by = P.body;
+  drawLegsV(P, "#2e2e34", "#141414", { hip: hip, legW: 10 });
+  if (P.sit) by += SIT_DROP;
+  const top = reg ? by - 88 : by - 80, bot = by - hip + 2;
+  vRect(x - 5, top - 10, 10, 12, 2, metalD, INK, 1.5);
+  drawTorsoV(x, top, bot, 17, 15, "#f4ecd8", () => {
+    vPoly([x - 18, top - 1, x - 5, top - 1, x, top + 18, x, bot + 1, x - 18, bot + 1], s.body);
+    vPoly([x + 18, top - 1, x + 5, top - 1, x, top + 18, x, bot + 1, x + 18, bot + 1], s.body);
+    vStroke([x - 5, top - 1, x, top + 18, x, bot + 1], dark(s.body, 0.3), 1.2);
+    [top + 22, top + 30, top + 38].forEach(yy => vEll(x - 3, yy, 1.5, 1.5, "#d4af37"));
+    if (reg) {
+      vPoly([x, top + 3, x - 8, top - 1, x - 8, top + 7], "#141414", INK, 1);
+      vPoly([x, top + 3, x + 8, top - 1, x + 8, top + 7], "#141414", INK, 1);
+      vEll(x, top + 3, 2, 2, "#2a2a2a");
+      const px = x - L * 10;
+      vPoly([px - 4, top + 14, px + 4, top + 14, px + 2, top + 9, px, top + 11, px - 2, top + 8], "#fbf8ee", INK, 1);
+      vStroke([px - 5, top + 14, px + 5, top + 14], dark(s.body, 0.35), 1.4);
+    } else {
+      vPoly([x - 2.6, top + 1, x + 2.6, top + 1, x + 2, top + 8, x + 3.6, top + 22, x, top + 26, x - 3.6, top + 22, x - 2, top + 8], "#141414", INK, 1);
+    }
+  });
+  const hc = reg ? top - 34 : top - 25;
+  drawRobotHead(s, reg, x, hc, top, L, P);
+  if (!reg) {
+    ctx.save();
+    ctx.translate(x, hc);
+    ctx.scale(1.22, 1.22);
+    drawFaceV(0, -1, L, { skin: metal, brow: "#3a3a3a", noNose: true, noMouth: true, cele: P.cele, glance: P.glance });
+    ctx.restore();
+    if (P.cele) vPath(() => { ctx.moveTo(x - 8 + L * 2, hc + 8); ctx.quadraticCurveTo(x + L * 2, hc + 19, x + 8 + L * 2, hc + 8); ctx.closePath(); }, "#5a2a20", INK, 1.6);
+    else vArc(x + L * 2, hc + 4, 8, Math.PI * 0.2, Math.PI * 0.8, INK, 2.4);
+  } else {
+    drawFaceV(x, hc - 2, L, { skin: metal, brow: "#3a3a3a", noNose: true, noMouth: true, noBlush: true, cele: P.cele, glance: P.glance });
+    if (!P.cele) {
+      [-1, 1].forEach(sd => {
+        const ex = x + sd * 7 + L * 2, ey = hc - 2;
+        vPath(() => { ctx.ellipse(ex, ey, 4.6, 5.4, 0, Math.PI, Math.PI * 2); ctx.lineTo(ex - 4.6, ey - 0.2); }, metal);
+        vStroke([ex - 4.6, ey - 0.4, ex + 4.6, ey - 0.4], INK, 1.8);
+      });
+    }
+    const mx = x + L * 7 + L * 2, my = hc - 2;
+    vArc(mx, my, 6.8, 0, Math.PI * 2, "#d4af37", 2.2);
+    vEll(mx - 2, my - 3, 2, 1.2, "rgba(255,255,255,0.55)");
+    vPath(() => { ctx.moveTo(mx + L * 5, my + 5); ctx.quadraticCurveTo(mx + L * 12, my + 22, mx + L * 6, top + 6); }, null, "#d4af37", 1.2);
+    if (P.cele) vEll(x + L * 2, hc + 14, 4, 3, "#5a2a20", INK, 1.2);
+    else vStroke([x - 4 + L * 2, hc + 14, x + 5 + L * 2, hc + 13], INK, 2);
+  }
+  if (P.glance) drawSweat(x + (P.left ? -26 : 26), hc - 16);
+  const act = activityPlan(pr, P, by);
+  const hands = handsFor(pr, P, by, true, act, { rest: reg ? 50 : 46, up: reg ? 124 : 116 });
+  [-L, L].forEach(sd => {
+    const hx = hands[sd][0], hy2 = hands[sd][1];
+    drawArmV(x + sd * 14, top + 4, hx, hy2, metal, metal, { noHand: sd === L, w: 7.5, cuff: "#f4ecd8" });
+    if (sd === L) { drawPropV(s.prop, hx, hy2, L); drawHandV(hx, hy2, metal, true); }
+  });
+  pr._act = act;
+}
+
+/* ---------- Kraken Keith: a purple octopus in a navy waistcoat ---------- */
+function skinDOf(c) { return dark(c, 0.25); }
+const KEITH_BUSY = ["kettle", "lounge", "darts", "rods", "canteen", "sofa", "music"];
+function drawTentacle(pts, w, skin, sucker, curl) {
+  vLimb(pts, w, skin, INK);
+  const n = pts.length;
+  const tx = pts[n - 2], ty = pts[n - 1];
+  if (curl) { vEll(tx + curl * 2, ty + 1, 3.4, 3.2, skin, INK, 1.5); vEll(tx + curl * 2, ty + 1, 1.3, 1.2, skinDOf(skin)); }
+  if (sucker) {
+    const ax = pts[n - 4], ay = pts[n - 3];
+    for (let i = 1; i <= 2; i++) {
+      const t = 0.35 + i * 0.22;
+      vEll(ax + (tx - ax) * t, ay + (ty - ay) * t + 1.5, 1.8, 1.4, sucker);
+    }
+  }
+}
+function drawKeith(pr) {
+  const s = pr.staff, P = poseOf(pr), x = P.x, L = P.look;
+  const skin = "#8a5cc4", skinD = "#6a3fa0", skinL = "#a87ad8", sucker = "#e8a0b8", vest = "#1e2a4a", gold = "#d4af37";
+  vShadow(x, P.feet, 26);
+  if (P.work) {
+    const by = P.y, tap = (!REDUCE && ((pr.typeT * 6 | 0) % 2)) ? 3 : 0;
+    [-1, 1].forEach(sd => drawTentacle([x + sd * 16, by - 36, x + sd * 30, by - 34, x + sd * 36, by - 24 + (sd > 0 ? tap : 0)], 8, skin, sucker));
+    drawTorsoV(x, by - 44, by - 2, 22, 20, vest, () => q(x - 6, by - 30, 12, 3, lite(vest, 0.15)));
+    vEll(x, by - 76, 24, 30, skin, INK);
+    vEll(x - 9, by - 90, 8, 10, skinL);
+    [[8, -92], [-4, -70], [12, -74]].forEach(([dx, dy]) => vEll(x + dx, by + dy, 2.2, 2.2, skinD));
+    vStroke([x - 24, by - 76, x - 18, by - 74], INK, 2);
+    vStroke([x + 24, by - 76, x + 18, by - 74], INK, 2);
+    return;
+  }
+  let by = P.body;
+  if (P.sit) {
+    for (let i = 0; i < 4; i++) {
+      const bx = x - 15 + i * 10;
+      drawTentacle([bx, P.y - 16, bx + (i - 1.5) * 2, P.y - 6, bx + (i - 1.5) * 4, P.y + 2], 9, skin, sucker);
+    }
+    by += SIT_DROP;
+  } else {
+    for (let i = 0; i < 4; i++) {
+      const spread = i - 1.5;
+      const sway = P.swing * (i % 2 ? 1 : -1) * 6 * L;
+      const hx0 = x + spread * 6, hy0 = P.y - 34;
+      drawTentacle([hx0, hy0, x + spread * 8 + sway * 0.5, P.y - 18, x + spread * 14 + sway, P.y - 3], 9, skin, sucker);
+    }
+  }
+  drawTorsoV(x, by - 74, by - 30, 21, 19, vest, () => {
+    vStroke([x - 8, by - 74, x, by - 58, x + 8, by - 74], lite(vest, 0.25), 1.6);
+    [by - 52, by - 43].forEach(yy => vEll(x, yy, 1.6, 1.6, "#0a1020"));
+    const bx = x + L * 10, byy = by - 64;
+    vEll(bx, byy, 4.6, 4.6, gold, INK, 1.4);
+    vEll(bx, byy, 2, 2, "#c47a1a");
+  });
+  for (let i = 0; i < 3; i++) {
+    const fx = x - 8 + i * 8;
+    drawTentacle([fx, by - 82, fx + (i - 1) * 2, by - 70, fx + (i - 1) * 3 + 1, by - 62], 6, skin, null);
+  }
+  const hc = by - 104;
+  const head = () => { ctx.ellipse(x, hc, 24, 30, 0, 0, Math.PI * 2); };
+  vPath(head, skin);
+  withClip(head, () => {
+    vEll(x + 14, hc + 6, 14, 30, skinD);
+    vEll(x - 9, hc - 14, 8, 11, skinL);
+  });
+  vPath(head, null, INK);
+  [[9, -18], [3, -24], [-12, -6], [14, -2]].forEach(([dx, dy]) => vEll(x + dx, hc + dy, 2, 2, skinD));
+  const ey = hc + 6, gl = P.glance ? 1.2 : 0;
+  [-1, 1].forEach(sd => {
+    const gx = x + sd * 9 + L * 2;
+    vEll(gx, ey, 7.4, 7.4, "#fffef8", INK, 2.6);
+    vEll(gx + L * (2 + gl), ey + 0.5, 3, 3.4, "#141414");
+    vEll(gx + L * (2 + gl) - 1, ey - 1, 1, 1, "#ffffff");
+    vStroke([gx - 4, ey - 11 + (P.cele ? -2 : 0), gx + 4, ey - 11 + (P.cele ? -2 : 0)], skinD, 2.2);
+  });
+  vStroke([x - 2 + L * 2, ey, x + 2 + L * 2, ey], INK, 2.4);
+  vStroke([x - 16 + L * 2, ey - 1, x - 23, ey - 3], INK, 2);
+  vStroke([x + 16 + L * 2, ey - 1, x + 23, ey - 3], INK, 2);
+  if (P.cele) vPath(() => { ctx.moveTo(x - 5 + L * 2, hc + 17); ctx.quadraticCurveTo(x + L * 2, hc + 25, x + 5 + L * 2, hc + 17); ctx.closePath(); }, "#5a2050", INK, 1.4);
+  else vArc(x + L * 2, hc + 15, 4.4, Math.PI * 0.2, Math.PI * 0.8, INK, 1.8);
+  if (P.glance) drawSweat(x + (P.left ? -28 : 28), hc - 18);
+  const act = activityPlan(pr, P, by);
+  const hands = handsFor(pr, P, by, true, act, { reach: 24, up: 112 });
+  const busy = KEITH_BUSY.includes(pr.activity) && pr.phase === "idle" && !pr.target;
+  [-L, L].forEach(sd => {
+    const hx = hands[sd][0], hy2 = hands[sd][1];
+    const shx = x + sd * 16, shy = by - 68;
+    drawTentacle([shx, shy, (shx + hx) / 2 + sd * 8, (shy + hy2) / 2, hx, hy2], 7.5, skin, sucker, sd);
+    if (sd === L) drawPropV("tablet", hx, hy2, L);
+    else if (!busy && !act && !P.cele) drawPropV("coin", hx, hy2, -L);
+  });
+  pr._act = act;
+}
+
+
+/* ---------- The office cats ---------- */
+const CAT_LOOKS = {
+  arthur: { base: "#efe3cc", hi: "#f8f2e6", point: "#6b5348", pointD: "#4a3a34", eye: "#6ab8e0", nose: "#c48a8a", mask: true },
+  tilly: { base: "#ece6dc", hi: "#f8f6f0", point: "#9a9088", pointD: "#7a7068", eye: "#8ed0ee", nose: "#e89aa8", mask: true },
+  trixie: { base: "#d8c8b0", hi: "#efe4d2", point: "#3a2c26", pointD: "#241a16", eye: "#5aa8e0", nose: "#3a2a26", mask: true, socks: "#fbf8f0", collar: "#d1202f" },
+  daisy: { base: "#f6f0e4", hi: "#fffdf8", point: "#d8c4a8", pointD: "#c4ac8c", eye: "#7ec8e8", nose: "#e8a0a8", mask: true, bow: "#d1202f" },
+  dexter: { base: "#2e2622", hi: "#4a3e38", point: "#1a1210", pointD: "#120c0a", eye: "#e6b83a", nose: "#3a2a26", ruff: "#a8a098", fluffy: true },
+  spyro: { base: "#f6f2e8", hi: "#ffffff", point: "#f6f2e8", pointD: "#d8d4c8", eye: "#c5d86a", nose: "#e8a0a0", tail: "#c45c26", tailD: "#8a3a10" }
+};
+
+function catEars(cx, cy, rx, look, k) {
+  [-1, 1].forEach(sd => {
+    const ex = cx + sd * rx * 0.62;
+    vPoly([ex - sd * 7, cy - 8, ex + sd * 4, cy - rx - 4, ex + sd * 7, cy - 4], k.mask ? k.point : k.base, INK, 2);
+    vPoly([ex - sd * 3, cy - 8, ex + sd * 3.4, cy - rx, ex + sd * 4.4, cy - 6], "#e8a8b0");
+  });
+}
+function catFace(cx, cy, look, k, o) {
+  const opt = o || {};
+  const shift = look * 2;
+  if (k.mask) {
+    vEll(cx + shift * 0.5, cy + 3, 12, 9, k.point);
+    vEll(cx + shift * 0.5, cy + 8, 6, 4, k.base);
+  }
+  [-1, 1].forEach(sd => {
+    const ex = cx + sd * 7 + shift, ey = cy;
+    if (opt.sleep) { vArc(ex, ey - 1, 3.6, Math.PI * 0.15, Math.PI * 0.85, INK, 1.8); return; }
+    vEll(ex, ey, 4.4, 4.2, k.eye, INK, 1.5);
+    vEll(ex + look * 0.8, ey, 1.4, 3.4, "#0e0a08");
+    vEll(ex - 1.2, ey - 1.5, 1.1, 1.1, "#ffffff");
+  });
+  vPoly([cx + shift - 3, cy + 5.5, cx + shift + 3, cy + 5.5, cx + shift, cy + 8.5], k.nose, INK, 1);
+  vPath(() => { ctx.moveTo(cx + shift - 4, cy + 10); ctx.quadraticCurveTo(cx + shift - 2, cy + 12, cx + shift, cy + 9); ctx.quadraticCurveTo(cx + shift + 2, cy + 12, cx + shift + 4, cy + 10); }, null, INK, 1.2);
+  const wc = k.fluffy ? "rgba(220,210,200,0.7)" : "rgba(60,40,30,0.55)";
+  [-1, 1].forEach(sd => {
+    vStroke([cx + shift + sd * 6, cy + 8, cx + shift + sd * 17, cy + 6], wc, 1);
+    vStroke([cx + shift + sd * 6, cy + 9.5, cx + shift + sd * 17, cy + 11], wc, 1);
+  });
+}
+function catHead(cx, cy, look, k, o) {
+  catEars(cx, cy, 18, look, k);
+  if (k.ruff) {
+    for (let i = 0; i < 9; i++) {
+      const a = Math.PI * (0.05 + i * 0.1125);
+      vEll(cx + Math.cos(a) * 18, cy + 4 + Math.sin(a) * 13, 7, 7, k.ruff, INK, 1.5);
+    }
+    for (let i = 0; i < 9; i++) {
+      const a = Math.PI * (0.05 + i * 0.1125);
+      vEll(cx + Math.cos(a) * 18, cy + 4 + Math.sin(a) * 13, 5.6, 5.6, k.ruff);
+    }
+  }
+  vEll(cx, cy, 19, 16, k.base, INK);
+  vEll(cx - 6, cy - 7, 6, 3.4, k.hi);
+  catFace(cx, cy, look, k, o);
+  if (k.bow) {
+    const bx = cx + 12, by = cy - 13;
+    vPoly([bx, by, bx - 8, by - 5, bx - 8, by + 5], k.bow, INK, 1.2);
+    vPoly([bx, by, bx + 8, by - 5, bx + 8, by + 5], k.bow, INK, 1.2);
+    vEll(bx, by, 2.4, 2.4, dark(k.bow, 0.2), INK, 1);
+  }
+}
+function catTail(pts, k, w) {
+  const col = k.tail || k.point, colD = k.tailD || k.pointD;
+  vLimb(pts, w + (k.fluffy ? 4 : 0), col, INK);
+  const n = pts.length;
+  vEll(pts[n - 2], pts[n - 1], (w + (k.fluffy ? 4 : 0)) / 2 + 0.5, (w + (k.fluffy ? 4 : 0)) / 2 + 0.5, colD);
+}
+function drawZzz(x, y) {
+  if (REDUCE || ((animT * 0.8) % 2) >= 1.2) return;
+  [[0, 0, 5], [9, -12, 6.5], [20, -26, 8]].forEach(([dx, dy, r]) => {
+    vStroke([x + dx - r / 2, y + dy - r / 2, x + dx + r / 2, y + dy - r / 2, x + dx - r / 2, y + dy + r / 2, x + dx + r / 2, y + dy + r / 2], "#8a867c", 1.8);
+  });
+}
+function drawCrown(cx, cy) {
+  vPoly([cx - 10, cy, cx - 11, cy - 10, cx - 5, cy - 5, cx, cy - 13, cx + 5, cy - 5, cx + 11, cy - 10, cx + 10, cy], "#d4af37", INK, 1.5);
+  vEll(cx, cy - 4, 2.2, 2.2, "#d1202f");
+  vEll(cx - 7, cy - 3, 1.4, 1.4, "#2a7ad1");
+  vEll(cx + 7, cy - 3, 1.4, 1.4, "#2a9a4a");
+}
+
+function drawCat(c) {
+  const k = CAT_LOOKS[c.id] || CAT_LOOKS.tilly;
+  const walking = !REDUCE && c.target && c.wait <= 0;
+  const x = Math.round(c.x), y = Math.round(c.y);
+  const L = c.facing === "l" ? -1 : 1;
+  const loaf = !c.target && c.spot && (c.spot.clock || (c.spot.sofa && c.id === "arthur"));
+  charBegin();
+  if (loaf) {
+    /* A loaf: paws tucked, tail wrapped round, eyes shut. */
+    vShadow(x, y, 38);
+    catTail([x + 30, y - 6, x + 38, y + 2, x + 18, y + 6, x - 4, y + 6], k, 8);
+    vEll(x + 6, y - 16, 34, 18, k.base, INK);
+    vEll(x + 2, y - 26, 22, 6, k.hi);
+    if (k.fluffy) vEll(x - 10, y - 10, 14, 10, k.ruff || k.hi);
+    vEll(x - 14, y + 1, 9, 4.5, k.socks || k.hi, INK, 1.5);
+    vEll(x + 4, y + 1, 9, 4.5, k.socks || k.hi, INK, 1.5);
+    catHead(x - 14, y - 30, 0, k, { sleep: true });
+    drawZzz(x + 20, y - 54);
+    charEnd();
+    return;
+  }
+  if (walking) {
+    /* Side-on trot: four legs in a diagonal gait, tail up. */
+    const ph = c.walkT * 12, sw = Math.sin(ph);
+    vShadow(x, y, 30);
+    catTail([x - L * 24, y - 28, x - L * 40, y - 40, x - L * 38, y - 58], k, 7);
+    const legs = [[-L * 16, sw], [L * 14, -sw]];
+    legs.forEach(([dx, s2]) => vLimb([x + dx - 4, y - 18, x + dx - 4 - L * s2 * 6, y - 3], 7, k.pointD && k.mask ? dark(k.base, 0.08) : dark(k.base, 0.1), INK));
+    vEll(x, y - 24, 28, 14, k.base, INK);
+    vEll(x - L * 4, y - 32, 18, 5, k.hi);
+    if (k.fluffy) vEll(x + L * 14, y - 20, 12, 12, k.ruff, INK, 1.5);
+    legs.forEach(([dx, s2]) => {
+      const fx = x + dx + 4 + L * s2 * 6;
+      vLimb([x + dx + 4, y - 16, fx, y - 3], 7, k.base, INK);
+      vEll(fx + L * 2, y - 2, 5, 3, k.socks || (k.mask ? k.point : k.base), INK, 1.5);
+    });
+    if (k.collar) vStroke([x + L * 20, y - 34, x + L * 24, y - 24], k.collar, 4);
+    catHead(x + L * 24, y - 42, L, k, {});
+    charEnd();
+    return;
+  }
+  /* Sitting up, facing us. Spyro on a desk wears his crown. */
+  vShadow(x, y, 28);
+  catTail([x - L * 20, y - 8, x - L * 34, y - 6, x - L * 36, y - 22, x - L * 30, y - 34], k, 7);
+  vEll(x, y - 20, 25, 20, k.base, INK);
+  vEll(x, y - 26, 14, 16, k.hi);
+  if (k.fluffy) {
+    for (let i = 0; i < 6; i++) vEll(x - 22 + i * 9, y - 6 + (i % 2) * 2, 7, 6, k.base);
+  }
+  vLimb([x - 7, y - 24, x - 8, y - 4], 7, k.hi, INK);
+  vLimb([x + 7, y - 24, x + 8, y - 4], 7, k.hi, INK);
+  vEll(x - 8, y - 2, 5.5, 3.6, k.socks || k.hi, INK, 1.5);
+  vEll(x + 8, y - 2, 5.5, 3.6, k.socks || k.hi, INK, 1.5);
+  if (k.collar) { vArc(x, y - 52, 12, Math.PI * 0.25, Math.PI * 0.75, k.collar, 4); vEll(x, y - 41, 2.4, 2.4, "#d4af37", INK, 1); }
+  catHead(x, y - 48, L * 0.5, k, {});
+  if (c.id === "spyro" && c.deskSit) drawCrown(x, y - 66);
+  charEnd();
+}
 
 const GLYPH_ADV = 12, GLYPH_H = 14; /* 5×7 cells at 2px, with a 2px gap */
 const GLYPHS = {
@@ -3445,9 +3845,7 @@ function drawFrame() {
       const f = flinchOffset(c);
       const ox = c.x, oy = c.y;
       c.x += f.x; c.y += f.y;
-      if (c.id === "arthur") drawArthur(c);
-      else if (c.id === "spyro") drawSpyro(c);
-      else drawDexter(c);
+      drawCat(c);
       c.x = ox; c.y = oy;
     }
   }));
@@ -3527,9 +3925,15 @@ function applyShareDemo() {
       if (perch) perchSpyro(c, perch);
       return;
     }
-    c.x = poses[i % poses.length].x;
-    c.y = poses[i % poses.length].y;
-    if (poses[i % poses.length].spot) c.spot = poses[i % poses.length].spot;
+    const pose = c.id === "arthur" ? poses[0] : c.id === "dexter" ? poses[1] : null;
+    if (!pose) {
+      c.x = c.spot.x;
+      c.y = c.spot.y;
+      return;
+    }
+    c.x = pose.x;
+    c.y = pose.y;
+    if (pose.spot) c.spot = pose.spot;
   });
   paintBoard();
   demoAppliedWorking = true;
@@ -3738,6 +4142,10 @@ function boot() {
   cats.push(makeCat("arthur", 0));
   cats.push(makeCat("dexter", 1));
   cats.push(makeCat("spyro", 2));
+  /* The three younger Ragdolls wander about too. */
+  cats.push(makeCat("tilly", 3));
+  cats.push(makeCat("trixie", 4));
+  cats.push(makeCat("daisy", 5));
   if (REDUCE) {
     const spyro = cats.find(c => c.id === "spyro");
     const perch = desks.find(d => d.id === "percy");
@@ -3855,7 +4263,7 @@ function setupOfficeCards() {
     const who = hit.who;
     const id = who.id;
     const staff = who.staff;
-    const title = staff ? staff.name : (id === "arthur" ? "Arthur" : id === "dexter" ? "Dexter" : id === "spyro" ? "Spyro" : id);
+    const title = staff ? staff.name : (CAT_NAMES[id] || id);
     const line = JOB_LINE[id] || (staff ? staff.role : "");
     const src = PORTRAITS[id] || "";
     nameEl.textContent = title;
