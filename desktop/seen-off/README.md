@@ -103,7 +103,7 @@ in M1. Dexter was fixed on 23 Nov 2026: he is now smoky black (near-black head, 
 as in his photos (he was drawn dark grey, and his ruff colour was never drawn). The live website file is untouched.
 
 **Not done / untested in M2:** Daily Rules (added in M3, see below) and Steam leaderboards (no Steamworks); Rainy Day tokens; the
-legendary cards; the B&B and the Old Pier still borrow pier crowds ("Coming soon"); Arcades & Bingo and the Winter Gardens have their own crowds (28 Nov); the Daily's seed
+legendary cards; the Old Pier still borrows pier crowds ("Coming soon"); Arcades & Bingo, the Winter Gardens and the B&B have their own crowds (28 Nov); the Daily's seed
 covers generation (maps, fights, rewards, shops, events), not mid-fight draws after turn 1. Steam Deck hardware and Windows were not run
 on real machines (the Windows installer is built and the Linux AppImage smoke-tested under Xvfb).
 
@@ -149,6 +149,8 @@ list: *Tide's Out* and *Half-Day Closing* (they need map changes). Screenshot: `
 
 **Boss-health pass (28 Nov 2026), first cut:** a 24-run playtest (sticks 14, new places, all three Quills, all wins) on the beach→park→chippy→lights route showed the later bosses on the easy side, as the M2 notes said. The Woman Behind the Counter (was 160–168, plan 190) is now **188–196**; A Man Off the Telly (was 208–216, plan 200, but the bot often finished with 40–60 health) is now **236–244**; Old Rattler (was 132–138) is now **146–154**. The Crocodile (126–132) was left alone: it is still the hard early boss (bot end health down to 3). The Rock Shop and Tower bosses were not in that sample (the bot preferred the first unlocked new place each stage). Bingo Caller and Keynote Speaker are new and untested. A second pass should include those four.
 
+**The B&B (28 Nov 2026):** its own crowd, no “Coming soon” stand-ins. Enemies: the House Rules (posts a **No Hot Food in Rooms** clutter card — unplayable, painted art still to do), the Shower (alternates Scald and Freeze), Squeaky Floorboard, the Other Guests (a pal pair) and the Landlady. Each turn the Landlady announces a house rule that applies until her next turn: **No more than three cards** (the fourth card costs 1 more), **Lights out at eleven** (draw 1 fewer), or **Shoes off** (you lose your Block at the end of your turn). Event: The Breakfast Room (Full English heals 25; Continental draws 2 extra on the next fight’s first turn; asking for a later breakfast leaves you Flustered for the rest of the stage). Canvas ink drawings, no AI. Screenshots: `shots/d6-03-bnb-foes.png`, `shots/d6-03-bnb-boss.png`.
+
 ### Where to pick up next time
 
 State at end of 27 Nov 2026 (branch `archie/seen-off-dayout`, working copy `/workspace/seen-off-steam/desktop`, local git mirrors the pushed commits):
@@ -170,7 +172,7 @@ State at end of 27 Nov 2026 (branch `archie/seen-off-dayout`, working copy `/wor
    unplayable, so in a hand the game shows them desaturated (existing `.cd.no` style); `shots/d4-03b-shared-art.png` shows their art
    in full colour. Overviews for Ben: `shots/d3-08-hand-overview.png`, `shots/d4-04-overview.png`.
 4. **Still open for M3 (from the M2 proposal):** (enemy drawings done 27 Nov, see above) the other
-   two places (the B&B, the Old Pier); Arcades & Bingo, the Winter Gardens and Daily Rules (done 28 Nov, see above); legendary cards; a boss-health pass for later places (first pass 28 Nov: Counter 188–196, near the plan’s 190; the Man Off the Telly 236–244; Old Rattler 146–154; the Crocodile left as the hard early boss).
+   place (the Old Pier); Arcades & Bingo, the Winter Gardens, the B&B and Daily Rules (done 28 Nov, see above); legendary cards; a boss-health pass for later places (first pass 28 Nov: Counter 188–196, near the plan’s 190; the Man Off the Telly 236–244; Old Rattler 146–154; the Crocodile left as the hard early boss).
 5. **Before release:** declare everything in the AI content list below in Steam's Content Survey.
 
 **WebKitGTK note:** `app.security.dangerousDisableAssetCspModification` is `["style-src"]`. Without it Tauri adds hashes to `style-src`,

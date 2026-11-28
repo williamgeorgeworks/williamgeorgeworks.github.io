@@ -409,6 +409,7 @@ C('wblock','s','Writer’s Block','X',0,'x','Unplayable. Fleeting. When you draw
 C('photo','s','Unflattering Photo','X',0,'x','Unplayable. Fleeting.',[],null,{unp:1,eth:1});
 C('catchp','s','Catchphrase','X',0,'x','Unplayable. Fleeting. When you draw this, lose 1 Energy.',[],null,{unp:1,eth:1});
 C('handout','s','Handout','X',0,'x','Unplayable. Fleeting.',[],null,{unp:1,eth:1});
+C('nohot','s','No Hot Food in Rooms','X',0,'x','Unplayable.',[],null,{unp:1});
 var TYPE={A:'Attack',S:'Skill',P:'Power',X:'Clutter'};
 
 var HEROES={
@@ -533,8 +534,15 @@ var EN={
  mirror:{n:'Mirror Ball',hp:[26,30],ph:'#e8e8f0',ai:function(e){return cyc(e,[{n:'Dazzle',flu:2},{n:'Spin',a:7}]);}},
  raffle:{n:'Raffle Ticket',hp:[11,13],sc:.7,ph:'#ff9ad6',ai:function(e){return cyc(e,[{n:'Draw',a:4},{n:'Tear',a:3,sog:1}]);}},
  walkon:{n:'The Walk-On Music',hp:[136,144],elite:1,ph:'#14a84b',ai:function(e){return cyc(e,[{n:'Walk-On',g:4},{n:RUN.lvl>=5?'Treble Twenty':'Single Twenty',a:20,x:RUN.lvl>=5?3:1}]);}},
- keynote:{n:'The Keynote Speaker',hp:[206,214],boss:1,sc:1.35,ph:'#6a3fe0',ai:function(e){return cyc(e,[{n:'Next Slide',add:['handout',1],a:6},{n:'Any Questions?',sog:2,flu:2},{n:'Overrunning',a:12,x:2,again:1}]);}}
+ keynote:{n:'The Keynote Speaker',hp:[206,214],boss:1,sc:1.35,ph:'#6a3fe0',ai:function(e){return cyc(e,[{n:'Next Slide',add:['handout',1],a:6},{n:'Any Questions?',sog:2,flu:2},{n:'Overrunning',a:12,x:2,again:1}]);}},
+ /* the B&B */
+ rules:{n:'The House Rules',hp:[34,38],ph:'#e8dcc8',ai:function(e){return cyc(e,[{n:'Posted',add:['nohot',1],a:5},{n:'By Order of the House',a:9}]);}},
+ shower:{n:'The Shower',hp:[28,32],ph:'#8fd0ff',ai:function(e){return e.i++%2?{n:'Freeze',sog:2,a:4}:{n:'Scald',a:12};}},
+ floor:{n:'Squeaky Floorboard',hp:[15,17],sc:.75,ph:'#c8955a',ai:function(e){return cyc(e,[{n:'Squeak',a:5},{n:'Creak',a:3,sog:1}]);}},
+ guest:{n:'The Other Guests',hp:[28,32],pal:1,ph:'#d8c4ff',ai:function(e){return cyc(e,[{n:'Corridor Whisper',flu:1,a:4},{n:'Bathroom Queue',a:8}]);}},
+ landlady:{n:'The Landlady',hp:[236,244],boss:1,sc:1.35,ph:'#6a3fe0',ai:function(e){var rs=[['cards','No more than three cards'],['lights','Lights out at eleven'],['shoes','Shoes off']],i=ri(0,2);if(e.prevRule===rs[i][0])i=(i+1)%3;e.prevRule=rs[i][0];var m=e.i%2?{n:'I Run a Respectable House',b:20}:{n:'Breakfast Is at Eight',a:14};e.i++;m.rule=rs[i][0];m.n+=' — '+rs[i][1];return m;}}
 };
+
 
 
 var ENC={
@@ -549,6 +557,7 @@ var ENC={
  lights:{F:[['bulb','bulb','bulb','bulb'],['tableau'],['coach'],['moth','moth','moth'],['tableau','moth','moth'],['coach','bulb','bulb']],L:[['littram'],['tableau','bulb','bulb']],B:[['telly']]},
  arcades:{F:[['falls'],['fruit'],['change'],['dabber','dabber'],['fruit','dabber'],['falls','change']],L:[['claw'],['fruit','falls']],B:[['bingo']]},
  winter:{F:[['delegate'],['mirror'],['darts'],['raffle','raffle','raffle','raffle'],['delegate','raffle'],['darts','mirror']],L:[['walkon'],['darts','delegate']],B:[['keynote']]},
+ bnb:{F:[['rules'],['shower'],['floor'],['guest','guest'],['rules','floor'],['shower','floor']],L:[['guest','guest','rules'],['shower','rules']],B:[['landlady']]},
  prom:{F:[['breeze'],['lamppost'],['inspector'],['stag','stag'],['lamppost','breeze'],['pigeon','pigeon','breeze']],L:[['bride','maid','maid'],['inspector','lamppost']],B:[['tram']]}
 };
 var ACTS=['','South Pier','Central Pier','North Pier'];
@@ -585,7 +594,7 @@ STAGES.park.soon=STAGES.tower.soon='Coming soon: this lot are still queuing, so 
 STAGES.chippy.soon=STAGES.arcades.soon='Coming soon: this lot are still on their tea break, so the Central Pier crowd have filled in.';
 STAGES.lights.soon=STAGES.winter.soon=STAGES.bnb.soon=STAGES.oldpier.soon='Coming soon: this lot have not turned up yet, so the North Pier crowd have filled in.';
 STAGES.prom.bt='the end of the line';STAGES.south.bt=STAGES.central.bt=STAGES.north.bt='the end of the pier';
-['beach','rock','park','tower','chippy','lights','arcades','winter'].forEach(function(id){STAGES[id].ready=1;STAGES[id].enc=id;delete STAGES[id].soon;});
+['beach','rock','park','tower','chippy','lights','arcades','winter','bnb'].forEach(function(id){STAGES[id].ready=1;STAGES[id].enc=id;delete STAGES[id].soon;});
 function STGD(){return RUN&&RUN.stage?STAGES[RUN.stage]:null;}
 function stEnc(){var s=STGD();return s?s.enc:RUN.act;}
 function stName(act){var s=STGD();return s?s.n:ACTS[act];}
@@ -870,7 +879,8 @@ function startCombat(kind){
   if(has('rock'))H.st.gus=1;if(has('deckchair'))H.st.poi=1;if(has('manus')){H.st.gus=(H.st.gus||0)+2;H.st.poi=(H.st.poi||0)+2;}
   if(hasCat('tilly'))H.st.claw=3;if(hasCat('arthur'))H.block=8;
   B.en.forEach(function(e){if(has('wetfish'))e.st.sog=1;if(has('bill'))e.st.inv=3;if(rule('fret'))e.st.sog=(e.st.sog||0)+1;if(rule('account'))e.st.inv=(e.st.inv||0)+5;e.mv=nextMove(e);});if(rule('fret'))H.st.sog=(H.st.sog||0)+1;
-  B.en.forEach(function(e){if(EN[e.k].sunk)e.sunk=EN[e.k].sunk;});var nf=RUN.nextFight;if(nf){if(nf.eflu)B.en.forEach(function(e){e.st.flu=(e.st.flu||0)+nf.eflu;});if(nf.poi)H.st.poi=(H.st.poi||0)+nf.poi;if(nf.flu)H.st.flu=(H.st.flu||0)+nf.flu;RUN.nextFight=null;}if(RUN.stGus&&RUN.stGus===RUN.stage)H.st.gus=(H.st.gus||0)+1;
+  B.en.forEach(function(e){if(EN[e.k].sunk)e.sunk=EN[e.k].sunk;});var nf=RUN.nextFight;if(nf){if(nf.eflu)B.en.forEach(function(e){e.st.flu=(e.st.flu||0)+nf.eflu;});if(nf.poi)H.st.poi=(H.st.poi||0)+nf.poi;if(nf.flu)H.st.flu=(H.st.flu||0)+nf.flu;if(nf.draw)B.xdraw=nf.draw;RUN.nextFight=null;}if(RUN.stGus&&RUN.stGus===RUN.stage)H.st.gus=(H.st.gus||0)+1;
+  if(RUN.stFlu)H.st.flu=(H.st.flu||0)+RUN.stFlu;
   S.scr='combat';S.sel=-1;S.brewSel=-1;FX=[];fxReset(0);clearStamps();startTurn(true);if(kind==='B')setTimeout(bossBill,60);
 }
 function nextMove(e){e.ans=0;var m=EN[e.k].ai(e),o={},k;for(k in m)o[k]=m[k];if(o.a)o.a=Math.round(o.a*(1+.07*RUN.lvl));if(o.then)o.then=Math.round(o.then*(1+.07*RUN.lvl));if(e.house){if(o.a)o.a=Math.round(o.a*1.5);if(o.then)o.then=Math.round(o.then*1.5);}return o;}
@@ -921,11 +931,11 @@ function startTurn(first){
   if(H.st.next){H.block+=H.st.next;H.st.next=0;}
   if(H.st.ci)alive().forEach(function(e){e.st.inv=(e.st.inv||0)+H.st.ci;});
   if(H.st.fr)H.st.gus=(H.st.gus||0)+H.st.fr;
-  draw(5+(B.turn===1?(hasCat('dexter')?2:0)+(has('bulb')?1:0)+(B.kind==='B'&&has('ridephoto')?1:0):0));
+  var dn=5+(B.turn===1?(hasCat('dexter')?2:0)+(has('bulb')?1:0)+(B.kind==='B'&&has('ridephoto')?1:0)+(B.xdraw||0):0);if(B.houseRule==='lights')dn=Math.max(0,dn-1);draw(dn);if(B.turn===1)B.xdraw=0;
   for(var i=0;i<(H.st.oi||0);i++)addHand(randCard(),1,1);
   fxReset(0);
 }
-function cost(ci){var d=CARDS[ci.id];if(ci.z)return 0;return (ci.u&&d.o.uc!=null)?d.o.uc:d.cost;}
+function cost(ci){var d=CARDS[ci.id];if(ci.z)return 0;var c=(ci.u&&d.o.uc!=null)?d.o.uc:d.cost;if(B&&B.houseRule==='cards'&&B.tcount>=3)c+=1;return c;}
 function playable(ci){return !CARDS[ci.id].o.unp&&cost(ci)<=B.energy;}
 function playCard(i,ti){
   if(S.scr!=='combat'||B.over)return false;
@@ -965,6 +975,7 @@ function endTurn(){
   fxReset(RM?0:160);S.sel=-1;S.brewSel=-1;
   var tk=B.hand.filter(function(c){return c.id==='ticket';}).length;
   if(tk){RUN.hp-=2*tk;fxOn(H,'-'+2*tk+' Ticket',COL.red);if(RUN.hp<=0){defeat();if(S.scr!=='combat')return;}}
+  if(B.houseRule==='shoes'){if(H.block)fxOn(H,'Shoes off',COL.ink);H.block=0;}
   if(B.tg){H.st.gus=Math.max(0,(H.st.gus||0)-B.tg);B.tg=0;}B.handEnd=B.hand.length;
   alive().forEach(function(e){if(e.mv&&e.mv.grab){var c=null,i;for(i=0;i<B.hand.length;i++)if(!CARDS[B.hand[i].id].o.unp){c=B.hand[i];break;}if(!c&&B.hand.length)c=B.hand[0];if(c){B.hand.splice(B.hand.indexOf(c),1);e.held=e.held||[];e.held.push({id:c.id,u:c.u});fxOn(e,'Grab!',COL.purple);}}});
   B.hand.forEach(function(c){if(!(CARDS[c.id].o.eth||c.tmp))B.disc.push({id:c.id,u:c.u});});B.hand=[];
@@ -994,6 +1005,7 @@ function endTurn(){
     if(m.add){for(k=0;k<m.add[1];k++)B.disc.push({id:m.add[0],u:0});fxOn(H,'+'+m.add[1]+' '+CARDS[m.add[0]].name,COL.ink);}
     if(m.steal){var st=Math.min(m.steal,RUN.gold);if(st){RUN.gold-=st;fxOn(H,'-'+st+' Scrumplings',COL.gold);}else fxOn(H,'Nothing to nick',COL.ink);}
     if(m.again&&!e.again&&!B.over&&S.scr==='combat'){e.again=1;e.mv=nextMove(e);i--;continue;}
+    if(m.rule){B.houseRule=m.rule;B.houseName={cards:'No more than three cards',lights:'Lights out at eleven',shoes:'Shoes off'}[m.rule];fxOn(e,B.houseName,COL.ink);}
     if(EN[e.k].grow)e.st.gus=(e.st.gus||0)+EN[e.k].grow;
     if(e.st.sog>0)e.st.sog--;if(e.st.flu>0)e.st.flu--;
   }
@@ -1079,7 +1091,11 @@ var EVENTS=[
    o.push(['Walk on',function(){return S.ev.pot?'You leave the '+S.ev.pot+' on the tray.':'You watch, and walk on.';}]);return o;}},
  {id:'raffle',st:'winter',t:'The Raffle',tx:function(){return 'First prize is a hamper. Second prize is also a hamper.';},
   opts:function(){return [['Buy a strip (25 Scrumplings)',function(){if(RUN.gold<25)return null;RUN.gold-=25;var k=ri(0,2);if(k===0){var r=freeRelic(0);if(r){addRelic(r);return 'You win a keepsake: '+RELICS[r][0]+'.';}RUN.gold+=40;return 'You have every keepsake already. They give you 40 Scrumplings instead.';}if(k===1){if(gainBrew(pick(Object.keys(BREWS))))return 'Second prize is also a hamper. A brew, anyway.';RUN.gold+=15;return 'Your pockets are full of brews. 15 Scrumplings and a nod.';}RUN.deck.push({id:'sock',u:0});return 'You win a Mislaid Sock. It may have been third prize.';}],
-   ['Ask what third prize is',function(){return '“A hamper.” You recover '+heal(5)+' health.';}]];}}
+   ['Ask what third prize is',function(){return '“A hamper.” You recover '+heal(5)+' health.';}]];}},
+ {id:'breakfast',st:'bnb',t:'The Breakfast Room',tx:function(){return 'Breakfast is at half seven sharp. The tea is already stewed.';},
+  opts:function(){return [['Full English: heal 25',function(){return 'A proper plate. You recover '+heal(25)+' health.';}],
+   ['Continental: draw 2 extra on the first turn of the next fight',function(){RUN.nextFight=RUN.nextFight||{};RUN.nextFight.draw=2;return 'A pastry and a pointed look. Next fight, you draw 2 extra, first turn only.';}],
+   ['Ask for a later breakfast',function(){RUN.stFlu=1;return 'She looks at you. You start every fight here with 1 Flustered.';}]];}}
 ];
 function openEvent(){var p=EVENTS.filter(function(e){return RUN.seen.indexOf(e.id)<0&&(!e.st||e.st===RUN.stage);}),own=p.filter(function(e){return e.st;});if(own.length)p=own;if(!p.length){RUN.seen=[];p=EVENTS;}var ev=pick(p);RUN.seen.push(ev.id);S.ev={d:ev,res:''};if(ev.init)ev.init();S.scr='event';}
 
@@ -1518,7 +1534,27 @@ var ART={
   rect(-70,-86,44,70,'#fff',2.4);rect(-66,-82,36,20,'#2b2f45',1.6);rect(-66,-58,36,36,'#bfe9ff',1.6);ctx.fillStyle=COL.ink;ctx.font='8px '+FONT_D;ctx.textAlign='center';ctx.fillText('SLIDE',-48,-70);
   line([6,0,4,-22],5,COL.ink);line([20,0,22,-22],5,COL.ink);rect(2,-68,28,46,'#6a3fe0',2.4);ell(16,-82,13,14);ink('#ffd9b8',2.2);
   smooth(blob(16,-94,12,6,7,.15,r));ink('#2b2f45',1.6);eyes(16,-84,7,3.2,1);line([11,-74,21,-74],2);
-  limb([30,-48,48,-62+w*3],'#6a3fe0',4);rect(-20,-28,70,28,'#e8c56a',2.4);rect(-16,-24,28,16,'#fff',1.4);}
+  limb([30,-48,48,-62+w*3],'#6a3fe0',4);rect(-20,-28,70,28,'#e8c56a',2.4);rect(-16,-24,28,16,'#fff',1.4);},
+ /* ---- the B&B (milestone 3) ---- */
+ rules:function(e,r,t){rect(-40,-110,80,110,'#e8dcc8',2.6);rect(-34,-104,68,14,'#6a3fe0',2);ctx.fillStyle='#fff';ctx.font='8px '+FONT_D;ctx.textAlign='center';ctx.fillText('HOUSE RULES',0,-94);
+  for(var i=0;i<5;i++)line([-28,-78+i*14,28,-78+i*14],1.6,i===2?COL.red:'#c5b8a0');
+  eyes(0,-40,12,4.4,1);line([-8,-26,8,-28],2.2);rect(-8,-110,16,8,'#6b4a2a',1.6);},
+ shower:function(e,r,t){var w=Math.sin(t*8+e.seed);line([0,0,0,-86],4,COL.ink);line([0,-86,0,-100],3,COL.steel);ell(0,-108,16,8);ink('#c5ccd3',2.4);
+  for(var i=-2;i<=2;i++){ctx.beginPath();ctx.moveTo(i*5,-100);ctx.quadraticCurveTo(i*6+w*3,-70,i*8,-30-Math.abs(w)*8);ctx.strokeStyle='#8fd0ff';ctx.lineWidth=2;ctx.stroke();}
+  ell(0,-24,16,16);ink('#bfe9ff',2.4);eyes(0,-26,8,3.6,1);line([-6,-14,6,-16],2);},
+ floor:function(e,r,t){var w=Math.abs(Math.sin(t*5+e.seed))*6;rect(-50,-10,100,10,'#c8955a',2.2);for(var i=0;i<5;i++)line([-40+i*20,-10,-40+i*20,0],1.2);
+  ctx.save();ctx.translate(-8,-4);ctx.rotate(-.25-w*.02);rect(-18,-8,40,10,'#e0b47a',2);eyes(4,-4,8,3.2,1);line([-2,4,8,4],1.6);ctx.restore();},
+ guest:function(e,r,t){var w=Math.sin(t*2.2+e.seed+e.slot);line([-8,0,-8,-22],5,COL.ink);line([8,0,8,-22],5,COL.ink);
+  rect(-16,-70,32,48,e.slot?'#d8c4ff':'#fff3d1',2.4);ell(0,-84,13,14);ink('#ffd9b8',2.2);
+  smooth(blob(0,-96,12,6,7,.2,r));ink(e.slot?'#6b4a2a':'#c0c0c0',1.8);eyes(0,-86,7,3.2,1);line([-5,-76,5,-76],2);
+  limb([16,-50,28,-62+w*3],'#ffd9b8',4);rect(26,-70+w*3,16,22,e.slot?'#fff':'#6a3fe0',1.8);},
+ landlady:function(e,r,t){var w=Math.sin(t*2.4+e.seed);ctx.scale(.9,.9);
+  line([-10,0,-10,-24],5,COL.ink);line([10,0,12,-24],5,COL.ink);rect(-20,-74,40,50,'#fff',2.4);poly([-20,-74,0,-58,20,-74],'#6a3fe0',1.8);
+  ell(0,-90,16,17);ink('#ffd9b8',2.4);smooth(blob(0,-106,18,10,8,.15,r));ink('#6b4a2a',2);eyes(0,-92,9,3.8,1);
+  ctx.beginPath();ctx.moveTo(-8,-80);ctx.lineTo(8,-80);ctx.strokeStyle=COL.ink;ctx.lineWidth=2.4;ctx.stroke();
+  limb([20,-50,40,-66+w*3],'#ffd9b8',5);rect(32,-88+w*3,40,24,'#fff',2);ctx.fillStyle=COL.red;ctx.font='6px '+FONT_D;ctx.textAlign='center';ctx.fillText('NO',52,-74+w*3);ctx.fillText('VACANCIES',52,-66+w*3);
+  if(B&&B.houseName){ctx.fillStyle=COL.ink;ctx.font='8px '+FONT_D;ctx.fillText(B.houseName,0,-124);}
+  rect(-48,-28,96,28,'#e8dcc8',2.4);rect(-48,-32,96,6,'#6b4a2a',1.6);}
 };
 var HCOL={r:COL.red,t:COL.blue,k:COL.kenneth},HTINT={r:'#ffd0d6',t:'#cfdcff',k:'#dcdbe2'},HINK={r:COL.red,t:COL.ink,k:COL.kenneth};/* Kenneth went black on 24 Nov 2026 (was purple) */
 var NEON=['#ff4f9a','#29e0ff','#ffe14d','#b6f23c','#ff8a1f','#ffffff'];
