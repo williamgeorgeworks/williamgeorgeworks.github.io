@@ -33,8 +33,8 @@
 }
 .office-stage canvas {
   display: block;
-  image-rendering: pixelated;
-  image-rendering: crisp-edges;
+  /* auto when the 1920 bitmap is shrinking; JS sets pixelated at 1:1. */
+  image-rendering: auto;
 }
 .office-board {
   max-width: 960px;
