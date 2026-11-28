@@ -80,8 +80,8 @@ Branch `archie/seen-off-dayout`, commits (each pushed after its tests passed):
 | Cat card art | The six cats' signature cards (Ruling of the Court, Royal Decree, Rip Your Face Off, Requisition, Wouldn't Say Boo, Who, Me?) show art cropped from the mockups in `../mockups/` (`web/cats/*.jpg`, 360 px). `old-card-royal-decree-reggie.jpg` was skipped as asked. |
 | Tuning | `tools/playtest.js` (headless bot, no cheats; `tools/playtest-summary.py` summarises). Before: `ROCK_RATE` .5 gave a winning first day 5-6 sticks; now **.3** gives ~4 (the plan's sticks 1-4). The Last Tram went from 118-124 to **132-138** health: the bot still wins it 17/18 times, losing ~31 health (it was ~28). The Crocodile (Beach boss) is the hardest new boss (bot ends on 7-47 health); the later bosses (Counter, the Man Off the Telly) are on the easy side. |
 
-**Placeholder art in M2 (marked "PLACEHOLDER" on screen):** every enemy at the six new places is a painted cardboard stand-up
-with its name on it (`ART.standee`), and the place scenery is a few simple ink props over the matching pier's backdrop.
+**Placeholder art in M2 (marked "PLACEHOLDER" on screen):** every enemy at the six new places was a painted cardboard stand-up
+with its name on it (`ART.standee`; replaced by real drawings in M3, see below), and the place scenery is a few simple ink props over the matching pier's backdrop.
 
 **Art needed (no AI images were generated for this milestone):**
 1. 35 enemy drawings for the six places, in the game's ink style: Beach (Sandcastle, Jellyfish, Windbreak, Shore Crab, the Donkey Who Has
@@ -107,6 +107,34 @@ legendary cards; Arcades & Bingo, the Winter Gardens, the B&B and the Old Pier s
 covers generation (maps, fights, rewards, shops, events), not mid-fight draws after turn 1. Steam Deck hardware and Windows were not run
 on real machines (the Windows installer is built and the Linux AppImage smoke-tested under Xvfb).
 
+### Milestone 3 desktop build and enemy drawings (27 Nov 2026)
+
+**Desktop build `dist/m3/`** (built 27 Nov 2026 from commit `c08ca94`, all 79 painted cards; copies with `SHA256SUMS` in
+`/workspace/seen-off-steam/builds-m3/`). Not uploaded or published anywhere.
+
+| File | Bytes | sha256 |
+|---|---|---|
+| `Seen Off_0.1.0_amd64.AppImage` (Linux / Steam Deck) | 97,864,184 | `523c3a038c155d43b38773b90ac3096f1e5ab8c51d199a010229bfc0f429882d` |
+| `Seen Off_0.1.0_amd64.deb` | 6,363,512 | `ac9f7f74271cd84ab3a3da5ac6fdd6b41ae4e23b15c7e25a235c0e4872b909cc` |
+| `Seen Off_0.1.0_x64-setup.exe` (Windows NSIS installer) | 7,843,998 | `4844ef4e2d92e2d57467398d541efc9757e56fdb0227f1e59baccaf333bf5c0b` |
+| `seen-off.exe` (bare Windows exe, the one for Steam) | 8,047,616 | `ec2829fd6cec30649aa0a5b967187742d5ff9a1960d7a1f8776d287a560de67e` |
+
+The AppImage was smoke-tested under Xvfb (`shots/d5-01-appimage-xvfb.png`, `d5-02-appimage-ingame.png`, `d5-02-appimage-fight.png`).
+No Mac build. Windows and Steam Deck were not run on real hardware. The enemy drawings below came after this build, so they are
+not in `dist/m3/` until the next rebuild.
+
+**Enemy drawings (no AI):** the PLACEHOLDER stand-ups are replaced by canvas ink drawings in the same `ART` style as the pier
+enemies, so nothing here is an AI image and nothing needs adding to the AI content list. Done: Beach (Sandcastle, Jellyfish, Windbreak,
+Shore Crab, the Donkey, the Crocodile in a striped puppet booth with his string of sausages), Rock Shop (Stick of Rock, Chattering Teeth,
+Fudge Tray, Sugar Dummy, the Rock Boiler, the Stick That Says BLACKPOOL, Half a Stick; the lettering is drawn by the game's own font,
+so it is never garbled), Pleasure Park (the height sign, Dodgem, Ghost Train Skeleton, Log Flume, Ride Photo Kiosk, Old Rattler, all
+generic, no real ride names or brands), the Tower (Ballroom Couple, Lift Attendant, Circus Clown, the Ringmaster, the Mighty Organ,
+which still sinks into its ORGAN PIT and rises on Rise), the Chippy (Battered Sausage, Mushy Peas, Curry Sauce, the Queue, Pickled Onion,
+the Fryer, the Woman Behind the Counter) and the Lights (Faulty Bulb that flickers, Lit-up Tableau, Coach Party, Moth, the Lit-up Tram,
+A Man Off the Telly, drawn as a walking telly with a made-up cartoon presenter on screen, not anyone real). All 35 are done; `ART.standee`
+stays only as the fallback. Drawing source per place is kept in `/workspace/seen-off-steam/helpers/art-*.js`. Screenshots:
+`shots/d5-03-enemies-*.png`. Test: `m2d … enemies have real drawings` (`window.__SO.ART` exposed for the test only).
+
 ### Where to pick up next time
 
 State at end of 27 Nov 2026 (branch `archie/seen-off-dayout`, working copy `/workspace/seen-off-steam/desktop`, local git mirrors the pushed commits):
@@ -118,7 +146,7 @@ State at end of 27 Nov 2026 (branch `archie/seen-off-dayout`, working copy `/wor
    Kenneth's sprite redrawn from his portrait, his UI colour is near-black `#1d1c24`, and his hero-pick blurb says he has been drawn.
    Screenshots: `shots/d1-*`, `d2-*`, `d3-*.png`. Local helper scripts (push, screenshots) live in `/workspace/seen-off-steam/helpers/`
    because `/tmp` is wiped when the box is refreshed.
-2. **Tests:** `node tests/verify.js` (about 7 min; all passing on 27 Nov: 213 checks, or 211 when the keyboard bot loses its random first fight and the two Esc-menu checks are skipped; `ONLY=m2d` etc. runs one section). The autoplay driver takes the
+2. **Tests:** `node tests/verify.js` (about 7 min; all passing on 27 Nov: 214 checks, or 212 when the keyboard bot loses its random first fight and the two Esc-menu checks are skipped; `ONLY=m2d` etc. runs one section). The autoplay driver takes the
    last event option if the first one refuses. Playtest: `RUNS=6 node tools/playtest.js out.json`.
 3. **Card art is complete.** Suggested next: a desktop rebuild into `dist/m3/` (Windows/Linux bundles as in M2) so the painted cards
    ship in the app, then a quick visual pass at 1920x1080 and in the deck viewer. Quality bar if anything is redone: reject any image
@@ -127,7 +155,7 @@ State at end of 27 Nov 2026 (branch `archie/seen-off-dayout`, working copy `/wor
    `HAND=... node ../helpers/cardshot.js`, which sets a debug hand in the page without changing the game. Clutter cards are
    unplayable, so in a hand the game shows them desaturated (existing `.cd.no` style); `shots/d4-03b-shared-art.png` shows their art
    in full colour. Overviews for Ben: `shots/d3-08-hand-overview.png`, `shots/d4-04-overview.png`.
-4. **Still open for M3 (from the M2 proposal):** real drawings for the 35 new enemies (still labelled PLACEHOLDER stand-ups); the other
+4. **Still open for M3 (from the M2 proposal):** (enemy drawings done 27 Nov, see above) the other
    four places (Arcades & Bingo, the Winter Gardens, the B&B, the Old Pier); Daily Rules; legendary cards; a boss-health pass for later places.
 5. **Before release:** declare everything in the AI content list below in Steam's Content Survey.
 
@@ -376,7 +404,8 @@ unchanged. Today each unlock goes to localStorage, shows a toast and appears in 
 ## Building
 
 Prerequisites (Debian/Ubuntu): `libwebkit2gtk-4.1-dev build-essential libxdo-dev libssl-dev libayatana-appindicator3-dev librsvg2-dev`,
-Rust via rustup (stable), Node 18+, Python 3. For the Windows cross-build: `nsis lld llvm clang`, `rustup target add x86_64-pc-windows-msvc`,
+`dpkg-dev patchelf file` (linuxdeploy's GTK plugin calls `dpkg-architecture`),
+Rust via rustup (stable), Node 18+, Python 3. For the Windows cross-build: `nsis lld llvm clang` (`llvm` provides `llvm-rc`, which tauri-winres needs for the exe icon/version), `rustup target add x86_64-pc-windows-msvc`,
 `cargo install --locked cargo-xwin`, and `clang-cl` on PATH (e.g. `ln -s clang-cl-19 /usr/bin/clang-cl`). cargo-xwin downloads the MSVC CRT/SDK
 on first run, which means accepting Microsoft's licence for those files.
 
@@ -385,7 +414,7 @@ npm ci                      # Tauri CLI + playwright-core (tests)
 ./build-all.sh              # Windows NSIS installer (cross) + Linux .deb + .AppImage
 # or one at a time:
 npx tauri build --runner cargo-xwin --target x86_64-pc-windows-msvc --bundles nsis
-NO_STRIP=true npx tauri build --bundles deb,appimage
+APPIMAGE_EXTRACT_AND_RUN=1 NO_STRIP=true npx tauri build --bundles deb,appimage
 node tests/verify.js        # headless checks + screenshots into ../shots/
 ```
 

@@ -480,6 +480,9 @@ async function m2d(browser, port) {
   ok(`${tag} cat art files load`, loaded.every(w => w >= 300), loaded.join(','));
   ok(`${tag} hand with cat cards fits, nothing clips`, await ev(() => document.documentElement.scrollHeight <= innerHeight));
   await page.screenshot({ path: `${SHOTS}/m2-09-cat-cards.png` });
+  { const groups = [['castle', 'jelly', 'windbreak'], ['crab', 'donkey'], ['croc'], ['rockstick', 'teeth', 'fudge'], ['dummy', 'boiler'], ['bigrock', 'halfrock'], ['tall', 'dodgem', 'skeleton'], ['flume', 'kiosk'], ['rattler'], ['couple', 'lift', 'clown'], ['ringmaster', 'organ'], ['sausage', 'peas', 'curry'], ['queue', 'onion', 'fryer'], ['counter'], ['bulb', 'tableau', 'coach'], ['moth', 'littram'], ['telly']];
+    const drawn = await ev(async g => { if (!g.flat().every(k => typeof __SO.ART[k] === 'function')) return 'missing'; for (const x of g) { __SO.fightWith(x, 'F'); await new Promise(r => setTimeout(r, 300)); } return 'ok'; }, groups);
+    ok(`${tag} all 34 milestone-2 enemies have real drawings (the Tower Pigeon reuses the pigeon)`, drawn === 'ok', drawn); await page.screenshot({ path: `${SHOTS}/m3-enemies-telly.png` }); }
   ok(`${tag} zero external requests`, external.length === 0, external.slice(0, 5).join(' '));
   ok(`${tag} no page errors`, errors.length === 0, errors.slice(0, 3).join(' | '));
   await ctx.close();
