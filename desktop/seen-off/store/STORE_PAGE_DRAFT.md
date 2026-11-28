@@ -243,6 +243,8 @@ Valve sizes used here are the high-resolution ones:
 | Main capsule | 1232 x 706 | `store/capsules/DRAFT-main-1232x706.png` |
 | Library capsule | 600 x 900 | `store/capsules/DRAFT-library-600x900.png` |
 
+**Status (28 Nov 2026):** all four DRAFT files are in `store/capsules/`. One generation each, no retry (no garbled lettering). The title "SEEN OFF" and the red DRAFT label are composited afterwards in HTML/CSS, using Anton (the game font), not AI-generated letters. On the main capsule, two tiny background figures on the prom were painted out by hand and logged here. The paintings must be added to the AI disclosure before any of them go on a live store page.
+
 **Rules for every capsule:** true depictions of Reggie, Terry and Kenneth from the portraits in `refs/`. No other people. No money. No trade marks, no ride names, no "Blackpool Tower" lettering, no Pleasure Beach, no celebrities. Wordless AI painting: signs, papers and tickets stay blank. **The title "SEEN OFF" is composited afterwards as real text** (Anton, the game font) in HTML/CSS, never as AI-generated letters. Each asset is clearly labelled DRAFT (a small real-text overlay, not in the art). One generation per scene, at most one retry if lettering creeps in.
 
 **Briefs:**
