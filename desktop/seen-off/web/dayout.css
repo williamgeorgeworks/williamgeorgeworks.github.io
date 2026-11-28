@@ -54,11 +54,12 @@
 .pgrid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:10px;width:100%;max-width:1000px}
 .pcard{position:relative;aspect-ratio:3/2;border:3px solid var(--ink);border-radius:8px;overflow:hidden;display:grid;grid-template-rows:1fr auto auto;justify-items:center;align-items:center;padding:4px 4px 6px;
   background:linear-gradient(180deg,var(--c1),var(--c2));box-shadow:0 4px 0 var(--ink);color:var(--ink)}
-.pcard::after{content:'placeholder';position:absolute;left:4px;top:3px;font-size:.55rem;letter-spacing:.08em;text-transform:uppercase;opacity:.55}
+.pcard.painted{background-color:var(--c2);background-image:linear-gradient(180deg,rgba(20,20,20,0) 48%,rgba(20,20,20,.58) 100%),var(--pc);background-size:cover,cover;background-position:center,center;color:#fff}
+.pcard.painted i{color:#fff;text-shadow:1px 1px 0 var(--ink)}
 .pcard .pc-art .ic{width:30px;height:30px;color:#fff}
 .pcard i{font-family:var(--marker);font-style:normal;font-size:.62rem;line-height:1}
 .pcard b{font-family:var(--display);font-weight:400;text-transform:uppercase;font-size:.78rem;line-height:1.05;text-align:center;color:#fff;-webkit-text-stroke:.6px var(--ink);text-shadow:1.5px 1.5px 0 var(--ink)}
-.pcard .pc-st{position:absolute;right:3px;top:3px;display:flex;gap:2px}
+.pcard .pc-st{position:absolute;right:3px;top:3px;display:flex;gap:2px;z-index:2}
 .pcard .pc-st em{font-style:normal;font-family:var(--display);font-size:.55rem;width:15px;height:15px;display:grid;place-items:center;border-radius:50%;border:1.5px dashed rgba(20,20,20,.4);color:transparent}
 .pcard .pc-st em.on{border:1.5px solid var(--ink);background:#e3182d;color:#fff}
 .pcard .pc-st em.g.on{background:linear-gradient(135deg,#fff3a8,#d6a400);color:var(--ink)}

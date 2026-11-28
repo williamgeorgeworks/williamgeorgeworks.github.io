@@ -21,6 +21,7 @@ Steamworks is **not** integrated yet (no sign-ups, no app ID). There is a clean 
 | `tools/strip_original.py` | The old bundle step (strips network + chrome from the original). Now only writes `tools/stripped-baseline.html`, the fork's starting point |
 | `web/index.html` | **The game (hand-maintained fork).** The day-out block is marked `/* a day out (desktop, milestone 1) */` |
 | `web/dayout.css` | Styles for the day-out screens: stage picker, stamp, combo, postcards, report, rock meter, souvenir shop |
+| `web/postcards/` | Painted postcard fronts for the fourteen places (3:2 JPEGs). Visited album cards use these; titles are HTML text |
 | `web/desktop.css` | Desktop layout (full window, 1280x800 + 1920x1080), menu, focus ring, control hints |
 | `web/desktop.js` | Menu, fullscreen, keyboard + gamepad navigation, canvas fitting, achievement wiring |
 | `web/achievements.js` | `SeenOffAchievements.unlock(id)` stub (localStorage + event) for the Steam hook |
@@ -61,9 +62,10 @@ Saves: `so-day-v1` (rock, album, shelf, streak), alongside the game's `stp-v1` /
 by way of the Cloud"; **Spyro now matches his photos** (pure white, ginger ringed tail, a tiny ginger smudge on the forehead: the website's
 drawing had a white tail and a large off-centre patch, the website file itself is untouched).
 
-**Placeholder (M1 items, status after M2):** the Prom enemies now have real drawings (M2); the postcard art is still CSS cards marked
-"placeholder"; the place icons are still simple ink icons; the Last Tram was retuned in M2 (see below); Arthur's wig, the new Quill cards
-and the Daily Run now work (M2). The cat signature-card mockups are wired in (M2, see below).
+**Placeholder (M1 items, status after the 28 Nov 2026 postcard pass):** the Prom enemies now have real drawings (M2); the fourteen
+postcard fronts are painted (`web/postcards/`, 28 Nov 2026) with "Greetings from" and the place name as real HTML text; the place icons
+are still simple ink icons; the Last Tram was retuned in M2 (see below); Arthur's wig, the new Quill cards and the Daily Run now work
+(M2). The cat signature-card mockups are wired in (M2, see below).
 
 ## A Blackpool Day Out: Milestone 2 (six places, unlocks, polish)
 
@@ -93,7 +95,7 @@ with its name on it (`ART.standee`; replaced by real drawings in M3, see below),
    a made-up presenter, not anyone real).
 2. Six place backdrops (or overlays for the existing pier backdrops) to replace the prop sketches.
 3. Card art for the 12 new Quill cards, and card-art crops for the other cards if the mockup style becomes the standard.
-4. The postcard fronts (still CSS placeholders from M1) and the place icons.
+4. The postcard fronts are done (28 Nov 2026, `web/postcards/`). The place icons are still simple ink icons.
 
 **Art credit / disclosure:** `web/cats/*.jpg` are crops of the card mockups supplied in `../mockups/`. If those mockups were made with
 AI image tools, they must be declared in Steam's Content Survey (see the Content Survey notes in `content-plan.md`). Nothing else in M2 is an image file.
@@ -383,9 +385,14 @@ crops in `web/cards/` (`junk`, `sock`, `ticket`, `wblock`, `photo`, `catchp`).
 - `web/cards/handout.jpg`: AI-generated (28 Nov 2026) prop still-life in our card style (blank conference leaflets, no heroes, people, lettering or money). One generation, no retry. Screenshots: `shots/d6-05-handout.jpg`, `shots/d6-05-handout-card.png`, `shots/d6-05-handout-hand.png`.
 - `web/cards/nohot.jpg`, `groan.jpg`, `condemned.jpg`, `wetsand.jpg`: AI-generated (28 Nov 2026) prop still-lifes in our card style (No Hot Food in Rooms, Groan, Condemned, Wet Sand; no heroes, people, lettering or money). One generation each, no retry. Screenshots: `shots/d8-01-*.jpg`, `shots/d8-02-clutter-hand.png`, `shots/d8-02-clutter-cards.png`.
 - `web/cards/bankrupt.jpg`, `magnum.jpg`, `cloud.jpg`: AI-generated (28 Nov 2026) from the three heroes' portraits and our card style (Bankrupt, Magnum Opus, The Cloud Provides). One generation each, no retry. Wordless papers and cards; no money. Screenshots: `shots/d9-01-*.jpg`, `shots/d9-02-legend-hand.png`.
+- `web/postcards/prom.jpg`, `beach.jpg`, `rock.jpg`, `south.jpg`, `park.jpg`, `tower.jpg`, `central.jpg`, `chippy.jpg`, `arcades.jpg`, `north.jpg`, `lights.jpg`, `winter.jpg`, `bnb.jpg`, `oldpier.jpg`: AI-generated (28 Nov 2026) painted postcard fronts in our card style, one per place. Wordless paintings (no titles, signs, ride names or trade marks); "Greetings from" and the place name are real HTML/CSS text in the album. One generation each; park, arcades, South Pier and North Pier each had one retry (garbled lettering or tiny background figures). South Pier mid-ground figures on the retry were further softened by hand and logged. No people in the other thirteen. The Tower and North Pier lanterns are blank or a plain glow, with no lettering.
 - `web/cats/*.jpg` (all six cat signature cards): crops of the cat card mockups in `../mockups/card-*.jpg`, which **were AI-generated**
   (from the cats' real photos). Declare them as pre-generated AI content.
 - The full-size sources of all of the above in `../mockups/`.
+
+### Postcard fronts (28 Nov 2026)
+
+The Postcard Album no longer uses CSS gradient placeholders. Each of the fourteen places has a painted 3:2 front in `web/postcards/{id}.jpg`. Unvisited cards stay striped and say "Not yet visited". Visited cards show the painting, with **Greetings from** and the place name (`The Prom`, `The Tower`, `The Lights`, `The Pleasure Park`, and so on) overlaid as real HTML text in Anton / Permanent Marker, never as letters in the painting. Signs, rock, trams, machines and hanging boards in the paintings are blank. No real attraction branding.
 
 ### Legendary cards (28 Nov 2026)
 

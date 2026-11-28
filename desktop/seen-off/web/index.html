@@ -781,7 +781,7 @@ function stageHTML(){
 }
 function postcardHTML(id){
   var s=STAGES[id],a=DAY.album[id]||{},v=!!a.v;
-  return '<div class="pcard'+(v?'':' blank')+'" style="--c1:'+s.c1+';--c2:'+s.c2+'"><span class="pc-art">'+ic(v?s.ic:'what')+'</span><i>'+(v?'Greetings from':'Not yet visited')+'</i><b>'+(v?s.n:'? ? ?')+'</b>'+
+  return '<div class="pcard'+(v?' painted':' blank')+'" style="--c1:'+s.c1+';--c2:'+s.c2+(v?';--pc:url(postcards/'+id+'.jpg)':'')+'">'+(v?'':'<span class="pc-art">'+ic('what')+'</span>')+'<i>'+(v?'Greetings from':'Not yet visited')+'</i><b>'+(v?s.n:'? ? ?')+'</b>'+
     '<span class="pc-st"><em class="'+(a.v?'on':'')+'" title="Visited">V</em><em class="'+(a.s?'on':'')+'" title="Seen off">S</em><em class="g'+(a.g?' on':'')+'" title="Gold foil: seen off on Encore 3 or higher">G</em></span></div>';
 }
 var SHELFX={fudge:['Bag of Fudge','Whatever you had left.']};
@@ -791,7 +791,7 @@ function albumHTML(){
   if(stickGot('hat','wig'))h+='<button type="button" class="chip" data-a="wig" aria-pressed="'+wigOn()+'">Arthur’s wig: '+(wigOn()?'on':'off')+'</button>';
   h+='</div>';
   if(t==='cards'){var n=0;Object.keys(DAY.album).forEach(function(k){var a=DAY.album[k];n+=(a.v?1:0)+(a.s?1:0)+(a.g?1:0);});
-    h+='<p>'+n+' of 42 stamps. <small class="ph">Postcard art is placeholder.</small></p><div class="pgrid">';
+    h+='<p>'+n+' of 42 stamps.</p><div class="pgrid">';
     PARTS.forEach(function(P){P.stages.forEach(function(id){h+=postcardHTML(id);});});h+='</div>';}
   else if(t==='rock'){h+='<p>'+DAY.sticks+' of '+STICKS.length+' sticks pulled. Every point you score goes into the next one.</p>'+rockHTML('sm')+'<div class="rgrid">';
     STICKS.forEach(function(s,k){h+='<span class="rstick'+(k<DAY.sticks?' on':'')+'" title="'+(k<DAY.sticks?stickName(k):'Not pulled yet')+'"><b>'+(k<DAY.sticks?s[3]:'#'+(k+1))+'</b></span>';});h+='</div>';}

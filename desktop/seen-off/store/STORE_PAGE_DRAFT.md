@@ -101,7 +101,7 @@ Suggested store-feature lines (short, built, honest):
 - A Daily Run with a Daily Rule, the same for everyone that day
 - Keyboard and controller, laid out for the Steam Deck, and it plays offline
 
-**Do not claim on the page (not built, or not true yet):** the Ferret as a playable Quill; Steam achievements (eight local stubs exist, not hooked up to Steamworks); Steam leaderboards; Encore 6-10; a Mac build; "Deck Verified" (not yet tested on a real Deck); finished postcard-front art (the album still says the fronts are placeholders).
+**Do not claim on the page (not built, or not true yet):** the Ferret as a playable Quill; Steam achievements (eight local stubs exist, not hooked up to Steamworks); Steam leaderboards; Encore 6-10; a Mac build; "Deck Verified" (not yet tested on a real Deck).
 
 **Counts, from the code, 28 Nov 2026:** 87 cards (`C()` in `web/index.html`: 9 starter, 27 common, 20 uncommon, 10 rare, 3 legendary, 18 uncollectable / clutter / familiar). 3 Quills and 6 cats. 14 places in `STAGES`. 94 enemy kinds in `EN` (including summoned backbenchers and the King of the Seagulls, Returned). 21 keepsakes in `RELICS`. 8 brews in `BREWS`. Encore 0-5. The Daily Run is in; mid-fight draws after turn 1 are not date-seeded.
 
@@ -204,7 +204,7 @@ If store capsules or a trailer later use AI images, add "and some store artwork"
 
 ## 7. Store screenshots (1920x1080, real gameplay)
 
-Captured 28 Nov 2026 from the current desktop `web/` build (the same content as the m3c AppImage) at 1920x1080. They live in `store/screenshots/`. They are real game UI, not mockups. Hands and fights were posed so a useful set of painted cards is on screen; the screens themselves are the live game. Achievement toasts were pre-cleared so they do not cover the art. The postcard album shot uses a few stamps filled in so the page is readable; its fronts are still the in-game placeholders.
+Captured 28 Nov 2026 from the current desktop `web/` build (the same content as the m3c AppImage) at 1920x1080. They live in `store/screenshots/`. They are real game UI, not mockups. Hands and fights were posed so a useful set of painted cards is on screen; the screens themselves are the live game. Achievement toasts were pre-cleared so they do not cover the art. The postcard album shot uses a few stamps filled in so the page is readable; the fronts are the painted 28 Nov 2026 art, with titles as real HTML text.
 
 Steam wants at least five. Mark at least four as suitable for all ages (all ten here are). No OS chrome, no "Blackpool Tower" caption, no Pleasure Beach, no real-brand logos.
 
@@ -218,15 +218,15 @@ Steam wants at least five. Mark at least four as suitable for all ages (all ten 
 | 4 | `02-cat-picker.png` | "Three cats have noticed you" | Yes |
 | 5 | `08-card-reward.png` | Card reward: three painted cards with the NEW! stamp, after a fight is seen off | Yes |
 | 6 | `07-winter-keynote.png` | The Winter Gardens, Kenneth, the Keynote Speaker, and The Cloud Provides in the hand | Yes |
-| 7 | `04-morning-places.png` | Morning, 9am: the Prom, the Beach and the Rock Shop, once those places are open | Yes |
-| 8 | `10-bnb-landlady.png` | Last orders at the B&B. The Landlady, a "NO VACANCIES" sign, Bankrupt in the hand | Yes |
+| 7 | `09-postcard-album.png` | The Postcard Album, with painted fronts and HTML titles | Yes |
+| 8 | `04-morning-places.png` | Morning, 9am: the Prom, the Beach and the Rock Shop, once those places are open | Yes |
+| 9 | `10-bnb-landlady.png` | Last orders at the B&B. The Landlady, a "NO VACANCIES" sign, Bankrupt in the hand | Yes |
 
 **Also taken, use with care:**
 
 | File | Note |
 |---|---|
 | `03-morning-first-day.png` | The first-run picker, with the Beach and the Rock Shop still locked. Honest, but less of a "day out" hook than `04`. |
-| `09-postcard-album.png` | The real album UI. The game itself labels the fronts as placeholders. Better held back until postcard art exists, or used only if we want to be early and honest. |
 
 **Still worth taking later:** a combo / "SEEN OFF!" stamp mid-fight; the Day Out Report; the Daily Run rule on the title screen; a Lights fight (the background may show a tower silhouette: do not caption it with a trade mark); the controller glyphs at 1280x800, recaptured at 1920x1080 if Valve want a Deck-like shot.
 
