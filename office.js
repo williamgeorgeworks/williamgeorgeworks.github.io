@@ -178,16 +178,16 @@ const PLACE_FLAVOUR = {
 };
 /* Little speech bubbles. Kept short: the pixel font is tiny. */
 const BUBBLES = {
-  kettle: ["TEA?", "BREW!", "BISCUIT?"],
-  darts: ["180!", "OOPS", "DOUBLE TOP"],
-  arcade: ["1UP!", "HI SCORE", "ONE MORE GO"],
+  kettle: ["TEA?", "BREW!", "BISCUIT?", "WHO'S HAD MY MUG?", "I'LL BE MOTHER", "JUST THE ONE"],
+  darts: ["180!", "OOPS", "DOUBLE TOP", "MIDDLES!", "ONE SEVEN FIVE"],
+  arcade: ["1UP!", "HI SCORE", "ONE MORE GO", "INSERT EXCUSE"],
   rods: ["THIS BIG", "NIBBLE?"],
-  sofa: ["ZZZ", "ZZZ", "COMFY"],
-  lounge: ["NO WAY", "OOH"],
-  canteen: ["CHIPS!", "VINEGAR?"],
-  printer: ["PC LOAD LETTER", "JAM?"],
-  music: [],
-  office: []
+  sofa: ["ZZZ", "COMFY", "FIVE MORE MINS"],
+  lounge: ["NO WAY", "OOH", "DID YOU HEAR?"],
+  canteen: ["CHIPS!", "VINEGAR?", "SCRAPS?", "THE USUAL"],
+  printer: ["PC LOAD LETTER", "JAM?", "TILLY AGAIN", "CAT IN PRINTER"],
+  music: ["ONE MORE TUNE", "THINNER!", "BAIRD?"],
+  office: ["SHH", "GONE ON HOLIDAY"]
 };
 /* Who tends to head where, when they have the choice. Everyone else picks at random. */
 const LIKES = {
@@ -206,6 +206,47 @@ const DWELL = {
 
 function pick(arr, salt) {
   return arr[Math.abs((salt | 0) + arr.length * 3) % arr.length];
+}
+
+/* Wall-clock time in Europe/London, including BST when it's on. Used for the
+   office clock, Today's Special, and the darts score as the day wears on. */
+function ukNow() {
+  const parts = {};
+  new Intl.DateTimeFormat("en-GB", {
+    timeZone: "Europe/London",
+    hour: "numeric", minute: "numeric", second: "numeric",
+    hourCycle: "h23",
+    day: "numeric", month: "numeric", year: "numeric"
+  }).formatToParts(new Date()).forEach(p => { parts[p.type] = p.value; });
+  return {
+    hour: +parts.hour, minute: +parts.minute, second: +parts.second,
+    day: +parts.day, month: +parts.month, year: +parts.year
+  };
+}
+function ukDayOfYear() {
+  const t = ukNow();
+  const md = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+  if (t.year % 4 === 0 && (t.year % 100 !== 0 || t.year % 400 === 0)) md[2] = 29;
+  let n = t.day;
+  for (let m = 1; m < t.month; m++) n += md[m];
+  return n;
+}
+const CANTEEN_SPECIALS = [
+  "CHIP BARM", "MUSHY PEAS", "GRAVY", "SCRAPS", "HADDOCK",
+  "PIE AND PEAS", "CURRY SAUCE", "FISH CAKE", "PEA WET",
+  "SAUSAGE BARM", "STEAK PUD", "CHIP BUTTY", "SCALLOPS",
+  "CHEESE CHIPS", "FISH SUPPER", "GRAVY BARM"
+];
+function todaySpecial() {
+  return CANTEEN_SPECIALS[(ukDayOfYear() - 1) % CANTEEN_SPECIALS.length];
+}
+/* The wall clock hangs on the office wall, and Arthur naps on the floor under it. */
+const CLOCK = { cx: 248, cy: 108, r: 13 };
+
+function line(x0, y0, x1, y1, colour) {
+  const dx = x1 - x0, dy = y1 - y0;
+  const n = Math.max(Math.abs(dx), Math.abs(dy), 1);
+  for (let i = 0; i <= n; i++) p(x0 + dx * i / n, y0 + dy * i / n, 1, 1, colour);
 }
 
 
@@ -353,6 +394,7 @@ function layoutSpots() {
 
 /* Cats go where they like, in straight lines, as cats do. */
 const CAT_SPOTS = [
+  { x: CLOCK.cx, y: 136, clock: true },
   { x: 590, y: 322, sofa: true }, { x: 540, y: 412 }, { x: 612, y: 216 }, { x: 600, y: 266 },
   { x: 200, y: 280 }, { x: 120, y: 350 }, { x: 300, y: 420 }, { x: 440, y: 380 },
   { x: 520, y: 118 }, { x: 440, y: 180 }
@@ -712,7 +754,7 @@ function tickPerson(p, dt) {
 }
 
 /* The darts: one thrower at a time, three darts, then they fetch them back. */
-const darts = { stuck: [], t: 0, flying: null };
+const darts = { stuck: [], t: 0, flying: null, session: 0 };
 function tickDarts(dt) {
   const thrower = people.find(p => p.activity === "darts" && p.spot && !p.spot.waiting && !p.target);
   if (!thrower) {
@@ -732,7 +774,7 @@ function tickDarts(dt) {
     const rad = miss ? BOARD.r + 3 + Math.random() * 4 : Math.random() * (BOARD.r - 2);
     darts.flying = {
       x0: thrower.x + (thrower.facing === "l" ? 8 : -10), y0: thrower.y - 40,
-      x1: BOARD.cx + Math.cos(ang) * rad, y1: BOARD.cy + Math.sin(ang) * rad, t: 0
+      x1: BOARD.cx + Math.cos(ang) * rad, y1: BOARD.cy + Math.sin(ang) * rad, t: 0, miss: miss
     };
     thrower.throwT = 0;
   }
@@ -740,6 +782,7 @@ function tickDarts(dt) {
     darts.flying.t += dt / 0.32;
     if (darts.flying.t >= 1) {
       darts.stuck.push({ x: darts.flying.x1, y: darts.flying.y1 });
+      if (!darts.flying.miss) darts.session += 15 + ((darts.stuck.length * 17 + (ukNow().minute | 0)) % 46);
       darts.flying = null;
     }
   }
@@ -754,9 +797,11 @@ function tickCat(c, dt) {
   const arrived = stepMove(c, dt, 28);
   if (arrived) {
     c.wait = 4 + Math.random() * 10;
-    if (c.id === "arthur" && c.spot && c.spot.sofa) c.wait += 10;   /* Arthur and the sofa have an understanding */
+    if (c.id === "arthur" && c.spot && (c.spot.sofa || c.spot.clock)) c.wait += 16;
     const taken = cats.filter(o => o !== c).map(o => o.spot);
-    const options = CAT_SPOTS.filter(s => s !== c.spot && !taken.includes(s));
+    const clock = CAT_SPOTS.find(s => s.clock);
+    let options = CAT_SPOTS.filter(s => s !== c.spot && !taken.includes(s));
+    if (c.id === "arthur" && clock && !taken.includes(clock) && Math.random() < 0.45) options = [clock];
     const dest = options[Math.floor(Math.random() * options.length)];
     if (dest) {
       c.spot = dest;
@@ -998,10 +1043,9 @@ function drawNook() {
   p(c.x + 26, c.y + 40, 3, 3, "#6ab8d8");
   p(c.x + 12, c.y + 52, 8, 6, "#141414");
   p(c.x + 15, c.y + 53, 2, 4, "#e6c200");
-  /* Chalk scoreboard and the dartboard. */
-  box(BOARD.cx - 40, n.y + 6, 22, 26, "#1a1a1a", "#6b4a2a");
-  for (let i = 0; i < 4; i++) p(BOARD.cx - 37, n.y + 10 + i * 5, 6 + (i * 5) % 9, 1, "#d8d4c8");
-  p(BOARD.cx - 28, n.y + 9, 1, 20, "#d8d4c8");
+  /* Chalk scoreboard (the numbers are drawn each frame, as the day wears on). */
+  box(BOARD.cx - 48, n.y + 4, 32, 30, "#1a1a1a", "#6b4a2a");
+  p(BOARD.cx - 47, n.y + 5, 30, 1, "#3a3a28");
   disc(BOARD.cx, BOARD.cy, BOARD.r + 1, "#141414");
   disc(BOARD.cx, BOARD.cy, BOARD.r - 1, "#1a1a1a");
   for (let a = 0; a < 20; a++) {
@@ -1203,15 +1247,76 @@ function buildScenery() {
 }
 
 /* The bits of scenery that move: steam, toast, the arcade screen, the darts, the machine. */
+function dartsRemaining() {
+  /* A 301 game that ticks down through the UK day, plus any throws this visit. */
+  const t = ukNow();
+  const elapsed = Math.max(0, t.hour * 60 + t.minute - 8 * 60);
+  const visits = Math.floor(elapsed / 11);
+  let score = 301;
+  for (let i = 0; i < visits; i++) score = Math.max(0, score - (15 + (i * 17) % 46));
+  score = Math.max(0, score - (darts.session || 0));
+  return score;
+}
+
+function drawWallClock() {
+  const cx = CLOCK.cx, cy = CLOCK.cy, r = CLOCK.r;
+  disc(cx, cy, r + 2, "#3d2a1c");
+  disc(cx, cy, r, "#f4f0e4");
+  p(cx, cy - r + 2, 1, 3, "#141414");
+  p(cx, cy + r - 4, 1, 3, "#141414");
+  p(cx - r + 2, cy, 3, 1, "#141414");
+  p(cx + r - 4, cy, 3, 1, "#141414");
+  const t = ukNow();
+  const hourAng = ((t.hour % 12) + t.minute / 60) / 12 * Math.PI * 2 - Math.PI / 2;
+  const minAng = (t.minute + t.second / 60) / 60 * Math.PI * 2 - Math.PI / 2;
+  line(cx, cy, cx + Math.cos(hourAng) * (r - 6), cy + Math.sin(hourAng) * (r - 6), "#141414");
+  line(cx, cy, cx + Math.cos(minAng) * (r - 3), cy + Math.sin(minAng) * (r - 3), "#3d2a1c");
+  if (!REDUCE) {
+    const secAng = t.second / 60 * Math.PI * 2 - Math.PI / 2;
+    line(cx, cy, cx + Math.cos(secAng) * (r - 2), cy + Math.sin(secAng) * (r - 2), "#d1202f");
+  }
+  p(cx, cy, 2, 2, "#d1202f");
+}
+
+function drawCanteenSpecial() {
+  const room = rooms.find(r => r.id === "canteen");
+  if (!room) return;
+  const x = room.x + 168, y = room.y + 4, w = 70, h = 22;
+  box(x, y, w, h, "#2a2a18", "#6b4a2a");
+  p(x + 1, y + 1, w - 2, 1, "#4a4a30");
+  if (!EMBED) {
+    drawLabel(x + w / 2, y + 3, "TODAY", "#c8c4a0");
+    drawLabel(x + w / 2, y + 12, todaySpecial(), "#f4f0e4");
+  }
+}
+
+function drawDartsScore() {
+  const x = BOARD.cx - 48, y = 4;
+  const left = dartsRemaining();
+  if (EMBED) return;
+  drawLabel(x + 16, y + 6, "301", "#8a8668");
+  p(x + 4, y + 13, 24, 1, "#5a5640");
+  drawLabel(x + 16, y + 16, left === 0 ? "GAME" : String(left), "#f4f0e4");
+}
+
 function drawLiveScenery() {
   const kx = KETTLE.x + 18, ky = KETTLE.y + 12 - 18;
   const brewing = people.some(pr => pr.activity === "kettle" && !pr.target);
-  if (!REDUCE) {
-    const s = (animT * 1.6) % 1;
-    p(kx + 14, ky - 8 - s * 7, 2, 3, "#ffffffcc");
-    p(kx + 18, ky - 10 - s * 9, 2, 3, "#ffffff88");
-    if (brewing) p(kx + 11, ky - 12 - ((animT * 1.3 + 0.5) % 1) * 10, 2, 3, "#ffffffaa");
+  /* Steam only really gets going when someone is on kettle duty. */
+  /* Puffs stay over the counter, rather than drifting up into the games nook. */
+  if (brewing) {
+    const s1 = REDUCE ? 0.4 : (animT * 1.4) % 1;
+    const s2 = REDUCE ? 0.7 : (animT * 1.1 + 0.35) % 1;
+    const s3 = REDUCE ? 0.2 : (animT * 1.7 + 0.6) % 1;
+    p(kx + 13, ky + 2 - s1 * 8, 3, 4, "#ffffffdd");
+    p(kx + 18, ky + 1 - s2 * 9, 3, 4, "#ffffffbb");
+    p(kx + 10, ky + 4 - s3 * 7, 2, 3, "#ffffffcc");
+    p(kx + 16, ky - 2 - s2 * 5, 4, 3, "#ffffff88");
+    p(kx + 21, ky + 3 - s1 * 6, 2, 3, "#ffffff99");
   }
+  drawWallClock();
+  drawCanteenSpecial();
+  drawDartsScore();
   /* Toast pops up every so often. */
   const tx = KETTLE.x + 16 + 42, ty = KETTLE.y + 12 - 8;
   const pop = !REDUCE && (animT % 9) > 7.6;
@@ -1517,10 +1622,17 @@ function drawProp(px, py, kind, facing) {
     p(px + 3, py + 3, 3, 3, "#2a2a2a");
     p(px + 8, py + 2, 3, 5, "#3d2a1c");
   } else if (kind === "coin") {
-    p(px + 1, py, 7, 9, "#d4af37");
-    p(px, py + 2, 9, 5, "#d4af37");
-    p(px + 3, py + 2, 3, 5, "#f2e6a0");
-    p(px + 4, py + 3, 1, 3, "#8a6a20");
+    /* Penny's coin: every few seconds it spins on the spot, then sits still again. */
+    const spin = !REDUCE && ((animT * 0.55) % 7) < 1.1;
+    const phase = spin ? Math.abs(Math.cos(animT * 10)) : 1;
+    const cw = Math.max(1, Math.round(9 * phase));
+    const cx = px + 4 - Math.floor(cw / 2);
+    p(cx + 1, py, cw - 2, 9, "#d4af37");
+    p(cx, py + 2, cw, 5, "#d4af37");
+    if (cw > 3) {
+      p(cx + Math.floor(cw / 2), py + 2, 1, 5, "#f2e6a0");
+      if (cw > 5) p(cx + Math.floor(cw / 2), py + 3, 1, 3, "#8a6a20");
+    }
   } else if (kind === "whistle") {
     box(px, py + 2, 8, 4, "#c0c0c0", "#141414");
     p(px + 8, py + 3, 3, 2, "#c0c0c0");
@@ -1562,14 +1674,13 @@ function drawProp(px, py, kind, facing) {
     p(px + 4, py + 2, 2, 3, "#1a1a1a");
     p(px + 5, py + 3, 1, 1, "#1a1a1a");
   } else if (kind === "tablet") {
-    /* Kraken Keith's tablet: a green candlestick chart, going up, for now. */
+    /* Kraken Keith's tablet: the chart flips from a green rise to a red dip. */
+    const up = REDUCE || ((animT * 0.35 | 0) % 2 === 0);
     box(px, py, 10, 9, "#1a1a1a", "#141414");
-    p(px + 1, py + 1, 8, 7, "#0e1a14");
-    p(px + 2, py + 5, 1, 2, "#3dff7a");
-    p(px + 4, py + 4, 1, 2, "#3dff7a");
-    p(px + 5, py + 4, 1, 1, "#d1202f");
-    p(px + 6, py + 2, 1, 3, "#3dff7a");
-    p(px + 7, py + 1, 1, 2, "#3dff7a");
+    p(px + 1, py + 1, 8, 7, up ? "#0e1a14" : "#1a0e0e");
+    const col = up ? "#3dff7a" : "#d1202f";
+    const bars = up ? [2, 3, 3, 5, 4, 6] : [6, 5, 5, 3, 4, 2];
+    bars.forEach((h, i) => p(px + 2 + i, py + 8 - h, 1, Math.max(1, h - 1), col));
   } else if (kind === "quill") {
     p(px + 3, py, 4, 5, "#f4f0e4");
     p(px + 4, py + 1, 2, 3, "#ffffff");
@@ -2221,8 +2332,35 @@ function drawBubble(pr) {
 }
 
 function drawArthur(c) {
+  const asleep = c.spot && c.spot.clock && !c.target;
   const bob = (!REDUCE && c.target && c.wait <= 0) ? ((c.walkT * 7 | 0) % 2) : 0;
   const x = Math.round(c.x), y = Math.round(c.y + bob);
+  if (asleep) {
+    /* A Ragdoll loaf, under the clock. Eyes shut, tail wrapped round. */
+    shadow(x - 12, y + 2, 24, 5);
+    const cream = "#e8d6b8", hi = "#f4efe4", point = "#6b5348", pointD = "#4a3a34";
+    p(x - 13, y - 8, 26, 11, cream);
+    p(x - 11, y - 10, 22, 5, hi);
+    p(x - 8, y - 7, 16, 7, "#f4efe8");
+    p(x - 8, y - 16, 14, 9, cream);
+    p(x - 7, y - 17, 5, 5, point);
+    p(x + 2, y - 17, 5, 5, point);
+    p(x - 7, y - 13, 12, 6, point);
+    p(x - 6, y - 10, 10, 3, cream);
+    p(x - 5, y - 13, 4, 1, "#3d2a1c");
+    p(x + 1, y - 13, 4, 1, "#3d2a1c");
+    p(x - 3, y - 9, 4, 2, "#c48a8a");
+    p(x + 8, y - 6, 10, 6, point);
+    p(x + 14, y - 3, 7, 6, pointD);
+    p(x - 11, y + 1, 8, 3, cream);
+    p(x + 3, y + 1, 8, 3, cream);
+    if (!REDUCE && ((animT * 0.8) % 2) < 1.2) {
+      p(x + 8, y - 22, 1, 2, "#9a968c");
+      p(x + 10, y - 26, 1, 3, "#9a968c");
+      p(x + 12, y - 23, 1, 2, "#9a968c");
+    }
+    return;
+  }
   shadow(x - 10, y + 3, 22, 5);
   const cream = "#e8d6b8";
   const hi = "#f4efe4";
@@ -2419,12 +2557,17 @@ function applyShareDemo() {
     if (bubbles[p.id]) p.bubble = { text: bubbles[p.id], t: 9999 };
   });
   darts.stuck = [{ x: BOARD.cx - 2, y: BOARD.cy - 3 }, { x: BOARD.cx + 1, y: BOARD.cy - 4 }, { x: BOARD.cx - 1, y: BOARD.cy - 5 }];
-  const poses = [{ x: 590, y: 322 }, { x: 540, y: 412 }];
+  const clock = CAT_SPOTS.find(s => s.clock);
+  const poses = [
+    { x: clock ? clock.x : CLOCK.cx, y: clock ? clock.y : 136, spot: clock },
+    { x: 540, y: 412, spot: CAT_SPOTS.find(s => s.x === 540) }
+  ];
   cats.forEach((c, i) => {
     c.target = null;
     c.wait = 9999;
     c.x = poses[i % poses.length].x;
     c.y = poses[i % poses.length].y;
+    if (poses[i % poses.length].spot) c.spot = poses[i % poses.length].spot;
   });
   paintBoard();
   demoAppliedWorking = true;
@@ -2480,6 +2623,15 @@ function applyDemo(now) {
       k.facing = "r";
       k.wait = 9999;
       k.glanceT = 0;
+      const arthur = cats.find(c => c.id === "arthur");
+      const clock = CAT_SPOTS.find(s => s.clock);
+      if (arthur && clock) {
+        arthur.target = null;
+        arthur.wait = 9999;
+        arthur.x = clock.x;
+        arthur.y = clock.y;
+        arthur.spot = clock;
+      }
       demoAppliedIdle = true;
     }
   }
