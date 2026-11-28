@@ -123,6 +123,17 @@ The AppImage was smoke-tested under Xvfb (`shots/d5-01-appimage-xvfb.png`, `d5-0
 No Mac build. Windows and Steam Deck were not run on real hardware. The enemy drawings below came after this build, so they are
 not in `dist/m3/` until the next rebuild.
 
+**Desktop build `dist/m3b/`** (built 28 Nov 2026 from commit `4ac43723`, which includes all ten new places, Daily Rules, both boss-health passes, enemy drawings and the Handout card art; copies with `SHA256SUMS` in `/workspace/seen-off-steam/builds-m3b/`). Also at `/workspace/seen-off-steam/dist/m3b/`. Not uploaded or published anywhere.
+
+| File | Bytes | sha256 |
+|---|---|---|
+| `Seen Off_0.1.0_amd64.AppImage` (Linux / Steam Deck) | 97,921,528 | `4361496e1e199064197e553bac5892ad104e6025531ff30876a31c56e11e2177` |
+| `Seen Off_0.1.0_amd64.deb` | 6,423,940 | `b88ccdae16491db82a91f666c6332901856cd3fd59c89c1b657a232175a2bda9` |
+| `Seen Off_0.1.0_x64-setup.exe` (Windows NSIS installer) | 7,918,743 | `9935a10cee1b234dbd9960ac1dbaf7056fdee9754a555ba9dded47eb940bc1b6` |
+| `seen-off.exe` (bare Windows exe) | 8,107,520 | `077ca28444be0ddd7302fe129d9572b04f2a9da170c3c25e7468f7195fc777e7` |
+
+The AppImage was smoke-tested under Xvfb at 1280x800 with `SteamDeck=1` (`shots/d7-01-appimage-xvfb.png`, `d7-02-appimage-ingame.png`, `d7-02b-appimage-map.png`, `d7-03-appimage-fight.png`). No Mac build. Windows and Steam Deck were not run on real hardware.
+
 **Enemy drawings (no AI):** the PLACEHOLDER stand-ups are replaced by canvas ink drawings in the same `ART` style as the pier
 enemies, so nothing here is an AI image and nothing needs adding to the AI content list. Done: Beach (Sandcastle, Jellyfish, Windbreak,
 Shore Crab, the Donkey, the Crocodile in a striped puppet booth with his string of sausages), Rock Shop (Stick of Rock, Chattering Teeth,
@@ -166,16 +177,15 @@ State at end of 27 Nov 2026 (branch `archie/seen-off-dayout`, working copy `/wor
    Kenneth's sprite redrawn from his portrait, his UI colour is near-black `#1d1c24`, and his hero-pick blurb says he has been drawn.
    Screenshots: `shots/d1-*`, `d2-*`, `d3-*.png`. Local helper scripts (push, screenshots) live in `/workspace/seen-off-steam/helpers/`
    because `/tmp` is wiped when the box is refreshed.
-2. **Tests:** `node tests/verify.js` (about 7 min; all passing on 28 Nov: 246 checks, or two fewer when the keyboard bot loses its random first fight and the two Esc-menu checks are skipped; `ONLY=m2d` etc. runs one section). The autoplay driver takes the
+2. **Tests:** `node tests/verify.js` (about 7 min; all passing on 28 Nov: 247 checks, or two fewer when the keyboard bot loses its random first fight and the two Esc-menu checks are skipped; `ONLY=m2d` etc. runs one section). The autoplay driver takes the
    last event option if the first one refuses. Playtest: `RUNS=6 node tools/playtest.js out.json`.
-3. **Card art is complete.** Suggested next: a desktop rebuild into `dist/m3/` (Windows/Linux bundles as in M2) so the painted cards
-   ship in the app, then a quick visual pass at 1920x1080 and in the deck viewer. Quality bar if anything is redone: reject any image
+3. **Card art is complete** (plus the Handout card, 28 Nov). Desktop rebuild `dist/m3b/` is done (see above). A later visual pass at 1920x1080 and in the deck viewer is still worth doing. Quality bar if anything is redone: reject any image
    with garbled lettering (prompts ask for a wordless image; signs, papers and cards stay blank; a stray background sign may be
    painted out by hand and logged). Unlock cards are locked at the start of a run, so screenshot them with
    `HAND=... node ../helpers/cardshot.js`, which sets a debug hand in the page without changing the game. Clutter cards are
    unplayable, so in a hand the game shows them desaturated (existing `.cd.no` style); `shots/d4-03b-shared-art.png` shows their art
    in full colour. Overviews for Ben: `shots/d3-08-hand-overview.png`, `shots/d4-04-overview.png`.
-4. **Still open for M3 (from the M2 proposal):** legendary cards; painted art for the remaining new clutter (No Hot Food in Rooms, Groan, Condemned, Wet Sand). Handout art, enemy drawings, all ten new places, Daily Rules and both boss-health passes are done, 27–28 Nov, see above. First pass: Counter 188–196, the Man Off the Telly 236–244, Old Rattler 146–154; the Crocodile left as the hard early boss. Second pass: the Mighty Organ 154–162; the Rock Shop stick, the Bingo Caller and the Keynote Speaker left alone.
+4. **Still open for M3 (from the M2 proposal):** legendary cards; painted art for the remaining new clutter (No Hot Food in Rooms, Groan, Condemned, Wet Sand). Handout art, enemy drawings, all ten new places, Daily Rules, both boss-health passes and the `dist/m3b/` desktop rebuild are done, 27–28 Nov, see above. First pass: Counter 188–196, the Man Off the Telly 236–244, Old Rattler 146–154; the Crocodile left as the hard early boss. Second pass: the Mighty Organ 154–162; the Rock Shop stick, the Bingo Caller and the Keynote Speaker left alone.
 5. **Before release:** declare everything in the AI content list below in Steam's Content Survey.
 
 **WebKitGTK note:** `app.security.dangerousDisableAssetCspModification` is `["style-src"]`. Without it Tauri adds hashes to `style-src`,
