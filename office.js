@@ -2685,7 +2685,7 @@ function drawFaceV(cx, cy, look, o) {
   [-1, 1].forEach(s => {
     const bx = cx + s * eyeDX + shift;
     const tilt = opt.glance ? s * 1.5 : (opt.stern ? -s * 1.2 : 0);
-    vStroke([bx - 3.5, cy - 7.5 + lift + tilt, bx + 3.5, cy - 7.5 + lift - tilt], brow, 2.2);
+    vStroke([bx - 3.5, cy - 7.5 + lift + tilt, bx + 3.5, cy - 7.5 + lift - tilt], brow, opt.browW || 2.2);
   });
   const skin = opt.skin || "#e8c4a0";
   if (!opt.noNose) vArc(cx + look * 3, cy + 5.5, 2.2, look > 0 ? -Math.PI * 0.3 : Math.PI * 0.3, look > 0 ? Math.PI * 0.6 : Math.PI * 1.3, dark(skin, 0.3), 1.6);
@@ -2695,6 +2695,10 @@ function drawFaceV(cx, cy, look, o) {
     vEll(mx, my + 3, 2.4, 1.4, "#e07a7a");
   } else if (opt.glance) {
     vEll(mx, my + 1, 2, 2.4, "#7a2420", INK, 1.2);
+  } else if (opt.grin) {
+    vPath(() => { ctx.moveTo(mx - 7, my - 3); ctx.quadraticCurveTo(mx, my + 10, mx + 7, my - 3); ctx.closePath(); }, "#7a2420", INK, 1.5);
+    q(mx - 5.4, my - 2.2, 10.8, 2.6, "#fffdf6");
+    vEll(mx, my + 3.4, 3, 1.6, "#e07a7a");
   } else if (!opt.noMouth) {
     vArc(mx, my - 3, 4.6, Math.PI * 0.2, Math.PI * 0.8, "#7a3a30", 1.8);
   }
@@ -2709,7 +2713,7 @@ function drawSweat(x, y) {
 
 
 /* Everyone's own prop, held in the hand at (hx, hy). look is +1 facing right, -1 left. */
-function drawPropV(kind, hx, hy, look) {
+function drawPropV(kind, hx, hy, look, sym) {
   const L = look || 1;
   if (kind === "clipboard") {
     ctx.save(); ctx.translate(hx + L * 6, hy - 6); ctx.rotate(L * 0.12);
@@ -2785,7 +2789,7 @@ function drawPropV(kind, hx, hy, look) {
       vEll(x, y, 6.5 * phase, 6.5, "#e8c650");
       ctx.save(); ctx.translate(x, y); ctx.scale(phase, 1);
       ctx.fillStyle = "#8a6a20"; ctx.font = "bold 11px Georgia, serif"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
-      ctx.fillText("£", 0, 1);
+      ctx.fillText(sym || "£", 0, 1);
       ctx.restore();
     }
   } else if (kind === "whistle") {
@@ -2902,40 +2906,7 @@ function drawHeadgearV(s, cx, cy, look, back) {
 
 
 /* Each floor specialist's look: hair, clothes, and the odd extra. Colours come from STAFF. */
-const LOOKS = {
-  boris: { hair: "side", outfit: "jacket", tie: "#a8323a" },
-  tweety: { hair: "spiky", outfit: "hoodie" },
-  percy: { hair: "side", outfit: "cardigan", glasses: true },
-  george: { hair: "short", outfit: "hivis" },
-  archie: { hair: "quiff", outfit: "tee", stripe: true },
-  brian: { hair: "curly", outfit: "tee" },
-  clive: { hair: "crew", outfit: "hoodie", stubble: true },
-  frank: { hair: "short", outfit: "chef", tache: true },
-  filament: { hair: "ponytail", outfit: "overall", goggles: true },
-  oddly: { hair: "messy", outfit: "waistcoat" },
-  rupert: { hair: "swept", outfit: "turtleneck" },
-  penny: { hair: "bun", outfit: "blouse", glasses: true, brooch: true },
-  sheila: { hair: "ponytail", outfit: "tabard" },
-  sarge: { hair: "crew", outfit: "uniform", stern: true },
-  mona: { hair: "bob", outfit: "blouse" },
-  hettie: { hair: "bun", outfit: "cardigan" },
-  stockley: { hair: "short", outfit: "coat", beard: true },
-  grant: { hair: "side", outfit: "jacket", tie: null },
-  vinnie: { hair: "quiff", outfit: "tee", logo: true }
-};
-
-function hairBackV(style, cx, cy, col, look, back) {
-  if (style === "bob") {
-    vRect(cx - 19, cy - 12, 38, 30, 10, col, INK);
-  } else if (style === "ponytail") {
-    const px = back ? cx : cx - look * 15;
-    vEllRot(px, cy + 8, 6, 14, back ? 0 : look * 0.35, col, INK);
-    vEll(px, cy - 4, 3.5, 2.5, "#d1202f", INK, 1.2);
-  } else if (style === "bun") {
-    vEll(cx - (back ? 0 : look * 3), cy - 20, 8, 7, col, INK);
-  }
-}
-function hairFrontV(style, cx, cy, col, look) {
+function hairFrontBaseV(style, cx, cy, col, look) {
   const top = () => { ctx.ellipse(cx, cy - 1, 17.5, 19, 0, Math.PI, Math.PI * 2); };
   const hi = lite(col, 0.22);
   if (style === "crew") {
@@ -2984,22 +2955,7 @@ function hairFrontV(style, cx, cy, col, look) {
   if (style === "swept") vPath(() => { ctx.moveTo(cx - look * 14, cy - 12); ctx.quadraticCurveTo(cx, cy - 22, cx + look * 16, cy - 8); }, null, dark(col, 0.25), 1.6);
   vEllRot(cx - 6, cy - 13, 5, 2, -0.3, hi);
 }
-function hairBackOfHeadV(style, cx, cy, col) {
-  /* Seen from behind: hair covers most of the head. */
-  if (style === "crew") {
-    vPath(() => { ctx.ellipse(cx, cy, 16.5, 17.5, 0, Math.PI * 0.95, Math.PI * 2.05); ctx.closePath(); }, lite(col, 0.08), INK, 2);
-  } else if (style === "bob") {
-    vRect(cx - 19, cy - 18, 38, 34, 12, col, INK);
-  } else if (style === "curly") {
-    [[-12, -8], [0, -14], [12, -8], [-13, 4], [13, 4], [-6, 6], [6, 6], [0, -2]].forEach(([dx, dy]) => vEll(cx + dx, cy + dy, 7.5, 7.5, col, INK, 2));
-    [[-12, -8], [0, -14], [12, -8], [-6, 6], [6, 6], [0, -2]].forEach(([dx, dy]) => vEll(cx + dx, cy + dy, 6, 6, col));
-  } else {
-    vPath(() => { ctx.ellipse(cx, cy - 1, 17.5, 18.5, 0, Math.PI * 0.9, Math.PI * 2.1); ctx.quadraticCurveTo(cx, cy + 14, cx - 17, cy + 5); ctx.closePath(); }, col, INK, 2);
-  }
-  vEllRot(cx - 6, cy - 9, 6, 2.5, -0.4, lite(col, 0.2));
-}
-
-function outfitDetailsV(look, s, x, top, bottom, wt) {
+function outfitBaseV(look, s, x, top, bottom, wt) {
   const o = look.outfit, body = s.body, acc = s.accent;
   const shirt = "#fbf8ee";
   if (o === "jacket" || o === "hivis" || o === "coat") {
@@ -3077,20 +3033,6 @@ function outfitDetailsV(look, s, x, top, bottom, wt) {
   }
 }
 
-function facialExtrasV(look, s, cx, ey, lk) {
-  const shift = lk * 2;
-  if (look.tache) vPath(() => { ctx.moveTo(cx + shift - 7, ey + 9); ctx.quadraticCurveTo(cx + shift, ey + 5, cx + shift + 7, ey + 9); ctx.quadraticCurveTo(cx + shift, ey + 8, cx + shift - 7, ey + 9); }, s.hair, INK, 1.2);
-  if (look.beard) vPath(() => { ctx.moveTo(cx - 15, ey + 1); ctx.quadraticCurveTo(cx - 13, ey + 19, cx, ey + 20); ctx.quadraticCurveTo(cx + 13, ey + 19, cx + 15, ey + 1); ctx.quadraticCurveTo(cx + 10, ey + 12, cx + shift, ey + 13); ctx.quadraticCurveTo(cx - 10, ey + 12, cx - 15, ey + 1); }, s.hair, INK, 1.5);
-  if (look.stubble) for (let i = -9; i <= 9; i += 3) q(cx + i + shift, ey + 13 + Math.abs(i) * -0.2, 1.2, 1.2, "rgba(60, 60, 60, 0.45)");
-  if (look.glasses) {
-    [-1, 1].forEach(sd => vEll(cx + sd * 7 + shift, ey, 5.6, 5.4, "rgba(220, 235, 245, 0.18)", INK, 1.6));
-    vStroke([cx - 1.4 + shift, ey - 1, cx + 1.4 + shift, ey - 1], INK, 1.6);
-  }
-  if (look.goggles) {
-    vStroke([cx - 17, ey - 12, cx + 17, ey - 12], "#2a2a2a", 3);
-    [-1, 1].forEach(sd => vEll(cx + sd * 7 + shift, ey - 12, 5.2, 4, "#8ec8e6", INK, 1.6));
-  }
-}
 
 
 const HELD = ["clipboard", "envelope", "book", "joystick", "basket", "spool", "duck", "reel", "coin", "whistle", "badge", "megaphone", "teacup", "crate", "grant", "trophy", "quill", "tablet"];
@@ -3233,31 +3175,482 @@ function handsFor(pr, P, by, held, act, opts) {
   return hands;
 }
 
+/* ---------- Each bot's look, taken from their own icon ----------
+   ov = colours that differ from the STAFF entry (STAFF itself is unchanged). */
+const LOOKS = {
+  boris: { ov: { body: "#1e2a48", hair: "#4a2c14" }, hair: "side", outfit: "jacket", tie: null, hat: "postcap", tache: true, strap: true, piping: "#c4202a" },
+  tweety: { bird: true },
+  percy: { ov: { body: "#3a5a2a", hair: "#5a3a20" }, hair: "side", outfit: "cardigan", glasses: true, beard: true, bow: "#2f5a2a" },
+  george: { ov: { body: "#a8322e", hair: "#4a3020", skin: "#dcae86" }, hair: "short", outfit: "plaidvest", stubble: true, vestC: "#f08a1c" },
+  archie: { ov: { body: "#6a3fd0", hair: "#14121a" }, hair: "quiff", outfit: "jacketopen", shirt: "#141418", zig: "#26b8e8", streak: true, grin: true },
+  brian: { ov: { body: "#1c1c20", hair: "#3a2010" }, hair: "crew", outfit: "hoodie", hat: "beanie", stubble: true, grin: true },
+  clive: { cloud: true },
+  frank: { ov: { hair: "#c8602a" }, hair: "short", outfit: "chef", hat: "chefhat", bignose: true, grin: true, wide: 1.06, pin: true, cheeks: true },
+  filament: { ov: { hair: "#7a4a22" }, hair: "messy", outfit: "overall", goggles: true, freckles: true },
+  oddly: { ov: { body: "#7a5030", hair: "#dcd8d4" }, hair: "wild", outfit: "waistcoat", bow: "#8a2a3a", monocle: true, bignose: true, vestC: "#b0583a", watch: true },
+  rupert: { ov: { body: "#1a1618", hair: "#4a2410" }, hair: "curly", outfit: "jacket", tie: null, hat: "beret", scarf: "#7a1f30", camera: true, goatee: true, tache: true },
+  penny: { ov: { body: "#1f6a40", hair: "#8a3a1a" }, hair: "bun", outfit: "cardigan", glasses: true, brooch: true, shirt: "#14402a" },
+  sheila: { ov: { body: "#1f8a8c", hair: "#2a1a14" }, hair: "curly", outfit: "blazer", shirt: "#2aa6a6" },
+  sarge: { ov: { body: "#1a2240", hair: "#2a1a14" }, hair: "crew", outfit: "uniform", hat: "helmet", stern: true, tache: true, bignose: true, chevrons: true },
+  mona: { ov: { body: "#2878b8", hair: "#4a2410" }, hair: "bigcurl", outfit: "blazer", shirt: "#e8782a", scarf: "#2aa6a6", earring: true, grin: true },
+  hettie: { ov: { body: "#8a5a3a", hair: "#a09c96" }, hair: "bun", outfit: "apron" },
+  stockley: { ov: { body: "#c8a574", hair: "#c07030" }, hair: "quiff", outfit: "coat", plaid: "#8a2a2a", grin: true, wide: 1.1 },
+  grant: { ov: { body: "#6a4a2a", hair: "#3a2414" }, hair: "side", outfit: "jacket", tie: null, bow: "#3a2a1a", vestC: "#4a3220", stern: true },
+  vinnie: { ov: { body: "#1c1c20", hair: "#16120e" }, hair: "spiky", outfit: "jacketopen", shirt: "#c4202a", earring: true, grin: true, bold: true }
+};
+
+function hairBackV(style, cx, cy, col, look, back) {
+  if (style === "bob") {
+    vRect(cx - 19, cy - 12, 38, 30, 10, col, INK);
+  } else if (style === "ponytail") {
+    const px = back ? cx : cx - look * 15;
+    vEllRot(px, cy + 8, 6, 14, back ? 0 : look * 0.35, col, INK);
+    vEll(px, cy - 4, 3.5, 2.5, "#d1202f", INK, 1.2);
+  } else if (style === "bun") {
+    vEll(cx - (back ? 0 : look * 3), cy - 20, 8, 7, col, INK);
+  } else if (style === "bigcurl") {
+    [[-20, -4], [20, -4], [-21, 8], [21, 8], [-16, 16], [16, 16]].forEach(([dx, dy]) => vEll(cx + dx, cy + dy, 8, 8, col, INK, 2));
+  } else if (style === "wild") {
+    [[-20, 0], [20, 0], [-19, -9], [19, -9]].forEach(([dx, dy]) => vEllRot(cx + dx, cy + dy, 8, 5, dx < 0 ? -0.5 : 0.5, col, INK, 2));
+  }
+}
+function hairFrontV(style, cx, cy, col, look) {
+  if (style === "bigcurl") {
+    [[-17, -6], [-12, -16], [-4, -21], [5, -21], [13, -16], [18, -6], [0, -13], [-9, -10], [9, -10]].forEach(([dx, dy]) => vEll(cx + dx, cy + dy, 8, 8, col, INK, 2));
+    [[-12, -16], [-4, -21], [5, -21], [13, -16], [0, -13], [-9, -10], [9, -10]].forEach(([dx, dy]) => vEll(cx + dx, cy + dy, 6.6, 6.6, col));
+    vEll(cx - 6, cy - 19, 2.6, 1.8, lite(col, 0.25));
+    return;
+  }
+  if (style === "wild") {
+    for (let i = -3; i <= 3; i++) {
+      const a = -Math.PI / 2 + i * 0.42;
+      vPoly([cx + Math.cos(a - 0.2) * 14, cy - 3 + Math.sin(a - 0.2) * 15, cx + Math.cos(a) * 29, cy - 3 + Math.sin(a) * 31, cx + Math.cos(a + 0.2) * 14, cy - 3 + Math.sin(a + 0.2) * 15], col, INK, 1.8);
+    }
+    vPath(() => { ctx.ellipse(cx, cy - 1, 17.5, 18, 0, Math.PI, Math.PI * 2); ctx.lineTo(cx + 17.5, cy - 4); ctx.quadraticCurveTo(cx, cy - 12, cx - 17.5, cy - 4); ctx.closePath(); }, col);
+    vEllRot(cx - 6, cy - 14, 5, 2, -0.3, lite(col, 0.3));
+    return;
+  }
+  hairFrontBaseV(style, cx, cy, col, look);
+}
+function hairBackOfHeadV(style, cx, cy, col) {
+  /* Seen from behind: hair covers most of the head. */
+  if (style === "crew") {
+    vPath(() => { ctx.ellipse(cx, cy, 16.5, 17.5, 0, Math.PI * 0.95, Math.PI * 2.05); ctx.closePath(); }, lite(col, 0.08), INK, 2);
+  } else if (style === "bob") {
+    vRect(cx - 19, cy - 18, 38, 34, 12, col, INK);
+  } else if (style === "curly" || style === "bigcurl") {
+    const big = style === "bigcurl";
+    [[-12, -8], [0, -14], [12, -8], [-13, 4], [13, 4], [-6, 6], [6, 6], [0, -2]].forEach(([dx, dy]) => vEll(cx + dx * (big ? 1.25 : 1), cy + dy * (big ? 1.2 : 1), big ? 9 : 7.5, big ? 9 : 7.5, col, INK, 2));
+    [[-12, -8], [0, -14], [12, -8], [-6, 6], [6, 6], [0, -2]].forEach(([dx, dy]) => vEll(cx + dx * (big ? 1.25 : 1), cy + dy * (big ? 1.2 : 1), big ? 7.6 : 6, big ? 7.6 : 6, col));
+  } else if (style === "wild") {
+    for (let i = -3; i <= 3; i++) {
+      const a = -Math.PI / 2 + i * 0.4;
+      vPoly([cx + Math.cos(a - 0.22) * 14, cy + Math.sin(a - 0.22) * 15, cx + Math.cos(a) * 29, cy + Math.sin(a) * 30, cx + Math.cos(a + 0.22) * 14, cy + Math.sin(a + 0.22) * 15], col, INK, 1.8);
+    }
+    vEll(cx, cy, 17.5, 18, col, INK);
+  } else {
+    vPath(() => { ctx.ellipse(cx, cy - 1, 17.5, 18.5, 0, Math.PI * 0.9, Math.PI * 2.1); ctx.quadraticCurveTo(cx, cy + 14, cx - 17, cy + 5); ctx.closePath(); }, col, INK, 2);
+  }
+  vEllRot(cx - 6, cy - 9, 6, 2.5, -0.4, lite(col, 0.2));
+}
+
+/* Hats from the icons: postman's cap, beanie, chef's toque, beret, custodian helmet. */
+function drawHatV(kind, cx, cy, L, back) {
+  if (kind === "postcap") {
+    vPath(() => { ctx.moveTo(cx - 17.5, cy - 8); ctx.quadraticCurveTo(cx - 20, cy - 28, cx, cy - 28); ctx.quadraticCurveTo(cx + 20, cy - 28, cx + 17.5, cy - 8); ctx.closePath(); }, "#1e2a48", INK);
+    vEll(cx - 7, cy - 21, 6, 3, "rgba(255,255,255,0.18)");
+    vRect(cx - 18, cy - 14, 36, 7, 2.5, "#141e38", INK, 1.8);
+    if (!back) {
+      vEllRot(cx + L * 11, cy - 7, 11, 3.4, 0, "#101830", INK, 1.8);
+      vEll(cx + L * 2, cy - 10.5, 3.4, 3.4, "#c4202a", INK, 1.2);
+    }
+  } else if (kind === "beanie") {
+    vPath(() => { ctx.moveTo(cx - 18, cy - 4); ctx.quadraticCurveTo(cx - 20, cy - 29, cx, cy - 29); ctx.quadraticCurveTo(cx + 20, cy - 29, cx + 18, cy - 4); ctx.closePath(); }, "#26262a", INK);
+    vRect(cx - 18.5, cy - 11, 37, 8, 3, "#34343a", INK, 1.8);
+    for (let i = -14; i <= 14; i += 5) vStroke([cx + i, cy - 10, cx + i, cy - 5], "#1a1a1e", 1);
+    vEll(cx - 7, cy - 22, 6, 3, "rgba(255,255,255,0.14)");
+  } else if (kind === "chefhat") {
+    vRect(cx - 16, cy - 20, 32, 9, 3, "#fdfcf8", INK, 1.8);
+    [[-9, -27, 9.5], [9, -27, 9.5], [0, -33, 10.5]].forEach(([dx, dy, r]) => vEll(cx + dx, cy + dy, r, r, "#fdfcf8", INK, 1.8));
+    [[-9, -27, 8.2], [9, -27, 8.2], [0, -33, 9.2]].forEach(([dx, dy, r]) => vEll(cx + dx, cy + dy, r, r, "#fdfcf8"));
+    vRect(cx - 15, cy - 19, 30, 7, 2.5, "#fdfcf8");
+    vStroke([cx - 5, cy - 31, cx - 6, cy - 22], "#e8e4d8", 1.2);
+    vStroke([cx + 6, cy - 30, cx + 7, cy - 22], "#e8e4d8", 1.2);
+    vRect(cx - 15, cy - 14, 30, 3, 1, "#e4e0d2");
+  } else if (kind === "beret") {
+    vEllRot(cx + L * 3, cy - 16, 21, 9, -L * 0.12, "#1a1618", INK);
+    vEllRot(cx + L * 3 - 5, cy - 19, 9, 3, -L * 0.12, "rgba(255,255,255,0.14)");
+    vStroke([cx + L * 3, cy - 25, cx + L * 3, cy - 28], "#1a1618", 2.4);
+    vPath(() => { ctx.moveTo(cx - 17, cy - 10); ctx.quadraticCurveTo(cx, cy - 5, cx + 17, cy - 10); }, null, "#3a3236", 3);
+  } else if (kind === "helmet") {
+    vPath(() => { ctx.moveTo(cx - 18, cy - 8); ctx.quadraticCurveTo(cx - 21, cy - 31, cx, cy - 33); ctx.quadraticCurveTo(cx + 21, cy - 31, cx + 18, cy - 8); ctx.closePath(); }, "#14182a", INK);
+    vStroke([cx, cy - 33, cx, cy - 9], "#2a3050", 2.4);
+    vEll(cx - 8, cy - 24, 5, 2.6, "rgba(255,255,255,0.18)");
+    vEllRot(cx, cy - 8, 20, 4, 0, "#0e1220", INK, 1.8);
+    vEll(cx, cy - 36, 3, 3, "#d8d8d8", INK, 1.4);
+    if (!back) {
+      vEll(cx + L * 1, cy - 19, 5, 5.4, "#d8d8d8", INK, 1.4);
+      vEll(cx + L * 1, cy - 19, 2.4, 2.4, "#8a8a92");
+    }
+  }
+}
+
+/* Torso extras: bow ties, scarves, satchel strap, camera, vest, plaid, chevrons. */
+function torsoExtrasV(look, s, x, top, bottom, wt, L) {
+  if (look.plaid) {
+    for (let i = -wt; i <= wt; i += 7) q(x + i, top, 1.6, bottom - top, look.plaid);
+    for (let j = top + 4; j < bottom; j += 7) q(x - wt, j, wt * 2, 1.6, look.plaid);
+  }
+  if (look.vestC && look.outfit !== "waistcoat" && look.outfit !== "plaidvest") {
+    vPoly([x - 9, top + 1, x + 9, top + 1, x + 6, bottom, x - 6, bottom], look.vestC, INK, 1.4);
+    [18, 26, 34].forEach(dy => vEll(x, top + dy, 1.6, 1.6, dark(look.vestC, 0.4)));
+  }
+  if (look.strap) {
+    vStroke([x - wt + 3, top + 3, x + wt - 3, bottom - 8], INK, 6);
+    vStroke([x - wt + 3, top + 3, x + wt - 3, bottom - 8], "#8a5a30", 3.4);
+    vRect(x + wt - 10, bottom - 16, 13, 12, 2, "#7a4a28", INK, 1.5);
+    vRect(x + wt - 10, bottom - 16, 13, 4, 1.5, "#8a5a30", INK, 1.2);
+  }
+  if (look.camera) {
+    vStroke([x - 9, top, x - 5, top + 20], "#2a2a2a", 2.4);
+    vStroke([x + 9, top, x + 5, top + 20], "#2a2a2a", 2.4);
+    vRect(x - 9, top + 20, 18, 12, 2.5, "#2e2e32", INK, 1.5);
+    vRect(x - 9, top + 20, 18, 4, 1.5, "#b8b8b8", INK, 1);
+    vEll(x, top + 27, 4.6, 4.6, "#1a1a1e", INK, 1.5);
+    vEll(x - 1, top + 26, 1.4, 1.4, "#8ec8e6");
+  }
+  if (look.chevrons) {
+    [-1, 1].forEach(sd => [0, 4, 8].forEach(dy => vStroke([x + sd * (wt - 2) - 4, top + 5 + dy, x + sd * (wt - 2), top + 8 + dy, x + sd * (wt - 2) + 4, top + 5 + dy], "#f4f0e4", 1.6)));
+    vEll(x - L * 9, top + 17, 3.6, 3.6, "#d8d8d8", INK, 1.2);
+  }
+  if (look.scarf) {
+    const c = look.scarf, multi = s.id === "mona";
+    vRect(x - 11, top - 4, 22, 9, 4.5, c, INK, 1.6);
+    vPoly([x + 1, top + 3, x + 11, top + 3, x + 13, top + 24, x + 4, top + 26], c, INK, 1.6);
+    if (multi) { [["#f2c200", 9], ["#d1202f", 15], ["#e8782a", 21]].forEach(([cc, dy]) => q(x + 2, top + dy, 11, 2.6, cc)); }
+    else q(x + 2, top + 22, 11, 2, dark(c, 0.3));
+  }
+  if (look.bow) {
+    vPoly([x, top + 3, x - 9, top - 2, x - 9, top + 8], look.bow, INK, 1.4);
+    vPoly([x, top + 3, x + 9, top - 2, x + 9, top + 8], look.bow, INK, 1.4);
+    vEll(x, top + 3, 2.6, 2.6, dark(look.bow, 0.25), INK, 1.2);
+  }
+  if (look.watch) {
+    vStroke([x + 6, top + 22, x + 2, top + 28, x - 6, top + 30], "#d4af37", 1.4);
+    vEll(x - 7, top + 31, 3.6, 3.6, "#f4efe0", INK, 1.4);
+  }
+}
+
+function outfitDetailsV(look, s, x, top, bottom, wt) {
+  const o = look.outfit, body = s.body, acc = s.accent;
+  if (o === "plaidvest") {
+    for (let i = -wt; i <= wt; i += 7) q(x + i, top, 1.8, bottom - top, dark(body, 0.4));
+    for (let j = top + 3; j < bottom; j += 7) q(x - wt, j, wt * 2, 1.8, dark(body, 0.4));
+    vPoly([x - 8, top, x + 8, top, x, top + 8], "#7a1f1c", INK, 1.2);
+    [-1, 1].forEach(sd => {
+      vPoly([x + sd * 4, top, x + sd * (wt + 1), top, x + sd * (wt + 1), bottom, x + sd * 4, bottom], look.vestC, INK, 1.6);
+      [24, 34].forEach(dy => { q(x + sd * 4 - (sd < 0 ? wt - 3 : 0), top + dy, wt - 3, 5, "#d8dce0"); });
+    });
+    return;
+  }
+  if (o === "jacketopen") {
+    vPoly([x - 9, top, x + 9, top, x + 7, bottom, x - 7, bottom], look.shirt, INK, 1.4);
+    [-1, 1].forEach(sd => {
+      vStroke([x + sd * 9, top, x + sd * 7, bottom], dark(body, 0.4), 2.2);
+      if (look.zig) {
+        vStroke([x + sd * 12, top + 4, x + sd * 17, top + 12, x + sd * 12, top + 20, x + sd * 17, top + 28, x + sd * 12, top + 36], look.zig, 3);
+        q(x + sd * 14 - 2, top + 8, 4, 1.6, "#f2c200"); q(x + sd * 14 - 0.8, top + 6.8, 1.6, 4, "#f2c200");
+      }
+    });
+    if (look.zig) vEll(x - wt + 5, top + 5, 2.2, 2.2, "#e23d8a");
+    return;
+  }
+  if (o === "blazer") {
+    vPoly([x - 10, top, x + 10, top, x + 6, bottom, x - 6, bottom], look.shirt, INK, 1.4);
+    vPoly([x - 9, top - 1, x - 2, top + 1, x - 5, top + 8], lite(look.shirt, 0.25), INK, 1.2);
+    vPoly([x + 9, top - 1, x + 2, top + 1, x + 5, top + 8], lite(look.shirt, 0.25), INK, 1.2);
+    [-1, 1].forEach(sd => vStroke([x + sd * 10, top, x + sd * 6, top + 26, x + sd * 5, bottom], dark(body, 0.4), 2.2));
+    [16, 24].forEach(dy => vEll(x, top + dy, 1.5, 1.5, dark(look.shirt, 0.3)));
+    return;
+  }
+  if (o === "apron") {
+    vPoly([x - 8, top, x + 8, top, x, top + 14], "#fbf8ee", INK, 1.4);
+    vStroke([x, top + 14, x, bottom], dark(body, 0.35), 1.6);
+    vRect(x - wt + 5, top + 12, wt * 2 - 10, bottom - top - 12, 3, "#f1e8d6", INK, 1.5);
+    vStroke([x - wt + 7, top + 12, x - 8, top + 1], "#f1e8d6", 2.4);
+    vStroke([x + wt - 7, top + 12, x + 8, top + 1], "#f1e8d6", 2.4);
+    [[-8, 18, "#c4503a"], [6, 22, "#d98a3a"], [-2, 28, "#7a9a5a"], [8, 32, "#c4503a"], [-9, 34, "#d98a3a"], [0, 38, "#c4503a"]].forEach(([dx, dy, c]) => {
+      vEll(x + dx, top + dy, 2.6, 2.6, c);
+      vEll(x + dx, top + dy, 0.9, 0.9, "#f2e6a0");
+    });
+    return;
+  }
+  if (o === "chef" && look.pin) {
+    vPoly([x - 7, top, x + 7, top, x, top + 9], s.skin);
+    vStroke([x - 7, top, x - 1, top + 12, x + 7, top], dark("#f4f0e4", 0.25), 1.6);
+    [-5, 5].forEach(dx => [16, 24].forEach(dy => vEll(x + dx, top + dy, 1.6, 1.6, "#9a968c")));
+    vRect(x - wt + 3, top + 22, wt * 2 - 6, bottom - top - 22, 2, "#fdfcf8", INK, 1.4);
+    for (let i = -wt + 6; i < wt - 4; i += 5) q(x + i, top + 23, 2.4, bottom - top - 24, "#2a4a8a");
+    vStroke([x - wt + 4, top + 22, x - 6, top + 4], "#2a4a8a", 2.4);
+    vStroke([x + wt - 4, top + 22, x + 6, top + 4], "#2a4a8a", 2.4);
+    return;
+  }
+  if (o === "cardigan" && look.shirt) {
+    vPoly([x - 8, top, x + 8, top, x, top + 16], look.shirt, INK, 1.5);
+    vStroke([x, top + 16, x, bottom], dark(body, 0.35), 1.6);
+    [22, 29, 36].forEach(dy => vEll(x + 3, top + dy, 1.6, 1.6, lite(body, 0.4)));
+    return;
+  }
+  if (o === "waistcoat" && look.vestC) {
+    vPoly([x - 10, top, x + 10, top, x + 5, top + 26, x - 5, top + 26], look.vestC, INK, 1.5);
+    vPath(() => { ctx.moveTo(x - 10, top); ctx.quadraticCurveTo(x - 2, top + 14, x - 5, top + 26); }, null, dark(look.vestC, 0.35), 1.4);
+    [30, 36].forEach(dy => vEll(x, top + dy, 1.8, 1.8, "#d4af37", INK, 1));
+    return;
+  }
+  outfitBaseV(look, s, x, top, bottom, wt);
+}
+
+function facialExtrasV(look, s, cx, ey, lk) {
+  const shift = lk * 2;
+  if (look.freckles) [[-8, 6], [-5, 8], [-11, 8], [6, 6], [9, 8], [12, 6]].forEach(([dx, dy]) => q(cx + dx + shift, ey + dy, 1.2, 1.2, "rgba(150, 90, 50, 0.6)"));
+  if (look.bignose) {
+    vEll(cx + shift + lk * 1, ey + 6, 4.6, 4.2, dark(s.skin, 0.04), dark(s.skin, 0.32), 1.4);
+    vEll(cx + shift + lk * 0.4, ey + 4.6, 1.6, 1.1, lite(s.skin, 0.35));
+  }
+  if (look.tache) {
+    const big = look.stern || s.id === "boris" ? 1 : 0.85, ww = s.id === "sarge" ? 11 : 8;
+    vPath(() => { ctx.moveTo(cx + shift - ww, ey + 10); ctx.quadraticCurveTo(cx + shift - ww * 0.4, ey + 6.5 * big, cx + shift, ey + 8.6); ctx.quadraticCurveTo(cx + shift + ww * 0.4, ey + 6.5 * big, cx + shift + ww, ey + 10); ctx.quadraticCurveTo(cx + shift + ww * 0.5, ey + 12, cx + shift, ey + 10); ctx.quadraticCurveTo(cx + shift - ww * 0.5, ey + 12, cx + shift - ww, ey + 10); }, s.hair, INK, 1.3);
+  }
+  if (look.goatee) vPath(() => { ctx.moveTo(cx + shift - 4, ey + 12); ctx.quadraticCurveTo(cx + shift, ey + 14, cx + shift + 4, ey + 12); ctx.lineTo(cx + shift + 1.6, ey + 21); ctx.lineTo(cx + shift - 1.6, ey + 21); ctx.closePath(); }, s.hair, INK, 1.3);
+  if (look.beard) vPath(() => { ctx.moveTo(cx - 15, ey + 1); ctx.quadraticCurveTo(cx - 13, ey + 19, cx, ey + 20); ctx.quadraticCurveTo(cx + 13, ey + 19, cx + 15, ey + 1); ctx.quadraticCurveTo(cx + 10, ey + 12, cx + shift, ey + 13); ctx.quadraticCurveTo(cx - 10, ey + 12, cx - 15, ey + 1); }, s.hair, INK, 1.5);
+  if (look.stubble) for (let i = -9; i <= 9; i += 3) for (let j = 0; j < 2; j++) q(cx + i + shift + j * 1.5, ey + 13 + Math.abs(i) * -0.2 + j * 2.5, 1.2, 1.2, "rgba(50, 50, 50, 0.5)");
+  if (look.glasses) {
+    [-1, 1].forEach(sd => vEll(cx + sd * 7 + shift, ey, 5.8, 5.6, "rgba(220, 235, 245, 0.18)", INK, 1.8));
+    vStroke([cx - 1.4 + shift, ey - 1, cx + 1.4 + shift, ey - 1], INK, 1.8);
+    vStroke([cx - 13 + shift, ey - 1, cx - 16, ey - 2], INK, 1.6);
+    vStroke([cx + 13 + shift, ey - 1, cx + 16, ey - 2], INK, 1.6);
+  }
+  if (look.monocle) {
+    const mx = cx + 7 + shift;
+    vArc(mx, ey, 7, 0, Math.PI * 2, "#d4af37", 2);
+    vEll(mx - 2.5, ey - 2.5, 2.2, 1.3, "rgba(255,255,255,0.6)");
+    vPath(() => { ctx.moveTo(mx + 5, ey + 5); ctx.quadraticCurveTo(mx + 14, ey + 20, mx + 6, ey + 34); }, null, "#d4af37", 1);
+  }
+  if (look.goggles) {
+    vStroke([cx - 17, ey - 13, cx + 17, ey - 13], "#2a2a2a", 3.4);
+    [-1, 1].forEach(sd => { vEll(cx + sd * 8 + shift, ey - 14, 6, 4.6, "#8ec8e6", INK, 1.8); vEll(cx + sd * 8 + shift - 2, ey - 15.5, 2, 1.2, "rgba(255,255,255,0.7)"); });
+  }
+  if (look.cheeks) [-1, 1].forEach(sd => vEll(cx + sd * 11 + shift, ey + 6, 4.2, 2.6, "rgba(235, 100, 90, 0.4)"));
+}
+
+
+/* ---------- Tweety: a yellow chick with a blue neckerchief ---------- */
+function drawTweety(pr, P, by0, act0) {
+  const x = P.x, L = P.look;
+  const yel = "#f6d21c", yelL = "#ffe86a", yelD = "#d8a812", wing = "#8a8a2a", beak = "#f08a2a";
+  const back = !!P.work;
+  const y0 = back ? P.y : by0;
+  const hc = back ? y0 - 56 : y0 - 80;
+  /* feet and legs */
+  if (!back) {
+    const order = L > 0 ? [-1, 1] : [1, -1];
+    order.forEach(sd => {
+      const k = sd * P.swing, dx = L * k * 8, lift = P.moving ? Math.max(0, k) * 4 : 0;
+      if (P.sit) return;
+      const fx = x + sd * 7 + dx, fy = P.y - 3 - lift;
+      vStroke([x + sd * 7, P.y - 22, fx, fy - 1], beak, 3.4);
+      vPath(() => { ctx.moveTo(fx - 6, fy + 2); ctx.lineTo(fx, fy - 2); ctx.lineTo(fx + 6, fy + 2); ctx.moveTo(fx, fy - 2); ctx.lineTo(fx + L * 1, fy + 3); }, null, beak, 2.4);
+    });
+  }
+  /* tail feathers */
+  const tb = back ? y0 - 10 : y0 - 30;
+  [0, 1, 2].forEach(i => vEllRot(x - L * (back ? 0 : 20) + (back ? (i - 1) * 9 : 0), tb + (back ? 12 : 4 + i * 4), back ? 4.4 : 11, back ? 11 : 4.4, back ? (i - 1) * 0.5 : -L * (0.5 - i * 0.5), wing, INK, 1.6));
+  /* body */
+  const bodyC = back ? y0 - 24 : y0 - 42;
+  vEll(x, bodyC, 20, back ? 22 : 24, yel, INK);
+  if (!back) {
+    vEll(x + L * 3, bodyC + 5, 13, 16, yelL);
+    vEll(x - 6, bodyC - 12, 7, 4, "rgba(255,255,255,0.35)");
+    /* neckerchief */
+    vPoly([x - 12, hc + 17, x + 12, hc + 17, x + 1, hc + 32], "#2a70c8", INK, 1.6);
+    vEll(x + L * 1, hc + 18, 11, 4.2, "#2a70c8", INK, 1.6);
+    vStroke([x - 3, hc + 22, x - 1, hc + 27], "#6aa4e8", 1.2);
+  } else {
+    vEll(x - 6, bodyC - 12, 7, 4, "rgba(255,255,255,0.3)");
+  }
+  /* head */
+  const hr = 21;
+  vEll(x, hc, hr + 1, hr, yel, INK);
+  vEll(x - 7, hc - 9, 8, 4, "rgba(255,255,255,0.35)");
+  if (!back) {
+    vEll(x + 8, hc + 6, 12, 14, yelD);
+    vEll(x, hc + 2, hr - 1, hr - 2, yel);
+    vEll(x + 8, hc + 8, 8, 10, "rgba(216,168,18,0.35)");
+  }
+  /* head tuft */
+  [-1, 0, 1].forEach(i => vPath(() => { ctx.moveTo(x + i * 4 - 2, hc - hr + 3); ctx.quadraticCurveTo(x + i * 6 + L * 3, hc - hr - 8 - (i === 0 ? 3 : 0), x + i * 7 + 3, hc - hr + 2); ctx.closePath(); }, yel, INK, 1.5));
+  if (!back) {
+    const shift = L * 2;
+    [-1, 1].forEach(sd => {
+      const ex = x + sd * 8 + shift, ey = hc - 2;
+      vEll(ex, ey, 5.2, 7, "#fffef8", INK, 1.6);
+      vEll(ex + L * 1.5 + (P.glance ? L * 0.6 : 0), ey + (P.glance ? 1.5 : 0.5), 3.5, 5, "#0e0a08");
+      vEll(ex + L * 1.5 - 1.2, ey - 2.2, 1.5, 1.5, "#ffffff");
+      [-1, 0, 1].forEach(i => vStroke([ex + sd * 4.4, ey - 4 + i * 2.6, ex + sd * (8 + (i === 0 ? 1 : 0)), ey - 6 + i * 3.4], INK, 1.3));
+    });
+    vEll(x - 14 + shift, hc + 7, 4.6, 3, "rgba(240, 120, 70, 0.45)");
+    vEll(x + 14 + shift, hc + 7, 4.6, 3, "rgba(240, 120, 70, 0.45)");
+    const bx = x + L * 3 + shift;
+    if (P.cele) {
+      vPoly([bx - 7, hc + 5, bx + 7, hc + 5, bx, hc + 19], "#e07a20", INK, 1.5);
+      vPoly([bx - 5, hc + 8, bx + 5, hc + 8, bx, hc + 17], "#8a2a20");
+    } else {
+      vPoly([bx - 8, hc + 6, bx + 8, hc + 6, bx + L * 2, hc + 16], beak, INK, 1.6);
+      vStroke([bx - 6, hc + 9, bx + 6, hc + 9], "#c8641a", 1.2);
+    }
+    if (P.glance) drawSweat(x + (P.left ? -24 : 24), hc - 16);
+  }
+  /* wings as arms */
+  let hands;
+  let act = null;
+  if (back) {
+    const tap = (!REDUCE && ((pr.typeT * 6 | 0) % 2)) ? 3 : 0;
+    [-1, 1].forEach(sd => {
+      vLimb([x + sd * 16, y0 - 34, x + sd * 27, y0 - 32 + (sd > 0 ? tap : 0)], 9, wing, INK);
+      vEll(x + sd * 27, y0 - 32 + (sd > 0 ? tap : 0), 4.2, 3.8, yel, INK, 1.5);
+    });
+    return null;
+  }
+  act = activityPlan(pr, P, by0);
+  hands = handsFor(pr, P, by0, false, act, { rest: 40, up: 100 });
+  [-L, L].forEach(sd => {
+    const hx = hands[sd][0], hy2 = hands[sd][1];
+    drawArmV(x + sd * 17, by0 - 56, hx, hy2, wing, wing, { noHand: true, w: 9 });
+    vEll(hx, hy2, 4.6, 4.2, yel, INK, 1.6);
+    vEll(hx + sd * 2.4, hy2 + 2, 2, 2.6, yel, INK, 1.2);
+  });
+  return act;
+}
+
+/* ---------- Clive: a friendly little cloud who vapes (from his icon) ---------- */
+function drawClive(pr, P, by0) {
+  const x = P.x, L = P.look, back = !!P.work;
+  const white = "#fdfeff", shade = "#cfdbe8", shade2 = "#b4c6d8";
+  const cl = (cx, cy, r) => { vEll(cx, cy, r, r * 0.92, white, INK, 2); };
+  const clFill = (cx, cy, r) => { vEll(cx, cy, r - 1.2, r * 0.92 - 1.2, white); };
+  const y0 = back ? P.y : by0;
+  const bodyC = back ? y0 - 24 : y0 - 54, headC = back ? y0 - 58 : y0 - 92;
+  if (!back) {
+    const order = L > 0 ? [-1, 1] : [1, -1];
+    if (!P.sit) order.forEach(sd => {
+      const k = sd * P.swing, dx = L * k * 8, lift = P.moving ? Math.max(0, k) * 4 : 0;
+      const fx = x + sd * 8 + dx, fy = P.y - 5 - lift;
+      vLimb([x + sd * 8, P.y - 34, fx, fy], 8, "#9fb0bd", INK);
+      vEll(fx + L * 3, fy + 3, 8, 4.2, "#f4f6fa", INK, 2);
+    });
+  }
+  /* puffy body */
+  const body = [[-18, 0, 14], [18, 0, 14], [-10, 14, 14], [10, 14, 14], [0, -8, 18], [0, 8, 18], [-20, -14, 10], [20, -14, 10]];
+  body.forEach(([dx, dy, r]) => cl(x + dx, bodyC + dy, r));
+  body.forEach(([dx, dy, r]) => clFill(x + dx, bodyC + dy, r));
+  vEll(x + 12, bodyC + 12, 14, 12, shade);
+  vEll(x - 8, bodyC - 12, 9, 4, "rgba(255,255,255,0.9)");
+  /* head puffs */
+  const head = [[-16, 4, 13], [16, 4, 13], [-9, -10, 14], [9, -10, 14], [0, -4, 18], [0, 8, 14]];
+  head.forEach(([dx, dy, r]) => cl(x + dx, headC + dy, r));
+  head.forEach(([dx, dy, r]) => clFill(x + dx, headC + dy, r));
+  vEll(x + 12, headC + 6, 11, 11, shade);
+  vEll(x - 6, headC - 4, 14, 14, white);
+  vEll(x - 9, headC - 15, 7, 3.5, "rgba(255,255,255,0.9)");
+  /* wisp of steam */
+  const wob = REDUCE ? 0 : Math.sin(animT * 2) * 2;
+  vPath(() => { ctx.moveTo(x - 1, headC - 24); ctx.quadraticCurveTo(x + 6 + wob, headC - 30, x + 1, headC - 36); ctx.quadraticCurveTo(x - 3, headC - 40, x + 2 + wob, headC - 43); }, null, INK, 3.6);
+  vPath(() => { ctx.moveTo(x - 1, headC - 24); ctx.quadraticCurveTo(x + 6 + wob, headC - 30, x + 1, headC - 36); ctx.quadraticCurveTo(x - 3, headC - 40, x + 2 + wob, headC - 43); }, null, "#f2f6fb", 1.8);
+  if (back) {
+    const tap = (!REDUCE && ((pr.typeT * 6 | 0) % 2)) ? 3 : 0;
+    [-1, 1].forEach(sd => {
+      vLimb([x + sd * 16, y0 - 34, x + sd * 27, y0 - 30 + (sd > 0 ? tap : 0)], 9, white, INK);
+      vEll(x + sd * 27, y0 - 30 + (sd > 0 ? tap : 0), 4.6, 4.2, white, INK, 1.8);
+    });
+    return null;
+  }
+  /* face */
+  const shift = L * 2, ey = headC + 2;
+  [-1, 1].forEach(sd => {
+    const ex = x + sd * 8.5 + shift;
+    vEll(ex, ey, 4.4, 6.2, "#16161c");
+    vEll(ex - 1.2 + L * (P.glance ? 1.5 : 0), ey - 2.4, 1.6, 2, "#ffffff");
+    vStroke([ex + sd * 3.4, ey - 5.5, ex + sd * 6.4, ey - 7.5], INK, 1.2);
+  });
+  vStroke([x - 14 + shift, ey - 11, x - 5 + shift, ey - 10.5], INK, 1.8);
+  vStroke([x + 5 + shift, ey - 10.5, x + 14 + shift, ey - 11], INK, 1.8);
+  vEll(x - 15 + shift, ey + 6, 4.6, 3, "rgba(240, 130, 150, 0.55)");
+  vEll(x + 15 + shift, ey + 6, 4.6, 3, "rgba(240, 130, 150, 0.55)");
+  vEll(x + L * 3 + shift, ey + 5, 3.4, 3, "#f4f6fa", "#8a96a8", 1.3);
+  const mx = x + L * 2 + shift, my = ey + 11;
+  vPath(() => { ctx.moveTo(mx - 7, my - 2); ctx.quadraticCurveTo(mx, my + 10, mx + 7, my - 2); ctx.closePath(); }, "#7a2430", INK, 1.5);
+  vEll(mx, my + 3.4, 3.6, 2, "#e87a8a");
+  q(mx - 5, my - 1.6, 10, 2, "#ffffff");
+  if (P.glance) drawSweat(x + (P.left ? -30 : 30), headC - 14);
+  /* arms and the vape */
+  const act = activityPlan(pr, P, by0);
+  const hands = handsFor(pr, P, by0, true, act, { reach: 24, rest: 50, up: 112 });
+  [-L, L].forEach(sd => {
+    const hx = hands[sd][0], hy2 = hands[sd][1];
+    vLimb([x + sd * 22, by0 - 62, (x + sd * 22 + hx) / 2 + sd * 3, (by0 - 62 + hy2) / 2 + 2, hx, hy2], 10, white, INK);
+    vEll(hx, hy2, 6, 5.6, white, INK, 2);
+    if (sd === L) {
+      vRect(hx + L * 2 - 3, hy2 - 17, 6.4, 18, 2, "#1c1c22", INK, 1.5);
+      vRect(hx + L * 2 - 2, hy2 - 22, 4.4, 6, 1.5, "#3a3a44", INK, 1.2);
+      vEll(hx + L * 2 + 1, hy2 - 11, 1.3, 4, "rgba(255,255,255,0.45)");
+      vEll(hx, hy2, 5.2, 4.8, white);
+    }
+  });
+  return act;
+}
+
+
 function drawSpecialist(pr) {
-  const s = pr.staff, look = LOOKS[s.id] || { hair: "short", outfit: "tee" };
+  const look = LOOKS[pr.staff.id] || { hair: "short", outfit: "tee" };
+  const s = look.ov ? Object.assign({}, pr.staff, look.ov) : pr.staff;
   const P = poseOf(pr);
   const x = P.x, L = P.look;
   vShadow(x, P.feet, 20);
+  if (look.bird || look.cloud) {
+    let by0 = P.body;
+    if (P.sit) by0 += SIT_DROP;
+    pr._act = look.bird ? drawTweety(pr, P, by0) : drawClive(pr, P, by0);
+    return;
+  }
   if (P.work) { drawSpecialistBack(pr, P, s, look); return; }
+  const w2 = look.wide || 1;
   let by = P.body;
   const casual = look.outfit === "tee" || look.outfit === "hoodie";
-  const trouser = casual ? "#34405a" : (s.id === "frank" ? "#2a2a34" : dark(s.body, 0.45));
+  const trouser = s.id === "george" ? "#3a4a6a" : s.id === "sarge" ? "#161a2a" : s.id === "vinnie" ? "#2a2a30" : s.id === "stockley" ? "#4a4a56" : s.id === "hettie" ? "#4a3a30" : s.id === "sheila" ? "#1a4a5a" : s.id === "mona" ? "#2a2a38" : s.id === "penny" ? "#1a1a24" : casual ? "#34405a" : (s.id === "frank" ? "#2a2a34" : dark(s.body, 0.45));
   const shoe = s.id === "sheila" || s.id === "george" ? "#3a2a1a" : "#2a1c14";
-  drawLegsV(P, trouser, shoe);
+  drawLegsV(P, trouser, shoe, { legW: 11 * w2 });
   if (P.sit) by += SIT_DROP;
   const hy = by - 100;
   hairBackV(look.hair, x, hy, s.hair, L, false);
   vRect(x - 5, by - 88, 10, 10, 3, dark(s.skin, 0.12), INK, 1.5);
-  drawTorsoV(x, by - 80, by - 36, 17, 15, s.body, () => outfitDetailsV(look, s, x, by - 80, by - 36, 17));
-  vEll(x - 16, hy + 2, 3.5, 5, s.skin, INK, 2);
-  vEll(x + 16, hy + 2, 3.5, 5, s.skin, INK, 2);
-  vEll(x, hy, 16, 17, s.skin, INK);
+  drawTorsoV(x, by - 80, by - 36, 17 * w2, 15 * w2, s.body, () => {
+    outfitDetailsV(look, s, x, by - 80, by - 36, 17 * w2);
+    torsoExtrasV(look, s, x, by - 80, by - 36, 17 * w2, L);
+  });
+  vEll(x - 16 * w2, hy + 2, 3.5, 5, s.skin, INK, 2);
+  vEll(x + 16 * w2, hy + 2, 3.5, 5, s.skin, INK, 2);
+  if (look.earring) vArc(x + (L > 0 ? -16 : 16) * w2, hy + 9, 3.2, 0, Math.PI * 2, "#e8c040", 1.6);
+  vEll(x, hy, 16 * w2, 17, s.skin, INK);
   vEll(x - 5, hy - 7, 6, 3.5, lite(s.skin, 0.25));
   vEll(x + 6, hy + 9, 7, 4, dark(s.skin, 0.05));
   if (s.prop !== "hat") hairFrontV(look.hair, x, hy, s.hair, L);
   else vPath(() => { ctx.moveTo(x - 16, hy - 4); ctx.quadraticCurveTo(x, hy - 9, x + 16, hy - 4); ctx.lineTo(x + 16, hy - 10); ctx.lineTo(x - 16, hy - 10); ctx.closePath(); }, s.hair);
-  drawFaceV(x, hy + 2, L, { skin: s.skin, brow: dark(s.hair, 0.2), cele: P.cele, glance: P.glance, stern: look.stern });
+  if (look.streak) {
+    [["#26b8e8", -4], ["#f2c200", 0], ["#e23d8a", 4]].forEach(([c, d]) => vStroke([x + L * 3 + d, hy - 13, x + L * 9 + d * 1.4, hy - 24], c, 2.4));
+  }
+  drawFaceV(x, hy + 2, L, { skin: s.skin, brow: dark(s.hair, 0.2), cele: P.cele, glance: P.glance, stern: look.stern, grin: look.grin, browW: look.bold ? 3.4 : (look.stern ? 2.8 : 0), eye: look.eye });
   facialExtrasV(look, s, x, hy + 2, L);
+  if (look.hat) drawHatV(look.hat, x, hy, L, false);
   drawHeadgearV(s, x, hy, L, false);
   if (P.glance) drawSweat(x + (P.left ? -22 : 22), hy - 14);
   const act = activityPlan(pr, P, by);
@@ -3266,13 +3659,13 @@ function drawSpecialist(pr) {
   const shortSleeve = look.outfit === "tee";
   [-L, L].forEach(sd => {
     const hx = hands[sd][0], hy2 = hands[sd][1];
-    const shx = x + sd * 14, shy = by - 76;
+    const shx = x + sd * 14 * w2, shy = by - 76;
     const holding = sd === L && held;
     if (shortSleeve) {
       drawArmV(shx, shy, hx, hy2, s.skin, s.skin, { noHand: holding });
       vLimb([shx, shy, shx + (hx - shx) * 0.38, shy + (hy2 - shy) * 0.38], 10, s.body, INK);
     } else {
-      drawArmV(shx, shy, hx, hy2, s.body, s.skin, { noHand: holding, cuff: look.outfit === "chef" ? "#fbf8ee" : null });
+      drawArmV(shx, shy, hx, hy2, s.body, s.skin, { noHand: holding, cuff: look.outfit === "chef" ? "#fbf8ee" : null, w: 8.5 * w2 });
     }
     if (holding) {
       drawPropV(s.prop, hx, hy2, L);
@@ -3283,21 +3676,24 @@ function drawSpecialist(pr) {
 }
 
 function drawSpecialistBack(pr, P, s, look) {
-  const x = P.x, by = P.y, L = P.look;
+  const x = P.x, by = P.y, L = P.look, w2 = look.wide || 1;
   const tap = (!REDUCE && ((pr.typeT * 6 | 0) % 2)) ? 3 : 0;
-  [-1, 1].forEach(sd => drawArmV(x + sd * 13, by - 38, x + sd * 25, by - 30 + (sd > 0 ? tap : 0), s.body, s.skin, { bend: 2 }));
-  drawTorsoV(x, by - 46, by - 2, 18, 16, s.body, () => {
+  [-1, 1].forEach(sd => drawArmV(x + sd * 13 * w2, by - 38, x + sd * 25 * w2, by - 30 + (sd > 0 ? tap : 0), s.body, s.skin, { bend: 2 }));
+  drawTorsoV(x, by - 46, by - 2, 18 * w2, 16 * w2, s.body, () => {
     if (look.outfit === "hoodie") vEll(x, by - 40, 13, 9, dark(s.body, 0.16), INK, 1.5);
     else if (look.outfit === "chef") q(x - 16, by - 30, 32, 3, s.accent);
-    else if (look.outfit === "overall" || look.outfit === "hivis" || look.outfit === "tabard") {
-      q(x - 18, by - 26, 36, 4, s.accent);
-    }
+    else if (look.outfit === "plaidvest") { q(x - 18, by - 46, 36, 44, look.vestC); q(x - 18, by - 28, 36, 4, "#d8dce0"); q(x - 18, by - 20, 36, 4, "#d8dce0"); }
+    else if (look.outfit === "overall" || look.outfit === "tabard") q(x - 18, by - 26, 36, 4, s.accent);
+    else if (look.outfit === "apron") q(x - 12, by - 26, 24, 24, "#f1e8d6");
+    else if (look.outfit === "jacketopen" && look.zig) { q(x - 18, by - 30, 36, 3, look.zig); }
+    if (look.scarf) vRect(x - 11, by - 48, 22, 7, 3.5, look.scarf, INK, 1.4);
+    if (look.strap) vStroke([x - 16, by - 44, x + 16, by - 8], "#8a5a30", 3.4);
     vStroke([x, by - 40, x, by - 6], dark(s.body, 0.22), 1.4);
   });
   vRect(x - 5, by - 52, 10, 9, 3, dark(s.skin, 0.12), INK, 1.5);
-  vEll(x - 16, by - 62, 3.5, 5, s.skin, INK, 2);
-  vEll(x + 16, by - 62, 3.5, 5, s.skin, INK, 2);
-  vEll(x, by - 64, 16, 17, s.skin, INK);
+  vEll(x - 16 * w2, by - 62, 3.5, 5, s.skin, INK, 2);
+  vEll(x + 16 * w2, by - 62, 3.5, 5, s.skin, INK, 2);
+  vEll(x, by - 64, 16 * w2, 17, s.skin, INK);
   if (s.prop === "hat") {
     vPath(() => { ctx.moveTo(x - 16, by - 72); ctx.quadraticCurveTo(x, by - 60, x + 16, by - 72); ctx.lineTo(x + 16, by - 77); ctx.lineTo(x - 16, by - 77); ctx.closePath(); }, s.hair);
   } else {
@@ -3305,10 +3701,10 @@ function drawSpecialistBack(pr, P, s, look) {
   }
   if (look.hair === "ponytail") { vEll(x, by - 46, 6, 13, s.hair, INK, 2); vEll(x, by - 58, 4, 2.6, "#d1202f", INK, 1); }
   if (look.hair === "bun") vEll(x, by - 82, 8, 7, s.hair, INK, 2);
-  if (look.goggles) vStroke([x - 16, by - 70, x + 16, by - 70], "#2a2a2a", 3);
+  if (look.goggles) vStroke([x - 16, by - 74, x + 16, by - 74], "#2a2a2a", 3.4);
+  if (look.hat) drawHatV(look.hat, x, by - 64, L, true);
   drawHeadgearV(s, x, by - 64, L, true);
 }
-
 
 /* ---------- Kenneth: cream metal head, flat cap with a red feather, round glasses ---------- */
 function drawKenCap(x, top, L, back) {
@@ -3599,78 +3995,150 @@ function drawKeith(pr) {
     const shx = x + sd * 16, shy = by - 68;
     drawTentacle([shx, shy, (shx + hx) / 2 + sd * 8, (shy + hy2) / 2, hx, hy2], 7.5, skin, sucker, sd);
     if (sd === L) drawPropV("tablet", hx, hy2, L);
-    else if (!busy && !act && !P.cele) drawPropV("coin", hx, hy2, -L);
+    else if (!busy && !act && !P.cele) drawPropV("coin", hx, hy2, -L, "B");
   });
   pr._act = act;
 }
 
 
-/* ---------- The office cats ---------- */
+/* ---------- The office cats ----------
+   Each is drawn from their photos on the Cats page: colours, markings, coat length
+   and build. Long-haired cats get a fluffy outline and a plume tail; Spyro is sleek. */
 const CAT_LOOKS = {
-  arthur: { base: "#efe3cc", hi: "#f8f2e6", point: "#6b5348", pointD: "#4a3a34", eye: "#6ab8e0", nose: "#c48a8a", mask: true },
-  tilly: { base: "#ece6dc", hi: "#f8f6f0", point: "#9a9088", pointD: "#7a7068", eye: "#8ed0ee", nose: "#e89aa8", mask: true },
-  trixie: { base: "#d8c8b0", hi: "#efe4d2", point: "#3a2c26", pointD: "#241a16", eye: "#5aa8e0", nose: "#3a2a26", mask: true, socks: "#fbf8f0", collar: "#d1202f" },
-  daisy: { base: "#f6f0e4", hi: "#fffdf8", point: "#d8c4a8", pointD: "#c4ac8c", eye: "#7ec8e8", nose: "#e8a0a8", mask: true, bow: "#d1202f" },
-  dexter: { base: "#2e2622", hi: "#4a3e38", point: "#1a1210", pointD: "#120c0a", eye: "#e6b83a", nose: "#3a2a26", ruff: "#a8a098", fluffy: true },
-  spyro: { base: "#f6f2e8", hi: "#ffffff", point: "#f6f2e8", pointD: "#d8d4c8", eye: "#c5d86a", nose: "#e8a0a0", tail: "#c45c26", tailD: "#8a3a10" }
+  /* Arthur: blue-point Ragdoll, taupe mask, cream body with a fawn back, big dark plume, white mitts. */
+  arthur: { fur: "long", base: "#f1e6d2", back: "#d6bb98", belly: "#fbf5ea", ruff: "#fbf5ea", face: "#eadfca", mask: "#8d7d72", ear: "#7d6d62", eye: "#7ec0ea", nose: "#6a5a58", leg: "#f4ecdc", paw: "#ffffff", tail: "#85705f", tailD: "#5e4b40", sx: 1.1, sy: 1.04 },
+  /* Spyro: short-haired white with pink ears, a ginger dab on the forehead and a ginger tail. */
+  spyro: { fur: "short", base: "#f7f4ec", back: "#ffffff", belly: "#ece7db", face: "#faf8f2", ear: "#f2bcbc", eye: "#c8d46a", nose: "#e8a0a0", leg: "#f7f4ec", paw: "#ffffff", tail: "#d98a3a", tailD: "#b26418", patch: "#d9a060", rings: true, sx: 0.94, sy: 1 },
+  /* Tilly: silver-tabby (lynx-point) Ragdoll: grey-barred face and legs, pink nose, white ruff. */
+  tilly: { fur: "long", base: "#e6dccd", back: "#cdbfae", belly: "#faf6ee", ruff: "#fbf8f2", face: "#e5dbcf", mask: "#a99d91", stripes: "#5e554e", ear: "#9c9086", eye: "#74b2e0", nose: "#d98a96", leg: "#cfc3b4", legStripe: "#6a6058", paw: "#ddd2c4", tail: "#b9ab9b", tailD: "#6a6058", rings: true, sx: 0.98, sy: 1.08, soft: true },
+  /* Trixie: seal-point Ragdoll: very dark face and ears, vivid blue eyes, white socks, dark plume. */
+  trixie: { fur: "long", base: "#f0e6d6", back: "#d4bc9a", belly: "#fffaf0", ruff: "#fffaf0", face: "#e4d6c2", mask: "#3f332e", ear: "#3f332e", eye: "#56aae6", nose: "#3a2c28", leg: "#f6eddc", paw: "#ffffff", tail: "#6d5d55", tailD: "#463a34", stern: true, sx: 1.02, sy: 1 },
+  /* Daisy: cream-and-white mitted Ragdoll: fawn cap with a white blaze, pink nose, grey-taupe tail. */
+  daisy: { fur: "long", base: "#f6eedf", back: "#ebcfa8", belly: "#fffdf8", ruff: "#fffdf8", face: "#f8f2e6", mask: "#d6bb98", blaze: true, ear: "#cdb090", eye: "#78b4e0", nose: "#e8a0a8", leg: "#fbf6ec", paw: "#ffffff", tail: "#9b9088", tailD: "#756b62", sx: 1.08, sy: 1 },
+  /* Dexter: black-smoke longhair: black face and legs, smoky-grey ruff and body, amber eyes. */
+  dexter: { fur: "long", base: "#524b46", back: "#27201e", belly: "#7c756f", ruff: "#908983", face: "#1c1614", ear: "#1c1614", eye: "#eab838", nose: "#2a2020", leg: "#1e1816", paw: "#1e1816", tail: "#4b4440", tailD: "#26201e", noCheek: true, sx: 1.12, sy: 1.02 }
 };
 
-function catEars(cx, cy, rx, look, k) {
-  [-1, 1].forEach(sd => {
-    const ex = cx + sd * rx * 0.62;
-    vPoly([ex - sd * 7, cy - 8, ex + sd * 4, cy - rx - 4, ex + sd * 7, cy - 4], k.mask ? k.point : k.base, INK, 2);
-    vPoly([ex - sd * 3, cy - 8, ex + sd * 3.4, cy - rx, ex + sd * 4.4, cy - 6], "#e8a8b0");
-  });
-}
-function catFace(cx, cy, look, k, o) {
-  const opt = o || {};
-  const shift = look * 2;
-  if (k.mask) {
-    vEll(cx + shift * 0.5, cy + 3, 12, 9, k.point);
-    vEll(cx + shift * 0.5, cy + 8, 6, 4, k.base);
-  }
-  [-1, 1].forEach(sd => {
-    const ex = cx + sd * 7 + shift, ey = cy;
-    if (opt.sleep) { vArc(ex, ey - 1, 3.6, Math.PI * 0.15, Math.PI * 0.85, INK, 1.8); return; }
-    vEll(ex, ey, 4.4, 4.2, k.eye, INK, 1.5);
-    vEll(ex + look * 0.8, ey, 1.4, 3.4, "#0e0a08");
-    vEll(ex - 1.2, ey - 1.5, 1.1, 1.1, "#ffffff");
-  });
-  vPoly([cx + shift - 3, cy + 5.5, cx + shift + 3, cy + 5.5, cx + shift, cy + 8.5], k.nose, INK, 1);
-  vPath(() => { ctx.moveTo(cx + shift - 4, cy + 10); ctx.quadraticCurveTo(cx + shift - 2, cy + 12, cx + shift, cy + 9); ctx.quadraticCurveTo(cx + shift + 2, cy + 12, cx + shift + 4, cy + 10); }, null, INK, 1.2);
-  const wc = k.fluffy ? "rgba(220,210,200,0.7)" : "rgba(60,40,30,0.55)";
-  [-1, 1].forEach(sd => {
-    vStroke([cx + shift + sd * 6, cy + 8, cx + shift + sd * 17, cy + 6], wc, 1);
-    vStroke([cx + shift + sd * 6, cy + 9.5, cx + shift + sd * 17, cy + 11], wc, 1);
-  });
-}
-function catHead(cx, cy, look, k, o) {
-  catEars(cx, cy, 18, look, k);
-  if (k.ruff) {
-    for (let i = 0; i < 9; i++) {
-      const a = Math.PI * (0.05 + i * 0.1125);
-      vEll(cx + Math.cos(a) * 18, cy + 4 + Math.sin(a) * 13, 7, 7, k.ruff, INK, 1.5);
-    }
-    for (let i = 0; i < 9; i++) {
-      const a = Math.PI * (0.05 + i * 0.1125);
-      vEll(cx + Math.cos(a) * 18, cy + 4 + Math.sin(a) * 13, 5.6, 5.6, k.ruff);
+function fluffRing(cx, cy, rx, ry, col, n, r, from, to) {
+  for (let pass = 0; pass < 2; pass++) {
+    for (let i = 0; i < n; i++) {
+      const a = from + (to - from) * (n === 1 ? 0 : i / (n - 1));
+      const px = cx + Math.cos(a) * rx, py = cy + Math.sin(a) * ry;
+      if (pass === 0) vEll(px, py, r, r * 0.92, col, INK, 1.8);
+      else vEll(px, py, r - 1.1, r * 0.92 - 1.1, col);
     }
   }
-  vEll(cx, cy, 19, 16, k.base, INK);
-  vEll(cx - 6, cy - 7, 6, 3.4, k.hi);
-  catFace(cx, cy, look, k, o);
-  if (k.bow) {
-    const bx = cx + 12, by = cy - 13;
-    vPoly([bx, by, bx - 8, by - 5, bx - 8, by + 5], k.bow, INK, 1.2);
-    vPoly([bx, by, bx + 8, by - 5, bx + 8, by + 5], k.bow, INK, 1.2);
-    vEll(bx, by, 2.4, 2.4, dark(k.bow, 0.2), INK, 1);
+}
+function catBodyV(cx, cy, rx, ry, k, o) {
+  const long = k.fur === "long";
+  if (long) fluffRing(cx, cy, rx - 1, ry - 1, k.base, o.n || 14, o.r || 6.5, o.from === undefined ? 0 : o.from, o.to === undefined ? Math.PI * 2 : o.to);
+  const path = () => { ctx.ellipse(cx, cy, rx, ry, 0, 0, Math.PI * 2); };
+  vPath(path, k.base, long ? null : INK);
+  withClip(path, () => {
+    vEll(cx, cy - ry * 0.78, rx * 1.1, ry * 0.95, k.back);
+    vEll(cx, cy + ry * 0.7, rx * 0.62, ry * 0.55, k.belly);
+  });
+  if (!long) vPath(path, null, INK);
+}
+function polySample(pts, n) {
+  const seg = [];
+  let tot = 0;
+  for (let i = 2; i < pts.length; i += 2) {
+    const l = Math.hypot(pts[i] - pts[i - 2], pts[i + 1] - pts[i - 1]);
+    seg.push(l);
+    tot += l;
   }
+  const out = [];
+  for (let j = 0; j < n; j++) {
+    let d = tot * j / (n - 1), i = 0;
+    while (i < seg.length - 1 && d > seg[i]) { d -= seg[i]; i++; }
+    const t = seg[i] ? Math.min(1, d / seg[i]) : 0;
+    out.push([pts[i * 2] + (pts[i * 2 + 2] - pts[i * 2]) * t, pts[i * 2 + 1] + (pts[i * 2 + 3] - pts[i * 2 + 1]) * t]);
+  }
+  return out;
 }
 function catTail(pts, k, w) {
-  const col = k.tail || k.point, colD = k.tailD || k.pointD;
-  vLimb(pts, w + (k.fluffy ? 4 : 0), col, INK);
+  const col = k.tail, colD = k.tailD;
+  if (k.fur === "long") {
+    /* A feathery plume: puffs that fatten towards the tip. */
+    const sp = polySample(pts, 10);
+    for (let pass = 0; pass < 2; pass++) {
+      sp.forEach(([px, py], i) => {
+        const r = (w * 0.5 + i * 0.75) + (i % 2 ? 0.8 : 0) - pass * 1.2;
+        vEll(px, py, r, r, i > 6 ? mixHex(col, colD, (i - 6) / 4) : col, pass ? null : INK, 1.8);
+      });
+    }
+    return;
+  }
+  vLimb(pts, w, col, INK);
+  if (k.rings) {
+    const sp = polySample(pts, 6);
+    for (let i = 1; i < sp.length - 1; i++) {
+      const dx = sp[i + 1][0] - sp[i - 1][0], dy = sp[i + 1][1] - sp[i - 1][1], l = Math.max(1, Math.hypot(dx, dy));
+      const nx = -dy / l * w * 0.42, ny = dx / l * w * 0.42;
+      vStroke([sp[i][0] - nx, sp[i][1] - ny, sp[i][0] + nx, sp[i][1] + ny], colD, 2);
+    }
+  }
   const n = pts.length;
-  vEll(pts[n - 2], pts[n - 1], (w + (k.fluffy ? 4 : 0)) / 2 + 0.5, (w + (k.fluffy ? 4 : 0)) / 2 + 0.5, colD);
+  vEll(pts[n - 2], pts[n - 1], w / 2, w / 2, colD);
+}
+function mixHex(a, b, t) {
+  const pa = parseInt(a.slice(1), 16), pb = parseInt(b.slice(1), 16);
+  const ch = sh => Math.round(((pa >> sh) & 255) * (1 - t) + ((pb >> sh) & 255) * t);
+  return "rgb(" + ch(16) + "," + ch(8) + "," + ch(0) + ")";
+}
+function catEars(cx, cy, k) {
+  [-1, 1].forEach(sd => {
+    const ex = cx + sd * 11.5;
+    vPoly([ex - sd * 9, cy - 4, ex + sd * 0.5, cy - 21, ex + sd * 10, cy - 1], k.ear, INK, 2);
+    vPoly([ex - sd * 5, cy - 5, ex + sd * 0.8, cy - 16, ex + sd * 7, cy - 2], "#e9a9ae");
+    if (k.fur === "long") [-2, 0, 2].forEach(o => vStroke([ex + sd * 5 + sd * o * 0.5, cy - 3, ex + sd * 4 + sd * o, cy - 9], lite(k.face, 0.3), 1));
+  });
+}
+function catHeadV(cx, cy, look, k, o) {
+  const opt = o || {}, sh = look * 2;
+  catEars(cx, cy, k);
+  const long = k.fur === "long";
+  if (long && !k.noCheek) {
+    [-1, 1].forEach(sd => {
+      vPoly([cx + sd * 14, cy + 1, cx + sd * 25, cy + 10, cx + sd * 15, cy + 12], k.ruff, INK, 1.8);
+      vPoly([cx + sd * 13, cy + 7, cx + sd * 22, cy + 17, cx + sd * 10, cy + 15], k.ruff, INK, 1.8);
+    });
+  }
+  const head = () => { ctx.ellipse(cx, cy, 19, 16, 0, 0, Math.PI * 2); };
+  vPath(head, k.face);
+  withClip(head, () => {
+    if (k.mask) {
+      vEll(cx + sh * 0.4, cy - (k.blaze ? 5 : 0), k.blaze ? 18 : 15.5, k.blaze ? 11 : 13, k.mask);
+      if (k.stripes) {
+        for (let i = -1; i <= 1; i++) vStroke([cx + i * 5 + sh * 0.4, cy - 16, cx + i * 4.2 + sh * 0.4, cy - 8], k.stripes, 1.8);
+        [-1, 1].forEach(sd => {
+          vStroke([cx + sd * 15, cy + 1, cx + sd * 10, cy + 2], k.stripes, 1.6);
+          vStroke([cx + sd * 15, cy + 5, cx + sd * 10, cy + 5], k.stripes, 1.6);
+        });
+      }
+      if (k.blaze) vPoly([cx - 2 + sh, cy - 14, cx + 2 + sh, cy - 14, cx + 5 + sh, cy + 4, cx + sh, cy + 12, cx - 5 + sh, cy + 4], k.face);
+      else vEll(cx + sh, cy + 9, 8, 5, k.stripes ? lite(k.face, 0.1) : k.ruff ? k.face : k.mask);
+    }
+    vEll(cx - 7, cy - 9, 7, 3.4, "rgba(255,255,255,0.22)");
+    if (k.patch) vEll(cx - 3 + sh * 0.3, cy - 10, 3.6, 2.6, k.patch);
+  });
+  vPath(head, null, INK);
+  [-1, 1].forEach(sd => {
+    const ex = cx + sd * 7.2 + sh, ey = cy - 0.5;
+    if (opt.sleep) { vArc(ex, ey - 1, 3.8, Math.PI * 0.15, Math.PI * 0.85, INK, 1.8); return; }
+    vEll(ex, ey, 4.8, 4.8, k.eye, INK, 1.5);
+    vEll(ex + look * 0.8, ey, 1.5, 3.8, "#0e0a08");
+    vEll(ex - 1.3, ey - 1.7, 1.2, 1.2, "#ffffff");
+    if (k.stern) vStroke([ex - sd * 5.6, ey - 7.2 + (sd > 0 ? 0 : 0), ex + sd * 4, ey - 3.8], "#241a16", 2);
+  });
+  vPoly([cx + sh - 3, cy + 5, cx + sh + 3, cy + 5, cx + sh, cy + 8.4], k.nose, INK, 1);
+  vPath(() => { ctx.moveTo(cx + sh - 4, cy + 10.5); ctx.quadraticCurveTo(cx + sh - 2, cy + 12.5, cx + sh, cy + 8.6); ctx.quadraticCurveTo(cx + sh + 2, cy + 12.5, cx + sh + 4, cy + 10.5); }, null, INK, 1.2);
+  const wc = (k.id === "dexter" || k.id === "trixie") ? "rgba(235,228,220,0.85)" : "rgba(70,50,40,0.5)";
+  [-1, 1].forEach(sd => {
+    vStroke([cx + sh + sd * 6, cy + 8, cx + sh + sd * 18, cy + 5.5], wc, 1);
+    vStroke([cx + sh + sd * 6, cy + 9.6, cx + sh + sd * 18, cy + 11], wc, 1);
+  });
 }
 function drawZzz(x, y) {
   if (REDUCE || ((animT * 0.8) % 2) >= 1.2) return;
@@ -3679,68 +4147,76 @@ function drawZzz(x, y) {
   });
 }
 function drawCrown(cx, cy) {
-  vPoly([cx - 10, cy, cx - 11, cy - 10, cx - 5, cy - 5, cx, cy - 13, cx + 5, cy - 5, cx + 11, cy - 10, cx + 10, cy], "#d4af37", INK, 1.5);
-  vEll(cx, cy - 4, 2.2, 2.2, "#d1202f");
-  vEll(cx - 7, cy - 3, 1.4, 1.4, "#2a7ad1");
-  vEll(cx + 7, cy - 3, 1.4, 1.4, "#2a9a4a");
+  /* Spyro's small crown: red velvet cap, gold band and points. */
+  vPath(() => { ctx.moveTo(cx - 10, cy); ctx.quadraticCurveTo(cx - 12, cy - 12, cx, cy - 13); ctx.quadraticCurveTo(cx + 12, cy - 12, cx + 10, cy); ctx.closePath(); }, "#b81c24", INK, 1.5);
+  vPoly([cx - 11, cy + 2, cx - 11.5, cy - 8, cx - 6, cy - 3, cx, cy - 11, cx + 6, cy - 3, cx + 11.5, cy - 8, cx + 11, cy + 2], "#d4af37", INK, 1.5);
+  vStroke([cx, cy - 11, cx, cy - 16], "#d4af37", 2.2);
+  vStroke([cx - 2.6, cy - 14, cx + 2.6, cy - 14], "#d4af37", 2.2);
+  vEll(cx, cy - 1, 1.8, 1.8, "#d1202f");
+  vEll(cx - 6.5, cy - 0.5, 1.2, 1.2, "#2a7ad1");
+  vEll(cx + 6.5, cy - 0.5, 1.2, 1.2, "#2a9a4a");
 }
 
 function drawCat(c) {
   const k = CAT_LOOKS[c.id] || CAT_LOOKS.tilly;
+  k.id = c.id;
   const walking = !REDUCE && c.target && c.wait <= 0;
   const x = Math.round(c.x), y = Math.round(c.y);
   const L = c.facing === "l" ? -1 : 1;
+  const long = k.fur === "long";
   const loaf = !c.target && c.spot && (c.spot.clock || (c.spot.sofa && c.id === "arthur"));
   charBegin();
+  ctx.translate(x, y);
+  ctx.scale(k.sx, k.sy);
+  ctx.translate(-x, -y);
   if (loaf) {
     /* A loaf: paws tucked, tail wrapped round, eyes shut. */
-    vShadow(x, y, 38);
-    catTail([x + 30, y - 6, x + 38, y + 2, x + 18, y + 6, x - 4, y + 6], k, 8);
-    vEll(x + 6, y - 16, 34, 18, k.base, INK);
-    vEll(x + 2, y - 26, 22, 6, k.hi);
-    if (k.fluffy) vEll(x - 10, y - 10, 14, 10, k.ruff || k.hi);
-    vEll(x - 14, y + 1, 9, 4.5, k.socks || k.hi, INK, 1.5);
-    vEll(x + 4, y + 1, 9, 4.5, k.socks || k.hi, INK, 1.5);
-    catHead(x - 14, y - 30, 0, k, { sleep: true });
-    drawZzz(x + 20, y - 54);
+    vShadow(x, y, 40);
+    catTail([x + 30, y - 8, x + 42, y, x + 24, y + 7, x - 2, y + 7], k, 9);
+    catBodyV(x + 6, y - 16, 34, 18, k, { n: 18, r: 6.5, from: Math.PI * 0.9, to: Math.PI * 2.1 });
+    vEll(x - 14, y + 1, 9.5, 4.8, k.paw, INK, 1.5);
+    vEll(x + 4, y + 1, 9.5, 4.8, k.paw, INK, 1.5);
+    if (long) vEll(x - 6, y - 8, 16, 8, k.ruff);
+    catHeadV(x - 14, y - 30, 0, k, { sleep: true });
+    drawZzz(x + 20, y - 56);
     charEnd();
     return;
   }
   if (walking) {
     /* Side-on trot: four legs in a diagonal gait, tail up. */
     const ph = c.walkT * 12, sw = Math.sin(ph);
-    vShadow(x, y, 30);
-    catTail([x - L * 24, y - 28, x - L * 40, y - 40, x - L * 38, y - 58], k, 7);
+    vShadow(x, y, 32);
+    catTail([x - L * 24, y - 28, x - L * 42, y - 36, x - L * 42, y - 58], k, 7);
     const legs = [[-L * 16, sw], [L * 14, -sw]];
-    legs.forEach(([dx, s2]) => vLimb([x + dx - 4, y - 18, x + dx - 4 - L * s2 * 6, y - 3], 7, k.pointD && k.mask ? dark(k.base, 0.08) : dark(k.base, 0.1), INK));
-    vEll(x, y - 24, 28, 14, k.base, INK);
-    vEll(x - L * 4, y - 32, 18, 5, k.hi);
-    if (k.fluffy) vEll(x + L * 14, y - 20, 12, 12, k.ruff, INK, 1.5);
+    legs.forEach(([dx, s2]) => vLimb([x + dx - 4, y - 18, x + dx - 4 - L * s2 * 6, y - 3], 7, dark(k.leg, 0.08), INK));
+    catBodyV(x, y - 24, 29, 15, k, { n: 13, r: 6.5, from: Math.PI * 0.05, to: Math.PI * 1.95 });
+    if (long) vEll(x + L * 15, y - 21, 11, 11, k.ruff);
+    if (k.legStripe) legs.forEach(([dx]) => vStroke([x + dx - 5, y - 12, x + dx + 3, y - 12], k.legStripe, 1.6));
     legs.forEach(([dx, s2]) => {
       const fx = x + dx + 4 + L * s2 * 6;
-      vLimb([x + dx + 4, y - 16, fx, y - 3], 7, k.base, INK);
-      vEll(fx + L * 2, y - 2, 5, 3, k.socks || (k.mask ? k.point : k.base), INK, 1.5);
+      vLimb([x + dx + 4, y - 16, fx, y - 3], 7, k.leg, INK);
+      vEll(fx + L * 2, y - 2, 5.4, 3.2, k.paw, INK, 1.5);
     });
-    if (k.collar) vStroke([x + L * 20, y - 34, x + L * 24, y - 24], k.collar, 4);
-    catHead(x + L * 24, y - 42, L, k, {});
+    catHeadV(x + L * 24, y - 42, L, k, {});
     charEnd();
     return;
   }
   /* Sitting up, facing us. Spyro on a desk wears his crown. */
-  vShadow(x, y, 28);
-  catTail([x - L * 20, y - 8, x - L * 34, y - 6, x - L * 36, y - 22, x - L * 30, y - 34], k, 7);
-  vEll(x, y - 20, 25, 20, k.base, INK);
-  vEll(x, y - 26, 14, 16, k.hi);
-  if (k.fluffy) {
-    for (let i = 0; i < 6; i++) vEll(x - 22 + i * 9, y - 6 + (i % 2) * 2, 7, 6, k.base);
+  vShadow(x, y, 29);
+  catTail([x - L * 20, y - 8, x - L * 36, y - 6, x - L * 40, y - 22, x - L * 34, y - 38], k, 7);
+  catBodyV(x, y - 21, 28, 22, k, { n: 15, r: 7.5, from: Math.PI * 0.0, to: Math.PI * 1.0 });
+  if (long) {
+    fluffRing(x, y - 31, 18, 12, k.ruff, 9, 6.5, Math.PI * 0.05, Math.PI * 0.95);
+    vEll(x, y - 31, 19, 12, k.ruff);
   }
-  vLimb([x - 7, y - 24, x - 8, y - 4], 7, k.hi, INK);
-  vLimb([x + 7, y - 24, x + 8, y - 4], 7, k.hi, INK);
-  vEll(x - 8, y - 2, 5.5, 3.6, k.socks || k.hi, INK, 1.5);
-  vEll(x + 8, y - 2, 5.5, 3.6, k.socks || k.hi, INK, 1.5);
-  if (k.collar) { vArc(x, y - 52, 12, Math.PI * 0.25, Math.PI * 0.75, k.collar, 4); vEll(x, y - 41, 2.4, 2.4, "#d4af37", INK, 1); }
-  catHead(x, y - 48, L * 0.5, k, {});
-  if (c.id === "spyro" && c.deskSit) drawCrown(x, y - 66);
+  vLimb([x - 9, y - 18, x - 9.5, y - 5], 8, k.leg, INK);
+  vLimb([x + 9, y - 18, x + 9.5, y - 5], 8, k.leg, INK);
+  if (k.legStripe) [-1, 1].forEach(sd => { vStroke([x + sd * 9 - 3.5, y - 13, x + sd * 9 + 3.5, y - 13], k.legStripe, 1.6); vStroke([x + sd * 9 - 3.5, y - 9, x + sd * 9 + 3.5, y - 9], k.legStripe, 1.6); });
+  vEll(x - 9.5, y - 2, 6.6, 4, k.paw, INK, 1.5);
+  vEll(x + 9.5, y - 2, 6.6, 4, k.paw, INK, 1.5);
+  if (long) fluffRing(x, y - 4, 12, 3, k.paw, 3, 3.6, Math.PI * 0.2, Math.PI * 0.8);
+  catHeadV(x, y - 48, L * 0.5, k, {});
+  if (c.id === "spyro" && c.deskSit) drawCrown(x, y - 64);
   charEnd();
 }
 
