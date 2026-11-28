@@ -132,6 +132,8 @@ let viewScale = 1;
 const REDUCE = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const params = new URLSearchParams(location.search);
 const DEMO = params.get("demo") || "";
+const NIGHT_PARAM = (params.get("night") || "").toLowerCase();
+const SEASON_PARAM = (params.get("season") || "").toLowerCase();
 const EMBED = params.get("embed") === "1" || (!document.getElementById("office-canvas") && !!document.getElementById("office-live"));
 const EMBED_CAM_X = 0;
 const EMBED_CAM_Y = 60;
@@ -242,6 +244,123 @@ function todaySpecial() {
 }
 /* The wall clock hangs on the office wall, and Arthur naps on the floor under it. */
 const CLOCK = { cx: 248, cy: 108, r: 13 };
+
+/* Approximate sunrise and sunset in Blackpool, as clock times, used only for
+   the office windows. No network call; dusk is a short band around sunset. */
+const SUN = [
+  null,
+  [8 * 60 + 20, 16 * 60 + 15], [7 * 60 + 40, 17 * 60 + 15], [6 * 60 + 30, 18 * 60 + 10],
+  [6 * 60 + 20, 20 * 60 + 10], [5 * 60 + 15, 21 * 60 + 10], [4 * 60 + 40, 21 * 60 + 45],
+  [5 * 60 + 0, 21 * 60 + 30], [5 * 60 + 50, 20 * 60 + 30], [6 * 60 + 45, 19 * 60 + 20],
+  [7 * 60 + 40, 18 * 60 + 10], [7 * 60 + 40, 16 * 60 + 20], [8 * 60 + 20, 15 * 60 + 50]
+];
+
+function currentSky() {
+  if (NIGHT_PARAM === "1" || NIGHT_PARAM === "night" || NIGHT_PARAM === "late") return "night";
+  if (NIGHT_PARAM === "dusk") return "dusk";
+  if (NIGHT_PARAM === "0" || NIGHT_PARAM === "day") return "day";
+  const t = ukNow();
+  const m = t.hour * 60 + t.minute;
+  const sun = SUN[t.month] || SUN[1];
+  if (m >= sun[1] - 35 && m <= sun[1] + 50) return "dusk";
+  if (m >= sun[0] - 30 && m < sun[0] + 25) return "dusk";
+  if (m >= sun[0] + 25 && m < sun[1] - 35) return "day";
+  return "night";
+}
+function isLateHours() {
+  if (NIGHT_PARAM === "1" || NIGHT_PARAM === "night" || NIGHT_PARAM === "late") return true;
+  if (NIGHT_PARAM === "0" || NIGHT_PARAM === "day" || NIGHT_PARAM === "dusk") return false;
+  const t = ukNow();
+  const m = t.hour * 60 + t.minute;
+  return m >= 22 * 60 || m < 6 * 60;
+}
+function currentSeason() {
+  if (SEASON_PARAM === "december" || SEASON_PARAM === "xmas" || SEASON_PARAM === "christmas") return "december";
+  if (SEASON_PARAM === "halloween") return "halloween";
+  if (SEASON_PARAM === "none" || SEASON_PARAM === "0" || SEASON_PARAM === "off") return "none";
+  const t = ukNow();
+  if (t.month === 12) return "december";
+  if (t.month === 10 && t.day >= 24) return "halloween";
+  return "none";
+}
+function nightOwl() {
+  if (!isLateHours() || !people.length) return null;
+  const working = people.filter(p => p.want === "working");
+  if (working.length) return working[0];
+  /* In the posed ?demo=1, Kenneth is standing for his portrait, so he is not the night owl. */
+  const owls = ["keith", "george", "rupert", "vinnie", "percy", "kenneth"];
+  const skip = (DEMO === "1") ? "kenneth" : "";
+  const list = owls.filter(id => id !== skip);
+  const id = list[(ukDayOfYear() - 1) % list.length];
+  return people.find(p => p.id === id) || people[0];
+}
+function isLateSitting(pr) {
+  const owl = nightOwl();
+  return !!(owl && pr.id === owl.id && pr.want !== "working" && pr.phase !== "celebrating" &&
+    !pr.target && pr.desk && Math.hypot(pr.x - pr.desk.chairX, pr.y - pr.desk.chairY) < 4);
+}
+function shouldSitLate(pr) {
+  const owl = nightOwl();
+  return !!(owl && pr.id === owl.id && pr.want !== "working" && pr.phase !== "celebrating" && pr.phase !== "to-desk");
+}
+function isWorkingPose(pr) {
+  return pr.phase === "working" || isLateSitting(pr);
+}
+
+/* Portraits that already exist. Most of the specialists do not have one yet;
+   their cards show a name and a line only. Paths stay lazy-loaded, one at a time. */
+const PORTRAITS = {
+  kenneth: "portraits/kenneth.jpg",
+  terry: "portraits/terry.jpg",
+  reggie: "portraits/reggie.jpg",
+  keith: "portraits/kraken-keith.jpg",
+  arthur: "portraits/arthur.jpg",
+  dexter: "portraits/dexter.jpg",
+  spyro: "portraits/spyro.jpg"
+};
+const JOB_LINE = {
+  kenneth: "Chief of Staff to the Ferret, coordinating the bots.",
+  terry: "The Machine: editor, and the first of the three.",
+  reggie: "The Cousin: proofreader, and the second of the three.",
+  boris: "Looks after the email.",
+  tweety: "Posts to X, when the Ferret says so.",
+  percy: "The books, from the proofs to the shop.",
+  george: "This website, by branch and pull request.",
+  archie: "The games in the arcade.",
+  brian: "The music.",
+  clive: "Vapers Choice.",
+  frank: "The View, and the canteen.",
+  filament: "The 3D printer.",
+  oddly: "A new shop, not yet named.",
+  rupert: "Incognito Science, on video.",
+  penny: "The money, the VAT, and an eye on the investments.",
+  keith: "Watches the crypto, and only trades when the Ferret says so.",
+  sheila: "Rotas and staff.",
+  sarge: "Keeps everyone on the right side of the rules.",
+  mona: "The shops' socials and reviews.",
+  hettie: "Home admin, and the cats.",
+  stockley: "The stock and the suppliers.",
+  grant: "Grants and other funding.",
+  vinnie: "Incognito Science on YouTube.",
+  arthur: "A Ragdoll, and the office loaf. Often found under the clock.",
+  dexter: "The grey wolf, here to supervise the rug.",
+  spyro: "The true king, who will occasionally take an empty desk."
+};
+const CHATS = {
+  kettle: [
+    ["BREW?", "GO ON THEN."],
+    ["BISCUIT?", "GONE"],
+    ["WHO'S HAD MY MUG?", "NOT ME"],
+    ["I'LL BE MOTHER", "TA"]
+  ],
+  arcade: [
+    ["1UP!", "GO ON!"],
+    ["ONE MORE GO", "GO ON THEN"],
+    ["HI SCORE", "IS IT?"]
+  ]
+};
+let chatWait = 6;
+let paintedSky = null, paintedSeason = null;
 
 function line(x0, y0, x1, y1, colour) {
   const dx = x1 - x0, dy = y1 - y0;
@@ -718,6 +837,33 @@ function tickPerson(p, dt) {
     }
     return;
   }
+  /* After ten, one person stays on for a late one, at their own desk under the lamp. */
+  if (shouldSitLate(p)) {
+    const atDesk = Math.hypot(p.x - p.desk.chairX, p.y - p.desk.chairY) < 4;
+    if (!atDesk) {
+      const goingHome = p.target && Math.hypot(p.target.x - p.desk.chairX, p.target.y - p.desk.chairY) < 4;
+      if (!goingHome) {
+        releaseSpot(p);
+        setRoute(p, { x: p.desk.chairX, y: p.desk.chairY, lane: p.desk.lane });
+        p.flavour = "Heading back for a late one";
+        paintBoard();
+      } else {
+        stepMove(p, dt, 46);
+      }
+      return;
+    }
+    p.x = p.desk.chairX;
+    p.y = p.desk.chairY;
+    p.target = null;
+    p.waypoints = [];
+    p.facing = "r";
+    if (p.flavour !== "Working late") {
+      p.flavour = "Working late";
+      paintBoard();
+    }
+    p.wait = 2;
+    return;
+  }
   /* Idle: walking to a spot, or doing something at one. */
   if (p.target) {
     if (stepMove(p, dt, 42) && p.spot) {
@@ -727,8 +873,11 @@ function tickPerson(p, dt) {
     return;
   }
   if (p.bubble) {
-    p.bubble.t -= dt;
-    if (p.bubble.t <= 0) p.bubble = null;
+    if (p.bubble.delay > 0) p.bubble.delay -= dt;
+    else {
+      p.bubble.t -= dt;
+      if (p.bubble.t <= 0) p.bubble = null;
+    }
   } else if (p.activity) {
     p.bubbleT -= dt;
     const lines = (p.spot && p.spot.watch) ? ["OOH", "GO ON!"] : (BUBBLES[p.activity] || []);
@@ -788,6 +937,22 @@ function tickDarts(dt) {
   }
 }
 
+function emptyDesks() {
+  return desks.filter(d => {
+    const owner = people.find(p => p.id === d.id);
+    if (!owner) return true;
+    if (owner.phase === "working" || owner.phase === "to-desk" || isLateSitting(owner)) return false;
+    return Math.hypot(owner.x - d.chairX, owner.y - d.chairY) > 18;
+  });
+}
+function perchSpyro(c, desk) {
+  c.deskSit = desk;
+  c.spot = { x: desk.cx + 10, y: desk.y + 18, desk: desk.id };
+  c.x = c.spot.x;
+  c.y = c.spot.y;
+  c.target = null;
+  c.facing = "l";
+}
 function tickCat(c, dt) {
   if (REDUCE) return;
   if (c.wait > 0) {
@@ -798,17 +963,60 @@ function tickCat(c, dt) {
   if (arrived) {
     c.wait = 4 + Math.random() * 10;
     if (c.id === "arthur" && c.spot && (c.spot.sofa || c.spot.clock)) c.wait += 16;
+    if (c.id === "spyro" && c.deskSit) c.wait += 14;
     const taken = cats.filter(o => o !== c).map(o => o.spot);
     const clock = CAT_SPOTS.find(s => s.clock);
+    let dest = null;
+    c.deskSit = null;
+    if (c.id === "spyro" && Math.random() < 0.55) {
+      const free = emptyDesks();
+      if (free.length) {
+        perchSpyro(c, free[Math.floor(Math.random() * free.length)]);
+        c.wait = 16 + Math.random() * 16;
+        return;
+      }
+    }
     let options = CAT_SPOTS.filter(s => s !== c.spot && !taken.includes(s));
     if (c.id === "arthur" && clock && !taken.includes(clock) && Math.random() < 0.45) options = [clock];
-    const dest = options[Math.floor(Math.random() * options.length)];
+    dest = options[Math.floor(Math.random() * options.length)];
     if (dest) {
       c.spot = dest;
       c.target = { x: dest.x, y: dest.y };
       c.wait = c.wait > 0 ? c.wait : 0;
     }
   }
+}
+
+const LATE_FLAVOUR = ["Working late", "A late one, apparently", "Burning the midnight oil, unofficially"];
+
+function tickChat(dt) {
+  if (REDUCE) return;
+  chatWait -= dt;
+  if (chatWait > 0) return;
+  const idleAt = kind => people.filter(p => p.phase === "idle" && !p.target && p.activity === kind);
+  const archie = people.find(p => p.id === "archie");
+  const rupert = people.find(p => p.id === "rupert");
+  let a = null, b = null, lines = null;
+  if (archie && rupert && idleAt("arcade").includes(archie) && idleAt("arcade").includes(rupert)) {
+    a = archie; b = rupert;
+    lines = CHATS.arcade[Math.floor(Math.random() * CHATS.arcade.length)];
+  } else {
+    const kettle = idleAt("kettle");
+    if (kettle.length >= 2) {
+      const i = Math.floor(Math.random() * kettle.length);
+      let j = Math.floor(Math.random() * (kettle.length - 1));
+      if (j >= i) j += 1;
+      a = kettle[i]; b = kettle[j];
+      lines = CHATS.kettle[Math.floor(Math.random() * CHATS.kettle.length)];
+    }
+  }
+  if (!a || !b || !lines) {
+    chatWait = 4;
+    return;
+  }
+  a.bubble = { text: lines[0], t: 3.4 };
+  b.bubble = { text: lines[1], t: 3.4, delay: 0.9 };
+  chatWait = 14 + Math.random() * 10;
 }
 
 function p(x, y, w, h, c) {
@@ -895,14 +1103,81 @@ function tileFloor(x, y, w, h, a, b) {
 }
 
 function drawWindow(x, y, w, h) {
+  const sky = currentSky();
+  let pane, pane2, glint;
+  if (sky === "night") {
+    pane = "#1a2048"; pane2 = "#121830"; glint = "#8ec8e855";
+  } else if (sky === "dusk") {
+    pane = "#e07a4a"; pane2 = "#8a3a6a"; glint = "#f2d36b";
+  } else {
+    pane = "#8ec8e8"; pane2 = "#7eb8dc"; glint = "#f4f0e4";
+  }
   box(x, y, w, h, "#3d2a1c", "#141414");
-  p(x + 2, y + 2, w - 4, h - 4, "#8ec8e8");
-  p(x + 2, y + 2, Math.floor((w - 4) / 2), h - 4, "#7eb8dc");
-  p(x + 3, y + 3, 3, 2, "#f4f0e4");
-  p(x + 3, y + 6, 2, 4, "#ffffff55");
+  p(x + 2, y + 2, w - 4, h - 4, pane);
+  p(x + 2, y + 2, Math.floor((w - 4) / 2), h - 4, pane2);
+  if (sky === "night") {
+    const seed = (x * 13 + y * 7) | 0;
+    for (let i = 0; i < 5; i++) {
+      const sx = x + 3 + ((seed + i * 17) % Math.max(2, w - 8));
+      const sy = y + 3 + ((seed + i * 11) % Math.max(2, h - 8));
+      p(sx, sy, 1, 1, i % 2 ? "#f4f0e4" : "#c5d8e4");
+    }
+  } else {
+    p(x + 3, y + 3, 3, 2, glint);
+    p(x + 3, y + 6, 2, 4, sky === "dusk" ? "#ffffff33" : "#ffffff55");
+  }
+  if (currentSeason() === "december") {
+    p(x + 2, y + h - 4, w - 4, 2, "#f4f0e4");
+    p(x + 3, y + h - 5, 3, 1, "#ffffff");
+    p(x + w - 8, y + h - 5, 2, 1, "#ffffff");
+  }
   /* mullion */
   p(x + Math.floor(w / 2) - 1, y, 2, h, "#3d2a1c");
   p(x, y + Math.floor(h / 2), w, 2, "#3d2a1c");
+}
+
+function drawTree(x, y) {
+  /* A small office Christmas tree, used only in December. */
+  shadow(x + 4, y + 36, 16, 5);
+  p(x + 10, y + 28, 4, 12, "#6b4a2a");
+  p(x + 1, y + 18, 22, 12, "#0f4a3a");
+  p(x + 4, y + 10, 16, 12, "#146b48");
+  p(x + 7, y + 2, 10, 12, "#1a7a52");
+  p(x + 3, y + 20, 6, 3, "#0f4a3a");
+  p(x + 15, y + 14, 5, 3, "#146b48");
+  p(x + 10, y - 2, 4, 4, "#e6c200");
+  p(x + 11, y - 3, 2, 2, "#f2e6a0");
+  p(x + 6, y + 12, 2, 2, "#d1202f");
+  p(x + 16, y + 8, 2, 2, "#d1202f");
+  p(x + 8, y + 22, 2, 2, "#e6c200");
+  p(x + 14, y + 18, 2, 2, "#22409a");
+  p(x + 5, y + 8, 2, 2, "#f4f0e4");
+}
+
+function drawPumpkin(x, y) {
+  shadow(x + 1, y + 12, 14, 4);
+  p(x + 1, y + 3, 14, 10, "#e07a2f");
+  p(x + 3, y + 1, 10, 3, "#e07a2f");
+  p(x + 2, y + 4, 4, 8, "#f08a3a");
+  p(x + 7, y, 2, 4, "#1a7a52");
+  p(x + 4, y + 5, 2, 2, "#141414");
+  p(x + 9, y + 5, 2, 2, "#141414");
+  p(x + 5, y + 9, 6, 2, "#141414");
+  p(x + 6, y + 8, 4, 1, "#141414");
+  if (!REDUCE && ((animT * 3 + x) % 1) < 0.5) p(x + 6, y + 6, 3, 2, "#f2d36b");
+}
+
+function drawSeasonalScenery() {
+  const season = currentSeason();
+  if (season === "december") {
+    /* In the lounge corner, in place of the little plant. */
+    drawTree(LOUNGE.x + 2, LOUNGE.y + 8);
+  }
+  if (season === "halloween") {
+    drawPumpkin(428, 120);
+    drawPumpkin(448, 230);
+    drawPumpkin(24, 424);
+  }
 }
 
 function drawSkirting(x, y, w) {
@@ -1154,7 +1429,7 @@ function drawLounge() {
   p(l.x + l.w - 18, l.y + 1, 12, 3, "#fff1b0");
   p(l.x + l.w - 16, l.y + 44, 10, 2, "#3d2a1c");
   drawPlant(l.x + l.w - 24, l.y + l.h - 28);
-  drawPlant(l.x + 2, l.y + 30);
+  if (currentSeason() !== "december") drawPlant(l.x + 2, l.y + 30);
 }
 
 function drawMachineCorner() {
@@ -1227,6 +1502,7 @@ function paintScenery() {
   drawMachineCorner();
   drawPrinterStation();
   drawAllRooms();
+  drawSeasonalScenery();
   p(0, 0, W, 2, "#141414");
   p(0, H - 2, W, 2, "#141414");
   p(0, 0, 2, H, "#141414");
@@ -1243,7 +1519,15 @@ function buildScenery() {
   ctx.imageSmoothingEnabled = false;
   paintScenery();
   ctx = screenCtx;
+  paintedSky = currentSky();
+  paintedSeason = currentSeason();
   return sheet;
+}
+function syncAtmosphere() {
+  if (paintedSky !== currentSky() || paintedSeason !== currentSeason()) {
+    sceneSheet = buildScenery();
+    if (!shouldAnimate()) drawFrame();
+  }
 }
 
 /* The bits of scenery that move: steam, toast, the arcade screen, the darts, the machine. */
@@ -1373,6 +1657,38 @@ function drawLiveScenery() {
   if (printerStation) {
     const led = !REDUCE && (animT % 1 < 0.5);
     p(printerStation.x + 10 + 31, printerStation.y + 6 + 9, 3, 3, led ? "#e07a2f" : "#6a3a10");
+  }
+}
+
+function drawLateLamp(d) {
+  /* Private offices are tight under the nameplate, so the lamp sits a little lower. */
+  const lx = d.x + d.w - 14, ly = d.y + (d.private ? 8 : -2);
+  /* A warm pool of light on the desk, then the lamp itself. */
+  p(lx - 8, ly + 14, 22, 10, "#f2d36b44");
+  p(lx - 4, ly + 16, 14, 6, "#f2d36b66");
+  p(lx + 2, ly + 18, 4, 8, "#3d2a1c");
+  p(lx + 2, ly + 4, 2, 14, "#c0c0c0");
+  box(lx - 4, ly, 12, 7, "#e6c200", "#141414");
+  p(lx - 3, ly + 1, 10, 3, "#f2e6a0");
+  p(lx, ly + 7, 2, 3, "#c0c0c0");
+}
+
+function drawSnow() {
+  if (currentSeason() !== "december") return;
+  if (REDUCE) {
+    /* A little settled snow, no falling flakes. */
+    for (let i = 0; i < 18; i++) {
+      const x = (i * 37 + 11) % W, y = (i * 53 + 20) % 40 + TOP_H - 8;
+      p(x, y, 2, 1, "#ffffffcc");
+    }
+    return;
+  }
+  const n = 36;
+  for (let i = 0; i < n; i++) {
+    const speed = 12 + (i % 5) * 6;
+    const x = (i * 79 + animT * (8 + i % 6)) % W;
+    const y = (i * 47 + animT * speed) % H;
+    p(x, y, i % 3 === 0 ? 2 : 1, i % 3 === 0 ? 2 : 1, i % 2 ? "#ffffff" : "#e8f0ff");
   }
 }
 
@@ -1583,6 +1899,8 @@ function drawDesk(d) {
       box(d.x + d.w - 13, y + 3, 7, 4, "#e6c200", "#3d2a1c");
     }
   }
+  const owl = nightOwl();
+  if (owl && owl.desk === d) drawLateLamp(d);
 }
 
 function drawProp(px, py, kind, facing) {
@@ -1718,7 +2036,7 @@ function drawPerson(pr) {
   }
   const cele = pr.phase === "celebrating";
   const walk = pr.phase === "idle" || pr.phase === "to-desk";
-  const work = pr.phase === "working";
+  const work = isWorkingPose(pr);
   const moving = !REDUCE && walk && pr.target;
   const frame = moving ? walkFrame(pr) : 0;
   const jump = (!REDUCE && cele) ? Math.round(Math.abs(Math.sin(pr.celeT * 10)) * 8) : 0;
@@ -1849,7 +2167,7 @@ function drawPerson(pr) {
 function drawKeith(pr) {
   const cele = pr.phase === "celebrating";
   const walk = pr.phase === "idle" || pr.phase === "to-desk";
-  const work = pr.phase === "working";
+  const work = isWorkingPose(pr);
   const moving = !REDUCE && walk && pr.target;
   const frame = moving ? walkFrame(pr) : 0;
   const jump = (!REDUCE && cele) ? Math.round(Math.abs(Math.sin(pr.celeT * 10)) * 8) : 0;
@@ -1962,7 +2280,7 @@ function drawKeith(pr) {
 function drawKenneth(pr) {
   const cele = pr.phase === "celebrating";
   const walk = pr.phase === "idle" || pr.phase === "to-desk";
-  const work = pr.phase === "working";
+  const work = isWorkingPose(pr);
   const moving = !REDUCE && walk && pr.target;
   const frame = moving ? walkFrame(pr) : 0;
   const jump = (!REDUCE && cele) ? Math.round(Math.abs(Math.sin(pr.celeT * 10)) * 8) : 0;
@@ -2081,7 +2399,7 @@ function drawRobot(pr) {
   const terry = s.kind === "terry";
   const cele = pr.phase === "celebrating";
   const walk = pr.phase === "idle" || pr.phase === "to-desk";
-  const work = pr.phase === "working";
+  const work = isWorkingPose(pr);
   const moving = !REDUCE && walk && pr.target;
   const frame = moving ? walkFrame(pr) : 0;
   const jump = (!REDUCE && cele) ? Math.round(Math.abs(Math.sin(pr.celeT * 10)) * 8) : 0;
@@ -2315,7 +2633,7 @@ function drawActivity(pr) {
 }
 
 function drawBubble(pr) {
-  if (!pr.bubble || pr.target || pr.phase !== "idle") return;
+  if (!pr.bubble || pr.bubble.delay > 0 || pr.target || pr.phase !== "idle") return;
   const text = pr.bubble.text;
   const x = Math.round(pr.x);
   const sit = isSeated(pr);
@@ -2391,6 +2709,60 @@ function drawArthur(c) {
   p(x + 4, y, 6, 4, cream);
   p(x - 10, y + 2, 5, 3, point);
   p(x + 5, y + 2, 5, 3, point);
+}
+
+function drawSpyro(c) {
+  const bob = (!REDUCE && c.target && c.wait <= 0) ? ((c.walkT * 7 | 0) % 2) : 0;
+  const sit = !!c.deskSit;
+  const x = Math.round(c.x), y = Math.round(c.y + bob);
+  const white = "#f4f0e4", shade = "#d8d4c8", tail = "#c45c26", tailD = "#8a3a10";
+  shadow(x - 9, y + 3, 20, 4);
+  if (sit) {
+    /* Upright on a desk, as the true king of that particular throne. */
+    p(x - 7, y - 10, 14, 12, white);
+    p(x - 6, y - 9, 5, 6, shade);
+    p(x - 6, y - 22, 12, 12, white);
+    p(x - 5, y - 23, 4, 5, "#f4c4c4");
+    p(x + 2, y - 23, 4, 5, "#f4c4c4");
+    p(x - 5, y - 22, 3, 4, white);
+    p(x + 2, y - 22, 3, 4, white);
+    p(x - 1, y - 23, 2, 2, "#c4a070");
+    p(x - 4, y - 16, 3, 3, "#c5d86a");
+    p(x + 2, y - 16, 3, 3, "#c5d86a");
+    p(x - 3, y - 15, 2, 2, "#141414");
+    p(x + 3, y - 15, 2, 2, "#141414");
+    p(x - 1, y - 12, 3, 2, "#c48a8a");
+    p(x + 7, y - 12, 8, 6, tail);
+    p(x + 12, y - 16, 5, 8, tailD);
+    /* a very small crown */
+    p(x - 4, y - 26, 9, 3, "#d4af37");
+    p(x - 4, y - 28, 2, 3, "#d4af37");
+    p(x - 1, y - 29, 3, 4, "#d1202f");
+    p(x + 3, y - 28, 2, 3, "#d4af37");
+    p(x - 1, y - 26, 3, 2, "#e6c200");
+    p(x - 6, y, 5, 4, white);
+    p(x + 1, y, 5, 4, white);
+    return;
+  }
+  p(x - 10, y - 10, 20, 13, white);
+  p(x - 8, y - 11, 16, 4, "#ffffff");
+  p(x - 6, y - 8, 12, 8, shade);
+  p(x - 6, y - 20, 13, 11, white);
+  p(x - 6, y - 21, 5, 5, "#f4c4c4");
+  p(x + 2, y - 21, 5, 5, "#f4c4c4");
+  p(x - 5, y - 20, 4, 4, white);
+  p(x + 2, y - 20, 4, 4, white);
+  p(x - 1, y - 21, 2, 2, "#c4a070");
+  p(x - 4, y - 15, 4, 4, "#c5d86a");
+  p(x + 1, y - 15, 4, 4, "#c5d86a");
+  p(x - 3, y - 14, 2, 2, "#141414");
+  p(x + 2, y - 14, 2, 2, "#141414");
+  p(x - 1, y - 11, 3, 2, "#c48a8a");
+  const tailL = c.facing === "l";
+  p(x + (tailL ? 8 : -16), y - 8, 11, 6, tail);
+  p(x + (tailL ? 14 : -20), y - 14, 6, 9, tailD);
+  p(x - 9, y, 6, 4, white);
+  p(x + 3, y, 6, 4, white);
 }
 
 function drawDexter(c) {
@@ -2501,7 +2873,7 @@ function drawFrame() {
   people.forEach(pr => sprites.push({ y: pr.y, draw: () => { drawPerson(pr); drawActivity(pr); } }));
   cats.forEach(c => sprites.push({
     y: c.y,
-    draw: () => (c.id === "arthur" ? drawArthur(c) : drawDexter(c))
+    draw: () => (c.id === "arthur" ? drawArthur(c) : c.id === "spyro" ? drawSpyro(c) : drawDexter(c))
   }));
   sprites.sort((a, b) => a.y - b.y);
   sprites.forEach(s => s.draw());
@@ -2516,6 +2888,7 @@ function drawFrame() {
     });
     people.forEach(drawBubble);
   }
+  drawSnow();
   if (EMBED) ctx.restore();
 }
 
@@ -2565,6 +2938,12 @@ function applyShareDemo() {
   cats.forEach((c, i) => {
     c.target = null;
     c.wait = 9999;
+    c.deskSit = null;
+    if (c.id === "spyro") {
+      const perch = desks.find(d => d.id === "frank") || desks.find(d => !d.private);
+      if (perch) perchSpyro(c, perch);
+      return;
+    }
     c.x = poses[i % poses.length].x;
     c.y = poses[i % poses.length].y;
     if (poses[i % poses.length].spot) c.spot = poses[i % poses.length].spot;
@@ -2632,6 +3011,40 @@ function applyDemo(now) {
         arthur.y = clock.y;
         arthur.spot = clock;
       }
+      const spyro = cats.find(c => c.id === "spyro");
+      const perch = desks.find(d => d.id === "percy") || desks.find(d => !d.private);
+      if (spyro && perch) {
+        perchSpyro(spyro, perch);
+        spyro.wait = 9999;
+      }
+      if (isLateHours()) {
+        const owl = nightOwl();
+        if (owl && owl.id !== k.id) {
+          releaseSpot(owl);
+          owl.target = null;
+          owl.waypoints = [];
+          owl.x = owl.desk.chairX;
+          owl.y = owl.desk.chairY;
+          owl.phase = "idle";
+          owl.want = "idle";
+          owl.flavour = "Working late";
+          owl.wait = 9999;
+        }
+      }
+      const archie = people.find(p => p.id === "archie");
+      const rupert = people.find(p => p.id === "rupert");
+      const aSpot = spots.find(s => s.id === "arcade-0");
+      const rSpot = spots.find(s => s.id === "arcade-1");
+      if (archie && rupert && aSpot && rSpot) {
+        releaseSpot(archie); releaseSpot(rupert);
+        people.forEach(p => {
+          if ((p.spot === aSpot || p.spot === rSpot) && p.id !== "archie" && p.id !== "rupert") releaseSpot(p);
+        });
+        settleAt(archie, aSpot); settleAt(rupert, rSpot);
+        archie.wait = 9999; rupert.wait = 9999;
+        archie.bubble = { text: "ONE MORE GO", t: 9999 };
+        rupert.bubble = { text: "GO ON THEN", t: 9999 };
+      }
       demoAppliedIdle = true;
     }
   }
@@ -2686,7 +3099,9 @@ function loop(ts) {
   if (DEMO) applyDemo(now);
   people.forEach(p => tickPerson(p, dt));
   tickDarts(dt);
+  tickChat(dt);
   cats.forEach(c => tickCat(c, dt));
+  syncAtmosphere();
   drawFrame();
   if (!DEMO && OFFICE_FEED_URL && !document.hidden && performance.now() - lastFeed > POLL_MS) {
     pullFeed();
@@ -2737,6 +3152,20 @@ function boot() {
   STAFF.forEach((s, i) => people.push(makePerson(s, i)));
   cats.push(makeCat("arthur", 0));
   cats.push(makeCat("dexter", 1));
+  cats.push(makeCat("spyro", 2));
+  if (REDUCE) {
+    const spyro = cats.find(c => c.id === "spyro");
+    const perch = desks.find(d => d.id === "percy");
+    if (spyro && perch) perchSpyro(spyro, perch);
+    const owl = nightOwl();
+    if (owl && owl.want !== "working") {
+      releaseSpot(owl);
+      owl.x = owl.desk.chairX;
+      owl.y = owl.desk.chairY;
+      owl.target = null;
+      owl.flavour = "Working late";
+    }
+  }
   if (DEMO && demoNote) {
     demoNote.hidden = false;
     feedOffline = false;
@@ -2746,13 +3175,121 @@ function boot() {
   }
   buildBoard();
   if (DEMO === "working" || DEMO === "celebrating" || DEMO === "1" || DEMO === "share") applyDemo(DEMO === "1" ? 0 : 10);
+  if (!EMBED) setupOfficeCards();
+  syncAtmosphere();
   drawFrame();
   if (!DEMO) pullFeed();
   watchEmbedVisibility();
   resumeLoop();
+  setInterval(syncAtmosphere, 60000);
 }
 
 boot();
+
+function setupOfficeCards() {
+  const wrap = document.getElementById("office-stage-wrap");
+  const card = document.getElementById("office-card");
+  if (!wrap || !card || !canvas) return;
+  const pic = document.getElementById("office-card-pic");
+  const nameEl = document.getElementById("office-card-name");
+  const jobEl = document.getElementById("office-card-job");
+  let shown = null;
+  let pointerOnCanvas = false;
+
+  function worldFromEvent(ev) {
+    const r = canvas.getBoundingClientRect();
+    if (r.width < 1 || r.height < 1) return null;
+    return {
+      x: (ev.clientX - r.left) * (W / r.width),
+      y: (ev.clientY - r.top) * (H / r.height)
+    };
+  }
+  function hitAt(pt) {
+    if (!pt) return null;
+    const hits = [];
+    people.forEach(pr => {
+      const top = isWorkingPose(pr) ? 30 : (pr.staff.kind === "reggie" ? 56 : pr.staff.kind === "keith" ? 52 : 48);
+      if (pt.x >= pr.x - 12 && pt.x <= pr.x + 12 && pt.y >= pr.y - top && pt.y <= pr.y + 4) {
+        hits.push({ y: pr.y, kind: "person", who: pr });
+      }
+    });
+    cats.forEach(c => {
+      const top = c.id === "spyro" && c.deskSit ? 30 : 22;
+      if (pt.x >= c.x - 14 && pt.x <= c.x + 14 && pt.y >= c.y - top && pt.y <= c.y + 4) {
+        hits.push({ y: c.y, kind: "cat", who: c });
+      }
+    });
+    if (!hits.length) return null;
+    hits.sort((a, b) => b.y - a.y);
+    return hits[0];
+  }
+  function hideCard() {
+    shown = null;
+    card.hidden = true;
+    canvas.style.cursor = "";
+  }
+  function showCard(hit, ev) {
+    if (!hit) {
+      hideCard();
+      return;
+    }
+    const who = hit.who;
+    const id = who.id;
+    const staff = who.staff;
+    const title = staff ? staff.name : (id === "arthur" ? "Arthur" : id === "dexter" ? "Dexter" : id === "spyro" ? "Spyro" : id);
+    const line = JOB_LINE[id] || (staff ? staff.role : "");
+    const src = PORTRAITS[id] || "";
+    nameEl.textContent = title;
+    jobEl.textContent = line;
+    if (src) {
+      if (pic.getAttribute("src") !== src) pic.src = src;
+      pic.alt = "Portrait of " + title;
+      pic.hidden = false;
+    } else {
+      pic.removeAttribute("src");
+      pic.alt = "";
+      pic.hidden = true;
+    }
+    shown = id;
+    card.hidden = false;
+    const wr = wrap.getBoundingClientRect();
+    let left = ev.clientX - wr.left + wrap.scrollLeft + 14;
+    let top = ev.clientY - wr.top + wrap.scrollTop - 12;
+    const cw = card.offsetWidth || 220, ch = card.offsetHeight || 160;
+    if (left + cw > wrap.scrollLeft + wr.width - 8) left = ev.clientX - wr.left + wrap.scrollLeft - cw - 10;
+    if (top + ch > wr.height - 8) top = ev.clientY - wr.top + wrap.scrollTop - ch - 8;
+    if (left < wrap.scrollLeft + 8) left = wrap.scrollLeft + 8;
+    if (top < 8) top = 8;
+    if (top + ch > wr.height - 8) top = Math.max(8, wr.height - ch - 8);
+    card.style.left = Math.round(left) + "px";
+    card.style.top = Math.round(top) + "px";
+    canvas.style.cursor = "pointer";
+  }
+
+  canvas.addEventListener("pointermove", ev => {
+    if (ev.pointerType !== "mouse") return;
+    pointerOnCanvas = true;
+    const hit = hitAt(worldFromEvent(ev));
+    canvas.style.cursor = hit ? "pointer" : "";
+    if (hit) showCard(hit, ev);
+    else hideCard();
+  });
+  canvas.addEventListener("pointerleave", ev => {
+    if (ev.pointerType === "mouse") hideCard();
+  });
+  canvas.addEventListener("pointerup", ev => {
+    if (ev.pointerType === "mouse") return;
+    const hit = hitAt(worldFromEvent(ev));
+    if (hit && shown === hit.who.id) hideCard();
+    else if (hit) showCard(hit, ev);
+    else hideCard();
+  });
+  document.addEventListener("pointerdown", ev => {
+    if (ev.pointerType === "mouse") return;
+    if (ev.target === canvas || card.contains(ev.target)) return;
+    hideCard();
+  });
+}
 
 function setupOfficeShare() {
   const root = document.getElementById("office-share");
