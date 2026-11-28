@@ -496,7 +496,7 @@ var EN={
  skeleton:{n:'Ghost Train Skeleton',hp:[25,28],ph:'#f4f4f4',ai:function(e){return cyc(e,[{n:'Boo!',flu:2},{n:'Rattle',a:9}]);}},
  flume:{n:'Log Flume',hp:[30,34],ph:'#8fd0ff',ai:function(e){return cyc(e,[{n:'Splash',a:6,sog:2},{n:'Drop',a:10}]);}},
  kiosk:{n:'The Ride Photo Kiosk',hp:[74,80],elite:1,ph:'#ff9ad6',ai:function(e){return cyc(e,[{n:'Say Cheese',add:['photo',1],a:5},{n:'£8 Please',a:15},{n:'Laminate',b:14}]);}},
- rattler:{n:'Old Rattler, the Wooden Coaster',hp:[132,138],boss:1,sc:1.4,ph:'#c8955a',ai:function(e){return cyc(e,[{n:'Click…',g:3,b:6},{n:'Click…',g:3,b:6},{n:'Click…',g:3,b:6},{n:'The Drop',a:18}]);}},
+ rattler:{n:'Old Rattler, the Wooden Coaster',hp:[146,154],boss:1,sc:1.4,ph:'#c8955a',ai:function(e){return cyc(e,[{n:'Click…',g:3,b:6},{n:'Click…',g:3,b:6},{n:'Click…',g:3,b:6},{n:'The Drop',a:18}]);}},
  /* the Tower */
  couple:{n:'Ballroom Couple',hp:[21,24],pal:1,ph:'#ffb0d8',ai:function(e){return cyc(e,[{n:'Quickstep',a:3,x:2},{n:'Dip',b:6}]);}},
  lift:{n:'Lift Attendant',hp:[36,40],ph:'#d6b44a',ai:function(e){return cyc(e,[{n:'Going Up',b:14},{n:'Mind the Doors',a:11}]);}},
@@ -511,7 +511,7 @@ var EN={
  queue:{n:'The Queue',hp:[58,62],thick:1,ph:'#a3adb8',ai:function(e){return cyc(e,[{n:'Shuffle Forward',a:6,x:2},{n:'Tut',flu:1,a:5}]);}},
  onion:{n:'Pickled Onion',hp:[12,13],sc:.7,ph:'#efe6d6',ai:function(e){return cyc(e,[{n:'Tang',a:5},{n:'Roll',a:3,sog:1}]);}},
  fryer:{n:'The Fryer',hp:[98,104],elite:1,ph:'#c5ccd3',ai:function(e){return cyc(e,[{n:'Hot Fat',a:6,x:3},{n:'Bubble',b:18},{n:'Spit',flu:2,a:4}]);}},
- counter:{n:'The Woman Behind the Counter',hp:[160,168],boss:1,sc:1.35,ph:'#ffffff',ai:function(e){return cyc(e,[
+ counter:{n:'The Woman Behind the Counter',hp:[188,196],boss:1,sc:1.35,ph:'#ffffff',ai:function(e){return cyc(e,[
    {n:'“Salt?” (answer with a Skill)',ask:'S',a:9},{n:'“Vinegar?” (answer with an Attack)',ask:'A',a:11},{n:'“Open or wrapped?” (answer with a Power)',ask:'P',a:8,b:10},{n:'“Scraps?” (on the house)',b:12,a:6}]);}},
  /* the Lights */
  bulb:{n:'Faulty Bulb',hp:[12,14],sc:.7,flick:1,ph:'#fff36b',ai:function(e){return cyc(e,[{n:'Flicker',a:5},{n:'Fizz',a:3,flu:1}]);}},
@@ -519,7 +519,7 @@ var EN={
  coach:{n:'Coach Party',hp:[70,76],ph:'#2456e6',ai:function(e){return cyc(e,[{n:'Coach Trip',a:4,x:4},{n:'Comfort Stop',b:14,g:1}]);}},
  moth:{n:'Moth',hp:[9,11],sc:.6,ph:'#cfc6b0',ai:function(e){return cyc(e,[{n:'Flutter',a:4},{n:'Dust',sog:1,a:2}]);}},
  littram:{n:'The Lit-up Tram',hp:[132,138],elite:1,sc:1.2,ph:'#ffd76b',ai:function(e){return cyc(e,[{n:'All Aboard',b:20},{n:'Ding',a:18},{n:'Fares Please',a:8,x:2}]);}},
- telly:{n:'A Man Off the Telly',hp:[208,216],boss:1,sc:1.4,ph:'#7a3ff0',ai:function(e){return cyc(e,[{n:'Catchphrase',add:['catchp',2],a:6},{n:'Countdown from Ten: 3',b:14,g:1},{n:'Countdown: 2',a:12},{n:'Countdown: 1',b:16},{n:'Let There Be Lights!',a:30},{n:'Wave to the Crowd',g:2,a:8}]);}},
+ telly:{n:'A Man Off the Telly',hp:[236,244],boss:1,sc:1.4,ph:'#7a3ff0',ai:function(e){return cyc(e,[{n:'Catchphrase',add:['catchp',2],a:6},{n:'Countdown from Ten: 3',b:14,g:1},{n:'Countdown: 2',a:12},{n:'Countdown: 1',b:16},{n:'Let There Be Lights!',a:30},{n:'Wave to the Crowd',g:2,a:8}]);}},
  /* Arcades & Bingo */
  falls:{n:'Tuppenny Falls',hp:[38,42],drop:2,ph:'#ffd76b',ai:function(e){return cyc(e,[{n:'Cascade',a:6,x:2},{n:'Jam',b:12}]);}},
  fruit:{n:'Fruit Machine',hp:[34,38],ph:'#ff4f9a',ai:function(e){if(e.i%2===0){e.i++;var n=[2,8,24][ri(0,2)];return {n:n===24?'Jackpot!':('Spin '+n),a:n};}e.i++;return {n:'Hold',b:10};}},
