@@ -21,7 +21,7 @@ A bot is `working` if any open issue (not a pull request) carries its label
 `for-boris`, `for-tweety`, `for-archie`, `for-brian`, `for-clive`,
 `for-frank`, `for-filament`, `for-oddly`, `for-rupert`, `for-penny`,
 `for-sheila`, `for-sarge`, `for-mona`, `for-hettie`, `for-stockley`,
-`for-grant`, `for-vinnie`). The response is cached for 60 seconds.
+`for-grant`, `for-vinnie`, `for-keith`). The response is cached for 60 seconds.
 
 ## Deploy steps (Kenneth)
 
