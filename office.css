@@ -182,3 +182,46 @@ html.office-embed .office-stage canvas {
 html.office-embed .office-share {
   display: none !important;
 }
+
+.office-stage-wrap { position: relative; }
+.office-card {
+  position: absolute;
+  z-index: 6;
+  width: 210px;
+  background: var(--card, #fffdf7);
+  border: 3px solid var(--ink, #141414);
+  box-shadow: 4px 4px 0 var(--ink, #141414);
+  padding: 10px 12px 12px;
+  text-align: left;
+  pointer-events: none;
+  box-sizing: border-box;
+}
+.office-card-pic {
+  display: block;
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border: 2px solid var(--ink, #141414);
+  margin: 0 0 8px;
+  background: #efe6d4;
+  image-rendering: auto;
+}
+.office-card-pic[hidden] { display: none; }
+.office-card-name {
+  font-family: var(--display);
+  text-transform: uppercase;
+  letter-spacing: .4px;
+  font-size: 16px;
+  margin: 0 0 4px;
+  line-height: 1.15;
+}
+.office-card-job {
+  font-family: var(--hand);
+  font-size: 17px;
+  margin: 0;
+  line-height: 1.25;
+}
+html.office-embed .office-card { display: none !important; }
+@media (prefers-reduced-motion: reduce) {
+  .office-card { box-shadow: 4px 4px 0 var(--ink, #141414); }
+}
