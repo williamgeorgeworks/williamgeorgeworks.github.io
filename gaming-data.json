@@ -1,6 +1,53 @@
 {
   "editions": [
     {
+      "date": "2026-11-28",
+      "title": "Saturday Brings A Free Sea, A Hundred And Forty-Two Million Pounds Of Shopping And A Crab With Rather Too Many Talents",
+      "standfirst": "Terry (PC, Steam Deck, master race, full price on day one) and Reggie (PS5, saving for a Pro, waiting for the sale) read through the latest gaming news and argue about every bit of it. Everything in big type is made up, and so is the arguing. Everything in the boxes is real. It is a very short edition today: only three stories we could check properly, from three different places, made the cut.",
+      "stories": [
+        {
+          "kicker": "PC",
+          "headline": "A Famous Beetle Adventure Is Handed A Whole Free Sea, And Nobody Has Been Asked To Bring A Towel",
+          "satire": "Reggie says a free sea is the only sort of sea he has ever respected, and he will be at the shore before the tide with a flask and a very small bucket. Terry says he bought the game on its first day at full price, so by his reckoning he has been quietly funding this sea since before it existed. Reggie asks whether Terry would like a thank-you card. Terry says a plaque would do. Reggie wins, because the sea is free to everyone, including a man with no bucket at all.",
+          "real": "Push Square reported on 27 November that Team Cherry has announced Sea of Sorrow, a DLC for Hollow Knight: Silksong, will launch on 11 December 2026. It is free for anyone who owns Silksong.",
+          "source": {
+            "name": "Push Square",
+            "url": "https://www.pushsquare.com/news/2026/11/hollow-knight-silksongs-sea-of-sorrow-dlc-launches-next-month-and-its-free"
+          }
+        },
+        {
+          "kicker": "Consoles",
+          "headline": "Britain Spends A Hundred And Forty-Two Million Pounds On Games In One Weekend And Nobody Can Find The Receipt",
+          "satire": "Reggie says that sort of money is a nice little earner and he would like it noted that he supplied the moral support, which comes to a modest fee. Terry says the whole country has finally matched his spending habits for one weekend, and he feels less alone. Reggie asks how much of the figure was his own. Terry says he is a PC man and the big game is on consoles, so, with some pride, none. Reggie says he is waiting for the sale, so that makes two of them. Terry wins, because he is at least proud of his zero.",
+          "real": "Gamerpapers reported on 28 November, citing NielsenIQ figures, that UK games retail revenue rose 99% week on week to £142 million over GTA 6's launch period of 19 to 21 November 2026. GTA 6 made £32 million in physical sales during that time.",
+          "source": {
+            "name": "Gamerpapers",
+            "url": "https://en.gamerpapers.com/gta-6-uk-sales-nielseniq-142-million-pounds/"
+          },
+          "link": {
+            "text": "Prefer your bargains free? Have a go on the Arcade.",
+            "url": "arcade.html"
+          }
+        },
+        {
+          "kicker": "Mobile",
+          "headline": "A Phone Roundup Offers A Horse-Racing Party, A Crab With Many Abilities And A Very Busy Gunboat",
+          "satire": "Terry says a crab with more than a hundred and sixty abilities is the most qualified creature he has ever met, and that he would hire it, but only on a Steam Deck. Reggie points out that the list is for phones and Terry has a phone. Terry says he does not use it for gaming, then goes quiet and checks the crab's page. Reggie says the horse-racing party game sounds like a Saturday at the bookies without the weather. Terry says he has downloaded all five. Reggie wins, since the whole lot cost nothing to look at.",
+          "real": "Pocket Gamer's roundup of new mobile games, dated 26 November, lists five for iOS and Android. They include Suits & Stallions, a horse-racing party game, Everything is Crab, a roguelite with more than 160 abilities, and Gunboat God, a side-scrolling shoot 'em up with 180 levels and 70 enemy types.",
+          "source": {
+            "name": "Pocket Gamer",
+            "url": "https://www.pocketgamer.com/new-weekly-mobile-games/november-26th-2026/"
+          },
+          "link": {
+            "text": "Pedal to the metal, with cats: Kitty Grand Prix.",
+            "url": "kitty-grand-prix.html"
+          }
+        }
+      ],
+      "terry": "And that, ladies and gentlemen, is Saturday: a free sea, a very large shopping trolley and a crab with a CV! Everything in the big type is made up, the boxes are real, and I would like it noted that I have only downloaded the crab for research. Back soon!",
+      "reggie": "Check the boxes, my old son, that is where the facts live, and the rest is pure patter. A short edition, but not a penny wasted, and not a story in it we could not check. The Pro stays on the wish-list and the tenner stays in my pocket. Back soon."
+    },
+    {
       "date": "2026-11-27",
       "title": "Friday Brings A Million Bookshops, A Very Patient Fish, A Free Biome Or Four, A Truck Stop Preview And A Fashion Update For The PS5",
       "standfirst": "Terry (PC, Steam Deck, master race, full price on day one) and Reggie (PS5, saving for a Pro, waiting for the sale) read through the latest gaming news and argue about every bit of it. Everything in big type is made up, and so is the arguing. Everything in the boxes is real. It is a short edition today: only stories we could check properly made the cut.",
