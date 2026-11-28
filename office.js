@@ -134,6 +134,9 @@ const params = new URLSearchParams(location.search);
 const DEMO = params.get("demo") || "";
 const NIGHT_PARAM = (params.get("night") || "").toLowerCase();
 const SEASON_PARAM = (params.get("season") || "").toLowerCase();
+const MACHINE_PARAM = (params.get("machine") || "").toLowerCase();
+const RAIN_PARAM = (params.get("rain") || "").toLowerCase();
+const EGG_PARAM = (params.get("egg") || (params.get("ferret") === "1" ? "ferret" : "")).toLowerCase();
 const EMBED = params.get("embed") === "1" || (!document.getElementById("office-canvas") && !!document.getElementById("office-live"));
 const EMBED_CAM_X = 0;
 const EMBED_CAM_Y = 60;
@@ -305,6 +308,319 @@ function shouldSitLate(pr) {
 }
 function isWorkingPose(pr) {
   return pr.phase === "working" || isLateSitting(pr);
+}
+
+/* ---- Batch 3: sound, the machine's daily fuss, easter eggs, and rain. ---- */
+
+const SOUND_KEY = "wgw-office-sound";
+const WEATHER_URL = "https://api.open-meteo.com/v1/forecast?latitude=53.82&longitude=-3.05&current=weather_code,precipitation,is_day";
+const WEATHER_MS = 20 * 60 * 1000;
+const MACHINE_EVENT_DUR = 3.2;
+
+let audioCtx = null;
+let soundWanted = false;
+let soundReady = false;
+let weatherRainy = false;
+let lastWeather = 0;
+const windowPanes = [];
+let machineEvent = null;
+let machineFiredDay = "";
+let machineSoundPlayed = false;
+let typedKeys = "";
+let ferretDash = null;
+let dexterTaps = 0;
+let dexterTapReset = 0;
+
+function ukDateKey() {
+  const t = ukNow();
+  return t.year + "-" + t.month + "-" + t.day;
+}
+function forceMachine() {
+  return MACHINE_PARAM === "1" || MACHINE_PARAM === "on" || MACHINE_PARAM === "spark" || MACHINE_PARAM === "yes";
+}
+function machineEventActive() {
+  return !!(machineEvent && machineEvent.t < machineEvent.dur);
+}
+function machineEventMinute() {
+  /* The same UK minute for everyone that day, sometime between ten and five. */
+  return 10 * 60 + (ukDayOfYear() * 29) % (7 * 60);
+}
+function isRaining() {
+  if (RAIN_PARAM === "1" || RAIN_PARAM === "rain" || RAIN_PARAM === "on" || RAIN_PARAM === "yes") return true;
+  if (RAIN_PARAM === "0" || RAIN_PARAM === "off" || RAIN_PARAM === "none" || RAIN_PARAM === "dry") return false;
+  return weatherRainy;
+}
+function rainFromWeather(data) {
+  const cur = data && data.current;
+  if (!cur) return false;
+  const code = +cur.weather_code;
+  const precip = +cur.precipitation;
+  /* Rain, drizzle, showers or thunder. Snow is not drawn as rain. */
+  return (code >= 51 && code <= 67) || (code >= 80 && code <= 82) || (code >= 95 && code <= 99) || (precip > 0 && code >= 51 && code <= 99 && !(code >= 71 && code <= 77) && !(code >= 85 && code <= 86));
+}
+
+function soundEnabled() {
+  return !EMBED && soundWanted && soundReady && audioCtx && audioCtx.state === "running" && !document.hidden;
+}
+function readSoundPref() {
+  try { return localStorage.getItem(SOUND_KEY) === "on"; } catch (err) { return false; }
+}
+function writeSoundPref(on) {
+  try { localStorage.setItem(SOUND_KEY, on ? "on" : "off"); } catch (err) {}
+}
+function syncSoundButton() {
+  const btn = document.getElementById("office-sound");
+  if (!btn) return;
+  const running = soundEnabled();
+  btn.textContent = running ? "Sound on" : "Sound off";
+  btn.setAttribute("aria-pressed", running ? "true" : "false");
+  btn.setAttribute("data-started", running ? "1" : "0");
+  if (running) {
+    btn.setAttribute("aria-label", "Office sound is on. Mute the office.");
+  } else if (soundWanted && !soundReady) {
+    btn.setAttribute("aria-label", "Office sound is off until you press this. You had it on last time; click to start it. Browsers will not let it start by itself.");
+  } else {
+    btn.setAttribute("aria-label", "Office sound is off. Turn sound on.");
+  }
+}
+function unlockSound() {
+  if (EMBED) return Promise.resolve(false);
+  try {
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return Promise.resolve(false);
+    if (!audioCtx) audioCtx = new AC();
+    const go = audioCtx.state === "suspended" ? audioCtx.resume() : Promise.resolve();
+    return go.then(function () {
+      soundReady = audioCtx && audioCtx.state === "running";
+      syncSoundButton();
+      return soundReady;
+    }).catch(function () {
+      soundReady = false;
+      syncSoundButton();
+      return false;
+    });
+  } catch (err) {
+    soundReady = false;
+    syncSoundButton();
+    return Promise.resolve(false);
+  }
+}
+function playTone(opts) {
+  if (!soundEnabled()) return;
+  const freq = opts.freq || 440, dur = opts.dur || 0.12, type = opts.type || "sine";
+  const vol = opts.vol || 0.05, at = opts.at || 0;
+  const t0 = audioCtx.currentTime + at;
+  const osc = audioCtx.createOscillator();
+  const g = audioCtx.createGain();
+  osc.type = type;
+  osc.frequency.setValueAtTime(freq, t0);
+  if (opts.freq2) osc.frequency.exponentialRampToValueAtTime(Math.max(20, opts.freq2), t0 + dur);
+  g.gain.setValueAtTime(0.0001, t0);
+  g.gain.exponentialRampToValueAtTime(vol, t0 + 0.012);
+  g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+  osc.connect(g);
+  g.connect(audioCtx.destination);
+  osc.start(t0);
+  osc.stop(t0 + dur + 0.02);
+}
+function playNoise(opts) {
+  if (!soundEnabled()) return;
+  const dur = opts.dur || 0.08, vol = opts.vol || 0.04, at = opts.at || 0;
+  const n = Math.max(32, Math.floor(audioCtx.sampleRate * dur));
+  const buf = audioCtx.createBuffer(1, n, audioCtx.sampleRate);
+  const data = buf.getChannelData(0);
+  for (let i = 0; i < n; i++) data[i] = (Math.random() * 2 - 1) * (1 - i / n);
+  const src = audioCtx.createBufferSource();
+  src.buffer = buf;
+  const f = audioCtx.createBiquadFilter();
+  f.type = "highpass";
+  f.frequency.value = opts.highpass || 900;
+  const g = audioCtx.createGain();
+  const t0 = audioCtx.currentTime + at;
+  g.gain.setValueAtTime(vol, t0);
+  g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+  src.connect(f);
+  f.connect(g);
+  g.connect(audioCtx.destination);
+  src.start(t0);
+  src.stop(t0 + dur + 0.02);
+}
+function playUnmuteBlip() {
+  playTone({ freq: 520, freq2: 780, dur: 0.09, type: "square", vol: 0.045 });
+  playTone({ freq: 780, freq2: 1040, dur: 0.1, type: "square", vol: 0.035, at: 0.08 });
+}
+function playMachineSound() {
+  playTone({ freq: 80, freq2: 130, dur: 0.55, type: "sawtooth", vol: 0.05 });
+  playTone({ freq: 70, freq2: 50, dur: 0.85, type: "sawtooth", vol: 0.035, at: 0.2 });
+  for (let i = 0; i < 8; i++) {
+    playNoise({ dur: 0.05, vol: 0.045, at: 0.16 + i * 0.18, highpass: 1100 + i * 180 });
+  }
+  playTone({ freq: 1400, freq2: 380, dur: 0.12, type: "square", vol: 0.028, at: 0.4 });
+}
+function playBoo() {
+  playTone({ freq: 180, freq2: 90, dur: 0.35, type: "triangle", vol: 0.06 });
+  playTone({ freq: 240, freq2: 80, dur: 0.28, type: "sine", vol: 0.035, at: 0.05 });
+}
+function playFerretZip() {
+  playTone({ freq: 400, freq2: 1200, dur: 0.18, type: "square", vol: 0.04 });
+  playTone({ freq: 900, freq2: 400, dur: 0.2, type: "sine", vol: 0.028, at: 0.12 });
+}
+
+function setupOfficeSound() {
+  const btn = document.getElementById("office-sound");
+  const row = document.getElementById("office-sound-row");
+  if (EMBED) {
+    if (row) row.hidden = true;
+    return;
+  }
+  if (!btn) return;
+  soundWanted = readSoundPref();
+  syncSoundButton();
+  btn.addEventListener("click", function () {
+    if (!soundWanted) {
+      soundWanted = true;
+      writeSoundPref(true);
+      unlockSound().then(function (ok) { if (ok) playUnmuteBlip(); });
+      return;
+    }
+    if (!soundReady || !audioCtx || audioCtx.state !== "running") {
+      unlockSound().then(function (ok) { if (ok) playUnmuteBlip(); });
+      return;
+    }
+    soundWanted = false;
+    writeSoundPref(false);
+    soundReady = false;
+    if (audioCtx && audioCtx.state === "running") audioCtx.suspend().catch(function () {});
+    syncSoundButton();
+  });
+}
+
+function pullWeather() {
+  if (EMBED) return;
+  if (RAIN_PARAM) return;
+  const now = performance.now();
+  if (lastWeather && now - lastWeather < WEATHER_MS - 1000) return;
+  lastWeather = now;
+  fetch(WEATHER_URL, { cache: "no-store" }).then(function (res) {
+    if (!res.ok) return null;
+    return res.json();
+  }).then(function (data) {
+    if (!data) return;
+    weatherRainy = rainFromWeather(data);
+  }).catch(function () {
+    /* Stay as we were. The office does not depend on the weather arriving. */
+  });
+}
+
+function flinchOffset(who) {
+  if (!machineEventActive()) return { x: 0, y: 0 };
+  const t = machineEvent.t;
+  const dur = machineEvent.dur;
+  /* Jump and lean away for most of the fuss, then ease back in the last beat. */
+  let shock;
+  if (t < 0.12) shock = t / 0.12;
+  else if (t < dur - 0.7) shock = 1;
+  else shock = Math.max(0, (dur - t) / 0.7);
+  const away = who.x < MACHINE.cx ? -1 : 1;
+  const shake = REDUCE ? 0 : Math.round(Math.sin(t * 42) * 2 * shock);
+  return { x: Math.round(away * 6 * shock) + shake, y: Math.round(-9 * shock) };
+}
+function startMachineEvent() {
+  if (machineEventActive()) return;
+  machineEvent = { t: REDUCE && !forceMachine() ? 0.9 : 0, dur: MACHINE_EVENT_DUR };
+  machineFiredDay = ukDateKey();
+  machineSoundPlayed = false;
+  if (soundEnabled()) {
+    playMachineSound();
+    machineSoundPlayed = true;
+  }
+  people.forEach(function (p) {
+    p.facing = p.x < MACHINE.cx ? "r" : "l";
+  });
+}
+function tickMachineEvent(dt) {
+  if (forceMachine() && !machineEvent) startMachineEvent();
+  if (!machineEvent) {
+    if (document.hidden) return;
+    const t = ukNow();
+    const m = t.hour * 60 + t.minute;
+    if (ukDateKey() !== machineFiredDay && m === machineEventMinute()) startMachineEvent();
+    return;
+  }
+  if (!machineSoundPlayed && soundEnabled() && machineEvent.t < 0.6) {
+    playMachineSound();
+    machineSoundPlayed = true;
+  }
+  machineEvent.t += dt;
+  if (machineEvent.t >= machineEvent.dur) {
+    if (forceMachine()) machineEvent.t = 0.15;
+    else machineEvent = null;
+  }
+}
+
+function startFerretDash() {
+  ferretDash = { t: REDUCE ? 0.7 : 0, dur: 1.8 };
+  playFerretZip();
+  if (REDUCE) { drawFrame(); return; }
+  kickEggAnim();
+}
+function tickEggs(dt) {
+  if (ferretDash) {
+    if (!(REDUCE && EGG_PARAM === "ferret")) ferretDash.t += dt;
+    if (ferretDash.t >= ferretDash.dur) ferretDash = null;
+  }
+  cats.forEach(function (c) {
+    if (c.bubble) {
+      c.bubble.t -= dt;
+      if (c.bubble.t <= 0) c.bubble = null;
+    }
+  });
+  if (dexterTaps && dexterTapReset) {
+    dexterTapReset -= dt;
+    if (dexterTapReset <= 0) { dexterTaps = 0; dexterTapReset = 0; }
+  }
+}
+function booDexter() {
+  const dex = cats.find(c => c.id === "dexter");
+  if (!dex) return;
+  dex.bubble = { text: "BOO", t: EGG_PARAM === "boo" ? 9999 : 3.2 };
+  dexterTaps = 0;
+  dexterTapReset = 0;
+  playBoo();
+  if (!shouldAnimate()) drawFrame();
+}
+function noteDexterTap() {
+  dexterTaps += 1;
+  dexterTapReset = 4;
+  if (dexterTaps >= 5) booDexter();
+}
+function kickEggAnim() {
+  if (shouldAnimate()) {
+    resumeLoop();
+    return;
+  }
+  /* Reduced motion: one still frame, no extra loop. */
+  if (forceMachine() && !machineEvent) startMachineEvent();
+  if (machineEvent && machineEvent.t < 0.9) machineEvent.t = 0.9;
+  if (ferretDash && ferretDash.t < 0.7) ferretDash.t = 0.7;
+  drawFrame();
+}
+
+function setupEasterEggs() {
+  if (EMBED) return;
+  document.addEventListener("keydown", function (ev) {
+    if (ev.metaKey || ev.ctrlKey || ev.altKey) return;
+    const el = ev.target;
+    const tag = el && el.tagName;
+    if (tag === "INPUT" || tag === "TEXTAREA" || (el && el.isContentEditable)) return;
+    const k = ev.key;
+    if (!k || k.length !== 1) return;
+    typedKeys = (typedKeys + k.toLowerCase()).slice(-6);
+    if (typedKeys === "ferret") {
+      typedKeys = "";
+      startFerretDash();
+    }
+  });
 }
 
 /* Portraits that already exist. Most of the specialists do not have one yet;
@@ -806,6 +1122,17 @@ function bubblesShowing() {
 
 function tickPerson(p, dt) {
   p.typeT += dt;
+  if (machineEventActive()) {
+    p.facing = p.x < MACHINE.cx ? "r" : "l";
+    if (p.bubble) {
+      if (p.bubble.delay > 0) p.bubble.delay -= dt;
+      else {
+        p.bubble.t -= dt;
+        if (p.bubble.t <= 0) p.bubble = null;
+      }
+    }
+    return;
+  }
   if (p.phase === "to-desk") {
     const arrived = REDUCE ? true : stepMove(p, dt, 46);
     if (arrived) {
@@ -955,6 +1282,7 @@ function perchSpyro(c, desk) {
 }
 function tickCat(c, dt) {
   if (REDUCE) return;
+  if (machineEventActive()) return;
   if (c.wait > 0) {
     c.wait -= dt;
     return;
@@ -1103,6 +1431,7 @@ function tileFloor(x, y, w, h, a, b) {
 }
 
 function drawWindow(x, y, w, h) {
+  windowPanes.push({ x: x, y: y, w: w, h: h });
   const sky = currentSky();
   let pane, pane2, glint;
   if (sky === "night") {
@@ -1492,6 +1821,7 @@ function drawPrinterStation() {
 
 /* Everything that never moves, painted once into an off-screen sheet. */
 function paintScenery() {
+  windowPanes.length = 0;
   ctx.drawImage(ensurePlanks(), 0, 0);
   p(0, 0, W, TOP_H + 2, "#efe6d4");
   drawCarpet(FLOOR_BLOCK.x, FLOOR_BLOCK.y, FLOOR_BLOCK.w, FLOOR_BLOCK.h);
@@ -1653,11 +1983,124 @@ function drawLiveScenery() {
     p(m.x + 60, m.y, 2, 2, "#f4f0e4");
     p(m.x + 54, m.y + 2, 2, 2, "#3dff7a");
   }
+  if (machineEventActive()) drawMachineFuss(m);
   /* The printer's light blinks orange. It always blinks orange. */
   if (printerStation) {
     const led = !REDUCE && (animT % 1 < 0.5);
     p(printerStation.x + 10 + 31, printerStation.y + 6 + 9, 3, 3, led ? "#e07a2f" : "#6a3a10");
   }
+}
+
+function drawMachineFuss(m) {
+  const t = machineEvent.t;
+  const flash = REDUCE || ((t * 18) % 1) < 0.55;
+  /* The eye goes a bit mental, then the sparks start. */
+  p(m.x + 20, m.y - 8, 32, 26, flash ? "#f4f0e4" : "#d1202f");
+  p(m.x + 24, m.y - 4, 24, 20, flash ? "#e6c200" : "#a04ad0");
+  p(m.x + 30, m.y + 2, 12, 10, "#141414");
+  p(m.x + 33, m.y + 5, 6, 6, flash ? "#3dff7a" : "#d1202f");
+  const sparks = [
+    [m.x + 8, m.y - 12], [m.x + 62, m.y - 10], [m.x + 70, m.y + 8],
+    [m.x + 4, m.y + 16], [m.x + 58, m.y - 20], [m.x + 16, m.y - 22],
+    [m.x + 74, m.y - 4], [m.x + 40, m.y - 26]
+  ];
+  sparks.forEach(function (s, i) {
+    const on = REDUCE ? (i % 2 === 0) : ((t * 14 + i * 0.37) % 1) < 0.6;
+    if (!on) return;
+    const col = i % 3 === 0 ? "#f4f0e4" : (i % 3 === 1 ? "#e6c200" : "#3dff7a");
+    p(s[0], s[1], 3, 3, col);
+    p(s[0] + (i % 2 ? 4 : -4), s[1] - 3, 2, 2, col);
+    p(s[0] + (i % 2 ? 7 : -6), s[1] - 1, 1, 4, col);
+  });
+}
+
+function drawRainOnWindows() {
+  if (!isRaining() || !windowPanes.length) return;
+  const sky = currentSky();
+  const drop = sky === "night" ? "#c5d8e4" : (sky === "dusk" ? "#efe6d4" : "#3a5a78");
+  const veil = sky === "night" ? "#12183099" : (sky === "dusk" ? "#4a2a3c44" : "#6a8aa066");
+  windowPanes.forEach(function (w, wi) {
+    p(w.x + 2, w.y + 2, w.w - 4, w.h - 4, veil);
+    const n = 7;
+    for (let i = 0; i < n; i++) {
+      const col = (w.x + 4 + ((i * 11 + wi * 5) % Math.max(2, w.w - 8)));
+      let row;
+      if (REDUCE) {
+        row = w.y + 3 + ((i * 7 + wi) % Math.max(2, w.h - 7));
+      } else {
+        const fall = (animT * (18 + (i % 4) * 6) + i * 9 + wi * 13) % Math.max(3, w.h - 5);
+        row = w.y + 3 + fall;
+      }
+      if (row > w.y + w.h - 4) continue;
+      p(col, row, 1, 4, drop);
+      if (i % 2 === 0) p(col, row + 1, 1, 2, "#f4f0e4aa");
+    }
+    /* Put the mullion back over the rain, so the window still reads as a window. */
+    p(w.x + Math.floor(w.w / 2) - 1, w.y, 2, w.h, "#3d2a1c");
+    p(w.x, w.y + Math.floor(w.h / 2), w.w, 2, "#3d2a1c");
+  });
+}
+
+function drawFerretDash() {
+  if (!ferretDash) return;
+  const u = Math.min(1, ferretDash.t / ferretDash.dur);
+  const x = Math.round(-24 + u * (W + 48));
+  const y = 272 + (REDUCE ? 0 : Math.round(Math.sin(ferretDash.t * 22) * 2));
+  const brown = "#8a5a32", dark = "#5a3a20", cream = "#e8d6b8", nose = "#c48a8a";
+  shadow(x - 8, y + 3, 28, 4);
+  /* A long little body, cream bib, and a bit of a dash. */
+  p(x - 6, y - 8, 22, 9, brown);
+  p(x - 4, y - 7, 14, 5, dark);
+  p(x + 4, y - 6, 8, 5, cream);
+  p(x + 12, y - 14, 12, 10, brown);
+  p(x + 14, y - 15, 8, 6, cream);
+  p(x + 14, y - 12, 3, 3, "#141414");
+  p(x + 20, y - 12, 3, 3, "#141414");
+  p(x + 15, y - 11, 1, 1, "#f4f0e4");
+  p(x + 21, y - 11, 1, 1, "#f4f0e4");
+  p(x + 22, y - 8, 3, 2, nose);
+  p(x + 24, y - 7, 3, 1, "#3d2a1c");
+  p(x + 12, y - 16, 3, 3, brown);
+  p(x + 18, y - 16, 3, 3, brown);
+  p(x - 14, y - 10, 10, 5, brown);
+  p(x - 18, y - 14, 8, 5, dark);
+  const step = REDUCE ? 0 : ((ferretDash.t * 14 | 0) % 2);
+  p(x - 2, y + 1, 4, 3, dark);
+  p(x + 8, y + 1, 4, 3, dark);
+  p(x + (step ? 2 : 12), y + 2, 3, 2, "#3d2a1c");
+}
+
+function drawFlinchBang(who) {
+  if (!machineEventActive()) return;
+  const f = flinchOffset(who);
+  const x = Math.round(who.x + f.x);
+  let top = 26;
+  if (who.staff) {
+    const k = who.staff.kind;
+    top = (k === "kenneth" || k === "reggie") ? 64 : (k === "terry" || k === "keith") ? 60 : 54;
+  } else if (who.id === "spyro" && who.deskSit) top = 34;
+  const y = Math.round(who.y + f.y) - top;
+  /* A little comic startle, so the flinch reads even in a still frame. */
+  p(x, y - 8, 2, 5, "#141414");
+  p(x, y - 2, 2, 2, "#141414");
+  p(x + 1, y - 8, 1, 5, "#f4f0e4");
+}
+
+function drawCatBubble(c) {
+  if (!c.bubble || c.bubble.t <= 0) return;
+  const text = c.bubble.text;
+  const x = Math.round(c.x + flinchOffset(c).x);
+  const y = Math.round(c.y + flinchOffset(c).y);
+  const top = y - 28;
+  const w = text.length * 4 + 5, h = 10;
+  let bx = Math.round(x - w / 2);
+  bx = Math.max(4, Math.min(W - w - 4, bx));
+  box(bx, top - h, w, h, "#fffdf7", "#141414");
+  p(x - 1, top - 1, 3, 2, "#fffdf7");
+  p(x - 2, top, 1, 2, "#141414");
+  p(x + 2, top, 1, 2, "#141414");
+  p(x - 1, top + 2, 3, 1, "#141414");
+  drawLabel(bx + w / 2, top - h + 3, text, "#141414");
 }
 
 function drawLateLamp(d) {
@@ -2870,10 +3313,27 @@ function drawFrame() {
   drawLiveScenery();
   const sprites = [];
   desks.forEach(d => sprites.push({ y: d.y + 20, draw: () => drawDesk(d) }));
-  people.forEach(pr => sprites.push({ y: pr.y, draw: () => { drawPerson(pr); drawActivity(pr); } }));
+  people.forEach(pr => sprites.push({
+    y: pr.y + flinchOffset(pr).y,
+    draw: () => {
+      const f = flinchOffset(pr);
+      const ox = pr.x, oy = pr.y;
+      pr.x += f.x; pr.y += f.y;
+      drawPerson(pr); drawActivity(pr);
+      pr.x = ox; pr.y = oy;
+    }
+  }));
   cats.forEach(c => sprites.push({
-    y: c.y,
-    draw: () => (c.id === "arthur" ? drawArthur(c) : c.id === "spyro" ? drawSpyro(c) : drawDexter(c))
+    y: c.y + flinchOffset(c).y,
+    draw: () => {
+      const f = flinchOffset(c);
+      const ox = c.x, oy = c.y;
+      c.x += f.x; c.y += f.y;
+      if (c.id === "arthur") drawArthur(c);
+      else if (c.id === "spyro") drawSpyro(c);
+      else drawDexter(c);
+      c.x = ox; c.y = oy;
+    }
   }));
   sprites.sort((a, b) => a.y - b.y);
   sprites.forEach(s => s.draw());
@@ -2887,8 +3347,15 @@ function drawFrame() {
       drawLabel(d.cx, ly + 1, d.staff.tag, "#141414");
     });
     people.forEach(drawBubble);
+    cats.forEach(drawCatBubble);
+  }
+  if (machineEventActive()) {
+    people.forEach(drawFlinchBang);
+    cats.forEach(drawFlinchBang);
   }
   drawSnow();
+  drawRainOnWindows();
+  drawFerretDash();
   if (EMBED) ctx.restore();
 }
 
@@ -3097,6 +3564,8 @@ function loop(ts) {
   lastTs = ts;
   animT = now;
   if (DEMO) applyDemo(now);
+  tickMachineEvent(dt);
+  tickEggs(dt);
   people.forEach(p => tickPerson(p, dt));
   tickDarts(dt);
   tickChat(dt);
@@ -3176,12 +3645,40 @@ function boot() {
   buildBoard();
   if (DEMO === "working" || DEMO === "celebrating" || DEMO === "1" || DEMO === "share") applyDemo(DEMO === "1" ? 0 : 10);
   if (!EMBED) setupOfficeCards();
+  if (!EMBED) setupOfficeSound();
+  if (!EMBED) setupEasterEggs();
+  if (forceMachine()) {
+    startMachineEvent();
+    if (REDUCE && machineEvent) machineEvent.t = 0.9;
+  }
+  if (EGG_PARAM === "boo") booDexter();
+  if (EGG_PARAM === "ferret") {
+    startFerretDash();
+    if (REDUCE && ferretDash) ferretDash.t = 0.7;
+  }
   syncAtmosphere();
   drawFrame();
   if (!DEMO) pullFeed();
+  if (!EMBED) {
+    pullWeather();
+    setInterval(function () {
+      if (!document.hidden) pullWeather();
+    }, WEATHER_MS);
+  }
   watchEmbedVisibility();
   resumeLoop();
   setInterval(syncAtmosphere, 60000);
+  setInterval(function () {
+    if (document.hidden) return;
+    if (!machineEvent && !forceMachine()) {
+      const t = ukNow();
+      const m = t.hour * 60 + t.minute;
+      if (ukDateKey() !== machineFiredDay && m === machineEventMinute()) {
+        startMachineEvent();
+        if (!shouldAnimate()) kickEggAnim();
+      }
+    }
+  }, 15000);
 }
 
 boot();
@@ -3278,8 +3775,9 @@ function setupOfficeCards() {
     if (ev.pointerType === "mouse") hideCard();
   });
   canvas.addEventListener("pointerup", ev => {
-    if (ev.pointerType === "mouse") return;
     const hit = hitAt(worldFromEvent(ev));
+    if (hit && hit.kind === "cat" && hit.who.id === "dexter") noteDexterTap();
+    if (ev.pointerType === "mouse") return;
     if (hit && shown === hit.who.id) hideCard();
     else if (hit) showCard(hit, ev);
     else hideCard();
