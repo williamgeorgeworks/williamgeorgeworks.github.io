@@ -134,6 +134,17 @@ not in `dist/m3/` until the next rebuild.
 
 The AppImage was smoke-tested under Xvfb at 1280x800 with `SteamDeck=1` (`shots/d7-01-appimage-xvfb.png`, `d7-02-appimage-ingame.png`, `d7-02b-appimage-map.png`, `d7-03-appimage-fight.png`). No Mac build. Windows and Steam Deck were not run on real hardware.
 
+**Desktop build `dist/m3c/`** (built 28 Nov 2026, 02:42-02:43 Europe/London, from commit `1714a643`, which includes the three Quill legendary cards and their painted art, plus everything in m3b and the later clutter art; copies with `SHA256SUMS` in `/workspace/seen-off-steam/builds-m3c/`). Also at `/workspace/seen-off-steam/dist/m3c/` and `desktop/dist/m3c/` (gitignored). Not uploaded or published anywhere.
+
+| File | Bytes | sha256 |
+|---|---|---|
+| `Seen Off_0.1.0_amd64.AppImage` (Linux / Steam Deck) | 98,298,360 | `a1872c3d56ef773163ab5bbff0e43a03a5636f239eefaf71eba1d9a6de957d7c` |
+| `Seen Off_0.1.0_amd64.deb` | 6,804,036 | `b61782b95353827c300f17e0c5f127bc31817288b67b04b82febaf9f665dbf92` |
+| `Seen Off_0.1.0_x64-setup.exe` (Windows NSIS installer) | 8,301,598 | `bde39860d66cdef91c7aa3b817fc873ce8bab2d99ff073b455c653f503f9edcd` |
+| `seen-off.exe` (bare Windows exe) | 8,486,912 | `465e2e1ca353e70a1ec4c990f7ab3971302816242a55cba24c2d058345682867` |
+
+The AppImage was smoke-tested under Xvfb at 1280x800 with `SteamDeck=1` (`shots/d9-03-appimage-xvfb.png`, `d9-03-appimage-ingame.png`, `d9-03-appimage-map.png`, `d9-03-appimage-fight.png`). No Mac build. Windows and Steam Deck were not run on real hardware. Missing GStreamer audio elements on the box log warnings; the UI still ran.
+
 **Enemy drawings (no AI):** the PLACEHOLDER stand-ups are replaced by canvas ink drawings in the same `ART` style as the pier
 enemies, so nothing here is an AI image and nothing needs adding to the AI content list. Done: Beach (Sandcastle, Jellyfish, Windbreak,
 Shore Crab, the Donkey, the Crocodile in a striped puppet booth with his string of sausages), Rock Shop (Stick of Rock, Chattering Teeth,
