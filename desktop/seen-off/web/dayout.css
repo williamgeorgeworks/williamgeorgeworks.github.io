@@ -1,0 +1,306 @@
+/* Seen Off desktop: "A Blackpool Day Out" (milestone 1). Same ink, fonts and paper as the game. */
+/* ---- stage picker ---- */
+.panel.day{--p1:#ffe9a8;--p2:#ff9f6a;gap:10px}
+.panel.day h2 .crest,.panel.report h2 .crest{position:relative;left:auto;top:auto;display:inline-grid;width:34px;height:34px;vertical-align:-6px;margin-right:10px}
+.places{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;width:100%;max-width:880px}
+.place{position:relative;font:inherit;text-align:left;color:var(--ink);display:grid;grid-template-rows:auto auto 1fr auto;gap:5px;padding:12px 14px 12px;border:3px solid var(--ink);border-radius:14px;cursor:pointer;
+  background:linear-gradient(170deg,var(--c1) 0 52%,#fffdf7 52.2%);box-shadow:0 6px 0 var(--ink);animation:pop .36s cubic-bezier(.2,.9,.3,1.5) backwards;animation-delay:calc(var(--i,0)*90ms);min-height:212px}
+.place:hover,.place:focus-visible{transform:translateY(-3px) rotate(-.6deg);box-shadow:0 9px 0 var(--ink)}
+.place .pl-art{display:grid;place-items:center;width:58px;height:58px;border-radius:50%;background:var(--c2);border:3px solid var(--ink);box-shadow:0 0 0 3px #fff}
+.place .pl-art .ic{width:34px;height:34px;color:#fff}
+.place b{font-family:var(--display);text-transform:uppercase;letter-spacing:.04em;font-size:1.35rem;line-height:1.05}
+.place em{font-style:normal;font-size:.86rem;line-height:1.3}
+.place .pl-foe{font-size:.78rem;line-height:1.25;border-top:2px dashed rgba(20,20,20,.35);padding-top:5px}
+.place .pl-foe i{font-family:var(--display);font-style:normal;text-transform:uppercase;letter-spacing:.06em;color:var(--c2)}
+.place .pl-lock{display:flex;gap:6px;align-items:center;font-family:var(--display);text-transform:uppercase;letter-spacing:.05em;font-size:.82rem}
+.place.locked{cursor:not-allowed;filter:grayscale(.85);opacity:.72;background:repeating-linear-gradient(135deg,#ddd 0 10px,#cfcfcf 10px 20px)}
+.place.locked:hover{transform:none;box-shadow:0 6px 0 var(--ink)}
+.place .tag{position:absolute;top:10px;right:10px;font-family:var(--display);text-transform:uppercase;letter-spacing:.06em;font-size:.78rem;border:2.5px solid var(--ink);border-radius:7px;padding:1px 8px;transform:rotate(4deg);box-shadow:2px 2px 0 var(--ink)}
+.tag.new{background:#ff4f9a;color:#fff}.tag.soon{background:#fff36b}.tag.done{background:#5fd068}
+/* ---- rock meter ---- */
+.rock{display:grid;grid-template-columns:auto 1fr;grid-template-rows:auto auto;gap:3px 10px;align-items:center;width:100%;max-width:560px;text-align:left}
+.rock .rk-lab{font-family:var(--display);text-transform:uppercase;letter-spacing:.05em;font-size:.9rem;display:flex;gap:5px;align-items:center;white-space:nowrap}
+.rock .rk-lab .ic{color:#ff8fc0}
+.rock .rk-bar{position:relative;height:24px;border:3px solid var(--ink);border-radius:999px;background:#fff;overflow:hidden;box-shadow:0 3px 0 var(--ink)}
+.rock .rk-fill{position:absolute;left:0;top:0;bottom:0;width:var(--to);background:repeating-linear-gradient(115deg,#ff5fa2 0 12px,#fff 12px 16px,#ff5fa2 16px 22px);animation:rkfill 1.4s .6s cubic-bezier(.3,.8,.3,1) backwards}
+.rock .rk-word{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--display);letter-spacing:.18em;font-size:.8rem;color:var(--ink);text-shadow:0 0 3px #fff,0 0 3px #fff}
+.rock .rk-next{grid-column:2;font-size:.78rem;line-height:1.2}
+.rock.sm{max-width:480px}
+@keyframes rkfill{from{width:var(--from)}}
+.pops{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;max-width:820px}
+.pop{flex:none;display:inline-flex;gap:6px;align-items:center;font-size:.84rem;background:#fff;border:3px solid var(--ink);border-radius:10px;padding:3px 10px;box-shadow:0 3px 0 #ff4f9a;animation:pop .4s cubic-bezier(.2,.9,.3,1.6) backwards;animation-delay:calc(var(--i,0)*180ms + 1.6s)}
+.pop b{font-family:var(--display);font-weight:400;text-transform:uppercase;letter-spacing:.04em}
+/* ---- SEEN OFF! stamp + combo ---- */
+.so-stamp{position:absolute;transform:translate(-50%,-50%) rotate(var(--rot,-6deg));display:grid;justify-items:center;padding:4px 14px 5px;border:4px double #d0102a;border-radius:9px;color:#d0102a;background:rgba(255,253,247,.5);
+  font-family:var(--display);text-transform:uppercase;line-height:1;mix-blend-mode:multiply;animation:sostamp .38s cubic-bezier(.2,.9,.3,1.3) both;pointer-events:none;z-index:3}
+.so-stamp b{font-weight:400;font-size:2.1rem;letter-spacing:.06em}
+.so-stamp i{font-style:normal;font-size:.72rem;letter-spacing:.16em}
+@keyframes sostamp{0%{opacity:0;transform:translate(-50%,-50%) rotate(var(--rot)) scale(2.6)}60%{opacity:1;transform:translate(-50%,-50%) rotate(var(--rot)) scale(.92)}100%{opacity:.92;transform:translate(-50%,-50%) rotate(var(--rot)) scale(1)}}
+#soCombo{position:absolute;right:14px;top:62px;z-index:30;pointer-events:none;display:none;transform:rotate(-8deg);text-align:center;font-family:var(--display);text-transform:uppercase;line-height:.9}
+#soCombo.on{display:grid}
+#soCombo b{font-weight:400;font-size:3rem;color:#fff36b;-webkit-text-stroke:2px var(--ink);text-shadow:4px 4px 0 var(--ink)}
+#soCombo span{font-size:1.15rem;letter-spacing:.06em;color:#fff;background:var(--ink);padding:3px 10px 4px;border-radius:7px;box-shadow:3px 3px 0 #e3182d}
+#soCombo.tier span{background:#e3182d;box-shadow:3px 3px 0 var(--ink)}
+#soCombo.scenes b{color:#ff4f9a;font-size:3.8rem}
+.lt.combo .ic{color:#ff4f9a}
+.so-shake{animation:soshake .3s ease-out}.so-shake2{animation:soshake2 .42s ease-out}
+@keyframes soshake{20%{transform:translate(-4px,2px)}40%{transform:translate(4px,-2px)}60%{transform:translate(-2px,1px)}80%{transform:translate(2px,0)}}
+@keyframes soshake2{15%{transform:translate(-9px,4px) rotate(-.4deg)}35%{transform:translate(8px,-4px) rotate(.4deg)}55%{transform:translate(-5px,2px)}75%{transform:translate(3px,-1px)}}
+@media (prefers-reduced-motion:reduce){.so-stamp,.place,.pop,.rock .rk-fill{animation:none}}
+/* ---- postcards + album ---- */
+.panel.album{--p1:#bfe9ff;--p2:#5aa9e6;gap:9px}
+.tabs .chip{font-size:.9rem}
+.ph{font-size:.75rem;opacity:.75}
+.pgrid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:10px;width:100%;max-width:1000px}
+.pcard{position:relative;aspect-ratio:3/2;border:3px solid var(--ink);border-radius:8px;overflow:hidden;display:grid;grid-template-rows:1fr auto auto;justify-items:center;align-items:center;padding:4px 4px 6px;
+  background:linear-gradient(180deg,var(--c1),var(--c2));box-shadow:0 4px 0 var(--ink);color:var(--ink)}
+.pcard.painted{background-color:var(--c2);background-image:linear-gradient(180deg,rgba(20,20,20,0) 48%,rgba(20,20,20,.58) 100%),var(--pc);background-size:cover,cover;background-position:center,center;color:#fff}
+.pcard.painted i{color:#fff;text-shadow:1px 1px 0 var(--ink)}
+.pcard .pc-art .ic{width:30px;height:30px;color:#fff}
+.pcard i{font-family:var(--marker);font-style:normal;font-size:.62rem;line-height:1}
+.pcard b{font-family:var(--display);font-weight:400;text-transform:uppercase;font-size:.78rem;line-height:1.05;text-align:center;color:#fff;-webkit-text-stroke:.6px var(--ink);text-shadow:1.5px 1.5px 0 var(--ink)}
+.pcard .pc-st{position:absolute;right:3px;top:3px;display:flex;gap:2px;z-index:2}
+.pcard .pc-st em{font-style:normal;font-family:var(--display);font-size:.55rem;width:15px;height:15px;display:grid;place-items:center;border-radius:50%;border:1.5px dashed rgba(20,20,20,.4);color:transparent}
+.pcard .pc-st em.on{border:1.5px solid var(--ink);background:#e3182d;color:#fff}
+.pcard .pc-st em.g.on{background:linear-gradient(135deg,#fff3a8,#d6a400);color:var(--ink)}
+.pcard.blank{background:repeating-linear-gradient(135deg,#eee 0 8px,#e2e2e2 8px 16px)}
+.pcard.blank b{color:#999;text-shadow:none;-webkit-text-stroke:0}
+.pcard.blank .pc-art .ic{color:#bbb}
+.rgrid{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:7px;width:100%;max-width:960px}
+.rstick{display:grid;place-items:center;height:64px;border:3px solid var(--ink);border-radius:32px/12px;background:#eee;font-size:.6rem;font-family:var(--display);letter-spacing:.05em;text-align:center;padding:0 3px;color:#999}
+.rstick.on{background:repeating-linear-gradient(115deg,#ff5fa2 0 8px,#fff 8px 12px);color:var(--ink)}
+.rstick.on b{background:#fff;border-radius:4px;padding:1px 3px;font-weight:400}
+.list.shelf{max-height:330px;overflow:hidden;grid-template-columns:1fr 1fr;max-width:820px}
+/* ---- Day Out Report (a postcard back) ---- */
+.panel.report{--p1:#ffd0a8;--p2:#ff7b6b;gap:9px}
+.panel.report.won{--p1:#fff08a;--p2:#ffae2b}
+.pc-back{display:grid;grid-template-columns:1.1fr 1fr;width:100%;max-width:820px;background:#fffdf7;border:3px solid var(--ink);border-radius:10px;box-shadow:6px 6px 0 var(--ink);text-align:left;transform:rotate(-.6deg)}
+.pc-msg{padding:12px 16px;border-right:2px solid rgba(20,20,20,.25)}
+.pc-head{font-family:var(--display);text-transform:uppercase;letter-spacing:.08em;font-size:.82rem;color:#e3182d}
+.pc-msg .hand,.pc-msg .sig{font-family:var(--marker);background:none;border:0;padding:4px 0 0;font-size:1.02rem;line-height:1.4;max-width:none}
+.pc-msg .sig{text-align:right;font-size:.95rem}
+.pc-addr{position:relative;padding:12px 16px}
+.pc-stamp{position:absolute;right:12px;top:10px;width:48px;height:56px;display:grid;place-items:center;border:2px dashed var(--ink);background:#e3182d;outline:3px solid #fffdf7;outline-offset:-6px}
+.pc-stamp .ic{width:28px;height:28px;color:#fff}
+.pc-addr dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:4px 10px;padding-right:58px}
+.pc-addr dt{font-family:var(--display);text-transform:uppercase;letter-spacing:.05em;font-size:.78rem;align-self:end}
+.pc-addr dd{margin:0;font-family:var(--marker);font-size:1.02rem;border-bottom:1.5px solid rgba(20,20,20,.3)}
+.pc-addr dd.pl{font-size:.82rem;line-height:1.25}
+.rp-mid{display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:center;width:100%;max-width:820px}
+.rp-score{display:grid;justify-items:center}
+.rp-score span:first-child{font-family:var(--display);text-transform:uppercase;letter-spacing:.08em}
+.rp-score .big{font-size:3.4rem}
+.rp-why{font-size:.84rem}
+/* ---- souvenir shop ---- */
+.panel.souv{--p1:#fff3d1;--p2:#ffc06b;gap:10px}
+.awning{position:absolute;left:0;right:0;top:0;height:16px;background:repeating-linear-gradient(90deg,#e3182d 0 28px,#fff 28px 56px);border-bottom:3px solid var(--ink);z-index:-1}
+.sgrid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:9px;width:100%;max-width:1000px}
+.sv{font:inherit;color:var(--ink);text-align:left;display:grid;gap:3px;align-content:start;background:#fffdf7;border:3px solid var(--ink);border-radius:10px;padding:7px 9px;box-shadow:0 4px 0 var(--ink);cursor:pointer;min-height:92px}
+.sv b{font-family:var(--display);font-weight:400;text-transform:uppercase;letter-spacing:.03em;font-size:.88rem;line-height:1.1}
+.sv em{font-style:normal;font-size:.74rem;line-height:1.2}
+.sv .pr{display:flex;gap:4px;align-items:center;font-family:var(--display);font-size:.84rem;margin-top:auto}
+.sv[disabled]{opacity:.5;cursor:not-allowed;box-shadow:0 2px 0 var(--ink)}
+.sv:not([disabled]):hover,.sv:focus-visible{transform:translateY(-2px)}
+/* stick toast */
+.so-toast.stick{background:#ff4f9a}
+.sv .pr .ic{color:var(--gold,#ffc21a)}
+/* ---- milestone 2: boss bill, NEW! cards ---- */
+.so-bill{position:absolute;left:50%;top:38%;z-index:40;pointer-events:none;transform:translate(-50%,-50%) rotate(-3deg);display:grid;justify-items:center;gap:2px;
+  background:#fff3a8;border:4px solid var(--ink);border-radius:6px;padding:10px 34px 12px;box-shadow:8px 8px 0 var(--ink);text-align:center;
+  background-image:repeating-linear-gradient(90deg,transparent 0 22px,rgba(227,24,45,.08) 22px 24px);animation:sobill 2.3s cubic-bezier(.2,.9,.3,1.3) both}
+.so-bill i{font-family:var(--marker);font-style:normal;font-size:1.25rem;color:#e3182d}
+.so-bill b{font-family:var(--display);font-weight:400;text-transform:uppercase;font-size:2.7rem;letter-spacing:.04em;line-height:1}
+.so-bill span{font-family:var(--display);text-transform:uppercase;letter-spacing:.12em;font-size:.8rem}
+.so-bill.still{animation:none}
+@keyframes sobill{0%{opacity:0;transform:translate(-50%,-50%) rotate(-12deg) scale(2.2)}14%{opacity:1;transform:translate(-50%,-50%) rotate(-3deg) scale(1)}82%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) rotate(-3deg) scale(.96)}}
+.cd.so-new{overflow:visible}
+.so-newst{position:absolute;right:-10px;top:56px;z-index:3;font-family:var(--display);text-transform:uppercase;font-size:1rem;letter-spacing:.05em;color:#fff;background:#e3182d;
+  border:3px solid var(--ink);border-radius:6px;padding:0 8px;transform:rotate(12deg);box-shadow:2px 3px 0 var(--ink);animation:sonew .4s .5s cubic-bezier(.2,.9,.3,1.3) backwards}
+@keyframes sonew{0%{opacity:0;transform:rotate(12deg) scale(2.4)}100%{opacity:1;transform:rotate(12deg) scale(1)}}
+@media (prefers-reduced-motion:reduce){.so-newst{animation:none}}
+
+/* milestone 2: the Daily Run line on the report */
+.so-daily{margin:.4em 0 0;font-size:.85rem;font-style:italic;color:var(--red,#e3182d)}
+
+/* card frame (Milestone 3, step 1): one shared inked frame tinted by the card's owner, a larger art window,
+   a type line naming the owner, rules text in Libre Caslon Text, and a rarity crest */
+.cd{--own:#6b7183}
+.cd.h-r{--own:#e3182d}.cd.h-t{--own:#2456e6}.cd.h-k{--own:#1d1c24}.cd.h-k::before{box-shadow:inset 0 0 0 1.5px var(--ink),inset 0 0 0 3px rgba(255,255,255,.6)}.cd.h-f{--own:#14a84b}
+.cd.c-ruling{--own:#e3182d}.cd.c-decree{--own:#ffb300}.cd.c-ripface{--own:#7a3ff0}.cd.c-requisition{--own:#1fb85a}.cd.c-boo{--own:#2456e6}.cd.c-whome{--own:#ff5fa0}
+.cd::before{content:"";position:absolute;top:0;right:0;bottom:0;left:0;border-radius:6px;border:3px solid var(--own);box-shadow:inset 0 0 0 1.5px var(--ink);pointer-events:none;z-index:2}
+.cd .art{height:48px}
+.cd i{max-width:calc(100% - 10px);overflow:hidden;text-overflow:ellipsis;letter-spacing:.06em}
+.cd .tx{font-family:'Libre Caslon Text',Georgia,serif;font-size:.7rem;line-height:1.16}
+.cd .gem{width:13px;height:15px;margin-left:-8px;bottom:-9px;transform:none;border-radius:2px 2px 50% 50%/2px 2px 75% 75%;z-index:3}
+/* the six cats' signature cards: their painted art, full width (crops of the card mockups in /mockups) */
+.cd.c-ruling .art,.cd.c-decree .art,.cd.c-ripface .art,.cd.c-requisition .art,.cd.c-boo .art,.cd.c-whome .art{height:78px;background:#e9e2d4 center/cover no-repeat}
+.cd.c-ruling .art>*,.cd.c-decree .art>*,.cd.c-ripface .art>*,.cd.c-requisition .art>*,.cd.c-boo .art>*,.cd.c-whome .art>*,
+.cd.c-ruling .art::before,.cd.c-decree .art::before,.cd.c-ripface .art::before,.cd.c-requisition .art::before,.cd.c-boo .art::before,.cd.c-whome .art::before{display:none}
+.cd.c-ruling .art{background-image:url(cats/arthur.jpg)}
+.cd.c-decree .art{background-image:url(cats/spyro.jpg)}
+.cd.c-ripface .art{background-image:url(cats/tilly.jpg)}
+.cd.c-requisition .art{background-image:url(cats/trixie.jpg)}
+.cd.c-boo .art{background-image:url(cats/dexter.jpg)}
+.cd.c-whome .art{background-image:url(cats/daisy.jpg)}
+/* Reggie's starter cards: painted art (AI-generated from Reggie's portrait on williamgeorgeworks.co.uk; see README) */
+.cd.c-redpen .art,.cd.c-cough .art,.cd.c-invoice .art{height:78px;background:#e9e2d4 center/cover no-repeat}
+.cd.c-redpen .art>*,.cd.c-cough .art>*,.cd.c-invoice .art>*,.cd.c-redpen .art::before,.cd.c-cough .art::before,.cd.c-invoice .art::before{display:none}
+.cd.c-redpen .art{background-image:url(cards/redpen.jpg);background-position:50% 30%}
+.cd.c-cough .art{background-image:url(cards/cough.jpg);background-position:55% 30%}
+.cd.c-invoice .art{background-image:url(cards/invoice.jpg);background-position:55% 30%}
+/* Terry's starter cards: painted art (AI-generated from Terry's portrait on williamgeorgeworks.co.uk; see README) */
+.cd.c-inkblot .art,.cd.c-sketch .art,.cd.c-splatter .art{height:78px;background:#e9e2d4 center/cover no-repeat}
+.cd.c-inkblot .art>*,.cd.c-sketch .art>*,.cd.c-splatter .art>*,.cd.c-inkblot .art::before,.cd.c-sketch .art::before,.cd.c-splatter .art::before{display:none}
+.cd.c-inkblot .art{background-image:url(cards/inkblot.jpg);background-position:45% 30%}
+.cd.c-sketch .art{background-image:url(cards/sketch.jpg);background-position:40% 30%}
+.cd.c-splatter .art{background-image:url(cards/splatter.jpg);background-position:45% 30%}
+/* Kenneth's starter cards: painted art (AI-generated from Ben's Kenneth portrait, 24 Nov 2026; see README) */
+.cd.c-handshake .art,.cd.c-nod .art,.cd.c-whoinv .art{height:78px;background:#e9e2d4 center/cover no-repeat}
+.cd.c-handshake .art>*,.cd.c-nod .art>*,.cd.c-whoinv .art>*,.cd.c-handshake .art::before,.cd.c-nod .art::before,.cd.c-whoinv .art::before{display:none}
+.cd.c-handshake .art{background-image:url(cards/handshake.jpg);background-position:40% 25%}
+.cd.c-nod .art{background-image:url(cards/nod.jpg);background-position:45% 30%}
+.cd.c-whoinv .art{background-image:url(cards/whoinv.jpg);background-position:50% 25%}
+
+/* most-offered reward cards (2 per hero): painted art, AI-generated from the heroes' portraits (24 Nov 2026; see README) */
+.cd.c-remit .art,.cd.c-factcheck .art,.cd.c-crosshatch .art,.cd.c-roughdraft .art,.cd.c-arrival .art,.cd.c-subject .art{height:78px;background:#e9e2d4 center/cover no-repeat}
+.cd.c-remit .art>*,.cd.c-remit .art::before,.cd.c-factcheck .art>*,.cd.c-factcheck .art::before,.cd.c-crosshatch .art>*,.cd.c-crosshatch .art::before,.cd.c-roughdraft .art>*,.cd.c-roughdraft .art::before,.cd.c-arrival .art>*,.cd.c-arrival .art::before,.cd.c-subject .art>*,.cd.c-subject .art::before{display:none}
+.cd.c-remit .art{background-image:url(cards/remit.jpg);background-position:50% 30%}
+.cd.c-factcheck .art{background-image:url(cards/factcheck.jpg);background-position:50% 30%}
+.cd.c-crosshatch .art{background-image:url(cards/crosshatch.jpg);background-position:40% 30%}
+.cd.c-roughdraft .art{background-image:url(cards/roughdraft.jpg);background-position:45% 35%}
+.cd.c-arrival .art{background-image:url(cards/arrival.jpg);background-position:45% 25%}
+.cd.c-subject .art{background-image:url(cards/subject.jpg);background-position:40% 30%}
+
+/* second batch of base commons (2 per hero): painted art, AI-generated from the heroes' portraits (24 Nov 2026; see README) */
+.cd.c-patter .art,.cd.c-lineedit .art,.cd.c-fullcolour .art,.cd.c-bigtitle .art,.cd.c-nobody .art,.cd.c-knowsterry .art{height:78px;background:#e9e2d4 center/cover no-repeat}
+.cd.c-patter .art>*,.cd.c-patter .art::before,.cd.c-lineedit .art>*,.cd.c-lineedit .art::before,.cd.c-fullcolour .art>*,.cd.c-fullcolour .art::before,.cd.c-bigtitle .art>*,.cd.c-bigtitle .art::before,.cd.c-nobody .art>*,.cd.c-nobody .art::before,.cd.c-knowsterry .art>*,.cd.c-knowsterry .art::before{display:none}
+.cd.c-patter .art{background-image:url(cards/patter.jpg);background-position:45% 30%}
+.cd.c-lineedit .art{background-image:url(cards/lineedit.jpg);background-position:45% 30%}
+.cd.c-fullcolour .art{background-image:url(cards/fullcolour.jpg);background-position:50% 35%}
+.cd.c-bigtitle .art{background-image:url(cards/bigtitle.jpg);background-position:40% 30%}
+.cd.c-nobody .art{background-image:url(cards/nobody.jpg);background-position:45% 30%}
+.cd.c-knowsterry .art{background-image:url(cards/knowsterry.jpg);background-position:50% 30%}
+
+/* last ten base commons: painted art, AI-generated from the heroes' portraits (24 Nov 2026; see README) */
+.cd.c-tenner .art,.cd.c-braveface .art,.cd.c-proofread .art,.cd.c-wraparound .art,.cd.c-inkwash .art,.cd.c-quick .art,.cd.c-refphoto .art,.cd.c-friendreg .art,.cd.c-cousin .art,.cd.c-uninvited .art{height:78px;background:#e9e2d4 center/cover no-repeat}
+.cd.c-tenner .art>*,.cd.c-tenner .art::before,.cd.c-braveface .art>*,.cd.c-braveface .art::before,.cd.c-proofread .art>*,.cd.c-proofread .art::before,.cd.c-wraparound .art>*,.cd.c-wraparound .art::before,.cd.c-inkwash .art>*,.cd.c-inkwash .art::before,.cd.c-quick .art>*,.cd.c-quick .art::before,.cd.c-refphoto .art>*,.cd.c-refphoto .art::before,.cd.c-friendreg .art>*,.cd.c-friendreg .art::before,.cd.c-cousin .art>*,.cd.c-cousin .art::before,.cd.c-uninvited .art>*,.cd.c-uninvited .art::before{display:none}
+.cd.c-tenner .art{background-image:url(cards/tenner.jpg);background-position:40% 30%}
+.cd.c-braveface .art{background-image:url(cards/braveface.jpg);background-position:50% 30%}
+.cd.c-proofread .art{background-image:url(cards/proofread.jpg);background-position:50% 30%}
+.cd.c-wraparound .art{background-image:url(cards/wraparound.jpg);background-position:45% 30%}
+.cd.c-inkwash .art{background-image:url(cards/inkwash.jpg);background-position:45% 30%}
+.cd.c-quick .art{background-image:url(cards/quick.jpg);background-position:45% 30%}
+.cd.c-refphoto .art{background-image:url(cards/refphoto.jpg);background-position:50% 30%}
+.cd.c-friendreg .art{background-image:url(cards/friendreg.jpg);background-position:50% 30%}
+.cd.c-cousin .art{background-image:url(cards/cousin.jpg);background-position:50% 30%}
+.cd.c-uninvited .art{background-image:url(cards/uninvited.jpg);background-position:45% 30%}
+
+/* first six uncommons (2 per hero): painted art, AI-generated from the heroes' portraits (25 Nov 2026; see README) */
+.cd.c-finaldemand .art,.cd.c-itemised .art,.cd.c-storm .art,.cd.c-layout .art,.cd.c-wronghouse .art,.cd.c-cointoss .art{height:78px;background:#e9e2d4 center/cover no-repeat}
+.cd.c-finaldemand .art>*,.cd.c-finaldemand .art::before,.cd.c-itemised .art>*,.cd.c-itemised .art::before,.cd.c-storm .art>*,.cd.c-storm .art::before,.cd.c-layout .art>*,.cd.c-layout .art::before,.cd.c-wronghouse .art>*,.cd.c-wronghouse .art::before,.cd.c-cointoss .art>*,.cd.c-cointoss .art::before{display:none}
+.cd.c-finaldemand .art{background-image:url(cards/finaldemand.jpg);background-position:45% 40%}
+.cd.c-itemised .art{background-image:url(cards/itemised.jpg);background-position:50% 30%}
+.cd.c-storm .art{background-image:url(cards/storm.jpg);background-position:45% 30%}
+.cd.c-layout .art{background-image:url(cards/layout.jpg);background-position:50% 30%}
+.cd.c-wronghouse .art{background-image:url(cards/wronghouse.jpg);background-position:50% 30%}
+.cd.c-cointoss .art{background-image:url(cards/cointoss.jpg);background-position:45% 25%}
+
+/* second six uncommons (2 per hero): painted art, AI-generated from the heroes' portraits (25 Nov 2026; see README) */
+.cd.c-earner .art,.cd.c-rounding .art,.cd.c-dayone .art,.cd.c-outrage .art,.cd.c-longstory .art,.cd.c-parcel .art{height:78px;background:#e9e2d4 center/cover no-repeat}
+.cd.c-earner .art>*,.cd.c-earner .art::before,.cd.c-rounding .art>*,.cd.c-rounding .art::before,.cd.c-dayone .art>*,.cd.c-dayone .art::before,.cd.c-outrage .art>*,.cd.c-outrage .art::before,.cd.c-longstory .art>*,.cd.c-longstory .art::before,.cd.c-parcel .art>*,.cd.c-parcel .art::before{display:none}
+.cd.c-earner .art{background-image:url(cards/earner.jpg);background-position:45% 35%}
+.cd.c-rounding .art{background-image:url(cards/rounding.jpg);background-position:45% 30%}
+.cd.c-dayone .art{background-image:url(cards/dayone.jpg);background-position:45% 25%}
+.cd.c-outrage .art{background-image:url(cards/outrage.jpg);background-position:45% 25%}
+.cd.c-longstory .art{background-image:url(cards/longstory.jpg);background-position:50% 35%}
+.cd.c-parcel .art{background-image:url(cards/parcel.jpg);background-position:45% 35%}
+
+/* last four base uncommons + two rares: painted art, AI-generated from the heroes' portraits (25 Nov 2026; see README) */
+.cd.c-myoldson .art,.cd.c-dignity .art,.cd.c-steady .art,.cd.c-goodbye .art,.cd.c-masterpiece .art,.cd.c-mystery .art{height:78px;background:#e9e2d4 center/cover no-repeat}
+.cd.c-myoldson .art>*,.cd.c-myoldson .art::before,.cd.c-dignity .art>*,.cd.c-dignity .art::before,.cd.c-steady .art>*,.cd.c-steady .art::before,.cd.c-goodbye .art>*,.cd.c-goodbye .art::before,.cd.c-masterpiece .art>*,.cd.c-masterpiece .art::before,.cd.c-mystery .art>*,.cd.c-mystery .art::before{display:none}
+.cd.c-myoldson .art{background-image:url(cards/myoldson.jpg);background-position:50% 30%}
+.cd.c-dignity .art{background-image:url(cards/dignity.jpg);background-position:50% 30%}
+.cd.c-steady .art{background-image:url(cards/steady.jpg);background-position:50% 35%}
+.cd.c-goodbye .art{background-image:url(cards/goodbye.jpg);background-position:60% 30%}
+.cd.c-masterpiece .art{background-image:url(cards/masterpiece.jpg);background-position:45% 35%}
+.cd.c-mystery .art{background-image:url(cards/mystery.jpg);background-position:40% 30%}
+
+/* last base-pool rares + Scribble: painted art, AI-generated from the heroes' portraits (25 Nov 2026; see README) */
+.cd.c-compound .art,.cd.c-cartel .art,.cd.c-framerate .art,.cd.c-scribble .art,.cd.c-openinv .art,.cd.c-plusone .art{height:78px;background:#e9e2d4 center/cover no-repeat}
+.cd.c-compound .art>*,.cd.c-compound .art::before,.cd.c-cartel .art>*,.cd.c-cartel .art::before,.cd.c-framerate .art>*,.cd.c-framerate .art::before,.cd.c-scribble .art>*,.cd.c-scribble .art::before,.cd.c-openinv .art>*,.cd.c-openinv .art::before,.cd.c-plusone .art>*,.cd.c-plusone .art::before{display:none}
+.cd.c-compound .art{background-image:url(cards/compound.jpg);background-position:50% 35%}
+.cd.c-cartel .art{background-image:url(cards/cartel.jpg);background-position:45% 45%}
+.cd.c-framerate .art{background-image:url(cards/framerate.jpg);background-position:45% 35%}
+.cd.c-scribble .art{background-image:url(cards/scribble.jpg);background-position:50% 35%}
+.cd.c-openinv .art{background-image:url(cards/openinv.jpg);background-position:45% 30%}
+.cd.c-plusone .art{background-image:url(cards/plusone.jpg);background-position:50% 25%}
+
+/* first six milestone-2 unlock cards: painted art, AI-generated from the heroes' portraits (27 Nov 2026; see README) */
+.cd.c-bailiffs .art,.cd.c-latepay .art,.cd.c-bleed .art,.cd.c-spot .art,.cd.c-replyall .art,.cd.c-delegated .art{height:78px;background:#e9e2d4 center/cover no-repeat}
+.cd.c-bailiffs .art>*,.cd.c-bailiffs .art::before,.cd.c-latepay .art>*,.cd.c-latepay .art::before,.cd.c-bleed .art>*,.cd.c-bleed .art::before,.cd.c-spot .art>*,.cd.c-spot .art::before,.cd.c-replyall .art>*,.cd.c-replyall .art::before,.cd.c-delegated .art>*,.cd.c-delegated .art::before{display:none}
+.cd.c-bailiffs .art{background-image:url(cards/bailiffs.jpg);background-position:40% 30%}
+.cd.c-latepay .art{background-image:url(cards/latepay.jpg);background-position:50% 35%}
+.cd.c-bleed .art{background-image:url(cards/bleed.jpg);background-position:40% 40%}
+.cd.c-spot .art{background-image:url(cards/spot.jpg);background-position:45% 35%}
+.cd.c-replyall .art{background-image:url(cards/replyall.jpg);background-position:50% 35%}
+.cd.c-delegated .art{background-image:url(cards/delegated.jpg);background-position:50% 30%}
+
+/* last six milestone-2 unlock cards: painted art, AI-generated from the heroes' portraits (27 Nov 2026; see README) */
+.cd.c-cashhand .art,.cd.c-vat .art,.cd.c-letters .art,.cd.c-spread .art,.cd.c-minutes .art,.cd.c-nominute .art{height:78px;background:#e9e2d4 center/cover no-repeat}
+.cd.c-cashhand .art>*,.cd.c-cashhand .art::before,.cd.c-vat .art>*,.cd.c-vat .art::before,.cd.c-letters .art>*,.cd.c-letters .art::before,.cd.c-spread .art>*,.cd.c-spread .art::before,.cd.c-minutes .art>*,.cd.c-minutes .art::before,.cd.c-nominute .art>*,.cd.c-nominute .art::before{display:none}
+.cd.c-cashhand .art{background-image:url(cards/cashhand.jpg);background-position:50% 30%}
+.cd.c-vat .art{background-image:url(cards/vat.jpg);background-position:45% 40%}
+.cd.c-letters .art{background-image:url(cards/letters.jpg);background-position:45% 35%}
+.cd.c-spread .art{background-image:url(cards/spread.jpg);background-position:45% 45%}
+.cd.c-minutes .art{background-image:url(cards/minutes.jpg);background-position:40% 35%}
+.cd.c-nominute .art{background-image:url(cards/nominute.jpg);background-position:45% 30%}
+
+/* legendary cards: painted from the portraits (28 Nov 2026; see README); gold foil frame is in index.html */
+.cd.c-bankrupt .art,.cd.c-magnum .art,.cd.c-cloud .art,.cd.c-didnt .art{height:78px;background:#e9e2d4 center/cover no-repeat}
+.cd.c-bankrupt .art>*,.cd.c-bankrupt .art::before,.cd.c-magnum .art>*,.cd.c-magnum .art::before,.cd.c-cloud .art>*,.cd.c-cloud .art::before,.cd.c-didnt .art>*,.cd.c-didnt .art::before{display:none}
+.cd.c-bankrupt .art{background-image:url(cards/bankrupt.jpg);background-position:50% 35%}
+.cd.c-magnum .art{background-image:url(cards/magnum.jpg);background-position:50% 30%}
+.cd.c-cloud .art{background-image:url(cards/cloud.jpg);background-position:48% 35%}
+.cd.c-didnt .art{background-image:url(cards/didnt.jpg);background-position:50% 30%}
+/* The Ferret starter cards: painted art from Terry's illustrated portrait of the Ferret on williamgeorgeworks.co.uk (28 Nov 2026; see README) */
+.cd.c-flick .art,.cd.c-bivvy .art,.cd.c-castout .art{height:48px;background:#e9e2d4 center/cover no-repeat}
+.cd.c-flick .art>*,.cd.c-flick .art::before,.cd.c-bivvy .art>*,.cd.c-bivvy .art::before,.cd.c-castout .art>*,.cd.c-castout .art::before{display:none}
+.cd.c-flick .art{background-image:url(cards/flick.jpg);background-position:50% 30%}
+.cd.c-bivvy .art{background-image:url(cards/bivvy.jpg);background-position:50% 40%}
+.cd.c-castout .art{background-image:url(cards/castout.jpg);background-position:45% 30%}
+/* The Ferret reward cards: painted art from Terry's illustrated portrait of the Ferret on williamgeorgeworks.co.uk (28 Nov 2026; see README) */
+.cd.c-six .art,.cd.c-hairrig .art,.cd.c-bite .art,.cd.c-feeder .art,.cd.c-bait .art,.cd.c-unhook .art,.cd.c-wrongpeg .art,.cd.c-khandle .art,.cd.c-nobite .art,.cd.c-twentyp .art,.cd.c-gotaway .art,.cd.c-keepnet .art,.cd.c-greatmorn .art,.cd.c-nightfish .art,.cd.c-weighin .art{height:48px;background:#e9e2d4 center/cover no-repeat}
+.cd.c-six .art>*,.cd.c-six .art::before,.cd.c-hairrig .art>*,.cd.c-hairrig .art::before,.cd.c-bite .art>*,.cd.c-bite .art::before,.cd.c-feeder .art>*,.cd.c-feeder .art::before,.cd.c-bait .art>*,.cd.c-bait .art::before,.cd.c-unhook .art>*,.cd.c-unhook .art::before,.cd.c-wrongpeg .art>*,.cd.c-wrongpeg .art::before,.cd.c-khandle .art>*,.cd.c-khandle .art::before,.cd.c-nobite .art>*,.cd.c-nobite .art::before,.cd.c-twentyp .art>*,.cd.c-twentyp .art::before,.cd.c-gotaway .art>*,.cd.c-gotaway .art::before,.cd.c-keepnet .art>*,.cd.c-keepnet .art::before,.cd.c-greatmorn .art>*,.cd.c-greatmorn .art::before,.cd.c-nightfish .art>*,.cd.c-nightfish .art::before,.cd.c-weighin .art>*,.cd.c-weighin .art::before{display:none}
+.cd.c-six .art{background-image:url(cards/six.jpg);background-position:50% 30%}
+.cd.c-hairrig .art{background-image:url(cards/hairrig.jpg);background-position:50% 35%}
+.cd.c-bite .art{background-image:url(cards/bite.jpg);background-position:45% 30%}
+.cd.c-feeder .art{background-image:url(cards/feeder.jpg);background-position:50% 30%}
+.cd.c-bait .art{background-image:url(cards/bait.jpg);background-position:50% 30%}
+.cd.c-unhook .art{background-image:url(cards/unhook.jpg);background-position:50% 40%}
+.cd.c-wrongpeg .art{background-image:url(cards/wrongpeg.jpg);background-position:50% 35%}
+.cd.c-khandle .art{background-image:url(cards/khandle.jpg);background-position:45% 30%}
+.cd.c-nobite .art{background-image:url(cards/nobite.jpg);background-position:45% 30%}
+.cd.c-twentyp .art{background-image:url(cards/twentyp.jpg);background-position:50% 30%}
+.cd.c-gotaway .art{background-image:url(cards/gotaway.jpg);background-position:50% 35%}
+.cd.c-keepnet .art{background-image:url(cards/keepnet.jpg);background-position:50% 40%}
+.cd.c-greatmorn .art{background-image:url(cards/greatmorn.jpg);background-position:50% 30%}
+.cd.c-nightfish .art{background-image:url(cards/nightfish.jpg);background-position:50% 30%}
+.cd.c-weighin .art{background-image:url(cards/weighin.jpg);background-position:50% 35%}
+.cd.q-l .gem{width:16px;height:16px;margin-left:-8px;bottom:-9px;transform:none;border:0;border-radius:0;background:linear-gradient(180deg,#fff6c4,#e8b923 55%,#c49212);clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);box-shadow:0 0 10px 3px rgba(255,214,64,.95)}
+
+/* six shared/clutter cards: painted prop still-lifes, no hero in shot, neutral grey frame (default --own); AI-generated (27 Nov 2026; see README) */
+.cd.c-junk .art,.cd.c-sock .art,.cd.c-ticket .art,.cd.c-wblock .art,.cd.c-photo .art,.cd.c-catchp .art,.cd.c-handout .art,.cd.c-nohot .art,.cd.c-groan .art,.cd.c-condemned .art,.cd.c-wetsand .art{height:78px;background:#e9e2d4 center/cover no-repeat}
+.cd.c-junk .art>*,.cd.c-junk .art::before,.cd.c-sock .art>*,.cd.c-sock .art::before,.cd.c-ticket .art>*,.cd.c-ticket .art::before,.cd.c-wblock .art>*,.cd.c-wblock .art::before,.cd.c-photo .art>*,.cd.c-photo .art::before,.cd.c-catchp .art>*,.cd.c-catchp .art::before,.cd.c-handout .art>*,.cd.c-handout .art::before,.cd.c-nohot .art>*,.cd.c-nohot .art::before,.cd.c-groan .art>*,.cd.c-groan .art::before,.cd.c-condemned .art>*,.cd.c-condemned .art::before,.cd.c-wetsand .art>*,.cd.c-wetsand .art::before{display:none}
+.cd.c-junk .art{background-image:url(cards/junk.jpg);background-position:45% 45%}
+.cd.c-sock .art{background-image:url(cards/sock.jpg);background-position:45% 55%}
+.cd.c-ticket .art{background-image:url(cards/ticket.jpg);background-position:50% 45%}
+.cd.c-wblock .art{background-image:url(cards/wblock.jpg);background-position:50% 45%}
+.cd.c-photo .art{background-image:url(cards/photo.jpg);background-position:50% 45%}
+.cd.c-catchp .art{background-image:url(cards/catchp.jpg);background-position:50% 35%}
+.cd.c-handout .art{background-image:url(cards/handout.jpg);background-position:50% 45%}
+.cd.c-nohot .art{background-image:url(cards/nohot.jpg);background-position:50% 45%}
+.cd.c-groan .art{background-image:url(cards/groan.jpg);background-position:50% 40%}
+.cd.c-condemned .art{background-image:url(cards/condemned.jpg);background-position:50% 40%}
+.cd.c-wetsand .art{background-image:url(cards/wetsand.jpg);background-position:40% 55%}
+
+.so-rule{margin:.5em auto;max-width:44em;padding:.35em .7em;border:2px dashed var(--red,#e3182d);border-radius:8px;background:#fffbe0;font-size:.95rem}

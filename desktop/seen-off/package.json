@@ -1,0 +1,16 @@
+{
+  "name": "seen-off-desktop",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Seen Off desktop build (Tauri 2) - offline bundle of slay-the-pier.html",
+  "scripts": {
+    "baseline": "python3 tools/strip_original.py",
+    "tauri": "tauri",
+    "build": "./build-all.sh",
+    "verify": "node tests/verify.js"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2.12.6",
+    "playwright-core": "1.49"
+  }
+}
