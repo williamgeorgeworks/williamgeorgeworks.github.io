@@ -37,7 +37,7 @@ h1{font-family:var(--display);font-weight:400;font-size:clamp(2.6rem,10vw,4.4rem
 .hud{display:flex;flex-wrap:wrap;gap:5px 7px;align-items:center;padding:7px 9px;background:var(--ink);color:#fff;font-family:var(--display);letter-spacing:.04em;font-size:.86rem;text-transform:uppercase;min-height:26px}
 .hud .sp{flex:1}
 .pill{display:inline-flex;align-items:center;gap:5px;padding:2px 10px 2px 8px;border-radius:999px;border:2px solid rgba(255,255,255,.35);line-height:1.55;white-space:nowrap}
-.pill.who{background:var(--c,var(--red));padding-left:10px}.pill.who.h-k{border-color:rgba(255,255,255,.85)}.pill.hp{background:var(--red)}.pill.hp .ic{color:#ffb3bd}.pill.gold{background:var(--gold);color:var(--ink);border-color:#fff3a8}.pill.gold .ic{color:#fff3a8}.pill.act{background:var(--blue)}.pill.ttl{background:var(--red);font-size:.95rem}
+.pill.who{background:var(--c,var(--red));padding-left:10px}.pill.who.h-k{border-color:rgba(255,255,255,.85)}.pill.hp{background:var(--red)}.pill.hp .ic{color:#ffb3bd}.pill.gold{background:var(--gold);color:var(--ink);border-color:#fff3a8}.pill.gold .ic{color:#fff3a8}.pill.catch{background:var(--green)}.pill.catch .ic{color:#d6ffe3}.pill.act{background:var(--blue)}.pill.ttl{background:var(--red);font-size:.95rem}
 .pill.hp.low{animation:low .9s ease-in-out infinite}.pill.up,.pill.hp.low.up{animation:pillup .5s cubic-bezier(.2,.9,.3,1.5)}.pill.down,.pill.hp.low.down{animation:pilldown .45s}
 .chip{display:inline-flex;align-items:center;gap:4px;font:inherit;background:#fff;color:var(--ink);border:2px solid var(--ink);border-radius:999px;padding:2px 10px;cursor:pointer;text-transform:uppercase;letter-spacing:.04em;font-size:.76rem;line-height:1.5;box-shadow:0 2px 0 rgba(255,255,255,.35);transition:transform .08s}
 .chip:hover:not(:disabled){transform:translateY(-1px)}.chip:active:not(:disabled){transform:translateY(1px)}
@@ -77,7 +77,7 @@ canvas#scene{display:block;width:100%;background:#37c8ff;touch-action:manipulati
 .cd .tx u.upv,.detail .tx u.upv{color:var(--green)}
 .cd .tx em,.detail .tx em{font-style:normal;font-weight:700;color:inherit}
 .cd .tab{position:absolute;right:-8px;top:-9px;min-width:21px;height:21px;box-sizing:border-box;padding:0 3px;border-radius:999px;background:var(--hc,#fff);color:#fff;border:2.5px solid var(--ink);font-family:var(--display);font-size:.68rem;line-height:1;display:grid;place-items:center;z-index:2}
-.cd.h-r{--hc:var(--red)}.cd.h-t{--hc:var(--blue)}.cd.h-k{--hc:var(--kenneth)}.cd.h-c{--hc:var(--gold)}.cd.h-c .tab{color:var(--ink)}
+.cd.h-r{--hc:var(--red)}.cd.h-t{--hc:var(--blue)}.cd.h-k{--hc:var(--kenneth)}.cd.h-f{--hc:var(--green)}.cd.h-c{--hc:var(--gold)}.cd.h-c .tab{color:var(--ink)}
 .cd .tab .ic{width:13px;height:13px;stroke-width:0}
 .cd .gem{position:absolute;left:50%;bottom:-7px;width:11px;height:11px;margin-left:-6px;transform:rotate(45deg);background:#c9c9c9;border:2.5px solid var(--ink)}
 .cd.q-u .gem{background:#37a0ff}.cd.q-r .gem{background:var(--gold);box-shadow:0 0 8px 2px rgba(255,198,26,.9)}
@@ -307,7 +307,7 @@ var ON_SITE=false; /* desktop build: no score wall, no fetch, no send-in */
 var COL={ink:'#141414',red:'#e3182d',blue:'#2456e6',white:'#ffffff',pink:'#ff8fa6',skin:'#f6c9ae',gold:'#ffc61a',green:'#14a84b',purple:'#7a3ff0',kenneth:'#1d1c24',metal:'#d3dae2',steel:'#a3adb8'};
 
 /* ================= the cards ================= */
-var CARDS={},POOL={r:[],t:[],k:[]};
+var CARDS={},POOL={r:[],t:[],k:[],f:[]};
 function C(id,h,name,type,cost,rar,tx,n,fn,o){CARDS[id]={id:id,h:h,name:name,type:type,cost:cost,rar:rar,tx:tx,n:n||[],fn:fn,o:o||{}};if(POOL[h]&&rar!=='b'&&rar!=='x')POOL[h].push(id);}
 function vals(d,u){return d.n.map(function(p){return p[u?1:0];});}
 function cardText(ci){var d=CARDS[ci.id],v=vals(d,ci.u);return d.tx.replace(/\$(\d)/g,function(m,i){return v[+i];});}
@@ -324,6 +324,10 @@ function en(n){B.energy+=n;}
 function gold(n){n=Math.round(n*(has('float')?1.25:1));RUN.gold+=n;sfx('coin',dl(fxOn(H,'+'+n+' Scrumplings',COL.gold)));}
 function addHand(id,zero,tmp){if(B.hand.length>=10)return;B.hand.push({id:id,u:0,z:zero?1:0,tmp:tmp?1:0});}
 function randCard(h){var p=h?POOL[h]:POOL.r.concat(POOL.t,POOL.k);return pick(p);}
+function lineOut(fn){if(!B)return;if(H&&H.st.night){fn();caught();}B.casts=B.casts||[];B.casts.push(fn);if(H)fxOn(H,'Cast',COL.green);}
+function caught(){if(!B)return;B.catch=(B.catch||0)+1;if(H&&H.st.keepnet)blk(H.st.keepnet);if(H)fxOn(H,'Catch',COL.green);}
+function reelCasts(){if(!B)return;var q=B.casts||[];B.casts=[];q.forEach(function(fn){fn();caught();});}
+function ferretOpen(){return (META&&META.wins>0)||(DAY&&DAY.sticks>=16);}
 var NAMES={gus:'Gusto',poi:'Poise',sog:'Soggy',flu:'Flustered',inv:'Invoice',claw:'Claws'};
 
 /* Reggie, the Proofreader: invoices, red pens and wounded dignity */
@@ -397,8 +401,8 @@ C('minutes','k','Minutes of the Meeting','S',1,'c','Draw $0 cards, then discard 
 C('replyall','k','Reply All','A',2,'u','Deal $0 damage to ALL enemies. Hit a random enemy once more for every Fleeting card you’ve played this turn.',[[6,8]],function(t,v){atkAll(v[0]);if(B.flt)atkRand(v[0],B.flt);});
 C('delegated','k','Delegated','S',0,'u','Put a random card from your discard pile into your hand. It costs 0 this turn. Exhaust (not when upgraded).',[],function(){if(!B.disc.length||B.hand.length>=10)return;var j=(Math.random()*B.disc.length)|0,c=B.disc.splice(j,1)[0];c.z=1;B.hand.push(c);},{x:1,xn:1});
 C('nominute','k','Nobody Minuted It','P',1,'r','The first Fleeting card you play each turn is played twice.',[],function(){me('nm',1);});
-var QNEW={r:['cashhand','vat','latepay','bailiffs'],t:['bleed','spot','letters','spread'],k:['minutes','replyall','delegated','nominute']};
-var QLEG={r:['bankrupt'],t:['magnum'],k:['cloud']};
+var QNEW={r:['cashhand','vat','latepay','bailiffs'],t:['bleed','spot','letters','spread'],k:['minutes','replyall','delegated','nominute'],f:[]};
+var QLEG={r:['bankrupt'],t:['magnum'],k:['cloud'],f:['didnt']};
 /* the familiars' own cards */
 C('ruling','c','Ruling of the Court','S',1,'x','Gain $0 Block. Apply 1 Soggy to ALL enemies.',[[8,11]],function(t,v){blk(v[0]);appAll('sog',1);});
 C('decree','c','Royal Decree','A',1,'x','Deal $0 damage.',[[12,16]],function(t,v){atk(t,v[0]);},{t:1});
@@ -421,6 +425,27 @@ C('wetsand','s','Wet Sand','X',0,'x','Unplayable. Fleeting.',[],null,{unp:1,eth:
 C('bankrupt','r','Bankrupt','S',0,'l','Every enemy pays its Invoice X times. Exhaust.',[],function(){var n=B.xpay||0;B.en.slice().forEach(function(e){if(e.dead)return;var inv=e.st.inv||0;for(var i=0;i<n&&!e.dead&&!B.over;i++)strike(H,e,inv);});},{xcost:1,x:1,xn:1});
 C('magnum','t','Magnum Opus','A',5,'l','Deal $0 damage. Costs 1 less for every Attack played this fight.',[[60,80]],function(t,v){atk(t,v[0]);},{t:1,mag:5});
 C('cloud','k','The Cloud Provides','S',1,'l','Add $0 random cards to your hand. They cost 0 this turn. Fleeting.',[[5,7]],function(t,v){for(var i=0;i<v[0];i++)addHand(randCard(),1,1);});
+/* The Ferret, the Gaffer (Not Technically a Quill): Cast, Catch, and a flask on the bank */
+C('flick','f','Flick','A',1,'b','Deal $0 damage.',[[6,9]],function(t,v){atk(t,v[0]);},{t:1});
+C('bivvy','f','Bivvy','S',1,'b','Gain $0 Block.',[[5,8]],function(t,v){blk(v[0]);});
+C('castout','f','Cast Out','S',1,'b','Cast: deal $0 damage to a random enemy.',[[12,16]],function(t,v){var n=v[0];lineOut(function(){atkRand(n,1);});});
+C('six','f','Since Six','A',0,'c','Deal $0 damage. Cast: deal it again.',[[4,6]],function(t,v){var e=t,n=v[0];atk(t,n);lineOut(function(){if(e&&!e.dead)atk(e,n);else atkRand(n,1);});},{t:1});
+C('hairrig','f','Hair Rig','A',1,'c','Deal $0 damage. Deal it twice if you have a line out.',[[7,10]],function(t,v){atk(t,v[0],(B.casts&&B.casts.length)?2:1);},{t:1});
+C('bite','f','Bite Alarm','S',1,'c','Gain $0 Block. Cast: draw 2 cards.',[[6,9]],function(t,v){blk(v[0]);lineOut(function(){draw(2);});});
+C('feeder','f','Swim Feeder','S',1,'c','Cast: gain 2 Energy.',[],function(){lineOut(function(){en(2);});},{uc:0});
+C('bait','f','Groundbait','S',1,'c','Apply $0 Soggy to ALL enemies.',[[2,3]],function(t,v){appAll('sog',v[0]);});
+C('unhook','f','Unhooking Mat','S',1,'c','Gain $0 Block. Lose all Soggy and Flustered.',[[7,10]],function(t,v){blk(v[0]);H.st.sog=0;H.st.flu=0;});
+C('wrongpeg','f','Wrong Peg','A',1,'c','Deal $0 damage to ALL enemies.',[[5,7]],function(t,v){atkAll(v[0]);});
+C('khandle','f','Kenneth Will Handle It','S',1,'c','Add a random Kenneth card to your hand. It costs 0 this turn. Fleeting.',[],function(){addHand(randCard('k'),1,1);},{uc:0});
+C('nobite','f','Not a Bite','S',0,'u','Nothing happens. Cast: gain $0 Energy.',[[2,3]],function(t,v){var n=v[0];lineOut(function(){en(n);});});
+C('twentyp','f','Twenty-Pounder','A',2,'u','Cast: deal $0 damage.',[[26,34]],function(t,v){var e=t,n=v[0];lineOut(function(){if(e&&!e.dead)atk(e,n);else atkRand(n,1);});},{t:1});
+C('gotaway','f','The One That Got Away','A',1,'u','Deal $0 damage. If that does not see it off, Cast: deal $1 damage to it.',[[8,11],[16,22]],function(t,v){var e=t,n=v[1];atk(t,v[0]);if(e&&!e.dead)lineOut(function(){if(e&&!e.dead)atk(e,n);});},{t:1});
+C('keepnet','f','Keepnet','P',1,'u','Whenever you reel in a line, gain $0 Block.',[[3,4]],function(t,v){H.st.keepnet=(H.st.keepnet||0)+v[0];});
+C('greatmorn','f','Great Morning','P',1,'u','At the start of your turn, heal $0.',[[2,3]],function(t,v){H.st.greatmorn=(H.st.greatmorn||0)+v[0];});
+C('nightfish','f','Night Fishing','P',2,'r','Your Cast cards land now and next turn.',[],function(){H.st.night=(H.st.night||0)+1;});
+C('weighin','f','Weigh-In','A',1,'r','Deal $0 damage for every line reeled in this fight. Exhaust.',[[4,6]],function(t,v){atk(t,v[0]*(B.catch||0));},{t:1,x:1});
+C('didnt','f','The One That Didn’t Get Away','A',1,'l','Deal $0 damage for every Catch this fight. Exhaust.',[[10,14]],function(t,v){atk(t,v[0]*(B.catch||0));},{t:1,x:1});
+
 var TYPE={A:'Attack',S:'Skill',P:'Power',X:'Clutter'};
 
 var HEROES={
@@ -429,7 +454,9 @@ var HEROES={
  t:{id:'t',name:'Terry',title:'The Mechanical Editor',hp:78,deck:['inkblot','inkblot','inkblot','inkblot','sketch','sketch','sketch','sketch','splatter'],
    blurb:'Ink, outrage and big lettering. Hits everything, often.'},
  k:{id:'k',name:'Kenneth',title:'Chief of Staff, by way of the Cloud',hp:66,deck:['handshake','handshake','handshake','handshake','nod','nod','nod','nod','whoinv'],
-   blurb:'The third Quill, from the Cloud, where he is the Ferret’s chief of staff. He has finally been drawn; his magic is still anybody’s guess.'}
+   blurb:'The third Quill, from the Cloud, where he is the Ferret’s chief of staff. He has finally been drawn; his magic is still anybody’s guess.'},
+ f:{id:'f',name:'The Ferret',title:'The Gaffer (Not Technically a Quill)',hp:70,deck:['flick','flick','flick','flick','bivvy','bivvy','bivvy','bivvy','castout'],
+   blurb:'Cast a line, reel it in bigger next turn, and keep count of your Catch. Kenneth is around here somewhere, probably.'}
 };
 var CATS={
  arthur:{name:'Arthur',card:'ruling',perk:'Diplomatic immunity: start every fight with 8 Block.',body:'#f3e9d8',head:'#f3e9d8',face:'#8a8c99',ear:'#5d6070',eye:'#3f7fd6',fluff:1,hat:'#e3182d'},
@@ -639,9 +666,10 @@ var STICKS=[
   STICKS.push([sc(0),'legend','r','PAID IN FULL','Bankrupt, a legendary card for Reggie']);
   STICKS.push([sc(1),'legend','t','HOLD YOUR NERVE','Magnum Opus, a legendary card for Terry']);
   STICKS.push([sc(2),'legend','k','THE TRUE KING','The Cloud Provides, a legendary card for Kenneth']);
-  for(var i=0;i<13;i++)STICKS.push([sc(i+3),'later','',ph[i],'A surprise (more to come)']);})();
+  STICKS.push([sc(3),'legend','f','DIDN’T GET AWAY','The One That Didn’t Get Away, a legendary card for the Ferret']);
+  for(var i=0;i<13;i++)STICKS.push([sc(i+4),'later','',ph[i],'A surprise (more to come)']);})();
 function stickGot(kind,arg){for(var i=0;i<STICKS.length;i++)if(STICKS[i][1]===kind&&(arg==null||STICKS[i][2]===arg))return i<DAY.sticks;return false;}
-function poolFix(){['r','t','k'].forEach(function(h){var on=stickGot('cards',h);QNEW[h].forEach(function(id){var i=POOL[h].indexOf(id);if(on&&i<0)POOL[h].push(id);if(!on&&i>=0)POOL[h].splice(i,1);});var ol=stickGot('legend',h);(QLEG[h]||[]).forEach(function(id){var i=POOL[h].indexOf(id);if(ol&&i<0)POOL[h].push(id);if(!ol&&i>=0)POOL[h].splice(i,1);});});}
+function poolFix(){['r','t','k','f'].forEach(function(h){var on=stickGot('cards',h);QNEW[h].forEach(function(id){var i=POOL[h].indexOf(id);if(on&&i<0)POOL[h].push(id);if(!on&&i>=0)POOL[h].splice(i,1);});var ol=stickGot('legend',h);(QLEG[h]||[]).forEach(function(id){var i=POOL[h].indexOf(id);if(ol&&i<0)POOL[h].push(id);if(!ol&&i>=0)POOL[h].splice(i,1);});});}
 function wigOn(){return stickGot('hat','wig')&&DAY.wig!==0;}
 function dailyOpen(){return stickGot('daily')||META.wins>0;}
 function stickName(k){var s=STICKS[k];if(!s)return '';if(s[1]==='place')return STAGES[s[2]].n+' opens for the '+PARTS.filter(function(p){return p.stages.indexOf(s[2])>=0;})[0].n.toLowerCase();return s[4];}
@@ -902,7 +930,7 @@ function startCombat(kind){
   var tbl=ENC[stEnc()][kind],set=(kind==='F'&&RUN.first)?pick(tbl.slice(0,4)):pick(tbl),hm=(1+.1*RUN.lvl)*(STGD()&&STGD().hm||1);RUN.first=0;
   if(kind==='F'&&set.length<4&&(rule('gulls')||rule('crowds')))set=set.concat([rule('gulls')?'gull':set[0]]);
   H={hero:1,name:HEROES[RUN.hero].name,block:0,st:{}};Object.defineProperty(H,'hp',{get:function(){return RUN.hp;},set:function(v){RUN.hp=v;}});H.max=RUN.max;
-  B={kind:kind,en:[],draw:[],hand:[],disc:[],turn:0,energy:0,over:false,won:false,count:0,tcount:0,combo:0,cmax:0,attk:0,hat:has('hat'),brolly:has('brolly'),mult:1};
+  B={kind:kind,en:[],draw:[],hand:[],disc:[],turn:0,energy:0,over:false,won:false,count:0,tcount:0,combo:0,cmax:0,attk:0,hat:has('hat'),brolly:has('brolly'),mult:1,casts:[],catch:0};
   set.forEach(function(k,i){var d=EN[k],hp=Math.round(ri(d.hp[0],d.hp[1])*hm);B.en.push({k:k,name:d.n,hp:hp,max:hp,block:0,st:{},i:set.length>1?i:0,sc:d.sc||1,boss:d.boss,elite:d.elite,slot:i,seed:ri(1,99999)});});
   B.draw=shuffle(RUN.deck.map(function(c){return {id:c.id,u:c.u};}));
   if(has('accord'))B.draw.splice(ri(0,B.draw.length),0,{id:'sock',u:0});
@@ -962,6 +990,8 @@ function startTurn(first){
   if(H.st.next){H.block+=H.st.next;H.st.next=0;}
   if(H.st.ci)alive().forEach(function(e){e.st.inv=(e.st.inv||0)+H.st.ci;});
   if(H.st.fr)H.st.gus=(H.st.gus||0)+H.st.fr;
+  if(H.st.greatmorn){var gh=heal(H.st.greatmorn);if(gh)fxOn(H,'+'+gh,COL.green);}
+  if(!first)reelCasts();
   var dn=5+(B.turn===1?(hasCat('dexter')?2:0)+(has('bulb')?1:0)+(B.kind==='B'&&has('ridephoto')?1:0)+(B.xdraw||0):0);if(B.houseRule==='lights')dn=Math.max(0,dn-1);draw(dn);if(B.turn===1)B.xdraw=0;
   for(var i=0;i<(H.st.oi||0);i++)addHand(randCard(),1,1);
   fxReset(0);
@@ -1097,7 +1127,7 @@ var EVENTS=[
   opts:function(){return [['Pay it (40 Scrumplings): strike a card from your deck',function(){if(RUN.gold<40)return null;RUN.gold-=40;S.mode='cut';return '';}],['Dispute it: gain 30 Scrumplings and a Mislaid Sock',function(){RUN.gold+=30;RUN.deck.push({id:'sock',u:0});return 'You are 30 Scrumplings up and one sock down.';}]];}},
  {id:'dear',t:'Dear Terry',tx:function(){return 'You have written to Terry with a problem. His reply runs to four pages and a diagram.';},
   opts:function(){return [['Follow the advice: lose 7 health, gain a keepsake',function(){var r=freeRelic(0);RUN.hp=Math.max(1,RUN.hp-7);if(r){addRelic(r);return 'It hurt, but you now own: '+RELICS[r][0]+'. '+RELICS[r][1];}RUN.gold+=50;return 'It hurt. 50 Scrumplings by way of apology.';}],['File it carefully',function(){return 'You file it under T.';}]];}},
- {id:'ferret',t:'The Ferret is fishing',tx:function(){return 'He has been here since six. Not a bite. Great morning, he says, and means it.';},
+ {id:'ferret',t:function(){return RUN&&RUN.hero==='f'?'Kenneth is fishing':'The Ferret is fishing';},tx:function(){return 'He has been here since six. Not a bite. Great morning, he says, and means it.';},
   opts:function(){return [['Sit with him a while: heal 15',function(){return 'Nothing is caught. You recover '+heal(15)+' health anyway.';}],['Borrow a brew from his flask',function(){return gainBrew()?'He hands over a '+BREWS[RUN.brews[RUN.brews.length-1]][0]+'.':'Your pockets are full. He shrugs.';}]];}},
  {id:'sue',st:'prom',t:'The Man Who Wanted to Sue God',tx:function(){return 'A man on a bench is drafting a claim against the Almighty. He needs a witness, and you have a pen.';},
   opts:function(){return [['Sign as witness: a rare card, and a Writer’s Block',function(){var p=POOL[RUN.hero].filter(function(id){return CARDS[id].rar==='r';}),c=pick(p.length?p:POOL[RUN.hero]);RUN.deck.push({id:c,u:0});RUN.deck.push({id:'wblock',u:0});return 'You sign. '+CARDS[c].name+' goes in your deck, and so does the doubt.';}],
@@ -1164,8 +1194,26 @@ function star(x,y,q,col){ctx.beginPath();for(var i=0;i<10;i++){var a=-Math.PI/2+
 
 /* the Quills */
 function quill(x,y,rot){ctx.save();ctx.translate(x,y);ctx.rotate(rot);ctx.beginPath();ctx.moveTo(0,0);ctx.quadraticCurveTo(-11,-22,-2,-46);ctx.quadraticCurveTo(11,-24,0,0);ink('#fff',1.8);line([0,8,0,-40],1.3);ctx.restore();}
+var FIMG=new Image();FIMG.src='heroes/ferret.jpg';FIMG.onload=function(){var list=document.querySelectorAll('canvas[data-art=hero][data-id=f]');for(var i=0;i<list.length;i++)if(typeof paintArt==='function')paintArt(list[i],'hero','f');};
 function drawQuill(kind,r,t){
   var bob=Math.sin(t*2.2)*1.5;
+  if(kind==='f'){
+    ctx.fillStyle='rgba(20,20,20,.13)';ell(0,2,34,6);ctx.fill();
+    ctx.save();ctx.translate(0,bob);
+    if(FIMG.complete&&FIMG.naturalWidth){
+      var iw=FIMG.naturalWidth,ih=FIMG.naturalHeight;
+      ctx.save();ell(0,-62,56,60);ctx.clip();
+      var hh=150,ww=hh*iw/ih;
+      ctx.drawImage(FIMG,-ww/2,-132,ww,hh);
+      ctx.restore();
+      ell(0,-62,56,60);ctx.strokeStyle=COL.ink;ctx.lineWidth=2.6;ctx.stroke();
+    }else{
+      poly([-24,-78,24,-78,20,-28,-20,-28],COL.red,2.4);
+      ell(0,-100,16,18);ink('#f6c9ae',2);
+      poly([-18,-118,18,-118,16,-104,-16,-104],'#2a2a2a',2);
+    }
+    ctx.restore();return;
+  }
   ctx.fillStyle='rgba(20,20,20,.13)';ell(0,2,34,6);ctx.fill();
   [-10,10].forEach(function(x){rect(x-5,-36,10,31,COL.steel,2.2);rect(x-8,-6,16,6,COL.ink,2);});
   ctx.save();ctx.translate(0,bob);
@@ -1648,7 +1696,7 @@ var ART={
  pgull:function(e,r,t){ART.gull(e,r,t,1);ctx.save();ctx.translate(-10,8);ctx.rotate(-.4);rect(-6,2,18,7,'#fff',1.6);line([-6,5,12,5],1.6,COL.ink);ctx.restore();},
  bgull:function(e,r,t){ART.gull(e,r,t);ell(8,6,5,5);ink('#e3182d',1.2);}
 };
-var HCOL={r:COL.red,t:COL.blue,k:COL.kenneth},HTINT={r:'#ffd0d6',t:'#cfdcff',k:'#dcdbe2'},HINK={r:COL.red,t:COL.ink,k:COL.kenneth};/* Kenneth went black on 24 Nov 2026 (was purple) */
+var HCOL={r:COL.red,t:COL.blue,k:COL.kenneth,f:COL.green},HTINT={r:'#ffd0d6',t:'#cfdcff',k:'#dcdbe2',f:'#c8f0d4'},HINK={r:COL.red,t:COL.ink,k:COL.kenneth,f:'#0b5c28'};/* Kenneth went black on 24 Nov 2026 (was purple) */
 var NEON=['#ff4f9a','#29e0ff','#ffe14d','#b6f23c','#ff8a1f','#ffffff'];
 var RM=!!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches),RM0=RM;if(FXL===0)RM=true;
 function setFx(n){FXL=n;try{localStorage.setItem('so-fx',String(n));}catch(e){}RM=RM0||n===0;}
@@ -1661,7 +1709,8 @@ function paintArt(c,kind,id){
   for(i=0;i<9;i++){a=i/9*6.283;ctx.beginPath();ctx.moveTo(0,w*.16);ctx.lineTo(Math.cos(a)*w,Math.sin(a)*w+w*.16);ctx.lineTo(Math.cos(a+.35)*w,Math.sin(a+.35)*w+w*.16);ctx.closePath();ctx.fill();}
   ctx.restore();ell(0,0,w*.46,w*.46);ctx.strokeStyle=COL.ink;ctx.lineWidth=2.8;ctx.stroke();ctx.restore();
   ctx.save();
-  if(kind==='hero'){ctx.translate(w/2-4*s,w-8*s);ctx.scale(.53*s,.53*s);drawQuill(id,r,0);}
+  if(kind==='hero'&&id==='f'&&FIMG.complete&&FIMG.naturalWidth){ctx.save();ctx.translate(w/2,w/2);ell(0,0,w*.46,w*.46);ctx.clip();var iw=FIMG.naturalWidth,ih=FIMG.naturalHeight,hh=w*1.12,ww=hh*iw/ih;ctx.drawImage(FIMG,-ww/2,-w*.48,ww,hh);ctx.restore();}
+  else if(kind==='hero'){ctx.translate(w/2-4*s,w-8*s);ctx.scale(.53*s,.53*s);drawQuill(id,r,0);}
   else{ctx.translate(w/2,w-15*s);ctx.scale(1.2*s,1.2*s);drawCat(id,r,0);}
   ctx.restore();ctx=old;
 }
@@ -2455,6 +2504,7 @@ function starD(cx,cy,R,r,n,rot){var s='',i,a,d;for(i=0;i<n*2;i++){a=(rot==null?-
 function spiralD(cx,cy,R,turns){var s='',i,n=48,a,d;for(i=0;i<=n;i++){a=i/n*turns*6.283;d=R*i/n;s+=(i?'L':'M')+(cx+Math.cos(a)*d).toFixed(1)+' '+(cy+Math.sin(a)*d).toFixed(1);}return s;}
 var IC={
  heart:'<path d="M12 21C5 15 2 11.5 2 8a5 5 0 0 1 10-1.5A5 5 0 0 1 22 8c0 3.5-3 7-10 13z"/>',
+ fish:'<path d="M3 12c2.2-3.6 5.4-5.5 9.2-5.5 2.4 0 4.2.6 6.1 2.1L21 7.2c-.2 1.6-.3 2.9 0 4.8-.3 1.9-.2 3.2 0 4.8l-2.7-1.4c-1.9 1.5-3.7 2.1-6.1 2.1C8.4 17.5 5.2 15.6 3 12z"/><circle cx="8.2" cy="11.2" r="1.1" fill="#fff"/>',
  coin:'<circle cx="12" cy="12" r="9.5"/><path d="M9.5 7.5h3a4.5 4.5 0 0 1 0 9h-3z" fill="none"/>',
  burst:'<path d="'+starD(12,12,11.5,5.6,9)+'"/>',
  twice:'<path d="'+starD(8.5,8.5,7.6,3.7,8)+'"/><path d="'+starD(15.5,15.5,7.6,3.7,8,.3)+'"/>',
@@ -2506,7 +2556,7 @@ function cardIcon(d){
   if(/Scrumplings/.test(t))return 'coin';
   return d.type==='P'?'star':'spark';
 }
-var KW=/\b(Block|Invoice|Gusto|Poise|Soggy|Flustered|Energy|Scrumplings|Exhaust|Fleeting|Unplayable|Scribble|Brew)\b/g;
+var KW=/\b(Block|Invoice|Gusto|Poise|Soggy|Flustered|Energy|Scrumplings|Exhaust|Fleeting|Unplayable|Scribble|Brew|Cast|Catch)\b/g;
 function cardRich(ci){var d=CARDS[ci.id],v=vals(d,ci.u),b=vals(d,0);return d.tx.replace(KW,'<em>$1</em>').replace(/\$(\d)/g,function(m,i){return '<u'+(ci.u&&v[+i]!==b[+i]?' class="upv"':'')+'>'+v[+i]+'</u>';});}
 /* the type line names the card's owner: ATTACK – SPYRO */
 function cardOwner(d){if(d.type==='X')return '';if(d.h==='c'){for(var k in CATS)if(CATS[k].card===d.id)return ' – '+CATS[k].name;return '';}return HEROES[d.h]?' – '+HEROES[d.h].name:'';}
@@ -2531,7 +2581,7 @@ function hudHTML(){
     else if(dg<0)GLAG={from:lagVal(GLAG,RUN.gold-dg),t0:now(),d:280};
     if(!fight&&dh>0)HLAG={from:RUN.hp-dh,t0:now()+330,d:480};
   }
-  var h='<span class="pill who h-'+RUN.hero+'" style="--c:'+HCOL[RUN.hero]+'">'+HEROES[RUN.hero].name+'</span><span class="pill hp'+(RUN.hp>0&&RUN.hp<=RUN.max*.25?' low':'')+(dh>0?' up':dh<0?' down':'')+'" id="hpPill" title="Health">'+ic('heart')+'<span class="vh">Health </span><span id="hpN">'+Math.max(0,lagVal(HLAG,RUN.hp))+'</span>/'+RUN.max+'</span><span class="pill gold'+(dg>0?(PREV.plan?'':' up'):dg<0?' down':'')+'" id="goldPill" title="Scrumplings">'+ic('coin')+'<span id="goldN">'+lagVal(GLAG,RUN.gold)+'</span><span class="w">&nbsp;Scrumplings</span></span><span class="pill act">'+(function(){var sg=S.scr==='stage'?null:STGD(),pp=PARTS[Math.min(RUN.part||0,4)];return sg?ic(sg.ic)+sg.n+' '+(RUN.row+1)+'/5':ic(pp.ic)+pp.n;})()+'</span><span class="sp"></span>';
+  var h='<span class="pill who h-'+RUN.hero+'" style="--c:'+HCOL[RUN.hero]+'">'+HEROES[RUN.hero].name+'</span><span class="pill hp'+(RUN.hp>0&&RUN.hp<=RUN.max*.25?' low':'')+(dh>0?' up':dh<0?' down':'')+'" id="hpPill" title="Health">'+ic('heart')+'<span class="vh">Health </span><span id="hpN">'+Math.max(0,lagVal(HLAG,RUN.hp))+'</span>/'+RUN.max+'</span><span class="pill gold'+(dg>0?(PREV.plan?'':' up'):dg<0?' down':'')+'" id="goldPill" title="Scrumplings">'+ic('coin')+'<span id="goldN">'+lagVal(GLAG,RUN.gold)+'</span><span class="w">&nbsp;Scrumplings</span></span>'+(RUN.hero==='f'&&B&&(S.scr==='combat'||beating())?'<span class="pill catch" title="Lines reeled in this fight">'+ic('fish')+'Catch '+(B.catch||0)+((B.casts&&B.casts.length)?' · line out':'')+'</span>':'')+'<span class="pill act">'+(function(){var sg=S.scr==='stage'?null:STGD(),pp=PARTS[Math.min(RUN.part||0,4)];return sg?ic(sg.ic)+sg.n+' '+(RUN.row+1)+'/5':ic(pp.ic)+pp.n;})()+'</span><span class="sp"></span>';
   RUN.brews.forEach(function(b,i){h+='<button type="button" class="chip brew'+(S.brewSel===i?' on':'')+'" data-a="brew" data-i="'+i+'" title="'+BREWS[b][1]+'">'+ic('cup')+BREWS[b][0]+'</button>';});
   h+='<button type="button" class="chip dk" data-a="deck" aria-label="Deck, '+RUN.deck.length+' cards" title="Your deck">'+ic('cards')+'<span class="w">Deck</span>'+RUN.deck.length+'</button>';
   if(RUN.relics.length)h+='<button type="button" class="chip rel" data-a="relics" aria-label="Keepsakes, '+RUN.relics.length+'" title="Keepsakes">'+ic('star')+'<span class="w">Keepsakes</span>'+RUN.relics.length+'</button>';
@@ -2573,7 +2623,7 @@ function render(){
   if(S.scr==='title'){
     var saved=loadRun();
     h='<div class="panel"><h2>Who is climbing?</h2><div class="row">';
-    ['r','t','k'].forEach(function(k){var x=HEROES[k];h+='<button type="button" class="pick'+(S.hero===k?' on':'')+'" style="--c:'+HCOL[k]+';--tint:'+HTINT[k]+'" data-a="hero" data-i="'+k+'" aria-pressed="'+(S.hero===k)+'"><canvas data-art="hero" data-id="'+k+'" aria-hidden="true"></canvas><b>'+x.name+'</b><em>'+x.title+'</em><span>'+x.blurb+'</span><span><strong>'+x.hp+' health</strong>'+(META.hw[k]?' · won '+META.hw[k]:'')+'</span></button>';});
+    ['r','t','k'].concat(ferretOpen()?'f':[]).forEach(function(k){var x=HEROES[k];h+='<button type="button" class="pick'+(S.hero===k?' on':'')+'" style="--c:'+HCOL[k]+';--tint:'+HTINT[k]+'" data-a="hero" data-i="'+k+'" aria-pressed="'+(S.hero===k)+'"><canvas data-art="hero" data-id="'+k+'" aria-hidden="true"></canvas><b>'+x.name+'</b><em>'+x.title+'</em><span>'+x.blurb+'</span><span><strong>'+x.hp+' health</strong>'+(META.hw[k]?' · won '+META.hw[k]:'')+'</span></button>';});
     h+='</div><div class="row">';
     for(i=0;i<=5;i++)h+='<button type="button" class="chip'+(S.lvl===i?' on':'')+'" data-a="lvl" data-i="'+i+'"'+(i>META.open?' disabled':'')+'>Encore '+i+'</button>';
     h+='</div><p style="font-size:.85rem;font-style:italic">'+(S.lvl?'Encore '+S.lvl+': everything out there is '+S.lvl*10+'% tougher and hits harder, and the score counts for '+(100+25*S.lvl)+'%.':'Win a run to open the next Encore: tougher piers, bigger scores.')+'</p>';
@@ -2620,7 +2670,7 @@ function render(){
     if(sh.cut)h+='<div class="item k-cut"><span><b>The red pen</b> Strike one card out of your deck for good.</span><button type="button" class="btn quiet" data-a="buy" data-i="x"'+(RUN.gold<sh.cut?' disabled':'')+'>'+ic('coin')+sh.cut+'</button></div>';
     h+='</div><button type="button" class="btn" data-a="leave">Leave the shop</button></div>';
   }else if(S.scr==='event'){
-    var ev=S.ev;h='<div class="panel"><h2>'+ev.d.t+'</h2><p>'+(ev.res||ev.d.tx())+'</p><div class="list">';
+    var ev=S.ev;h='<div class="panel"><h2>'+(typeof ev.d.t==='function'?ev.d.t():ev.d.t)+'</h2><p>'+(ev.res||ev.d.tx())+'</p><div class="list">';
     if(ev.res)h+='</div><button type="button" class="btn go" data-a="leave">Onward</button>';
     else{ev.d.opts().forEach(function(o,i){h+='<button type="button" class="btn quiet opt" data-a="opt" data-i="'+i+'">'+o[0]+'</button>';});h+='</div>'+(S.note?'<p><em>'+S.note+'</em></p>':'');}
     h+='</div>';
@@ -2673,7 +2723,7 @@ function act(a,i,el){
   if((a==='take'&&+i>=0)||a==='boss'||a==='begin')sparkAt(pos,'stars');else if(a==='cat'&&CATS[i])sparkAt(pos,'stars',CATS[i].hat);
   else if(a==='dk'&&S.mode==='cut')sparkAt(pos,'blots');else if(a==='dk'&&S.mode==='edit'&&RUN.deck[+i]&&!RUN.deck[+i].u&&(CARDS[RUN.deck[+i].id].n.length||CARDS[RUN.deck[+i].id].o.uc!=null))sparkAt(pos,'stars','#4fe07a');
   if(a==='mute'){A.muted=!A.muted;if(A.master)A.master.gain.value=A.muted?0:1;}
-  else if(a==='hero'){S.hero=i;}
+  else if(a==='hero'){if(i==='f'&&!ferretOpen())return;S.hero=i;}
   else if(a==='lvl'){if(+i<=META.open)S.lvl=+i;}
   else if(a==='begin'){S.dailyNext='';newRun();return;}
   else if(a==='daily'){if(dailyOpen())startDaily();return;}
@@ -2777,7 +2827,7 @@ document.addEventListener('visibilitychange',function(){if(!A.ac)return;try{if(d
 (function(){var ul=$('catList');CATIDS.forEach(function(id){var c=CATS[id],li=document.createElement('li');li.style.borderLeftColor=c.hat;var b=document.createElement('b');b.textContent=c.name;li.appendChild(b);li.appendChild(document.createElement('br'));var s=document.createElement('span');s.textContent=c.perk;li.appendChild(s);ul.appendChild(li);});})();
 S.lvl=0;render();loadWall();requestAnimationFrame(frame);
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){if(S.scr!=='combat')render();});
-window.__SO={openShop:openShop,RULES:RULES,ruleFor:ruleFor,ART:ART,S:S,act:act,render:render,run:function(){return RUN;},B:function(){return B;},H:function(){return H;},BOX:function(){return BOX;},cvPos:cvPos,beating:beating,trav:function(){return TRAV;},beat:function(){return BEAT;},META:META,CARDS:CARDS,alive:alive,playable:playable,A:A,DAY:DAY,STAGES:STAGES,PARTS:PARTS,STICKS:STICKS,enterStage:enterStage,saveDay:saveDay,saveRun:saveRun,finish:finish,fx:function(){return PO.length;},fightWith:function(set,kind){var e=ENC[stEnc()],k=kind||'F',o=e[k];e[k]=[set];RUN.first=0;S.scr='map';startCombat(k);e[k]=o;render();},EN:EN,ENC:ENC,setFx:setFx,fxl:function(){return FXL;},rm:function(){return RM;},POOL:POOL,QNEW:QNEW,QLEG:QLEG,poolFix:poolFix,pickLegend:pickLegend,putBossLegend:putBossLegend,rollCards:rollCards,cost:cost,wigOn:wigOn,dailyOpen:dailyOpen,startDaily:startDaily,today:today,playCard:playCard,strike:strike,drawN:draw,endTurn:endTurn,openEvent:openEvent,useBrew:useBrew,addRelic:addRelic,RELICS:RELICS,BREWS:BREWS,EVENTS:EVENTS};
+window.__SO={openShop:openShop,RULES:RULES,ruleFor:ruleFor,ART:ART,S:S,act:act,render:render,run:function(){return RUN;},B:function(){return B;},H:function(){return H;},BOX:function(){return BOX;},cvPos:cvPos,beating:beating,trav:function(){return TRAV;},beat:function(){return BEAT;},META:META,CARDS:CARDS,alive:alive,playable:playable,A:A,DAY:DAY,STAGES:STAGES,PARTS:PARTS,STICKS:STICKS,enterStage:enterStage,saveDay:saveDay,saveRun:saveRun,finish:finish,fx:function(){return PO.length;},fightWith:function(set,kind){var e=ENC[stEnc()],k=kind||'F',o=e[k];e[k]=[set];RUN.first=0;S.scr='map';startCombat(k);e[k]=o;render();},EN:EN,ENC:ENC,setFx:setFx,fxl:function(){return FXL;},rm:function(){return RM;},POOL:POOL,QNEW:QNEW,QLEG:QLEG,poolFix:poolFix,pickLegend:pickLegend,putBossLegend:putBossLegend,ferretOpen:ferretOpen,HEROES:HEROES,lineOut:lineOut,reelCasts:reelCasts,caught:caught,rollCards:rollCards,cost:cost,wigOn:wigOn,dailyOpen:dailyOpen,startDaily:startDaily,today:today,playCard:playCard,strike:strike,drawN:draw,endTurn:endTurn,openEvent:openEvent,useBrew:useBrew,addRelic:addRelic,RELICS:RELICS,BREWS:BREWS,EVENTS:EVENTS};
 if(window.__STP_TEST)window.__STP={S:S,run:function(){return RUN;},B:function(){return B;},H:function(){return H;},act:act,playCard:playCard,endTurn:endTurn,playable:playable,cost:cost,dmgCalc:dmgCalc,alive:alive,CARDS:CARDS,POOL:POOL,META:META,canGo:canGo,A:A,SONG:SONG,tone:tone,render:render,an:function(){return {AN:AN,SW:SW,FL:FL,ZP:ZP,GLAG:GLAG,HLAG:HLAG,TRAV:TRAV};},fx:function(){return {FX:FX,PT:PT,PO:PO,WB:WB,BEAT:BEAT};},endBeat:endBeat,beating:beating,sparkAt:sparkAt,confetti:confetti,ic:ic,IC:IC};
 })();
 </script>

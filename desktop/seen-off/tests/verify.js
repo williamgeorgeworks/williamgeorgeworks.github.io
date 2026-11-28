@@ -553,6 +553,78 @@ async function m2d(browser, port) {
   ok(`${tag} stick #15 adds Reggie's legendary`, (await lpools(15)) === '1,0,0', await lpools(15));
   ok(`${tag} stick #16 adds Terry's legendary`, (await lpools(16)) === '1,1,0', await lpools(16));
   ok(`${tag} stick #17 adds Kenneth's legendary`, (await lpools(17)) === '1,1,1', await lpools(17));
+  const fpool = n => ev(n => { __SO.DAY.sticks = n; __SO.poolFix(); const P = __SO.POOL, Q = __SO.QLEG; return Q.f.filter(id => P.f.includes(id)).length; }, n);
+  ok(`${tag} Ferret legendary stays out of his pool before stick #18`, (await fpool(17)) === 0, await fpool(17));
+  ok(`${tag} stick #18 adds the Ferret's legendary`, (await fpool(18)) === 1, await fpool(18));
+  ok(`${tag} first run hides the Ferret on the picker`, await ev(() => {
+    const w = __SO.META.wins, s = __SO.DAY.sticks;
+    __SO.META.wins = 0; __SO.DAY.sticks = 0; __SO.S.scr = 'title'; __SO.S.hero = 'r'; __SO.S.mode = null; __SO.render();
+    const n = document.querySelectorAll('[data-a=hero]').length;
+    const open = __SO.ferretOpen();
+    __SO.META.wins = w; __SO.DAY.sticks = s; __SO.poolFix();
+    return !open && n === 3;
+  }));
+  ok(`${tag} a win opens the Ferret on the picker`, await ev(() => {
+    const w = __SO.META.wins, s = __SO.DAY.sticks;
+    __SO.META.wins = 1; __SO.DAY.sticks = 0; __SO.S.scr = 'title'; __SO.S.hero = 'r'; __SO.S.mode = null; __SO.render();
+    const n = document.querySelectorAll('[data-a=hero]').length;
+    const names = [...document.querySelectorAll('[data-a=hero]')].map(b => b.dataset.i).join(',');
+    const open = __SO.ferretOpen();
+    __SO.META.wins = w; __SO.DAY.sticks = s; __SO.S.scr = 'title'; __SO.render(); __SO.poolFix();
+    return open && n === 4 && names === 'r,t,k,f';
+  }));
+  ok(`${tag} Daily Run still picks only the three Quills`, await ev(() => {
+    const src = Function.prototype.toString.call(__SO.startDaily);
+    return src.indexOf("pick(['r','t','k'])") >= 0;
+  }));
+  const ferretCast = await ev(async () => {
+    const w = __SO.META.wins;
+    __SO.META.wins = 1;
+    __SO.S.hero = 'f'; __SO.act('begin'); await new Promise(r => setTimeout(r, 200));
+    const R0 = __SO.run();
+    const counts = {};
+    R0.deck.forEach(c => { counts[c.id] = (counts[c.id] || 0) + 1; });
+    const deckOk = counts.flick === 4 && counts.bivvy === 4 && counts.castout === 1 && R0.deck.length === 9 && R0.max === 70;
+    __SO.act('cat', 'arthur'); __SO.DAY.done1 = 1;
+    __SO.fightWith(['breeze'], 'F'); await new Promise(r => setTimeout(r, 300));
+    const B = __SO.B(), e = B.en[0];
+    e.block = 0; e.hp = e.max = 200; e.st = {};
+    B.energy = 5; B.hand = [{ id: 'castout', u: 0 }]; B.casts = []; B.catch = 0;
+    const hp0 = e.hp;
+    const played = __SO.playCard(0);
+    const queued = !!(played && B.casts && B.casts.length === 1 && (B.catch || 0) === 0 && e.hp === hp0);
+    __SO.reelCasts();
+    const dmg = hp0 - e.hp;
+    const reeled = queued && B.casts.length === 0 && B.catch === 1 && dmg === 12;
+    const ev = __SO.EVENTS.find(x => x.id === 'ferret');
+    const title = ev && ev.t() === 'Kenneth is fishing';
+    __SO.META.wins = w;
+    return { ok: deckOk && reeled && title, deckOk, counts, hp: R0.max, played, queued, reeled, dmg, catch: B.catch, casts: (B.casts || []).length, title, hero: __SO.run() && __SO.run().hero };
+  });
+  ok(`${tag} Ferret starter deck is 4 Flick, 4 Bivvy, 1 Cast Out, and Cast reels in as Catch`, ferretCast && ferretCast.ok, JSON.stringify(ferretCast));
+  ok(`${tag} The One That Didn't Get Away deals 10 per Catch and Exhausts`, await ev(async () => {
+    const w = __SO.META.wins;
+    __SO.META.wins = 1;
+    __SO.S.hero = 'f'; __SO.act('begin'); await new Promise(r => setTimeout(r, 200)); __SO.act('cat', 'arthur'); __SO.DAY.done1 = 1;
+    __SO.fightWith(['breeze'], 'F'); await new Promise(r => setTimeout(r, 300));
+    const B = __SO.B(), e = B.en[0];
+    e.block = 0; e.hp = e.max = 200;
+    B.catch = 3; B.energy = 3; B.hand = [{ id: 'didnt', u: 0 }];
+    const hp0 = e.hp;
+    const okp = __SO.playCard(0, 0);
+    const dmg = hp0 - e.hp;
+    const gone = !B.disc.some(c => c.id === 'didnt') && !B.hand.some(c => c.id === 'didnt');
+    __SO.META.wins = w;
+    return okp && dmg === 30 && gone;
+  }));
+  ok(`${tag} fishing event is still The Ferret is fishing when you are a Quill`, await ev(() => {
+    const ev = __SO.EVENTS.find(x => x.id === 'ferret');
+    const w = __SO.META.wins;
+    __SO.META.wins = 1; __SO.S.hero = 'r'; __SO.act('begin');
+    const title = ev.t();
+    __SO.META.wins = w;
+    return title === 'The Ferret is fishing';
+  }));
   ok(`${tag} Bankrupt: 3 Energy vs Invoice 5 on two enemies deals 15 each`, await ev(async () => {
     __SO.S.hero = 'r'; __SO.act('begin'); await new Promise(r => setTimeout(r, 200)); __SO.act('cat', 'arthur'); __SO.DAY.done1 = 1;
     __SO.fightWith(['breeze', 'breeze'], 'F'); await new Promise(r => setTimeout(r, 300));

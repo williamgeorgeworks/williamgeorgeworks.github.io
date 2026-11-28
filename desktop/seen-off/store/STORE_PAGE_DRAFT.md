@@ -38,7 +38,7 @@ What the opposition means to do next is written above its head. Each turn you ha
 **A whole day out.** Fourteen places, in five parts of the day. The classic walk is still there: the Prom, then South, Central and North Pier. The other ten open as you play: the Beach, the Rock Shop, the Pleasure Park, the Tower, the Chippy, Arcades & Bingo, the Lights, the Winter Gardens, the B&B and the Old Pier. Every place has its own opposition, its own boss and a postcard for the album.
 
 **Also in the bag**
-- 87 cards, including three legendary cards, and a painted picture on every one.
+- 106 cards, including four legendary cards. Painted pictures on the three Quills' cards, the clutter, and the Ferret's starter three plus his legendary; his other fifteen reward cards still use the icon placeholder.
 - 21 keepsakes, 8 brews, and a shop with no refunds, no credit and no haggling.
 - A postcard album, a stick-of-rock collection and a souvenir shelf to fill on the way home.
 - A Daily Run, the same day out for everyone that day, with its own Daily Rule.
@@ -74,7 +74,7 @@ Fourteen places, in five parts of the day. The classic walk is still there: the 
 
 [h2]Also in the bag[/h2]
 [list]
-[*]87 cards, including three legendary cards, and a painted picture on every one.
+[*]106 cards, including four legendary cards. Painted pictures on the three Quills' cards, the clutter, and the Ferret's starter three plus his legendary; his other fifteen reward cards still use the icon placeholder.
 [*]21 keepsakes, 8 brews, and a shop with no refunds, no credit and no haggling.
 [*]A postcard album, a stick-of-rock collection and a souvenir shelf to fill on the way home.
 [*]A Daily Run, the same day out for everyone that day, with its own Daily Rule.
@@ -94,16 +94,16 @@ No seagulls were slain. They were seen off, and they will be back.
 Suggested store-feature lines (short, built, honest):
 
 - A daft roguelike deckbuilder set on a day out in Blackpool
-- 3 Quills and 6 cat familiars, each with their own tricks
+- 3 Quills, the Ferret (unlocked after a win or rock stick #16), and 6 cat familiars, each with their own tricks
 - 14 places, from the piers to the chippy, the Lights, the Winter Gardens and a last-orders B&B
-- 87 painted cards, including 3 legendaries, plus 21 keepsakes
+- 106 cards, including 4 legendaries, plus 21 keepsakes (the Ferret's fifteen non-starter reward cards are not painted yet)
 - Invoice a seagull, out-argue a landlady, and fill a postcard album
 - A Daily Run with a Daily Rule, the same for everyone that day
 - Keyboard and controller, laid out for the Steam Deck, and it plays offline
 
-**Do not claim on the page (not built, or not true yet):** the Ferret as a playable Quill; Steam achievements (eight local stubs exist, not hooked up to Steamworks); Steam leaderboards; Encore 6-10; a Mac build; "Deck Verified" (not yet tested on a real Deck).
+**Do not claim on the page (not built, or not true yet):** Steam achievements (eight local stubs exist, not hooked up to Steamworks); Steam leaderboards; Encore 6-10; a Mac build; "Deck Verified" (not yet tested on a real Deck). Do not claim that every Ferret card is painted; fifteen of his reward cards still use the icon placeholder.
 
-**Counts, from the code, 28 Nov 2026:** 87 cards (`C()` in `web/index.html`: 9 starter, 27 common, 20 uncommon, 10 rare, 3 legendary, 18 uncollectable / clutter / familiar). 3 Quills and 6 cats. 14 places in `STAGES`. 94 enemy kinds in `EN` (including summoned backbenchers and the King of the Seagulls, Returned). 21 keepsakes in `RELICS`. 8 brews in `BREWS`. Encore 0-5. The Daily Run is in; mid-fight draws after turn 1 are not date-seeded.
+**Counts, from the code, 28 Nov 2026:** 106 cards (`C()` in `web/index.html`: 12 starter, 35 common, 25 uncommon, 12 rare, 4 legendary, 18 uncollectable / clutter / familiar). 3 Quills, the Ferret, and 6 cats. 14 places in `STAGES`. 94 enemy kinds in `EN` (including summoned backbenchers and the King of the Seagulls, Returned). 21 keepsakes in `RELICS`. 8 brews in `BREWS`. Encore 0-5. The Daily Run is in; mid-fight draws after turn 1 are not date-seeded.
 
 ---
 
