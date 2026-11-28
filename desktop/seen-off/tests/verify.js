@@ -334,8 +334,8 @@ async function m2c(browser, port) {
   await page.addInitScript(() => { if (!sessionStorage.getItem('m2c')) { localStorage.clear(); sessionStorage.setItem('m2c', '1'); } });
   await page.goto(`http://127.0.0.1:${port}/index.html`, { waitUntil: 'networkidle' }); await sleep(700);
   const ev = (f, a) => page.evaluate(f, a);
-  const PL = ['beach', 'rock', 'park', 'tower', 'chippy', 'lights', 'arcades'];
-  ok(`${tag} seven places are ready with their own crowds`, await ev(PL => PL.every(id => __SO.STAGES[id].ready && __SO.STAGES[id].enc === id && __SO.ENC[id] && !__SO.STAGES[id].soon), PL));
+  const PL = ['beach', 'rock', 'park', 'tower', 'chippy', 'lights', 'arcades', 'winter'];
+  ok(`${tag} eight places are ready with their own crowds`, await ev(PL => PL.every(id => __SO.STAGES[id].ready && __SO.STAGES[id].enc === id && __SO.ENC[id] && !__SO.STAGES[id].soon), PL));
   ok(`${tag} every enemy in the new tables exists`, await ev(PL => PL.every(id => ['F', 'L', 'B'].every(k => __SO.ENC[id][k].every(s => s.every(x => __SO.EN[x])))), PL));
   await ev(() => { __SO.act('hero', 'r'); __SO.act('begin'); }); await sleep(300); await ev(() => { __SO.act('cat', 'arthur'); __SO.DAY.done1 = 1; __SO.DAY.sticks = 14; __SO.META.wins = 1; }); await sleep(300);
   const go = async st => { const s = await ev(st => { const R = __SO.run(); R.part = __SO.PARTS.findIndex(P => P.stages.includes(st)); R.hp = R.max; __SO.enterStage(st); return R.stage; }, st); if (s !== st) ok(`${tag} entered ${st}`, false, s); };
@@ -393,6 +393,21 @@ async function m2c(browser, port) {
     if(!(e.house&&e.block===25&&e.hp<h)) return 'house='+e.house+' block='+e.block;
     e.house=1; e.i=1; const m=__SO.EN.bingo.ai(e); /* Legs Eleven is 11, should become 16 or 17 after encore+house */
     return e.house===1 && e.block===25;
+  }));
+    await go('winter'); await sleep(600); await fight(['darts'], 'F'); await sleep(200);
+  ok(`${tag} Winter Gardens enemies have real drawings`, await ev(() => ['delegate','darts','mirror','raffle','walkon','keynote'].every(k => typeof __SO.ART[k]==='function')));
+  ok(`${tag} the Darts Fan throws 180 only once a fight`, await ev(() => { const e=__SO.B().en[0]; e.i=0; e.used180=0; const moves=[]; for (let i=0;i<8;i++) moves.push(__SO.EN.darts.ai(e)); return moves.filter(m=>m.once180).length===1 && moves.some(m=>m.a===18); }));
+  await fight(['walkon'], 'L'); await sleep(200);
+  ok(`${tag} Walk-On Music is a single 20 below Encore 5, and 20x3 at Encore 5`, await ev(() => {
+    const R=__SO.run(), e=__SO.B().en[0]; R.lvl=0; e.i=1; const lo=__SO.EN.walkon.ai(e); R.lvl=5; e.i=1; const hi=__SO.EN.walkon.ai(e); R.lvl=0;
+    return lo.a===20 && (lo.x||1)===1 && hi.a===20 && hi.x===3;
+  }));
+  await fight(['keynote'], 'B'); await sleep(200);
+  ok(`${tag} the Keynote Speaker hands out a Handout and Overrunning takes another turn`, await ev(() => {
+    const B=__SO.B(), e=B.en[0], H=__SO.H(); H.block=99; e.mv={n:'Next Slide',add:['handout',1],a:0}; __SO.endTurn();
+    if(!B.disc.some(c=>c.id==='handout')) return 'no-handout';
+    e.again=0; e.mv={n:'Overrunning',a:0,x:1,again:1}; H.block=99; __SO.endTurn();
+    return e.again===1;
   }));
     ok(`${tag} trade-mark check: no banned names in the page or game data`, !(await ev(() => /Pleasure Beach|Illuminations|Blackpool Tower|Big One|Valhalla|Merlin|Grok/i.test(document.documentElement.outerHTML + JSON.stringify(Object.values(__SO.EN).map(e => e.n))))));
   ok(`${tag} zero external requests`, external.length === 0, external.slice(0, 5).join(' '));
@@ -512,9 +527,9 @@ async function m2d(browser, port) {
   ok(`${tag} cat art files load`, loaded.every(w => w >= 300), loaded.join(','));
   ok(`${tag} hand with cat cards fits, nothing clips`, await ev(() => document.documentElement.scrollHeight <= innerHeight));
   await page.screenshot({ path: `${SHOTS}/m2-09-cat-cards.png` });
-  { const groups = [['castle', 'jelly', 'windbreak'], ['crab', 'donkey'], ['croc'], ['rockstick', 'teeth', 'fudge'], ['dummy', 'boiler'], ['bigrock', 'halfrock'], ['tall', 'dodgem', 'skeleton'], ['flume', 'kiosk'], ['rattler'], ['couple', 'lift', 'clown'], ['ringmaster', 'organ'], ['sausage', 'peas', 'curry'], ['queue', 'onion', 'fryer'], ['counter'], ['bulb', 'tableau', 'coach'], ['moth', 'littram'], ['telly'], ['falls', 'fruit', 'change'], ['dabber', 'claw'], ['bingo']];
+  { const groups = [['castle', 'jelly', 'windbreak'], ['crab', 'donkey'], ['croc'], ['rockstick', 'teeth', 'fudge'], ['dummy', 'boiler'], ['bigrock', 'halfrock'], ['tall', 'dodgem', 'skeleton'], ['flume', 'kiosk'], ['rattler'], ['couple', 'lift', 'clown'], ['ringmaster', 'organ'], ['sausage', 'peas', 'curry'], ['queue', 'onion', 'fryer'], ['counter'], ['bulb', 'tableau', 'coach'], ['moth', 'littram'], ['telly'], ['falls', 'fruit', 'change'], ['dabber', 'claw'], ['bingo'], ['delegate', 'darts', 'mirror'], ['raffle', 'walkon'], ['keynote']];
     const drawn = await ev(async g => { if (!g.flat().every(k => typeof __SO.ART[k] === 'function')) return 'missing'; for (const x of g) { __SO.fightWith(x, 'F'); await new Promise(r => setTimeout(r, 300)); } return 'ok'; }, groups);
-    ok(`${tag} all milestone-2 and Arcades enemies have real drawings (the Tower Pigeon reuses the pigeon)`, drawn === 'ok', drawn); await page.screenshot({ path: `${SHOTS}/m3-enemies-telly.png` }); }
+    ok(`${tag} all milestone-2, Arcades and Winter Gardens enemies have real drawings (the Tower Pigeon reuses the pigeon)`, drawn === 'ok', drawn); await page.screenshot({ path: `${SHOTS}/m3-enemies-telly.png` }); }
   ok(`${tag} zero external requests`, external.length === 0, external.slice(0, 5).join(' '));
   ok(`${tag} no page errors`, errors.length === 0, errors.slice(0, 3).join(' | '));
   await ctx.close();
