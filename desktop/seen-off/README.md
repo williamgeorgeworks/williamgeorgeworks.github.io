@@ -159,6 +159,17 @@ The AppImage was smoke-tested under Xvfb at 1280x800 with `SteamDeck=1` (`shots/
 
 The AppImage was smoke-tested under Xvfb at 1280x800 with `SteamDeck=1` (`shots/d10-01-appimage-xvfb.png` title screen, `shots/d10-05-appimage-after-start.png` in-game menu, `shots/d10-04-appimage-album.png` Postcard Album showing the painted Prom front). No Mac build. Windows and Steam Deck were not run on real hardware. Missing GStreamer audio elements on the box log the same warnings as m3c; the UI still ran.
 
+**Desktop build `dist/m3e/`** (built 28 Nov 2026, 10:58-11:00 Europe/London, from commit `6bf73d39`, which adds the Ferret as a playable fourth hero, his Cast/Catch starter deck, The One That Didn't Get Away, and everything in m3d; copies with `SHA256SUMS` in `/workspace/seen-off-steam/builds-m3e/`). Also at `/workspace/seen-off-steam/dist/m3e/` and `desktop/dist/m3e/` (gitignored). Not uploaded or published anywhere.
+
+| File | SHA256 |
+|---|---|
+| `Seen Off_0.1.0_amd64.AppImage` | `924af749ee20c6fc78c81adacc2ee531ac192b31be111db44b992198d2a29501` |
+| `Seen Off_0.1.0_amd64.deb` | `5fa3c1c3151660bcb34fa8e2f6abf934b7e8dfb6f2e5a378e0e62b324f0884a5` |
+| `Seen Off_0.1.0_x64-setup.exe` | `a5494552e5b5966d8516d9715f924511b0a22ed090ac724a90050c98d1d1614f` |
+| `seen-off.exe` | `211be6bc496482ea6737f91cfd89085f077873f89eecc20ecb7dc876f6ed12a1` |
+
+The AppImage was smoke-tested under Xvfb at 1280x800 with `SteamDeck=1` (`shots/d11-05-appimage-xvfb.png` title screen, three Quills only on a first-run save, `shots/d11-06-appimage-menu.png` in-game menu). No Mac build. Windows and Steam Deck were not run on real hardware. The box needed the documented GTK/WebKit and llvm-rc packages reinstalled before this rebuild.
+
 **Enemy drawings (no AI):** the PLACEHOLDER stand-ups are replaced by canvas ink drawings in the same `ART` style as the pier
 enemies, so nothing here is an AI image and nothing needs adding to the AI content list. Done: Beach (Sandcastle, Jellyfish, Windbreak,
 Shore Crab, the Donkey, the Crocodile in a striped puppet booth with his string of sausages), Rock Shop (Stick of Rock, Chattering Teeth,
