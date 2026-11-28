@@ -334,8 +334,8 @@ async function m2c(browser, port) {
   await page.addInitScript(() => { if (!sessionStorage.getItem('m2c')) { localStorage.clear(); sessionStorage.setItem('m2c', '1'); } });
   await page.goto(`http://127.0.0.1:${port}/index.html`, { waitUntil: 'networkidle' }); await sleep(700);
   const ev = (f, a) => page.evaluate(f, a);
-  const PL = ['beach', 'rock', 'park', 'tower', 'chippy', 'lights', 'arcades', 'winter', 'bnb'];
-  ok(`${tag} nine places are ready with their own crowds`, await ev(PL => PL.every(id => __SO.STAGES[id].ready && __SO.STAGES[id].enc === id && __SO.ENC[id] && !__SO.STAGES[id].soon), PL));
+  const PL = ['beach', 'rock', 'park', 'tower', 'chippy', 'lights', 'arcades', 'winter', 'bnb', 'oldpier'];
+  ok(`${tag} all ten new places are ready with their own crowds`, await ev(PL => PL.every(id => __SO.STAGES[id].ready && __SO.STAGES[id].enc === id && __SO.ENC[id] && !__SO.STAGES[id].soon), PL));
   ok(`${tag} every enemy in the new tables exists`, await ev(PL => PL.every(id => ['F', 'L', 'B'].every(k => __SO.ENC[id][k].every(s => s.every(x => __SO.EN[x])))), PL));
   await ev(() => { __SO.act('hero', 'r'); __SO.act('begin'); }); await sleep(300); await ev(() => { __SO.act('cat', 'arthur'); __SO.DAY.done1 = 1; __SO.DAY.sticks = 14; __SO.META.wins = 1; }); await sleep(300);
   const go = async st => { const s = await ev(st => { const R = __SO.run(); R.part = __SO.PARTS.findIndex(P => P.stages.includes(st)); R.hp = R.max; __SO.enterStage(st); return R.stage; }, st); if (s !== st) ok(`${tag} entered ${st}`, false, s); };
@@ -415,6 +415,17 @@ async function m2c(browser, port) {
   await fight(['landlady'], 'B'); await sleep(200);
   ok(`${tag} the Landlady's Lights out rule draws one fewer`, await ev(() => { const e=__SO.B().en[0], H=__SO.H(); H.block=99; e.mv={n:'Lights out',a:0,rule:'lights'}; __SO.endTurn(); return __SO.B().houseRule==='lights' && __SO.B().hand.length===4; }));
   ok(`${tag} No more than three cards costs 1 more on the fourth`, await ev(() => { const B=__SO.B(), c={id:'cough',u:0}; B.houseRule='cards'; B.tcount=3; B.energy=1; B.hand=[c]; const no=__SO.playable(c); B.tcount=0; const yes=__SO.playable(c); B.houseRule=''; return !no && yes; }));
+    await go('oldpier'); await sleep(600); await fight(['fortune'], 'F'); await sleep(300);
+  ok(`${tag} Old Pier enemies have real drawings`, await ev(() => ['fret','bolt','notice','scrab','mavis','doris','fortune','comic','vent','lord','pgull','bgull'].every(k => typeof __SO.ART[k]==='function' || (__SO.EN[k]&&typeof __SO.ART[__SO.EN[k].art]==='function'))));
+  ok(`${tag} the Fortune-Telling Machine hides its plan`, await ev(() => { const e=__SO.B().en[0]; e.mv=__SO.EN.fortune.ai(e); __SO.render(); return !!e.mv.myst; }));
+  await fight(['notice'], 'F'); await sleep(200);
+  ok(`${tag} a Condemned card takes 3 Block before the enemy acts`, await ev(() => { const R=__SO.run(), B=__SO.B(), H=__SO.H(); R.hp=R.max; H.block=10; H.st.flu=0; H.st.mist=0; B.houseRule=''; B.hand=[{id:'condemned',u:0}]; B.en[0].st={}; B.en[0].mv={n:'By Order',a:8}; __SO.endTurn(); return R.hp===R.max-1; }));
+  ok(`${tag} drawing a Groan gives 1 Flustered`, await ev(() => { const B=__SO.B(), H=__SO.H(); H.st.flu=0; B.draw.push({id:'groan',u:0}); __SO.drawN(1); return H.st.flu>=1; }));
+  await fight(['pgull','bgull','bgull'], 'B'); await sleep(300);
+  ok(`${tag} Order! Order! brings the Backbenchers back`, await ev(() => {
+    const B=__SO.B(), king=B.en[0], g=B.en[1]; g.hp=0; g.dead=true; king.block=0; king.hp=Math.floor(king.max/2)+3; __SO.strike(__SO.H(), king, 10);
+    return king.order===1 && king.block===20 && g.dead===false && g.hp===20;
+  }));
     ok(`${tag} trade-mark check: no banned names in the page or game data`, !(await ev(() => /Pleasure Beach|Illuminations|Blackpool Tower|Big One|Valhalla|Merlin|Grok/i.test(document.documentElement.outerHTML + JSON.stringify(Object.values(__SO.EN).map(e => e.n))))));
   ok(`${tag} zero external requests`, external.length === 0, external.slice(0, 5).join(' '));
   ok(`${tag} no page errors`, errors.length === 0, errors.slice(0, 3).join(' | '));
@@ -533,9 +544,9 @@ async function m2d(browser, port) {
   ok(`${tag} cat art files load`, loaded.every(w => w >= 300), loaded.join(','));
   ok(`${tag} hand with cat cards fits, nothing clips`, await ev(() => document.documentElement.scrollHeight <= innerHeight));
   await page.screenshot({ path: `${SHOTS}/m2-09-cat-cards.png` });
-  { const groups = [['castle', 'jelly', 'windbreak'], ['crab', 'donkey'], ['croc'], ['rockstick', 'teeth', 'fudge'], ['dummy', 'boiler'], ['bigrock', 'halfrock'], ['tall', 'dodgem', 'skeleton'], ['flume', 'kiosk'], ['rattler'], ['couple', 'lift', 'clown'], ['ringmaster', 'organ'], ['sausage', 'peas', 'curry'], ['queue', 'onion', 'fryer'], ['counter'], ['bulb', 'tableau', 'coach'], ['moth', 'littram'], ['telly'], ['falls', 'fruit', 'change'], ['dabber', 'claw'], ['bingo'], ['delegate', 'darts', 'mirror'], ['raffle', 'walkon'], ['keynote'], ['rules', 'shower', 'floor'], ['guest', 'landlady']];
+  { const groups = [['castle', 'jelly', 'windbreak'], ['crab', 'donkey'], ['croc'], ['rockstick', 'teeth', 'fudge'], ['dummy', 'boiler'], ['bigrock', 'halfrock'], ['tall', 'dodgem', 'skeleton'], ['flume', 'kiosk'], ['rattler'], ['couple', 'lift', 'clown'], ['ringmaster', 'organ'], ['sausage', 'peas', 'curry'], ['queue', 'onion', 'fryer'], ['counter'], ['bulb', 'tableau', 'coach'], ['moth', 'littram'], ['telly'], ['falls', 'fruit', 'change'], ['dabber', 'claw'], ['bingo'], ['delegate', 'darts', 'mirror'], ['raffle', 'walkon'], ['keynote'], ['rules', 'shower', 'floor'], ['guest', 'landlady'], ['fret', 'bolt', 'notice'], ['scrab', 'mavis', 'doris'], ['fortune', 'comic'], ['vent', 'lord'], ['pgull']];
     const drawn = await ev(async g => { if (!g.flat().every(k => typeof __SO.ART[k] === 'function')) return 'missing'; for (const x of g) { __SO.fightWith(x, 'F'); await new Promise(r => setTimeout(r, 300)); } return 'ok'; }, groups);
-    ok(`${tag} all milestone-2, Arcades, Winter Gardens and B&B enemies have real drawings (the Tower Pigeon reuses the pigeon)`, drawn === 'ok', drawn); await page.screenshot({ path: `${SHOTS}/m3-enemies-telly.png` }); }
+    ok(`${tag} all ten new places' enemies have real drawings (the Tower Pigeon reuses the pigeon)`, drawn === 'ok', drawn); await page.screenshot({ path: `${SHOTS}/m3-enemies-telly.png` }); }
   ok(`${tag} zero external requests`, external.length === 0, external.slice(0, 5).join(' '));
   ok(`${tag} no page errors`, errors.length === 0, errors.slice(0, 3).join(' | '));
   await ctx.close();

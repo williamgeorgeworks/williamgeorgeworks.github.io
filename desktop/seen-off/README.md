@@ -103,7 +103,7 @@ in M1. Dexter was fixed on 23 Nov 2026: he is now smoky black (near-black head, 
 as in his photos (he was drawn dark grey, and his ruff colour was never drawn). The live website file is untouched.
 
 **Not done / untested in M2:** Daily Rules (added in M3, see below) and Steam leaderboards (no Steamworks); Rainy Day tokens; the
-legendary cards; the Old Pier still borrows pier crowds ("Coming soon"); Arcades & Bingo, the Winter Gardens and the B&B have their own crowds (28 Nov); the Daily's seed
+legendary cards; all ten new places have their own crowds (Arcades, Winter Gardens, the B&B and the Old Pier finished 28 Nov); the Daily's seed
 covers generation (maps, fights, rewards, shops, events), not mid-fight draws after turn 1. Steam Deck hardware and Windows were not run
 on real machines (the Windows installer is built and the Linux AppImage smoke-tested under Xvfb).
 
@@ -151,6 +151,8 @@ list: *Tide's Out* and *Half-Day Closing* (they need map changes). Screenshot: `
 
 **The B&B (28 Nov 2026):** its own crowd, no “Coming soon” stand-ins. Enemies: the House Rules (posts a **No Hot Food in Rooms** clutter card — unplayable, painted art still to do), the Shower (alternates Scald and Freeze), Squeaky Floorboard, the Other Guests (a pal pair) and the Landlady. Each turn the Landlady announces a house rule that applies until her next turn: **No more than three cards** (the fourth card costs 1 more), **Lights out at eleven** (draw 1 fewer), or **Shoes off** (you lose your Block at the end of your turn). Event: The Breakfast Room (Full English heals 25; Continental draws 2 extra on the next fight’s first turn; asking for a later breakfast leaves you Flustered for the rest of the stage). Canvas ink drawings, no AI. Screenshots: `shots/d6-03-bnb-foes.png`, `shots/d6-03-bnb-boss.png`.
 
+**The Old Pier (28 Nov 2026):** its own crowd, no “Coming soon” stand-ins. Enemies: Sea Fret (adds Wet Sand clutter), Rusty Bolts (in threes and fours, stamped LOOSE or MISSING in the game font), Condemned Notice (adds a Condemned card: lose 3 Block at the end of your turn if it is in your hand), Spider Crab, the Shelter Ladies Mavis and Doris (a pal pair), and the Fortune-Telling Machine (its plan shows “?” until it acts). Elites: the End-of-Pier Comic (adds Groan: fleeting, 1 Flustered when drawn) and the Ventriloquist with Lord Timothy (a pal pair). Boss: the Parliament of Gulls — the King of the Seagulls, Returned, with a bandaged wing, and two Backbenchers; at half health he shouts **Order! Order!**, gains 20 Block, and both Backbenchers return on 20 health. Event: The Fortune-Telling Machine. New clutter (Groan, Condemned, Wet Sand) is text-only for now, painted art still to do. Canvas ink drawings, no AI, no real comedians or fortune-machine brands. Screenshots: `shots/d6-04-oldpier-*.png`.
+
 ### Where to pick up next time
 
 State at end of 27 Nov 2026 (branch `archie/seen-off-dayout`, working copy `/workspace/seen-off-steam/desktop`, local git mirrors the pushed commits):
@@ -162,7 +164,7 @@ State at end of 27 Nov 2026 (branch `archie/seen-off-dayout`, working copy `/wor
    Kenneth's sprite redrawn from his portrait, his UI colour is near-black `#1d1c24`, and his hero-pick blurb says he has been drawn.
    Screenshots: `shots/d1-*`, `d2-*`, `d3-*.png`. Local helper scripts (push, screenshots) live in `/workspace/seen-off-steam/helpers/`
    because `/tmp` is wiped when the box is refreshed.
-2. **Tests:** `node tests/verify.js` (about 7 min; all passing on 28 Nov: 216 checks, or 214 when the keyboard bot loses its random first fight and the two Esc-menu checks are skipped; `ONLY=m2d` etc. runs one section). The autoplay driver takes the
+2. **Tests:** `node tests/verify.js` (about 7 min; all passing on 28 Nov: 246 checks, or two fewer when the keyboard bot loses its random first fight and the two Esc-menu checks are skipped; `ONLY=m2d` etc. runs one section). The autoplay driver takes the
    last event option if the first one refuses. Playtest: `RUNS=6 node tools/playtest.js out.json`.
 3. **Card art is complete.** Suggested next: a desktop rebuild into `dist/m3/` (Windows/Linux bundles as in M2) so the painted cards
    ship in the app, then a quick visual pass at 1920x1080 and in the deck viewer. Quality bar if anything is redone: reject any image
@@ -171,8 +173,7 @@ State at end of 27 Nov 2026 (branch `archie/seen-off-dayout`, working copy `/wor
    `HAND=... node ../helpers/cardshot.js`, which sets a debug hand in the page without changing the game. Clutter cards are
    unplayable, so in a hand the game shows them desaturated (existing `.cd.no` style); `shots/d4-03b-shared-art.png` shows their art
    in full colour. Overviews for Ben: `shots/d3-08-hand-overview.png`, `shots/d4-04-overview.png`.
-4. **Still open for M3 (from the M2 proposal):** (enemy drawings done 27 Nov, see above) the other
-   place (the Old Pier); Arcades & Bingo, the Winter Gardens, the B&B and Daily Rules (done 28 Nov, see above); legendary cards; a boss-health pass for later places (first pass 28 Nov: Counter 188–196, near the plan’s 190; the Man Off the Telly 236–244; Old Rattler 146–154; the Crocodile left as the hard early boss).
+4. **Still open for M3 (from the M2 proposal):** legendary cards; a second boss-health pass for the Rock Shop, the Tower, the Bingo Caller and the Keynote Speaker (first pass 28 Nov: Counter 188–196, near the plan’s 190; the Man Off the Telly 236–244; Old Rattler 146–154; the Crocodile left as the hard early boss). Enemy drawings, all ten new places, Daily Rules and the first boss-health pass are done, 27–28 Nov, see above.
 5. **Before release:** declare everything in the AI content list below in Steam's Content Survey.
 
 **WebKitGTK note:** `app.security.dangerousDisableAssetCspModification` is `["style-src"]`. Without it Tauri adds hashes to `style-src`,

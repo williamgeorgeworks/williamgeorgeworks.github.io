@@ -410,6 +410,9 @@ C('photo','s','Unflattering Photo','X',0,'x','Unplayable. Fleeting.',[],null,{un
 C('catchp','s','Catchphrase','X',0,'x','Unplayable. Fleeting. When you draw this, lose 1 Energy.',[],null,{unp:1,eth:1});
 C('handout','s','Handout','X',0,'x','Unplayable. Fleeting.',[],null,{unp:1,eth:1});
 C('nohot','s','No Hot Food in Rooms','X',0,'x','Unplayable.',[],null,{unp:1});
+C('groan','s','Groan','X',0,'x','Unplayable. Fleeting. When you draw this, gain 1 Flustered.',[],null,{unp:1,eth:1});
+C('condemned','s','Condemned','X',0,'x','Unplayable. If this is in your hand at the end of your turn, lose 3 Block.',[],null,{unp:1});
+C('wetsand','s','Wet Sand','X',0,'x','Unplayable. Fleeting.',[],null,{unp:1,eth:1});
 var TYPE={A:'Attack',S:'Skill',P:'Power',X:'Clutter'};
 
 var HEROES={
@@ -540,8 +543,22 @@ var EN={
  shower:{n:'The Shower',hp:[28,32],ph:'#8fd0ff',ai:function(e){return e.i++%2?{n:'Freeze',sog:2,a:4}:{n:'Scald',a:12};}},
  floor:{n:'Squeaky Floorboard',hp:[15,17],sc:.75,ph:'#c8955a',ai:function(e){return cyc(e,[{n:'Squeak',a:5},{n:'Creak',a:3,sog:1}]);}},
  guest:{n:'The Other Guests',hp:[28,32],pal:1,ph:'#d8c4ff',ai:function(e){return cyc(e,[{n:'Corridor Whisper',flu:1,a:4},{n:'Bathroom Queue',a:8}]);}},
- landlady:{n:'The Landlady',hp:[236,244],boss:1,sc:1.35,ph:'#6a3fe0',ai:function(e){var rs=[['cards','No more than three cards'],['lights','Lights out at eleven'],['shoes','Shoes off']],i=ri(0,2);if(e.prevRule===rs[i][0])i=(i+1)%3;e.prevRule=rs[i][0];var m=e.i%2?{n:'I Run a Respectable House',b:20}:{n:'Breakfast Is at Eight',a:14};e.i++;m.rule=rs[i][0];m.n+=' — '+rs[i][1];return m;}}
+ landlady:{n:'The Landlady',hp:[236,244],boss:1,sc:1.35,ph:'#6a3fe0',ai:function(e){var rs=[['cards','No more than three cards'],['lights','Lights out at eleven'],['shoes','Shoes off']],i=ri(0,2);if(e.prevRule===rs[i][0])i=(i+1)%3;e.prevRule=rs[i][0];var m=e.i%2?{n:'I Run a Respectable House',b:20}:{n:'Breakfast Is at Eight',a:14};e.i++;m.rule=rs[i][0];m.n+=' — '+rs[i][1];return m;}},
+ /* the Old Pier */
+ fret:{n:'Sea Fret',hp:[30,34],ph:'#c5ccd3',ai:function(e){return cyc(e,[{n:'Roll In',sog:2,b:8,add:['wetsand',1]},{n:'Linger',a:4,x:2},{n:'Lift',a:11}]);}},
+ bolt:{n:'Rusty Bolt',hp:[10,12],sc:.7,ph:'#9aa3ad',ai:function(e){return cyc(e,[{n:'Rattle',a:3},{n:'Rattle',a:3},{n:'Shear',a:7}]);}},
+ notice:{n:'Condemned Notice',hp:[38,42],ph:'#fffbe0',ai:function(e){return cyc(e,[{n:'Pinned Up',add:['condemned',1],a:4},{n:'By Order',a:9},{n:'Final Warning',a:15}]);}},
+ scrab:{n:'Spider Crab',hp:[44,50],ph:'#c06a3a',ai:function(e){return cyc(e,[{n:'Sideways',b:14},{n:'Nip',a:5,x:2},{n:'Snap',a:14}]);}},
+ mavis:{n:'Mavis',hp:[24,28],pal:1,ph:'#6a3fe0',ai:function(e){return cyc(e,[{n:'Tut',flu:1},{n:'Well I Never',a:8},{n:'Remark',sog:2}]);}},
+ doris:{n:'Doris',hp:[24,28],pal:1,ph:'#c41228',ai:function(e){return cyc(e,[{n:'Tut',flu:1},{n:'Well I Never',a:8},{n:'Remark',sog:2}]);}},
+ fortune:{n:'Fortune-Telling Machine',hp:[46,50],ph:'#7a3ff0',ai:function(e){var list=[{n:'A Tall Dark Stranger',a:10},{n:'A Crossing of Water',sog:2,a:4},{n:'Good Fortune',b:14},{n:'Ill Tidings',a:6,flu:1}],m=list[ri(0,list.length-1)];m.myst=1;return m;}},
+ comic:{n:'The End-of-Pier Comic',hp:[150,158],elite:1,sc:1.2,ph:'#e3182d',ai:function(e){return cyc(e,[{n:'Did You Hear the One',add:['groan',2]},{n:'Is There Anyone In From Out of Town?',a:6,x:3},{n:'Tough Crowd',g:3,b:12},{n:"I'm Here All Week",a:20}]);}},
+ vent:{n:'The Ventriloquist',hp:[68,72],elite:1,pal:1,ph:'#2b2f45',ai:function(e){return cyc(e,[{n:'A Gottle of Geer',a:10},{n:'Throw Voice',sog:1,a:4}]);}},
+ lord:{n:'Lord Timothy',hp:[48,52],elite:1,pal:1,sc:.85,ph:'#e3182d',ai:function(e){return cyc(e,[{n:'Lip Service',a:8,x:2},{n:'Heckle',flu:2}]);}},
+ pgull:{n:'The King of the Seagulls, Returned',hp:[240,250],boss:1,sc:1.5,order:1,ph:'#aab1c2',ai:function(e){return cyc(e,[{n:'Point of Order',add:['junk',1],a:12},{n:'Your Chips (Again)',a:9,x:2},{n:'Filibuster',b:24,g:2},{n:'Division Bell',ag:3}]);}},
+ bgull:{n:'Backbencher',hp:[34,38],pal:1,sc:.85,ph:'#aab1c2',art:'gull',ai:function(e){return cyc(e,[{n:'Hear Hear',a:6},{n:'Squawk',g:2,a:3}]);}}
 };
+
 
 
 
@@ -558,6 +575,7 @@ var ENC={
  arcades:{F:[['falls'],['fruit'],['change'],['dabber','dabber'],['fruit','dabber'],['falls','change']],L:[['claw'],['fruit','falls']],B:[['bingo']]},
  winter:{F:[['delegate'],['mirror'],['darts'],['raffle','raffle','raffle','raffle'],['delegate','raffle'],['darts','mirror']],L:[['walkon'],['darts','delegate']],B:[['keynote']]},
  bnb:{F:[['rules'],['shower'],['floor'],['guest','guest'],['rules','floor'],['shower','floor']],L:[['guest','guest','rules'],['shower','rules']],B:[['landlady']]},
+ oldpier:{F:[['fret'],['bolt','bolt','bolt'],['notice'],['scrab'],['mavis','doris'],['fortune','bolt'],['bolt','bolt','bolt','bolt']],L:[['comic'],['vent','lord']],B:[['pgull','bgull','bgull']]},
  prom:{F:[['breeze'],['lamppost'],['inspector'],['stag','stag'],['lamppost','breeze'],['pigeon','pigeon','breeze']],L:[['bride','maid','maid'],['inspector','lamppost']],B:[['tram']]}
 };
 var ACTS=['','South Pier','Central Pier','North Pier'];
@@ -594,7 +612,7 @@ STAGES.park.soon=STAGES.tower.soon='Coming soon: this lot are still queuing, so 
 STAGES.chippy.soon=STAGES.arcades.soon='Coming soon: this lot are still on their tea break, so the Central Pier crowd have filled in.';
 STAGES.lights.soon=STAGES.winter.soon=STAGES.bnb.soon=STAGES.oldpier.soon='Coming soon: this lot have not turned up yet, so the North Pier crowd have filled in.';
 STAGES.prom.bt='the end of the line';STAGES.south.bt=STAGES.central.bt=STAGES.north.bt='the end of the pier';
-['beach','rock','park','tower','chippy','lights','arcades','winter','bnb'].forEach(function(id){STAGES[id].ready=1;STAGES[id].enc=id;delete STAGES[id].soon;});
+['beach','rock','park','tower','chippy','lights','arcades','winter','bnb','oldpier'].forEach(function(id){STAGES[id].ready=1;STAGES[id].enc=id;delete STAGES[id].soon;});
 function STGD(){return RUN&&RUN.stage?STAGES[RUN.stage]:null;}
 function stEnc(){var s=STGD();return s?s.enc:RUN.act;}
 function stName(act){var s=STGD();return s?s.n:ACTS[act];}
@@ -908,6 +926,7 @@ function splitEnemy(e){e.split=1;var tot=e.hp,a=Math.ceil(tot/2),k=EN[e.k].split
 function check(e){
   if(EN[e.k].split&&!e.split&&!e.dead&&e.hp>0&&e.hp<=e.max/2)splitEnemy(e);
   if(EN[e.k].house&&!e.house&&!e.dead&&e.hp>0&&e.hp<=e.max/2){e.house=1;e.block+=25;fxOn(e,'HOUSE!',COL.red);}
+  if(EN[e.k].order&&!e.order&&!e.dead&&e.hp>0&&e.hp<=e.max/2){e.order=1;e.block+=20;fxOn(e,'Order! Order!',COL.red);B.en.forEach(function(o){if(o.k==='bgull'&&o.dead){o.dead=false;o.hp=20;o.max=Math.max(o.max,20);o.block=0;o.st={};o.mv=nextMove(o);o.mvT=now();fxOn(o,'Back!',COL.red);}});}
   if(e.hp>0||e.dead)return;var ov=Math.max(0,-e.hp);e.dead=true;e.hp=0;e.deadT=ft();sfx('kill',dl(e.deadT));stampAt(e,ov);if(RUN&&RUN.stats)RUN.stats.kills++;
   if(EN[e.k].pal)alive().forEach(function(o){o.st.gus=(o.st.gus||0)+4;fxOn(o,'Vindicated!',COL.red);});
   if(e.held&&e.held.length){e.held.forEach(function(c){B.disc.push(c);});fxOn(H,'The Claw drops '+e.held.length,COL.ink);e.held=[];}
@@ -922,7 +941,7 @@ function draw(n){
   for(var i=0;i<n;i++){
     if(!B.draw.length){if(!B.disc.length)return;B.draw=shuffle(B.disc);B.disc=[];B.shufT=now();}
     var c=B.draw.pop();if(B.hand.length>=10){B.disc.push(c);continue;}
-    B.hand.push(c);if(c.id==='wblock'||c.id==='catchp'){B.energy=Math.max(0,B.energy-1);fxOn(H,CARDS[c.id].name,COL.ink);}
+    B.hand.push(c);if(c.id==='wblock'||c.id==='catchp'){B.energy=Math.max(0,B.energy-1);fxOn(H,CARDS[c.id].name,COL.ink);}if(c.id==='groan'){H.st.flu=(H.st.flu||0)+1;fxOn(H,'Groan',COL.purple);}
   }
 }
 function startTurn(first){
@@ -975,6 +994,7 @@ function endTurn(){
   fxReset(RM?0:160);S.sel=-1;S.brewSel=-1;
   var tk=B.hand.filter(function(c){return c.id==='ticket';}).length;
   if(tk){RUN.hp-=2*tk;fxOn(H,'-'+2*tk+' Ticket',COL.red);if(RUN.hp<=0){defeat();if(S.scr!=='combat')return;}}
+  var cn=B.hand.filter(function(c){return c.id==='condemned';}).length;if(cn&&H.block){var lost=Math.min(H.block,3*cn);H.block-=lost;fxOn(H,'-'+lost+' Block',COL.ink);}
   if(B.houseRule==='shoes'){if(H.block)fxOn(H,'Shoes off',COL.ink);H.block=0;}
   if(B.tg){H.st.gus=Math.max(0,(H.st.gus||0)-B.tg);B.tg=0;}B.handEnd=B.hand.length;
   alive().forEach(function(e){if(e.mv&&e.mv.grab){var c=null,i;for(i=0;i<B.hand.length;i++)if(!CARDS[B.hand[i].id].o.unp){c=B.hand[i];break;}if(!c&&B.hand.length)c=B.hand[0];if(c){B.hand.splice(B.hand.indexOf(c),1);e.held=e.held||[];e.held.push({id:c.id,u:c.u});fxOn(e,'Grab!',COL.purple);}}});
@@ -1095,7 +1115,11 @@ var EVENTS=[
  {id:'breakfast',st:'bnb',t:'The Breakfast Room',tx:function(){return 'Breakfast is at half seven sharp. The tea is already stewed.';},
   opts:function(){return [['Full English: heal 25',function(){return 'A proper plate. You recover '+heal(25)+' health.';}],
    ['Continental: draw 2 extra on the first turn of the next fight',function(){RUN.nextFight=RUN.nextFight||{};RUN.nextFight.draw=2;return 'A pastry and a pointed look. Next fight, you draw 2 extra, first turn only.';}],
-   ['Ask for a later breakfast',function(){RUN.stFlu=1;return 'She looks at you. You start every fight here with 1 Flustered.';}]];}}
+   ['Ask for a later breakfast',function(){RUN.stFlu=1;return 'She looks at you. You start every fight here with 1 Flustered.';}]];}},
+ {id:'swami',st:'oldpier',t:'The Fortune-Telling Machine',tx:function(){return 'A tin figure in a glass case. The sign says ONE GO 20 SCRUMPLINGS. The figure says nothing, which is fair.';},
+  opts:function(){return [['Pay 20 Scrumplings: improve a random card',function(){if(RUN.gold<20)return null;RUN.gold-=20;var c=pick(RUN.deck.filter(function(x){return !x.u&&CARDS[x.id].n.length;}));if(c){c.u=1;return 'A card is improved: '+CARDS[c.id].name+'. The figure nods, or the box shifts.';}RUN.gold+=20;return 'Every card is already as good as it will get. Your Scrumplings are returned.';}],
+   ['Give it a thump: 40 Scrumplings and a Groan',function(){RUN.gold+=40;RUN.deck.push({id:'groan',u:0});return '40 Scrumplings fall out, and a Groan goes into your deck.';}],
+   ['Walk on',function(){return 'You already know your future. It involves seagulls.';}]];}}
 ];
 function openEvent(){var p=EVENTS.filter(function(e){return RUN.seen.indexOf(e.id)<0&&(!e.st||e.st===RUN.stage);}),own=p.filter(function(e){return e.st;});if(own.length)p=own;if(!p.length){RUN.seen=[];p=EVENTS;}var ev=pick(p);RUN.seen.push(ev.id);S.ev={d:ev,res:''};if(ev.init)ev.init();S.scr='event';}
 
@@ -1554,7 +1578,52 @@ var ART={
   ctx.beginPath();ctx.moveTo(-8,-80);ctx.lineTo(8,-80);ctx.strokeStyle=COL.ink;ctx.lineWidth=2.4;ctx.stroke();
   limb([20,-50,40,-66+w*3],'#ffd9b8',5);rect(32,-88+w*3,40,24,'#fff',2);ctx.fillStyle=COL.red;ctx.font='6px '+FONT_D;ctx.textAlign='center';ctx.fillText('NO',52,-74+w*3);ctx.fillText('VACANCIES',52,-66+w*3);
   if(B&&B.houseName){ctx.fillStyle=COL.ink;ctx.font='8px '+FONT_D;ctx.fillText(B.houseName,0,-124);}
-  rect(-48,-28,96,28,'#e8dcc8',2.4);rect(-48,-32,96,6,'#6b4a2a',1.6);}
+  rect(-48,-28,96,28,'#e8dcc8',2.4);rect(-48,-32,96,6,'#6b4a2a',1.6);},
+ /* ---- the Old Pier (milestone 3) ---- */
+ fret:function(e,r,t){var w=Math.sin(t*1.4+e.seed);ctx.globalAlpha*=.7;smooth(blob(0,-48+w*4,48,28,10,.25,r));ink('#c5ccd3',2.2);
+  ctx.globalAlpha=1;eyes(0,-52+w*4,16,6,1);ctx.beginPath();ctx.arc(0,-40+w*4,10,.2,Math.PI-.2);ctx.strokeStyle=COL.ink;ctx.lineWidth=2;ctx.stroke();
+  ctx.globalAlpha*=.35;smooth(blob(-20,-70+w*3,22,16,8,.3,r));ctx.fillStyle='#fff';ctx.fill();ctx.globalAlpha=1;},
+ bolt:function(e,r,t){ctx.translate(0,Math.abs(Math.sin(t*5+e.seed))*-4);ctx.rotate(Math.sin(t*3+e.seed)*.12);
+  rect(-8,-44,16,36,'#9aa3ad',2.2);for(var i=0;i<3;i++)line([-8,-38+i*10,8,-38+i*10],1.2);
+  ell(0,-52,11,11);ink('#c5ccd3',2.2);eyes(0,-54,6,2.4,1);
+  ctx.fillStyle=COL.ink;ctx.font='8px '+FONT_D;ctx.textAlign='center';ctx.fillText(e.slot%2?'LOOSE':'MISSING',0,-24);},
+ notice:function(e,r,t){line([0,0,0,-30],6,COL.ink);line([0,0,0,-30],3,'#b98a4e');rect(-28,-110,56,80,'#fffbe0',2.6);
+  ctx.fillStyle=COL.red;ctx.font='9px '+FONT_D;ctx.textAlign='center';ctx.fillText('CONDEMNED',0,-88);
+  for(var i=0;i<4;i++)line([-18,-74+i*12,18,-74+i*12],1.4,'#c5b8a0');
+  ell(-20,-106,4,4);ink(COL.ink,1);ell(20,-106,4,4);ink(COL.ink,1);eyes(0,-50,10,4,1);line([-8,-36,8,-38],2);},
+ scrab:function(e,r,t){var w=Math.sin(t*3+e.seed);ctx.translate(w*6,0);ctx.scale(1.05,1.05);
+  ell(0,-20,26,14);ink('#c06a3a',2.6);ell(-16,-28,12,10);ink('#c06a3a',2);eyes(-16,-30,7,3.2,1);
+  [-1,1].forEach(function(sg){for(var i=0;i<3;i++)limb([sg*10,-18,sg*(28+i*2),-8-i*8+w*3],'#c06a3a',3);});
+  limb([-22,-24,-40,-44+w*5],'#c06a3a',4);poly([-40,-48+w*5,-52,-42+w*5,-40,-36+w*5],'#c06a3a',1.8);
+  limb([18,-24,36,-40-w*4],'#c06a3a',4);poly([36,-44-w*4,50,-40-w*4,36,-32-w*4],'#c06a3a',1.8);},
+ mavis:function(e,r,t){ART.doris(e,r,t,1);},
+ doris:function(e,r,t,mavis){var w=Math.sin(t*2+e.seed);ctx.translate(mavis?-4:4,0);
+  rect(-24,-22,48,10,'#8a8273',2); /* bench */
+  line([-8, -12,-8,-24],4,COL.ink);line([8,-12,8,-24],4,COL.ink);
+  rect(-16,-64,32,40,mavis?'#6a3fe0':'#c41228',2.4);ell(0,-76,12,13);ink('#ffd9b8',2.2);
+  ctx.beginPath();ctx.ellipse(0,-82,16,8,0,Math.PI,0);ink(mavis?'#c0c0c0':'#6b4a2a',2);
+  eyes((mavis?2:-2)-0,-76,6,2.8,1);line([-5,-68,5,-68],1.8);
+  limb([16,-48,26,-36+w*3],'#ffd9b8',3);},
+ fortune:function(e,r,t){rect(-36,-8,72,8,COL.ink,2);rect(-32,-96,64,88,'#7a3ff0',2.6);rect(-26,-86,52,54,'#bfe9ff',2.2);
+  ell(0,-64,12,14);ink('#c5ccd3',2.2);poly([-14,-76,0,-92,14,-76],'#7a3ff0',1.8);eyes(0,-66,7,3,1);
+  ctx.beginPath();ctx.arc(0,-56,6,.2,Math.PI-.2);ctx.strokeStyle=COL.ink;ctx.lineWidth=2;ctx.stroke();
+  rect(-10,-30,20,16,'#c5ccd3',1.8);star(-22,-90,5,'#ffe14d');star(22,-88,4,'#fffbe0');
+  rect(-8,-18,16,6,COL.ink,1);},
+ comic:function(e,r,t){var w=Math.sin(t*4+e.seed);line([-8,0,-8,-22],5,COL.ink);line([8,0,10,-22],5,COL.ink);
+  rect(-18,-70,36,48,'#e3182d',2.4);for(var i=0;i<3;i++){ell(0,-60+i*10,2.4,2.4);ink('#ffd23f',1);}
+  ell(0,-86,14,15);ink('#ffd9b8',2.2);smooth(blob(-12,-86,6,8,6,.3,r));ink('#fff',1.4);smooth(blob(12,-86,6,8,6,.3,r));ink('#fff',1.4);
+  eyes(0,-88,8,3.4,1);ctx.beginPath();ctx.arc(0,-78,7,.15,Math.PI-.15);ctx.strokeStyle=COL.ink;ctx.lineWidth=2.2;ctx.stroke();
+  poly([-10,-104,10,-104,0,-122],'#ffd23f',2);ell(0,-124,3,3);ink(COL.red,1);
+  limb([18,-50,34,-36+w*5],'#e3182d',4);star(-28,-100,6,'#ffe14d');star(28,-108,5,'#fffbe0');},
+ vent:function(e,r,t){var w=Math.sin(t*2.6+e.seed);line([-10,0,-8,-20],5,COL.ink);line([8,0,10,-20],5,COL.ink);
+  rect(-16,-64,32,44,'#2b2f45',2.4);ell(-2,-78,13,14);ink('#ffd9b8',2.2);smooth(blob(-2,-90,12,6,7,.15,r));ink(COL.ink,1.6);
+  eyes(-2,-80,7,3,1);line([-7,-70,3,-70],2);limb([16,-44,28,-34],'#2b2f45',4);},
+ lord:function(e,r,t){var w=Math.abs(Math.sin(t*3+e.seed))*3;ctx.translate(8,-10-w);
+  rect(-12,-44,24,32,'#e3182d',2.2);ell(0,-56,10,11);ink('#ffd9b8',2);smooth(blob(0,-66,10,5,6,.2,r));ink('#6b4a2a',1.4);
+  eyes(0,-58,6,2.6,1);ctx.beginPath();ctx.arc(0,-50,5,.1,Math.PI-.1);ctx.strokeStyle=COL.ink;ctx.lineWidth=2;ctx.stroke();
+  poly([-8,-70,8,-70,0,-86],'#ffd23f',1.8);line([-8,-12,-8,0],3,COL.ink);line([8,-12,8,0],3,COL.ink);},
+ pgull:function(e,r,t){ART.gull(e,r,t,1);ctx.save();ctx.translate(-10,8);ctx.rotate(-.4);rect(-6,2,18,7,'#fff',1.6);line([-6,5,12,5],1.6,COL.ink);ctx.restore();},
+ bgull:function(e,r,t){ART.gull(e,r,t);ell(8,6,5,5);ink('#e3182d',1.2);}
 };
 var HCOL={r:COL.red,t:COL.blue,k:COL.kenneth},HTINT={r:'#ffd0d6',t:'#cfdcff',k:'#dcdbe2'},HINK={r:COL.red,t:COL.ink,k:COL.kenneth};/* Kenneth went black on 24 Nov 2026 (was purple) */
 var NEON=['#ff4f9a','#29e0ff','#ffe14d','#b6f23c','#ff8a1f','#ffffff'];
@@ -2260,7 +2329,7 @@ function bars(o,x,y,w,name,dt,maxw){
 }
 function intent(e,x,y,t,n){
   var m=e.mv,parts=[],i,p,k,cx,cy=0,px,tw=4,bh=26;if(!m)return;
-  if(m.hid)parts.push(['q','?']);else if(m.a)parts.push(['a',dmgCalc(m.tall&&B.hand.length>5?m.tall:m.a,e,H)+(m.x>1?'×'+m.x:'')]);
+  if(m.hid||m.myst)parts.push(['q','?']);else if(m.a)parts.push(['a',dmgCalc(m.tall&&B.hand.length>5?m.tall:m.a,e,H)+(m.x>1?'×'+m.x:'')]);
   if(m.ask)parts.push(['q',e.ans?'✓':{S:'Salt?',A:'Vinegar?',P:'Wrapped?'}[m.ask]]);
   if(m.b||m.ab)parts.push(['b','']);if(m.g||m.ag||m.h)parts.push(['g','']);if(m.sog||m.flu)parts.push(['d','']);if(m.add)parts.push(['c','']);
   ctx.font='17px '+FONT_D;parts.forEach(function(q){q[2]=(q[0]==='q'?4:20)+(q[1]?ctx.measureText(q[1]).width+4:0);tw+=q[2]+4;});
@@ -2501,7 +2570,7 @@ function render(){
     var selc=S.sel>=0?B.hand[S.sel]:null,det,any=B.hand.some(function(c){return playable(c);}),enb=PREV.en>=0&&PREV.en!==B.energy,spent=PREV.en>B.energy,nn=late,pdr=PREV.pd>=0&&PREV.pd!==B.draw.length,pdi=PREV.pc>=0&&PREV.pc!==B.disc.length;PREV.en=B.energy;PREV.pd=B.draw.length;PREV.pc=B.disc.length;
     if(S.brewSel>=0)det='<b>'+BREWS[RUN.brews[S.brewSel]][0]+'.</b> Tap the enemy it is for.';
     else if(selc){var sd=CARDS[selc.id];det='<b>'+sd.name+(selc.u?'+':'')+'.</b> <span class="tx">'+cardRich(selc)+'</span> '+(!playable(selc)?'<em>'+(sd.o.unp?'It cannot be played.':'Not enough Energy.')+'</em>':(sd.o.t&&alive().length>1?'<em>Tap an enemy.</em>':'<em>Tap it again to play it.</em>'));}
-    else det=B.en.filter(function(e){return !e.dead;}).map(function(e){return '<b>'+e.name+'</b> means to: '+(e.mv.hid?'something. Look behind you!':e.mv.n)+(e.sunk>0?' (half sunk: takes half damage)':'');}).join(' · ');
+    else det=B.en.filter(function(e){return !e.dead;}).map(function(e){return '<b>'+e.name+'</b> means to: '+(e.mv.myst?'something. Your future is unclear.':e.mv.hid?'something. Look behind you!':e.mv.n)+(e.sunk>0?' (half sunk: takes half damage)':'');}).join(' · ');
     h='<div class="bar"><div class="orb'+(B.energy?'':' zero')+(S.shake?' shake':enb?' bump':'')+'" title="Energy">'+B.energy+ic('bolt')+'</div><div class="piles"><span'+(pdr?' class="bump"':'')+'>'+ic('cards')+'Draw '+B.draw.length+'</span><span class="d2'+(pdi?' bump':'')+'">'+ic('cards')+'Discard '+B.disc.length+'</span></div><button type="button" class="btn end'+(any?'':' ready')+'" data-a="end">End turn</button></div><div class="detail">'+det+'</div><div class="hand" id="hand">';
     B.hand.forEach(function(c,i){var nw=HSEEN.indexOf(c)<0;h+=cardHTML(c,'data-a="card" data-i="'+i+'"',{cls:(S.sel===i?'sel ':'')+(playable(c)?'':'no ')+(nw?'deal':''),sty:nw?'--i:'+(nn++):''});});
     h+='</div>';HSEEN=B.hand.slice();S.shake=0;
